@@ -1,15 +1,32 @@
 import { maxLevelShouldBe } from "../src/maxLevelShouldBe";
+import { DEFAULT_PRODUCT } from "./helpers";
 
 describe('maxLevelShouldBe', () => {
     test('should return 15 for this case', () => {
-        expect(maxLevelShouldBe(1e16,1,1e12,1e14)).toBe(20);
+        const product: Product = {
+            ...DEFAULT_PRODUCT,
+            revenue: 1e12,
+            buildCost: 1e14,
+        }
+        expect(maxLevelShouldBe(1e16, product)).toBe(20);
     });
 
     test('should return 4 for this case', () => {
-        expect(maxLevelShouldBe(1e15,1,1e12,162e12)).toBe(3);
+        const product: Product = {
+            ...DEFAULT_PRODUCT,
+            revenue: 1e12,
+            buildCost: 162e12,
+        }
+        expect(maxLevelShouldBe(1e15, product)).toBe(3);
     });
 
     test('find out', () => {
-        expect(maxLevelShouldBe(300e6,5,3e6,20e6*1.08)).toBe(7);
+        const product: Product = {
+            ...DEFAULT_PRODUCT,
+            outputCount: 5,
+            revenue: 3e6,
+            buildCost: 20e6,
+        }
+        expect(maxLevelShouldBe(300e6, product)).toBe(7);
     });
 });
