@@ -2,15 +2,14 @@ import { shouldUpgrade } from "./shouldUpgrade";
 
 export function maxLevelShouldBe(
     target: number,
-    itemsPerLevel: number,
-    incomePerItem: number,
-    costOfFirstUpgrade: number,
+    product: Product,
 ): number {
-    var currLevel = 1;
-    var currUpgradeCost = costOfFirstUpgrade;
-    while (shouldUpgrade(target,currLevel,itemsPerLevel,true,incomePerItem,true,currUpgradeCost)) {
+    var currLevel = 0;
+    do {
         currLevel++;
-        currUpgradeCost*=1.08;
-    }
+        if (currLevel > 100) {
+            break;
+        }
+    } while (shouldUpgrade(target, currLevel, true, true, product))
     return currLevel-1;
 }
