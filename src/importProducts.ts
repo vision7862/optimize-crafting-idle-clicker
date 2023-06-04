@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path';
 
-export function importProducts(eventName: string): Product[] {
+export function importProducts(eventName: string): Map<string, Product> {
     const filepath = path.join(__dirname, './products/' + eventName + '.txt');
     const file = fs.readFileSync(filepath,'utf8');
     const productMap = new Map<string, Product>();
@@ -21,5 +21,5 @@ export function importProducts(eventName: string): Product[] {
         }
         productMap.set(product.name, product);
     }
-    return Array.from(productMap.values());
+    return productMap;
 }

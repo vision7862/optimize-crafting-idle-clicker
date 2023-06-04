@@ -1,5 +1,9 @@
 export type Workshop = {
-    products: Product[];
-    productLevels: Map<string, number>;
-    productMerchants: Map<string, number>;
+    products: Map<string, Product>;
+    statuses: Map<string, ProductStatus>;
+}
+
+export type ProductStatus = {
+    level: number;
+    merchants: number;
 }

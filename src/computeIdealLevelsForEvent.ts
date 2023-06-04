@@ -1,26 +1,32 @@
 import { importProducts } from "./importProducts";
 import { maxLevelShouldBe } from "./maxLevelShouldBe";
-import { Workshop } from "./types/Workshop";
+import { ProductStatus, Workshop } from "./types/Workshop";
 
 export function computeIdealLevelsForEvent() {
     const eventName: string = "From Dust Till Lawn";
-    const products: Product[] = importProducts(eventName.replace(/\s/g,""));
+    const products: Map<string, Product> = importProducts(eventName.replace(/\s/g,""));
     const workshop: Workshop = setUpWorkshop(products);
-    const maxLvlProd1 = maxLevelShouldBe(products[1].buildCost, products[0]);
+    const productsInOrder = Array.from(products.keys());
+    const maxLvlProd1 = maxLevelShouldBe(
+        products.get(productsInOrder[1]).buildCost,
+        products.get(productsInOrder[0])
+    );
     return maxLvlProd1;
 }
 
-function setUpWorkshop(products: Product[]): Workshop {
-    const levels = new Map<string, number>();
-    const merchants = new Map<string, number>();
-    for(let product of products) {
-        levels.set(product.name, 0);
-        merchants.set(product.name, 0);
+function setUpWorkshop(products: Map<string, Product>): Workshop {
+    const statuses = new Map<string, ProductStatus>();
+    const status: ProductStatus = {
+        level: 0,
+        merchants: 0,
+    };
+
+    for(const productName of products.keys()) {
+        statuses.set(productName, status);
     }
 
     return {
         products,
-        productLevels: levels,
-        productMerchants: merchants,
+        statuses,
     }
 }
