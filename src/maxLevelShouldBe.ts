@@ -12,5 +12,5 @@ export function maxLevelShouldBe(
         currLevel++;
         currUpgradeCost*=1.08;
     }
-    return currLevel;
+    return currLevel-1;
 }
