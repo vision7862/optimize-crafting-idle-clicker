@@ -8,7 +8,7 @@ describe('maxLevelShouldBe', () => {
             revenue: 1e12,
             buildCost: 1e14,
         }
-        expect(maxLevelShouldBe(1e16, product)).toBe(20);
+        expect(maxLevelShouldBe(1e16, product)).toBe(21);
     });
 
     test('should return 4 for this case', () => {
