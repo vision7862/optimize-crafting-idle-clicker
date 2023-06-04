@@ -5,7 +5,7 @@ type Product = {
     revenue: number;
     outputCount: number;
     input1Count: number;
-    input1ProductName: string | null;
+    input1Product: Product | null;
     input2Count: number;
-    input2ProductName: string | null;
+    input2Product: Product | null;
 }
