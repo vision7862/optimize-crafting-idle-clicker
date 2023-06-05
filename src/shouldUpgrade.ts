@@ -1,3 +1,4 @@
+import { getProductLevel } from './WorkshopHelpers';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
 const clickBonusMultiplier = 3;
@@ -11,7 +12,7 @@ export function shouldUpgrade (
   product: Product,
   workshop: Workshop,
 ): boolean {
-  const currLevel = workshop.statuses.get(product.name).level;
+  const currLevel = getProductLevel(product, workshop);
   const currNumItems = currLevel * product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
   const incomePerCycle = currNumItems * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
   const cyclesToTarget = target / incomePerCycle;
@@ -46,13 +47,13 @@ function upgradeInputsToProduct (parentProduct: Product, workshop: Workshop): Up
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
   if (parentProduct.input1 != null) {
-    const inputItemsNeeded = parentProduct.input1.count * (modifiedWorkshop.statuses.get(parentProduct.name).level);
+    const inputItemsNeeded = parentProduct.input1.count * (getProductLevel(parentProduct, modifiedWorkshop));
     const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input1.product, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
   }
   if (parentProduct.input2 != null) {
-    const inputItemsNeeded = parentProduct.input2.count * (modifiedWorkshop.statuses.get(parentProduct.name).level);
+    const inputItemsNeeded = parentProduct.input2.count * (getProductLevel(parentProduct, modifiedWorkshop));
     const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input2.product, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
@@ -65,7 +66,7 @@ function upgradeInputsToProduct (parentProduct: Product, workshop: Workshop): Up
 
 function upgradeInput (inputItemsNeeded: number, inputProduct: Product, workshop: Workshop): UpgradeInfo {
   let costToUpgradeInput = 0;
-  let inputLevel = workshop.statuses.get(inputProduct.name).level;
+  let inputLevel = getProductLevel(inputProduct, workshop);
   let inputItems = inputLevel * inputProduct.outputCount;
   let modifiedWorkshop = workshop;
 
@@ -92,7 +93,10 @@ interface UpgradeInfo {
 };
 
 function upgradeSingleProduct (product: Product, workshop: Workshop): UpgradeInfo {
-  const oldStatus = workshop.statuses.get(product.name);
+  const oldStatus: ProductStatus | undefined = workshop.statuses.get(product.name);
+  if (oldStatus === undefined) {
+    throw new Error("product " + product.name + " does not have a status.")
+  }
   const newStatus: ProductStatus = {
     ...oldStatus,
     level: oldStatus.level + 1,
