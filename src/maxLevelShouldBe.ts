@@ -1,3 +1,4 @@
+import { getProductLevel } from './WorkshopHelpers';
 import { shouldUpgrade } from './shouldUpgrade';
 import { type Workshop } from './types/Workshop';
 
@@ -6,7 +7,7 @@ export function maxLevelShouldBe (
   product: Product,
   workshop: Workshop,
 ): number {
-  let currLevel = workshop.statuses.get(product.name).level;
+  let currLevel = getProductLevel(product, workshop);
   do {
     currLevel++;
     if (currLevel > 100) {
