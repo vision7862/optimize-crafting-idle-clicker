@@ -4,8 +4,11 @@ type Product = {
     buildCost: number;
     revenue: number;
     outputCount: number;
-    input1Count: number;
-    input1Product: Product | null;
-    input2Count: number;
-    input2Product: Product | null;
+    input1: InputProduct | null;
+    input2: InputProduct | null;
+}
+
+type InputProduct = {
+    product: Product,
+    count: number;
 }

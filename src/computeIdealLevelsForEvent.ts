@@ -9,7 +9,8 @@ export function computeIdealLevelsForEvent() {
     const productsInOrder = Array.from(products.keys());
     const maxLvlProd1 = maxLevelShouldBe(
         products.get(productsInOrder[1]).buildCost,
-        products.get(productsInOrder[0])
+        products.get(productsInOrder[0]),
+        workshop
     );
     return maxLvlProd1;
 }
