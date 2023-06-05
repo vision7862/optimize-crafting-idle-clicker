@@ -5,13 +5,13 @@ const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
 const ALWAYS_MERCHANT_MULTILIER = 4.25;
 
-export function shouldUpgrade(
+export function getUpgradedWorkshopIfBetter(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
   product: Product,
   workshop: Workshop,
-): boolean {
+): Workshop | null {
   const currLevel = getProductLevel(product, workshop);
   const currNumItems = currLevel * product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
   const incomePerCycle = currNumItems * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
@@ -22,7 +22,7 @@ export function shouldUpgrade(
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
   const upgradedCyclesToTarget = target / newIncomePerCycle + cyclesToRaiseUpgradeMoney;
-  return upgradedCyclesToTarget < cyclesToTarget;
+  return upgradedCyclesToTarget < cyclesToTarget ? upgradeProductInfo.workshop : null;
 }
 
 function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeInfo {
@@ -106,7 +106,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
     costOfUpgrade: product.buildCost * (1.07 ** oldStatus.level),
     workshop: {
       ...workshop,
-      statuses: workshop.statuses.set(product.name, newStatus),
+      statuses: new Map(workshop.statuses).set(product.name, newStatus),
     },
   };
 }

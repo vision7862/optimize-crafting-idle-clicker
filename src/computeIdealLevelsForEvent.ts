@@ -20,7 +20,7 @@ export function computeIdealLevelsForEvent(): number {
 function setUpWorkshop(products: Map<string, Product>): Workshop {
   const statuses = new Map<string, ProductStatus>();
   const status: ProductStatus = {
-    level: 0,
+    level: 1,
     merchants: 0,
   };
 

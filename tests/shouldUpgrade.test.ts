@@ -1,4 +1,4 @@
-import { shouldUpgrade } from '../src/shouldUpgrade';
+import { getUpgradedWorkshopIfBetter } from '../src/shouldUpgrade';
 import { DEFAULT_PRODUCT, getWorkshop } from './helpers';
 
 describe('should Upgrade', () => {
@@ -9,7 +9,7 @@ describe('should Upgrade', () => {
       revenue: 5.97e20,
     };
     const workshop = getWorkshop(product, 5);
-    expect(shouldUpgrade(7e23, false, false, product, workshop)).toBe(true);
+    expect(getUpgradedWorkshopIfBetter(7e23, false, false, product, workshop)).not.toBeNull();
   });
 
   test('should return false when it will take more cycles with upgrade', () => {
@@ -19,6 +19,6 @@ describe('should Upgrade', () => {
       revenue: 5.97e20,
     };
     const workshop = getWorkshop(product, 6);
-    expect(shouldUpgrade(7e23, false, false, product, workshop)).toBe(false);
+    expect(getUpgradedWorkshopIfBetter(7e23, false, false, product, workshop)).toBeNull();
   });
 });
