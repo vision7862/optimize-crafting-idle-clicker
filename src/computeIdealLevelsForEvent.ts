@@ -1,9 +1,8 @@
 import { importProducts } from './importProducts';
-import { maxLevelShouldBe } from './maxLevelShouldBe';
+import { maxLevelShouldBe, optimizeLevelsBelowProduct } from './maxLevelShouldBe';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
-export function computeIdealLevelsForEvent(): number {
-  const eventName: string = 'From Dust Till Lawn';
+export function computeIdealLevelsForEvent(eventName: string): number {
   const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
   const workshop: Workshop = setUpWorkshop(products);
   const productsInOrder = Array.from(products.keys());
@@ -15,6 +14,20 @@ export function computeIdealLevelsForEvent(): number {
     workshop,
   );
   return maxLvlProd1;
+}
+
+export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
+  const workshop: Workshop = setUpWorkshop(products);
+  const productsInOrder = Array.from(products.keys());
+  const upgradedWorkshop = optimizeLevelsBelowProduct(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    products.get(productsInOrder[productsInOrder.length - 2])!,
+    workshop,
+  );
+  return upgradedWorkshop.statuses;
 }
 
 function setUpWorkshop(products: Map<string, Product>): Workshop {
