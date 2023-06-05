@@ -5,7 +5,7 @@ describe('idealLevels', () => {
     console.log(computeIdealLevelsForEvent('From Dust Till Lawn'));
   });
 
-  test('max optimizer', ()=> {
+  test('max optimizer', () => {
     console.log(optimizeBuildingLastItem('From Dust Till Lawn'));
   });
 });
