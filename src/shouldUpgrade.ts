@@ -73,7 +73,7 @@ function upgradeInput(inputItemsNeeded: number, inputProduct: Product, workshop:
   while (inputItems < inputItemsNeeded) {
     const inputUpgradeInfo = upgradeSingleProduct(inputProduct, modifiedWorkshop);
     costToUpgradeInput += inputUpgradeInfo.costOfUpgrade;
-    inputItems = inputLevel++ * inputProduct.outputCount;
+    inputItems = ++inputLevel * inputProduct.outputCount;
     modifiedWorkshop = inputUpgradeInfo.workshop;
   }
 
