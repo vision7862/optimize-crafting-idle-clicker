@@ -1,0 +1,19 @@
+Coal	1	10	512	x3	-	-
+Iron Ore	10	200	2,560	x2	-	-
+Iron Ingot	50	2,000	10,240	x5	Iron Ore x2	Coal x3
+Water Tank	100		204,800	x1	Iron Ingot x2	-
+Cylinder	500	300,000	512,000	x1	Iron Ingot x1	-
+Iron Rivets	1,000		358400	x5	Iron Ingot x1	-
+Boiler	5,000		10.2 E6	x1	Iron Ingot x4	Iron Rivets x10
+Iron Pipes	10,000		20.4 E6	x1	Iron Ingot x1	-
+Steel	20,000	900.0 E6	102.4 E6	x1	Coal x4	Iron Ingot x2
+Machine Parts	50,000	8.0 E9	307.2 E6	x2	Steel x1	-
+Piston	100,000	50.0 E9	2.5 E9	x1	Iron Ingot x1	Machine Parts x1
+Water Pump	150,000		15.3 E9	x1	Water Tank x1	Iron Pipes x2
+Motor Unit	200,000	4.0 E12	51.2 E9	x1	Cylinder x1	Piston x1
+Engine Components	250,000		256.0 E9	x1	Boiler x1	Motor Unit x1
+Steam Engine	300,000		1.5 E12	x1	Water Pump x1	Engine Components x1
+Steel Beam	400,000	900.0 E12	5.1 E12	x1	Steel x5	-
+Wheel	500,000		20.4 E12	x1	Steel x2	Mechanical Parts x4
+Balanced Beam	600,000		153.6 E12	x1	Steel Beam x1	Wheel x1
+Beam Engine	700,000		512.0 E12	x1	Steam Engine x1	Balanced Beam x1
