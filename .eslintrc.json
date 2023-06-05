@@ -13,6 +13,8 @@
         "@typescript-eslint/semi": ["error", "always"],
         "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
         "semi": ["error", "always"],
-        "comma-dangle": ["error", "always-multiline"]
+        "comma-dangle": ["error", "always-multiline"],
+        "space-before-function-paren": ["error", "never"],
+        "@typescript-eslint/space-before-function-paren": ["error", "never"]
     }
 }

@@ -2,7 +2,7 @@ import { getProductLevel } from './WorkshopHelpers';
 import { shouldUpgrade } from './shouldUpgrade';
 import { type Workshop } from './types/Workshop';
 
-export function maxLevelShouldBe (
+export function maxLevelShouldBe(
   target: number,
   product: Product,
   workshop: Workshop,

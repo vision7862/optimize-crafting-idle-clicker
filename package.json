@@ -20,7 +20,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
-    "lintFix": "eslint . \"--fix\""
+    "lint": "eslint \"**/*.{js,jsx}\"",
+    "lintFix": "eslint \"**/*.{js,jsx}\" \"--fix\""
   }
 }

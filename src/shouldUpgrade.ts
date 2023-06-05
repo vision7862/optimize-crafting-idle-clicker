@@ -5,7 +5,7 @@ const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
 const ALWAYS_MERCHANT_MULTILIER = 4.25;
 
-export function shouldUpgrade (
+export function shouldUpgrade(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
@@ -25,7 +25,7 @@ export function shouldUpgrade (
   return upgradedCyclesToTarget < cyclesToTarget;
 }
 
-function getCostToUpgradeProduct (product: Product, workshop: Workshop): UpgradeInfo {
+function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeInfo {
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
 
@@ -43,7 +43,7 @@ function getCostToUpgradeProduct (product: Product, workshop: Workshop): Upgrade
   };
 }
 
-function upgradeInputsToProduct (parentProduct: Product, workshop: Workshop): UpgradeInfo {
+function upgradeInputsToProduct(parentProduct: Product, workshop: Workshop): UpgradeInfo {
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
   if (parentProduct.input1 != null) {
@@ -64,7 +64,7 @@ function upgradeInputsToProduct (parentProduct: Product, workshop: Workshop): Up
   };
 }
 
-function upgradeInput (inputItemsNeeded: number, inputProduct: Product, workshop: Workshop): UpgradeInfo {
+function upgradeInput(inputItemsNeeded: number, inputProduct: Product, workshop: Workshop): UpgradeInfo {
   let costToUpgradeInput = 0;
   let inputLevel = getProductLevel(inputProduct, workshop);
   let inputItems = inputLevel * inputProduct.outputCount;
@@ -92,10 +92,10 @@ interface UpgradeInfo {
   costOfUpgrade: number
 };
 
-function upgradeSingleProduct (product: Product, workshop: Workshop): UpgradeInfo {
+function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const oldStatus: ProductStatus | undefined = workshop.statuses.get(product.name);
   if (oldStatus === undefined) {
-    throw new Error("product " + product.name + " does not have a status.")
+    throw new Error('product ' + product.name + ' does not have a status.');
   }
   const newStatus: ProductStatus = {
     ...oldStatus,

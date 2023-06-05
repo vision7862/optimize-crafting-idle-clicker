@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function importProducts (eventName: string): Map<string, Product> {
+export function importProducts(eventName: string): Map<string, Product> {
   const filepath = path.join(__dirname, './products/' + eventName + '.txt');
   const file = fs.readFileSync(filepath, 'utf8');
   const productMap = new Map<string, Product>();
@@ -14,16 +14,24 @@ export function importProducts (eventName: string): Map<string, Product> {
       buildCost: +details[2].replace(' ', '').replace(',', ''),
       revenue: +details[3].replace(' ', '').replace(',', ''),
       outputCount: +details[4].split('x')[1],
-      input1: details[5] !== '-' ? {
-        product: productMap.get(details[5].split(' x')[0])!,
-        count: +details[5].split(' x')[1],
-      } : null,
-      input2: details[6] !== '-' ? {
-        product: productMap.get(details[6].split(' x')[0])!,
-        count: +details[6].split(' x')[1],
-      } : null,
+      input1: getInputProduct(details[5], productMap),
+      input2: getInputProduct(details[6], productMap),
     };
     productMap.set(product.name, product);
   }
   return productMap;
+}
+
+function getInputProduct(inputDescription: string, productMap: Map<string, Product>): InputProduct | null {
+  if (inputDescription !== '-') {
+    const inputProduct: Product | undefined = productMap.get(inputDescription.split(' x')[0]);
+    if (inputProduct === undefined) {
+      throw new Error('Product requires input that is missing ' + inputDescription);
+    }
+    return {
+      product: inputProduct,
+      count: +inputDescription.split(' x')[1],
+    };
+  }
+  return null;
 }
