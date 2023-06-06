@@ -1,5 +1,5 @@
 import { importProducts } from './importProducts';
-import { maxLevelShouldBe, optimizeLevelsBelowProduct } from './maxLevelShouldBe';
+import { maxLevelShouldBe, optimizeAllLevelsToTarget, optimizeLevelsBelowProduct } from './maxLevelShouldBe';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
 export function computeIdealLevelsForEvent(eventName: string): number {
@@ -27,6 +27,25 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
     products.get(productsInOrder[productsInOrder.length - 2])!,
     workshop,
   );
+  return upgradedWorkshop.statuses;
+}
+
+export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
+  const workshop: Workshop = setUpWorkshop(products);
+  const productsInOrder = Array.from(products.keys());
+  const upgradedWorkshop = optimizeAllLevelsToTarget(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    workshop,
+  );
+  return upgradedWorkshop.statuses;
+}
+
+export function oneByOneToTarget(eventName: string, target: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
+  const workshop: Workshop = setUpWorkshop(products);
+  const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
   return upgradedWorkshop.statuses;
 }
 
