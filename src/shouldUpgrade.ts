@@ -12,17 +12,28 @@ export function getUpgradedWorkshopIfBetter(
   product: Product,
   workshop: Workshop,
 ): Workshop | null {
-  const currLevel = getProductLevel(product, workshop);
-  const currNumItems = currLevel * product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
-  const incomePerCycle = currNumItems * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
+  const incomePerCycle = getCurrentIncome(workshop, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
 
-  const newItemsPerCycle = currNumItems + product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
-  const newIncomePerCycle = newItemsPerCycle * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
-  const upgradedCyclesToTarget = target / newIncomePerCycle + cyclesToRaiseUpgradeMoney;
+  const additionalItemsFromUpgrade = product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
+  const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
+  const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
+
   return upgradedCyclesToTarget < cyclesToTarget ? upgradeProductInfo.workshop : null;
+}
+
+function getCurrentIncome(workshop: Workshop, merchantBonus: boolean): number {
+  let totalIncome = 0;
+  for (const product of workshop.products.values()) {
+    totalIncome += product.outputCount *
+                   product.revenue *
+                   getProductLevel(product, workshop) *
+                   ALWAYS_MERCHANT_MULTILIER *
+                   (merchantBonus ? merchantBonusMultiplier : 1);
+  }
+  return totalIncome;
 }
 
 function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeInfo {
@@ -47,13 +58,13 @@ function upgradeInputsToProduct(parentProduct: Product, workshop: Workshop): Upg
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
   if (parentProduct.input1 != null) {
-    const inputItemsNeeded = parentProduct.input1.count * (getProductLevel(parentProduct, modifiedWorkshop));
+    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input1.product.name, workshop);
     const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input1.product, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
   }
   if (parentProduct.input2 != null) {
-    const inputItemsNeeded = parentProduct.input2.count * (getProductLevel(parentProduct, modifiedWorkshop));
+    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input2.product.name, workshop);
     const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input2.product, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
@@ -62,6 +73,20 @@ function upgradeInputsToProduct(parentProduct: Product, workshop: Workshop): Upg
     workshop: modifiedWorkshop,
     costOfUpgrade: costToUpgradeProduct,
   };
+}
+
+function getInputItemsNeeded(inputProductName: string, workshop: Workshop): number {
+  let itemsNeeded = 0;
+  for (const product of workshop.products.values()) {
+    if (product.input1 !== null && product.input1.product.name === inputProductName) {
+      itemsNeeded += product.input1.count * getProductLevel(product, workshop);
+    }
+    if (product.input2 !== null && product.input2.product.name === inputProductName) {
+      itemsNeeded += product.input2.count * getProductLevel(product, workshop);
+    }
+  }
+
+  return itemsNeeded;
 }
 
 function upgradeInput(inputItemsNeeded: number, inputProduct: Product, workshop: Workshop): UpgradeInfo {
