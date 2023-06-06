@@ -1,4 +1,4 @@
-import { computeIdealLevelsForEvent, oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget } from '../src/computeIdealLevelsForEvent';
+import { computeIdealLevelsForEvent, oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel } from '../src/computeIdealLevelsForEvent';
 
 describe('idealLevels', () => {
   test.skip('yo', () => {
@@ -18,6 +18,10 @@ describe('idealLevels', () => {
   });
 
   test('oneByOneToTarget', () => {
-    console.log(oneByOneToTarget('BoilerAlertCropped', 1e12));
+    console.log(oneByOneToTarget('BoilerAlertCropped', 100e12));
+  });
+
+  test.only('oneByOneToTargetAtEventLevel', () => {
+    console.log(oneByOneToTargetAtEventLevel('BoilerAlertCropped', 100e12, 9));
   });
 });

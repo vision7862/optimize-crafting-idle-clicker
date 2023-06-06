@@ -1,4 +1,4 @@
-import { importProducts } from './importProducts';
+import { importProducts, importProductsAtLevel } from './importProducts';
 import { maxLevelShouldBe, optimizeAllLevelsToTarget, optimizeLevelsBelowProduct } from './maxLevelShouldBe';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
@@ -43,7 +43,11 @@ export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus
 }
 
 export function oneByOneToTarget(eventName: string, target: number): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
+  return oneByOneToTargetAtEventLevel(eventName, target, 10);
+}
+
+export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProductsAtLevel(eventName.replace(/\s/g, ''), level);
   const workshop: Workshop = setUpWorkshop(products);
   const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
   return upgradedWorkshop.statuses;

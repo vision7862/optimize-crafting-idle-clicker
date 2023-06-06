@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function importProducts(eventName: string): Map<string, Product> {
+// level must be between 1 and 10
+export function importProductsAtLevel(eventName: string, level: number): Map<string, Product> {
   const filepath = path.join(__dirname, './products/' + eventName + '.txt');
   const file = fs.readFileSync(filepath, 'utf8');
   const productMap = new Map<string, Product>();
@@ -15,7 +16,7 @@ export function importProducts(eventName: string): Map<string, Product> {
       name: details[0],
       researchCost: +details[1].replace(' ', '').replace(',', ''),
       buildCost: +details[2].replace(' ', '').replace(',', ''),
-      revenue: +details[3].replace(' ', '').replace(',', ''),
+      revenue: +details[3].replace(' ', '').replace(',', '') / 2 ** (10 - level),
       outputCount: +details[4].split('x')[1],
       input1: getInputProduct(details[5], productMap),
       input2: getInputProduct(details[6], productMap),
@@ -23,6 +24,10 @@ export function importProducts(eventName: string): Map<string, Product> {
     productMap.set(product.name, product);
   }
   return productMap;
+}
+
+export function importProducts(eventName: string): Map<string, Product> {
+  return importProductsAtLevel(eventName, 10);
 }
 
 function getInputProduct(inputDescription: string, productMap: Map<string, Product>): InputProduct | null {
