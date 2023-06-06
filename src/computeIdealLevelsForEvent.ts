@@ -33,12 +33,21 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
 function setUpWorkshop(products: Map<string, Product>): Workshop {
   const statuses = new Map<string, ProductStatus>();
   const status: ProductStatus = {
-    level: 1,
+    level: 0,
     merchants: 0,
   };
 
+  let isFirstItem = true;
   for (const productName of products.keys()) {
-    statuses.set(productName, status);
+    if (isFirstItem) {
+      statuses.set(productName, {
+        level: 1,
+        merchants: 0,
+      });
+      isFirstItem = false;
+    } else {
+      statuses.set(productName, status);
+    }
   }
 
   return {
