@@ -7,7 +7,10 @@ export function importProducts(eventName: string): Map<string, Product> {
   const productMap = new Map<string, Product>();
 
   for (const line of file.split(/[\r\n]+/)) {
-    const details = line.split('\t');
+    const details = line.split(/\t+/);
+    if (details.length !== 7) {
+      throw new Error('import poorly formatted ' + line);
+    }
     const product: Product = {
       name: details[0],
       researchCost: +details[1].replace(' ', '').replace(',', ''),
