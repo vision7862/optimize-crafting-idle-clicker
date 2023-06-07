@@ -13,15 +13,11 @@ describe('idealLevels', () => {
     console.log(oneByOneToLastItem('From Dust Till Lawn'));
   });
 
-  test('oneByOneToLastItem cropped', () => {
-    console.log(oneByOneToLastItem('BoilerAlertCropped'));
-  });
-
   test('oneByOneToTarget', () => {
-    console.log(oneByOneToTarget('BoilerAlertCropped', 100e12));
+    console.log(oneByOneToTarget('BoilerAlert', 100e12));
   });
 
   test.only('oneByOneToTargetAtEventLevel', () => {
-    console.log(oneByOneToTargetAtEventLevel('BoilerAlertCropped', 100e12, 9));
+    console.log(oneByOneToTargetAtEventLevel('BoilerAlert', 469e18, 10));
   });
 });
