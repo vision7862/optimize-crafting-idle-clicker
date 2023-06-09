@@ -30,6 +30,19 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
   return upgradedWorkshop.statuses;
 }
 
+export function optimizeBuildingFromTargetProduct(eventName: string, target: number, productName: string): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
+  const workshop: Workshop = setUpWorkshop(products);
+  // const productsInOrder = Array.from(products.keys());
+  const upgradedWorkshop = optimizeLevelsBelowProduct(
+    target,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    workshop.products.get(productName)!,
+    workshop,
+  );
+  return upgradedWorkshop.statuses;
+}
+
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
   const products: Map<string, Product> = importProducts(eventName.replace(/\s/g, ''));
   const workshop: Workshop = setUpWorkshop(products);
@@ -49,6 +62,14 @@ export function oneByOneToTarget(eventName: string, target: number): Map<string,
 export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): Map<string, ProductStatus> {
   const products: Map<string, Product> = importProductsAtLevel(eventName.replace(/\s/g, ''), level);
   const workshop: Workshop = setUpWorkshop(products);
+  const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
+  return upgradedWorkshop.statuses;
+}
+
+export function optimizeToTargetFromStatus(eventName: string, statuses: Map<string, ProductStatus>, target: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importProductsAtLevel(eventName.replace(/\s/g, ''), 10);
+  const workshop: Workshop = setUpWorkshop(products);
+  workshop.statuses = statuses;
   const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
   return upgradedWorkshop.statuses;
 }
