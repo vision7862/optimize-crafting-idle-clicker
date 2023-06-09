@@ -37,7 +37,7 @@ export function optimizeLevelsBelowProduct(
     if (currLevel > 100) {
       break;
     }
-    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, true, true, product, modifiedWorkshop);
+    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, false, true, product, modifiedWorkshop);
     shouldUpgradeNext = upgradedWorkshop !== null;
     if (upgradedWorkshop != null) {
       modifiedWorkshop = upgradedWorkshop;

@@ -12,7 +12,7 @@ export function getUpgradedWorkshopIfBetter(
   product: Product,
   workshop: Workshop,
 ): Workshop | null {
-  const incomePerCycle = getCurrentIncome(workshop, merchantBonus);
+  const incomePerCycle = getCurrentIncome(workshop, clickBonus, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
   if (cyclesToTarget < 10) {
     return null;
@@ -27,16 +27,38 @@ export function getUpgradedWorkshopIfBetter(
   return upgradedCyclesToTarget < cyclesToTarget ? upgradeProductInfo.workshop : null;
 }
 
-function getCurrentIncome(workshop: Workshop, merchantBonus: boolean): number {
+function getCurrentIncome(workshop: Workshop, clickBonus: boolean, merchantBonus: boolean): number {
   let totalIncome = 0;
+  const topProduct: Product = getTopProduct(workshop);
   for (const product of workshop.products.values()) {
-    totalIncome += product.outputCount *
+    totalIncome += product.outputCount * applyClickBonus(product, topProduct, clickBonus) *
                    product.revenue *
                    getProductLevel(product, workshop) *
                    ALWAYS_MERCHANT_MULTILIER *
                    (merchantBonus ? merchantBonusMultiplier : 1);
   }
   return totalIncome;
+}
+
+function applyClickBonus(product: Product, topProduct: Product, clickBonus: boolean): number {
+  if (clickBonus && [topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
+    return clickBonusMultiplier;
+  } else return 1;
+}
+
+function getTopProduct(workshop: Workshop): Product {
+  const productsInOrder = Array.from(workshop.products.keys());
+  for (let productIndex = productsInOrder.length - 1; productIndex >= 0; productIndex--) {
+    const thisProduct: Product | undefined = workshop.products.get(productsInOrder[productIndex]);
+    if (thisProduct !== undefined) {
+      const productStatus: ProductStatus | undefined = workshop.statuses.get(thisProduct.name);
+      if (productStatus !== undefined && productStatus.level > 0) {
+        return thisProduct;
+      }
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return workshop.products.get(productsInOrder[0])!;
 }
 
 function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeInfo {
@@ -128,6 +150,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
   const newStatus: ProductStatus = {
     ...oldStatus,
     level: oldStatus.level + 1,
+    merchants: Math.ceil(((oldStatus.level + 1) * product.outputCount) / 10),
   };
 
   return {
