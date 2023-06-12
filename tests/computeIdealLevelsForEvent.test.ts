@@ -1,11 +1,7 @@
-import { computeIdealLevelsForEvent, oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel, optimizeToTargetFromStatus, optimizeBuildingFromTargetProduct, computeTargetFromFame } from '../src/computeIdealLevelsForEvent';
+import { oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel, optimizeToTargetFromStatus, optimizeBuildingFromTargetProduct, computeTargetFromFame } from '../src/computeIdealLevelsForEvent';
 import { type ProductStatus } from '../src/types/Workshop';
 
 describe('idealLevels', () => {
-  test.skip('yo', () => {
-    console.log(computeIdealLevelsForEvent('From Dust Till Lawn'));
-  });
-
   test('max optimizer', () => {
     console.log(optimizeBuildingLastItem('From Dust Till Lawn'));
   });
