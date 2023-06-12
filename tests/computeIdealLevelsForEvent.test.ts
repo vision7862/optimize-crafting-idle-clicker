@@ -1,4 +1,4 @@
-import { computeIdealLevelsForEvent, oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel, optimizeToTargetFromStatus, optimizeBuildingFromTargetProduct } from '../src/computeIdealLevelsForEvent';
+import { computeIdealLevelsForEvent, oneByOneToLastItem, optimizeBuildingLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel, optimizeToTargetFromStatus, optimizeBuildingFromTargetProduct, computeTargetFromFame } from '../src/computeIdealLevelsForEvent';
 import { type ProductStatus } from '../src/types/Workshop';
 
 describe('idealLevels', () => {
@@ -49,6 +49,16 @@ describe('idealLevels', () => {
 
   test('top down 5 fame from motor unit', () => {
     console.log(optimizeBuildingFromTargetProduct('BoilerAlert', 100e12, 'Motor Unit'));
+  });
+
+  describe('computeTargetFromFame', () => {
+    it.skip('should return 1e18 for lvl 10, 8 fame', () => {
+      expect(computeTargetFromFame(8, 10)).toBe(1e18);
+    });
+
+    it('should return correctly', () => {
+      expect(computeTargetFromFame(1, 4)).toBe(10000);
+    });
   });
 });
 

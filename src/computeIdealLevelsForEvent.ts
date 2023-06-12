@@ -99,3 +99,7 @@ function setUpWorkshop(products: Map<string, Product>): Workshop {
     statuses,
   };
 }
+
+export function computeTargetFromFame(fame: number, level: number): number {
+  return 10 ** (fame + level - 1);
+}
