@@ -12,9 +12,20 @@ export function getUpgradedWorkshopIfBetter(
   product: Product,
   workshop: Workshop,
 ): Workshop | null {
+  const workshopUpgradeInfo = getUpgradedWorkshopAndTimeIfBetter(target, clickBonus, merchantBonus, product, workshop);
+  return workshopUpgradeInfo !== null ? workshopUpgradeInfo.workshop : null;
+}
+
+export function getUpgradedWorkshopAndTimeIfBetter(
+  target: number,
+  clickBonus: boolean,
+  merchantBonus: boolean,
+  product: Product,
+  workshop: Workshop,
+): WorkshopUpgradeInfo | null {
   const incomePerCycle = getCurrentIncome(workshop, clickBonus, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
-  if (cyclesToTarget < 10) {
+  if (cyclesToTarget < 8) {
     return null;
   }
 
@@ -23,9 +34,18 @@ export function getUpgradedWorkshopIfBetter(
   const additionalItemsFromUpgrade = product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
   const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
-  // console.log('cycles to upgrade ' + product.name + ' from ' + getProductLevel(product, workshop).toString() + ': ' + upgradedCyclesToTarget.toString());
-  return upgradedCyclesToTarget < cyclesToTarget ? upgradeProductInfo.workshop : null;
+  if (upgradedCyclesToTarget < cyclesToTarget) {
+    return {
+      workshop: upgradeProductInfo.workshop,
+      cyclesToTarget: upgradedCyclesToTarget,
+    };
+  } else return null;
 }
+
+export interface WorkshopUpgradeInfo {
+  workshop: Workshop
+  cyclesToTarget: number
+};
 
 function getCurrentIncome(workshop: Workshop, clickBonus: boolean, merchantBonus: boolean): number {
   let totalIncome = 0;
