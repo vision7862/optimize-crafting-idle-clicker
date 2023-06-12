@@ -3,7 +3,7 @@ import * as path from 'path';
 
 // level must be between 1 and 10
 export function importProductsAtLevel(eventName: string, level: number): Map<string, Product> {
-  const filepath = path.join(__dirname, './products/' + eventName + '.txt');
+  const filepath = path.join(__dirname, './products/' + eventName.replace(/\s/g, '') + '.txt');
   const file = fs.readFileSync(filepath, 'utf8');
   const productMap = new Map<string, Product>();
 
