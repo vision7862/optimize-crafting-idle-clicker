@@ -1,12 +1,12 @@
 import { importProducts, importProductsAtLevel } from './importProducts';
-import { optimizeAllLevelsToTarget, optimizeLevelsBelowProduct } from './maxLevelShouldBe';
+import { optimizeEachProductToTarget, optimizeProductAndBelow } from './productLooper';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
   const products: Map<string, Product> = importProducts(eventName);
   const workshop: Workshop = setUpWorkshop(products);
   const productsInOrder = Array.from(products.keys());
-  const upgradedWorkshop = optimizeLevelsBelowProduct(
+  const upgradedWorkshop = optimizeProductAndBelow(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -20,7 +20,7 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
   const products: Map<string, Product> = importProducts(eventName);
   const workshop: Workshop = setUpWorkshop(products);
   // const productsInOrder = Array.from(products.keys());
-  const upgradedWorkshop = optimizeLevelsBelowProduct(
+  const upgradedWorkshop = optimizeProductAndBelow(
     target,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     workshop.products.get(productName)!,
@@ -33,7 +33,7 @@ export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus
   const products: Map<string, Product> = importProducts(eventName);
   const workshop: Workshop = setUpWorkshop(products);
   const productsInOrder = Array.from(products.keys());
-  const upgradedWorkshop = optimizeAllLevelsToTarget(
+  const upgradedWorkshop = optimizeEachProductToTarget(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
     workshop,
@@ -44,7 +44,7 @@ export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus
 export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): Map<string, ProductStatus> {
   const products: Map<string, Product> = importProductsAtLevel(eventName, level);
   const workshop: Workshop = setUpWorkshop(products);
-  const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
+  const upgradedWorkshop = optimizeEachProductToTarget(target, workshop);
   return upgradedWorkshop.statuses;
 }
 
@@ -56,7 +56,7 @@ export function optimizeToTargetFromStatus(eventName: string, statuses: Map<stri
   const products: Map<string, Product> = importProductsAtLevel(eventName, 10);
   const workshop: Workshop = setUpWorkshop(products);
   workshop.statuses = statuses;
-  const upgradedWorkshop = optimizeAllLevelsToTarget(target, workshop);
+  const upgradedWorkshop = optimizeEachProductToTarget(target, workshop);
   return upgradedWorkshop.statuses;
 }
 
