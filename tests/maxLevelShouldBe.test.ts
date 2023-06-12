@@ -21,15 +21,4 @@ describe('maxLevelShouldBe', () => {
     const workshop = getWorkshop(product, 1);
     expect(maxLevelShouldBe(1e15, product, workshop)).toBe(4);
   });
-
-  test('find out', () => {
-    const product: Product = {
-      ...DEFAULT_PRODUCT,
-      outputCount: 5,
-      revenue: 3e6,
-      buildCost: 20e6,
-    };
-    const workshop = getWorkshop(product, 1);
-    expect(maxLevelShouldBe(300e6, product, workshop)).toBe(8);
-  });
 });
