@@ -74,6 +74,9 @@ export function getUpgradeCostMultiplier(color: string): number {
     case 'Blue': return 9;
     case 'Red': return 10;
     case 'Violet': return 11;
-    default: throw new Error('color does not exist ' + color);
+    default: {
+      console.error('color does not exist ' + color);
+      return 9;
+    }
   }
 }

@@ -5,10 +5,26 @@ import { type ProductStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
   describe('events', () => {
-    const eventName = 'Wind it up';
+    const eventName = 'Idle flicker';
     function getFame(fame: number, level: number): Map<string, ProductStatus> {
       return oneByOneToTargetAtEventLevel(eventName, computeTargetFromFame(fame, level), level);
     }
+
+    test('2 fame level 1', () => {
+      console.log(getFame(2, 1));
+    });
+
+    test('3 fame level 2', () => {
+      console.log(getFame(3, 2));
+    });
+
+    test('5 fame level 3', () => {
+      console.log(getFame(5, 3));
+    });
+
+    test('6 fame level 3', () => {
+      console.log(getFame(6, 3));
+    });
 
     test('6 fame level 4', () => {
       console.log(getFame(6, 4));

@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { getUpgradeCostMultiplier } from './importMainWorkshop';
 
 // level must be between 1 and 10
 export function importProductsAtLevel(eventName: string, level: number): Map<string, Product> {
@@ -9,7 +10,7 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
 
   for (const line of file.split(/[\r\n]+/)) {
     const details = line.split(/\t+/);
-    if (details.length !== 7) {
+    if (details.length < 7) {
       throw new Error('import poorly formatted ' + line);
     }
     const product: Product = {
@@ -20,6 +21,7 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
       outputCount: +details[4].split('x')[1],
       input1: getInputProduct(details[5], productMap),
       input2: getInputProduct(details[6], productMap),
+      upgradeCostMultiplier: getUpgradeCostMultiplier(details[7]),
     };
     productMap.set(product.name, product);
   }

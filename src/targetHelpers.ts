@@ -5,8 +5,8 @@ export function computeTargetFromFame(fame: number, level: number): number {
 
 export function getCostOfScientists(numScientists: number): number {
   let cost = 0;
-  for (let i = 0; i < numScientists; i++) {
-    cost += 5e1 * (1.15 ** i);
+  for (let i = 2; i < numScientists; i++) {
+    cost += 50 * (1.15 ** (i - 2));
   }
   return cost;
 }
