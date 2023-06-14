@@ -1,0 +1,58 @@
+Wood				1			10			47.8e6		x1		-					-
+Rawhide				1			10,000		11.9e9		x1		-					-
+Leather				1			50,000		3.5e9		x3		Rawhide x1			-
+Hilt				1			1.5 E6		87.7e9		x1		Leather x2			-
+Leather Armor		1			10 E6		797.6e9		x1		Leather x8			-
+Tin Ore				50,000		1.5e12		7.1e15		x1		-					-
+Coal				1			600 E15		95.7e18		x1		-					-
+Iron Ore			1			2.5e18		478.6e18	x1		-					-
+Iron Ingots			1			21e18		430.7e18	x5		Iron Ore x2			Coal x3
+Iron Rivets			1			900e18		2.2e21		x5		Iron Ingots x1		-
+Iron Helmet			1			8e21		19.9e21		x1		Iron Rivets x5		Iron Ingots x2
+Iron Plates			1			75e21		59.8e21		x1		Iron Rivets x2		Iron Ingots x3
+Imp. Leather Armor	1			700e21		518.4e21	x1		Leather Armor x1	Iron Plates x2
+Iron Blades			1			7e24		1.1e24		x1		Iron Ingots x2		-
+Iron Sword			1			6.7e24		1.1e24		x1		Iron Blades x2		Hilt x1
+
+
+Wood				1.00E+00	1.00E+01	1.00E+00	x1		Green		-				-	
+Club				3.00E+01	4.00E+01	1.00E+01	x1		Red			Wood x4			-
+Arrows				9.00E+01	2.00E+02	7.00E+00	x3		Blue		Wood x1			-
+Bow					1.50E+02	1.50E+03	2.50E+02	x1		Violet		Wood x2			Arrows x5
+Rawhide				5.00E+02	1.00E+04	2.50E+02	x1		Green		-				-
+Leather				9.00E+02	5.00E+04	9.00E+02	x3		Yellow		Rawhide x1		-
+Boots				8.00E+02	2.50E+05	1.30E+04	x1		Red			Leather			-
+Hilt				1.50E+03	1.50E+06	2.20E+04	x1		Blue		Leather			-
+Leather Armor		2.20E+03	1.00E+07	2.00E+05	x1		Violet		Leather			-
+Copper Ore			6.00E+03	7.00E+07	2.20E+05	x1		Green		-				-
+Copper Ingots		1.30E+04	3.00E+08	7.00E+05	x1		Yellow		Copper Ore		-
+Copper Axe			9.00E+03	1.50E+09	8.50E+06	x1		Red			Wood			Copper Ingots
+Copper Blades		1.20E+04	7.50E+09	1.30E+07	x1		Blue		Copper Ingots	-
+Copper Knife		1.70E+04	4.00E+10	7.00E+07	x1		Violet		Copper Blades	-
+Copper Dagger		2.00E+04	2.50E+11	3.00E+08	x1		Violet		Copper Blades	Hilt
+Tin Ore				5.00E+04	1.50E+12	3.00E+08	x1		Green		-				-
+Bronze Ingots		1.00E+05	7.50E+12	7.00E+08	x1		Yellow		Copper Ore		Tin Ore
+Bronze Spear		6.00E+04	4.00E+13	6.00E+09	x1		Red			Wood			Bronze Ingots
+Bronze Shield		7.50E+04	2.00E+14	3.20E+10	x1		Red			Bronze Ingots	-
+Bronze Blades		1.00E+05	1.20E+15	6.00E+10	x1		Blue		Bronze Ingots	-
+Bronze Dagger		1.50E+05	8.50E+15	4.30E+11	x1		Violet		Bronze Blades	Hilt
+Bronze Sword		1.50E+05	7.00E+16	1.50E+12	x1		Violet		Bronze Blades	Hilt
+Sickle				1.75E+05	1.00E+17	2.00E+12	x1		Violet		Bronze Blades	Wood
+Coal				2.50E+05	6.00E+17	2.00E+12	x1		Green		-				-
+Iron Ore			2.60E+05	3.50E+18	1.00E+13	x1		Green		-				-
+Iron Ingots			4.50E+05	2.10E+19	1.80E+13	x5		Yellow		Coal			Iron Ore
+Chisel				2.50E+05	8.00E+19	1.50E+14	x1		Red			Iron Ingots		-
+Iron Mace			3.00E+05	1.30E+20	3.50E+14	x1		Red			Iron Ingots		-
+Iron Rivets			4.00E+05	9.00E+20	1.40E+14	x5		Blue		Iron Ingots		-
+Shovel				4.00E+05	1.00E+21	8.00E+14	x1		Red			Iron Ingots		Wood
+Lump Hammer			3.50E+05	3.00E+21	9.00E+14	x1		Red			Iron Ingots		Wood
+Iron Helmet			5.50E+05	8.00E+21	5.00E+15	x1		Red			Iron Ingots		Iron Rivets
+Iron Plates			4.50E+05	7.50E+22	1.50E+16	x1		Blue		Iron Ingots		Iron Rivets
+Imp. Leather Armor	6.00E+05	7.00E+23	1.30E+17	x1		Violet		Leather Armor	Iron Plates
+Iron Blades			2.00E+06	7.00E+24	3.00E+17	x1		Blue		Iron Ingots		-
+Iron Sword			2.60E+06	6.00E+25	1.70E+18	x1		Violet		Iron Ingots		Hilt
+Iron Armor			2.80E+06	1.00E+27	2.20E+18	x1		Violet		Iron Plates		Iron Rivets
+Iron Claymore		3.20E+06	5.00E+28	2.00E+19	x1		Violet		Iron Blades		Hilt
+Paper				4.00E+06	2.00E+29	8.00E+18	x1		Red			Wood			-
+Gold Ore			5.00E+06	1.00E+30	1.80E+20	x1		Green		-				-
+Gold Ingots			8.00E+06	5.00E+32	3.00E+21	x1		Yellow		Gold Ore		-

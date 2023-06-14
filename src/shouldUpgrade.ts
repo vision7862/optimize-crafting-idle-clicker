@@ -3,7 +3,23 @@ import { type ProductStatus, type Workshop } from './types/Workshop';
 
 const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
-const ALWAYS_MERCHANT_MULTILIER = 1; // 4.25;
+const ALWAYS_MERCHANT_MULTILIER = 6;
+const scienceIsTight = true;
+
+export function getMainWorkshopIncomeMultiplier(level: number): number {
+  return 2 ** level *
+        1.2 * // wood
+        1.2 * // leather
+        1.4 * // copper
+        1.2 * // bronze
+        1.4 * // iron
+        1 * // precious
+        1 * // renessance
+        1 * // industrial
+        1 * // vehicles
+        1 * // entertainment
+        2.3; // event
+}
 
 export function getUpgradedWorkshopIfBetter(
   target: number,
@@ -25,7 +41,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
 ): WorkshopUpgradeInfo | null {
   const incomePerCycle = getCurrentIncome(workshop, clickBonus, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
-  if (cyclesToTarget < 8) {
+  if (scienceIsTight ? cyclesToTarget < 20 : cyclesToTarget < 5) {
     return null;
   }
 
@@ -173,8 +189,10 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
     merchants: Math.ceil(((oldStatus.level + 1) * product.outputCount) / 10),
   };
 
+  const upgradeCostMultiplier: number = product.upgradeCostMultiplier !== undefined ? (1 + (product.upgradeCostMultiplier / 100)) : 1.07;
+
   return {
-    costOfUpgrade: product.buildCost * (1.07 ** oldStatus.level),
+    costOfUpgrade: product.buildCost * (upgradeCostMultiplier ** oldStatus.level),
     workshop: {
       ...workshop,
       statuses: new Map(workshop.statuses).set(product.name, newStatus),
