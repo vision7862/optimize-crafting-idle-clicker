@@ -9,7 +9,7 @@ export function optimizeProductAndBelow(
   let shouldUpgradeNext = true;
   let modifiedWorkshop = workshop;
   while (shouldUpgradeNext) {
-    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, false, true, product, modifiedWorkshop);
+    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, true, true, product, modifiedWorkshop);
     shouldUpgradeNext = upgradedWorkshop !== null;
     if (upgradedWorkshop != null) {
       modifiedWorkshop = upgradedWorkshop;
