@@ -9,4 +9,8 @@ describe('importProducts', () => {
   test('Wind it up', () => {
     expect(() => importProducts('Wind it up')).not.toThrowError();
   });
+
+  test('Idle Flicker', () => {
+    expect(() => importProducts('Idle Flicker')).not.toThrowError();
+  });
 });
