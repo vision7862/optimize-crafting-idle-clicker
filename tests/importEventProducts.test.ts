@@ -1,4 +1,4 @@
-import { importProducts } from '../src/importProducts';
+import { importProducts } from '../src/importEventProducts';
 
 describe('importProducts', () => {
   test('should import costs and relationship correctly', () => {

@@ -1,4 +1,5 @@
-import { importProducts, importProductsAtLevel } from './importProducts';
+import { importProducts, importProductsAtLevel } from './importEventProducts';
+import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeProductAndBelow } from './productLooper';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
@@ -48,6 +49,25 @@ export function oneByOneToTargetAtEventLevel(eventName: string, target: number, 
   return upgradedWorkshop.statuses;
 }
 
+export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const workshop: Workshop = setUpWorkshop(products);
+  const productsInOrder = Array.from(products.keys());
+  const upgradedWorkshop = optimizeEachProductToTarget(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    workshop,
+  );
+  return upgradedWorkshop.statuses;
+}
+
+export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const workshop: Workshop = setUpWorkshop(products);
+  const upgradedWorkshop = optimizeEachProductToTarget(target, workshop);
+  return upgradedWorkshop.statuses;
+}
+
 export function oneByOneToTarget(eventName: string, target: number): Map<string, ProductStatus> {
   return oneByOneToTargetAtEventLevel(eventName, target, 10);
 }
@@ -84,8 +104,4 @@ function setUpWorkshop(products: Map<string, Product>): Workshop {
     products,
     statuses,
   };
-}
-
-export function computeTargetFromFame(fame: number, level: number): number {
-  return 10 ** (fame + level - 1);
 }
