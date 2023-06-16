@@ -1,7 +1,8 @@
+import { getStatusMap } from './WorkshopHelpers';
 import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optimizeProductAndBelow } from './productLooper';
-import { type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
   const products: Map<string, ProductDetails> = importProducts(eventName);
@@ -11,15 +12,15 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder = Array.from(products.keys());
+  const productsInOrder: Product[] = Array.from(workshop.productsInfo.values());
   const upgradedWorkshop = optimizeProductAndBelow(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    productsInOrder[products.size - 1]!.details.buildCost,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    products.get(productsInOrder[productsInOrder.length - 2])!,
+    productsInOrder[products.size - 2]!,
     workshop,
   );
-  return upgradedWorkshop.statuses;
+  return getStatusMap(upgradedWorkshop);
 }
 
 export function optimizeBuildingFromTargetProduct(eventName: string, target: number, productName: string): Map<string, ProductStatus> {
@@ -30,14 +31,13 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  // const productsInOrder = Array.from(products.keys());
   const upgradedWorkshop = optimizeProductAndBelow(
     target,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.products.get(productName)!,
+    workshop.productsInfo.get(productName)!,
     workshop,
   );
-  return upgradedWorkshop.statuses;
+  return getStatusMap(upgradedWorkshop);
 }
 
 // for when you have a full workshop and want to build the single next thing without optimizing the whole path up
@@ -50,15 +50,15 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder = Array.from(products.keys());
+  const productsInOrder = Array.from(workshop.productsInfo.keys());
   const upgradedWorkshop = optimizeProductAndBelow(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.products.get(productName)!.buildCost,
+    workshop.productsInfo.get(productName)!.details.buildCost,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.products.get(productsInOrder[productsInOrder.indexOf(productName) - 1])!,
+    workshop.productsInfo.get(productsInOrder[productsInOrder.indexOf(productName) - 1])!,
     workshop,
   );
-  return upgradedWorkshop.statuses;
+  return getStatusMap(upgradedWorkshop);
 }
 
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
@@ -73,14 +73,13 @@ export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInf
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder = Array.from(products.keys());
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    workshop.productsInfo[products.size - 1]!.buildCost,
     workshop,
   );
   return {
-    statuses: upgradedWorkshopInfo.workshop.statuses,
+    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
@@ -99,7 +98,7 @@ export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: 
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {
-    statuses: upgradedWorkshopInfo.workshop.statuses,
+    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
@@ -117,13 +116,12 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder = Array.from(products.keys());
   const upgradedWorkshop = optimizeEachProductToTarget(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
+    Array.from(workshop.productsInfo.values())[products.size]!.details.buildCost,
     workshop,
   );
-  return upgradedWorkshop.statuses;
+  return getStatusMap(upgradedWorkshop);
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
@@ -140,7 +138,7 @@ export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: n
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {
-    statuses: upgradedWorkshopInfo.workshop.statuses,
+    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
@@ -149,44 +147,47 @@ export function oneByOneToTarget(eventName: string, target: number): Map<string,
   return oneByOneToTargetAtEventLevel(eventName, target, 10);
 }
 
-export function optimizeToTargetFromStatus(eventName: string, statuses: Map<string, ProductStatus>, target: number): Map<string, ProductStatus> {
-  const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, 10);
-  const workshopStatus: WorkshopStatus = {
-    event: true,
-    level: 0,
-    scientists: 100,
-  };
-  const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const modifiedWorkshop: Workshop = {
-    ...workshop,
-    statuses,
-  };
-  const upgradedWorkshop = optimizeEachProductToTarget(target, modifiedWorkshop);
-  return upgradedWorkshop.statuses;
-}
+// export function optimizeToTargetFromStatus(eventName: string, statuses: Map<string, ProductStatus>, target: number): Map<string, ProductStatus> {
+//   const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, 10);
+//   const workshopStatus: WorkshopStatus = {
+//     event: true,
+//     level: 0,
+//     scientists: 100,
+//   };
+//   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
+//   const modifiedWorkshop: Workshop = {
+//     ...workshop,
+//     statuses,
+//   };
+//   const upgradedWorkshop = optimizeEachProductToTarget(target, modifiedWorkshop);
+//   return getStatusMap(upgradedWorkshop);
+// }
 
 function setUpWorkshop(products: Map<string, ProductDetails>, workshopStatus: WorkshopStatus): Workshop {
-  const statuses = new Map<string, ProductStatus>();
-  const status: ProductStatus = {
-    level: 0,
-    merchants: 0,
-  };
-
+  const productsInfo = new Map<string, Product>();
   let isFirstItem = true;
-  for (const productName of products.keys()) {
+  for (const [productName, details] of products.entries()) {
     if (isFirstItem) {
-      statuses.set(productName, {
-        level: 1,
-        merchants: 0,
+      productsInfo.set(productName, {
+        status: {
+          level: 1,
+          merchants: 0,
+        },
+        details,
       });
       isFirstItem = false;
     } else {
-      statuses.set(productName, status);
+      productsInfo.set(productName, {
+        status: {
+          level: 0,
+          merchants: 0,
+        },
+        details,
+      });
     }
   }
   return {
-    products,
-    statuses,
-    ...workshopStatus,
+    productsInfo,
+    workshopStatus,
   };
 }
