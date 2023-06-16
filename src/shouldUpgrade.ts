@@ -1,25 +1,11 @@
 import { getProductLevel } from './WorkshopHelpers';
+import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
 const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
 const ALWAYS_MERCHANT_MULTILIER = 6;
 const scienceIsTight = true;
-
-export function getMainWorkshopIncomeMultiplier(level: number): number {
-  return 2 ** level *
-        1.2 * // wood
-        1.2 * // leather
-        1.4 * // copper
-        1.2 * // bronze
-        1.4 * // iron
-        1 * // precious
-        1 * // renessance
-        1 * // industrial
-        1 * // vehicles
-        1 * // entertainment
-        2.3; // event
-}
 
 export function getUpgradedWorkshopIfBetter(
   target: number,
@@ -51,7 +37,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue *
                                    (workshop.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
                                    (workshop.event ? 1 : getMainWorkshopIncomeMultiplier(workshop.level)) *
-                                   (merchantBonus ? merchantBonusMultiplier : 1);
+                                   (workshop.event && merchantBonus ? merchantBonusMultiplier : 1);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
     return {
@@ -64,7 +50,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
 export interface WorkshopUpgradeInfo {
   workshop: Workshop
   cyclesToTarget: number
-};
+}
 
 function getCurrentIncome(workshop: Workshop, clickBonus: boolean, merchantBonus: boolean): number {
   let totalIncome = 0;
@@ -179,7 +165,7 @@ function upgradeInput(inputItemsNeeded: number, inputProduct: Product, workshop:
 interface UpgradeInfo {
   workshop: Workshop
   costOfUpgrade: number
-};
+}
 
 function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const oldStatus: ProductStatus | undefined = workshop.statuses.get(product.name);

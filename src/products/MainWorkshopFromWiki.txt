@@ -28,9 +28,9 @@
 1x Chisel				250,000		$80,000,000,000,000,000,000.00	$150,000,000,000,000.00	Red	1x Iron Ingots	
 1x Iron Mace			300,000		$130,000,000,000,000,000,000.00	$350,000,000,000,000.00	Red	4x Iron Ingots	
 5x Iron Rivets			400,000		$900,000,000,000,000,000,000.00	$140,000,000,000,000.00	Blue	1x Iron Ingots	
-1x Shovel				400,000		$1,000,000,000,000,000,000,000.00	$800,000,000,000,000.00	Red	1x Iron Ingots	2x Wood
-1x Lump Hammer			350,000		$3,000,000,000,000,000,000,000.00	$900,000,000,000,000.00	Red	2x Iron Ingots	2x Wood
-1x Iron Helmet			550,000		$8,000,000,000,000,000,000,000.00	$5,000,000,000,000,000.00	Red	5x Iron Rivets	2x Iron Ingots
+// not worth 1x Shovel				400,000		$1,000,000,000,000,000,000,000.00	$800,000,000,000,000.00	Red	1x Iron Ingots	2x Wood
+// don't have 1x Lump Hammer			350,000		$3,000,000,000,000,000,000,000.00	$900,000,000,000,000.00	Red	2x Iron Ingots	2x Wood
+// not worth 1x Iron Helmet			550,000		$8,000,000,000,000,000,000,000.00	$5,000,000,000,000,000.00	Red	5x Iron Rivets	2x Iron Ingots
 1x Iron Plates			450,000		$75,000,000,000,000,000,000,000.00	$15,000,000,000,000,000.00	Blue	2x Iron Rivets	3x Iron Ingots
 1x Imp. Leather Armor	600,000		$700,000,000,000,000,000,000,000.00	$130,000,000,000,000,000.00	Violet	1x Leather Armor	2x Iron Plates
 1x Iron Blades			2,000,000	$7,000,000,000,000,000,000,000,000.00	$300,000,000,000,000,000.00	Blue	2x Iron Ingots	
