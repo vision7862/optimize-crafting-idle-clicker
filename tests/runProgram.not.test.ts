@@ -1,107 +1,153 @@
-import { oneByOneToLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel, oneByOneToTargetAtWorkshopLevel } from '../src/computeIdealLevelsForEvent';
+import { oneByOneToLastItem, oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime } from '../src/computeIdealLevelsForEvent';
 import { getMainWorkshopIncomeMultiplier } from '../src/shouldUpgrade';
-import { computeTargetFromFame, getCostOfScientists } from '../src/targetHelpers';
+import { computeTargetFromFame, filterOutSkipped, getCostOfScientists } from '../src/targetHelpers';
 import { type ProductStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
+  function toTime(seconds): string {
+    const date = new Date(+0);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(11, 8);
+  }
+
   describe('events', () => {
     const eventName = 'Idle flicker';
     function getFame(fame: number, level: number): Map<string, ProductStatus> {
       return oneByOneToTargetAtEventLevel(eventName, computeTargetFromFame(fame, level), level);
     }
 
-    test('2 fame level 1', () => {
-      console.log(getFame(2, 1));
+    function printFameTime(fame: number, level: number): void {
+      const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, computeTargetFromFame(fame, level), level);
+      console.log(targetInfo.statuses);
+      console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
+      console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+    }
+
+    describe('leveling', () => {
+      test('2 fame level 1', () => {
+        printFameTime(2, 1);
+      });
+
+      test('3 fame level 2', () => {
+        console.log(getFame(3, 2));
+      });
+
+      test('5 fame level 3', () => {
+        console.log(getFame(5, 3));
+      });
+
+      test('6 fame level 3', () => {
+        console.log(getFame(6, 3));
+      });
+
+      test('6 fame level 4', () => {
+        console.log(getFame(6, 4));
+      });
+
+      test('6 fame level 5', () => {
+        console.log(getFame(6, 5));
+      });
+
+      test('2 fame level 5', () => {
+        console.log(getFame(2, 5));
+      });
+
+      test('6 fame level 6', () => {
+        console.log(getFame(6, 6));
+      });
+
+      test('6 fame level 7', () => {
+        console.log(getFame(6, 7));
+      });
+
+      test('6 fame level 8', () => {
+        console.log(getFame(6, 8));
+      });
+
+      test('6 fame level 9', () => {
+        console.log(getFame(6, 9));
+      });
+
+      test('5 fame level 9', () => {
+        console.log(getFame(5, 9));
+      });
+
+      test('3 fame level 9', () => {
+        console.log(getFame(3, 9));
+      });
     });
 
-    test('3 fame level 2', () => {
-      console.log(getFame(3, 2));
-    });
+    describe('10+', () => {
+      test('last product level 10', () => {
+        const targetInfo = oneByOneToLastItemWithTime(eventName);
+        console.log(targetInfo.statuses);
+        console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
+        console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+      });
 
-    test('5 fame level 3', () => {
-      console.log(getFame(5, 3));
-    });
+      describe('scientists', () => {
+        beforeEach(() => {
+          console.log(expect.getState().currentTestName);
+        });
 
-    test('6 fame level 3', () => {
-      console.log(getFame(6, 3));
-    });
+        function testNumScientists(numScientists: number): void {
+          const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, getCostOfScientists(numScientists), 10);
+          console.log(targetInfo.statuses);
+          console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
+          console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+        }
 
-    test('6 fame level 4', () => {
-      console.log(getFame(6, 4));
-    });
+        test('280 scientists', () => {
+          testNumScientists(280);
+        });
 
-    test('6 fame level 5', () => {
-      console.log(getFame(6, 5));
-    });
+        test('290 scientists', () => {
+          testNumScientists(290);
+        });
 
-    test('2 fame level 5', () => {
-      console.log(getFame(2, 5));
-    });
+        test('300 scientists', () => {
+          testNumScientists(300);
+        });
 
-    test('6 fame level 6', () => {
-      console.log(getFame(6, 6));
-    });
+        test('310 scientists', () => {
+          testNumScientists(310);
+        });
 
-    test('6 fame level 7', () => {
-      console.log(getFame(6, 7));
-    });
+        test('320 scientists', () => {
+          testNumScientists(320);
+        });
+      });
 
-    test('6 fame level 8', () => {
-      console.log(getFame(6, 8));
-    });
+      test('6 fame level 10+', () => {
+        printFameTime(6, 10);
+      });
 
-    test('6 fame level 9', () => {
-      console.log(getFame(6, 9));
-    });
+      test('7 fame level 10+', () => {
+        printFameTime(7, 10);
+      });
 
-    test('5 fame level 9', () => {
-      console.log(getFame(5, 9));
-    });
+      test('5 fame level 10+', () => {
+        printFameTime(5, 10);
+      });
 
-    test('last product level 10', () => {
-      console.log(oneByOneToLastItem(eventName));
-    });
+      test('4 fame level 10+', () => {
+        printFameTime(4, 10);
+      });
 
-    test('280 scientists', () => {
-      console.log(oneByOneToTarget(eventName, 2.85e19));
-    });
-
-    test('290 scientists', () => {
-      console.log('290 scientists (' + getCostOfScientists(290).toString() + ')');
-      console.log(oneByOneToTarget(eventName, 1.17e20));
-    });
-
-    test('300 scientists', () => {
-      console.log('300 scientists (' + getCostOfScientists(300).toString() + ') vs estimate of ' + 5.61e20.toString());
-      console.log(oneByOneToTarget(eventName, 5.61e20));
-    });
-
-    test('300 scientists but from 250', () => {
-      console.log(oneByOneToTarget(eventName, 469e18)); // actual number from game
-    });
-
-    test('6 fame level 10+', () => {
-      console.log(getFame(6, 10));
-    });
-
-    test('7 fame level 10+', () => {
-      console.log(getFame(7, 10));
-    });
-
-    test('5 fame level 10+', () => {
-      console.log(getFame(6, 10));
-    });
-
-    test('4 fame level 10+', () => {
-      console.log(getFame(4, 10));
-    });
-
-    test('3 fame level 10+', () => {
-      console.log(getFame(6, 10));
+      test('3 fame level 10+', () => {
+        printFameTime(6, 10);
+      });
     });
   });
 
   describe('main workshop', () => {
+    function printFameTime(fame: number, level: number): void {
+      const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), level);
+      console.log(filterOutSkipped(targetInfo.statuses));
+      console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
+      console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+    }
+
     test.skip('uhhhh', () => {
       console.log(oneByOneToLastItem('Main Workshop'));
     });
@@ -116,6 +162,22 @@ describe.only('runProgram', () => {
 
     test('import Everything, fame 14 lvl 19', () => {
       console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(14, 19), 19));
+    });
+
+    test('5 fame lvl 7', () => {
+      console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(5, 7), 7));
+    });
+
+    test('6 fame lvl 8', () => {
+      printFameTime(6, 8);
+    });
+
+    test('6 fame lvl 9', () => {
+      printFameTime(6, 9);
+    });
+
+    test('15 fame lvl 13', () => {
+      printFameTime(15, 13);
     });
   });
 });
