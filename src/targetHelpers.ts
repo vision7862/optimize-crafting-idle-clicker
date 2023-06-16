@@ -1,3 +1,4 @@
+import memoize from 'fast-memoize';
 import { type ProductStatus } from './types/Workshop';
 
 export function computeTargetFromFame(fame: number, level: number): number {
@@ -22,7 +23,9 @@ export function filterOutSkipped(statuses: Map<string, ProductStatus>): Map<stri
   return filteredStatuses;
 }
 
-export function getMainWorkshopIncomeMultiplier(level: number): number {
+export const getMainWorkshopIncomeMultiplier = memoize(getMainWorkshopIncomeMultiplierNonMemo);
+
+function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
   return getLevelAchievementMultiplier(level) *
         1.2 * // wood
         1.2 * // leather

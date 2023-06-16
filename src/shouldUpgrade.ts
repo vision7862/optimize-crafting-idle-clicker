@@ -25,7 +25,8 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   product: Product,
   workshop: Workshop,
 ): WorkshopUpgradeInfo | null {
-  const incomePerCycle = getCurrentIncome(workshop, clickBonus, merchantBonus);
+  const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
+  const incomePerCycle = getCurrentIncome(workshop, clickBonusActual, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
   if (getProductLevel(product, workshop) === 0 && scienceIsTight ? cyclesToTarget < 20 : cyclesToTarget < 5) {
     return null;
@@ -33,11 +34,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
 
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
-  const additionalItemsFromUpgrade = product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
-  const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue *
-                                   (workshop.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
-                                   (workshop.event ? 1 : getMainWorkshopIncomeMultiplier(workshop.level)) *
-                                   (workshop.event && merchantBonus ? merchantBonusMultiplier : 1);
+  const additionalIncomePerCycle = clickBonusActual * getIncomeForOneLevelOfItem(workshop, product, merchantBonus);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
     return {
@@ -52,23 +49,28 @@ export interface WorkshopUpgradeInfo {
   cyclesToTarget: number
 }
 
-function getCurrentIncome(workshop: Workshop, clickBonus: boolean, merchantBonus: boolean): number {
+function getCurrentIncome(workshop: Workshop, clickBonus: number, merchantBonus: boolean): number {
   let totalIncome = 0;
   const topProduct: Product = getTopProduct(workshop);
   for (const product of workshop.products.values()) {
-    totalIncome += product.outputCount * applyClickBonus(product, topProduct, clickBonus) *
-                   product.revenue *
+    totalIncome += applyClickBonus(product, topProduct, clickBonus) *
                    getProductLevel(product, workshop) *
-                   ALWAYS_MERCHANT_MULTILIER *
-                   (merchantBonus ? merchantBonusMultiplier : 1);
+                   getIncomeForOneLevelOfItem(workshop, product, merchantBonus);
   }
   return totalIncome;
 }
 
-function applyClickBonus(product: Product, topProduct: Product, clickBonus: boolean): number {
-  if (clickBonus && [topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
-    return clickBonusMultiplier;
+function applyClickBonus(product: Product, topProduct: Product, clickBonus: number): number {
+  if ([topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
+    return clickBonus;
   } else return 1;
+}
+
+function getIncomeForOneLevelOfItem(workshop: Workshop, product: Product, merchantBonus: boolean): number {
+  return product.outputCount * product.revenue *
+          (workshop.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
+          (workshop.event ? 1 : getMainWorkshopIncomeMultiplier(workshop.level)) *
+          (workshop.event && merchantBonus ? merchantBonusMultiplier : 1);
 }
 
 function getTopProduct(workshop: Workshop): Product {

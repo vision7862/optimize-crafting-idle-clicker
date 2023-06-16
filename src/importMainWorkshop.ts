@@ -21,7 +21,7 @@ export function importMainWorkshopAtLevel(level: number): Map<string, Product> {
       name: details[0].split('x ')[1],
       researchCost: +details[1].replace(/[$, ]/g, ''),
       buildCost: +details[2].replace(/[$, ]/g, ''),
-      revenue: +details[3].replace(/[$, ]/g, '') * 2 ** level,
+      revenue: +details[3].replace(/[$, ]/g, ''),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
       input1: getInputProductWiki(details[5], productMap),
       input2: getInputProductWiki(details[6], productMap),
