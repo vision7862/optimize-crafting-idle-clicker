@@ -3,7 +3,7 @@ import { type ProductStatus, type Workshop } from './types/Workshop';
 
 const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
-const ALWAYS_MERCHANT_MULTILIER = 1; // 6;
+const ALWAYS_MERCHANT_MULTILIER = 6;
 const scienceIsTight = true;
 
 export function getMainWorkshopIncomeMultiplier(level: number): number {
@@ -48,7 +48,10 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
   const additionalItemsFromUpgrade = product.outputCount * (clickBonus ? clickBonusMultiplier : 1);
-  const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue * ALWAYS_MERCHANT_MULTILIER * (merchantBonus ? merchantBonusMultiplier : 1);
+  const additionalIncomePerCycle = additionalItemsFromUpgrade * product.revenue *
+                                   (workshop.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
+                                   (workshop.event ? 1 : getMainWorkshopIncomeMultiplier(workshop.level)) *
+                                   (merchantBonus ? merchantBonusMultiplier : 1);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
     return {
