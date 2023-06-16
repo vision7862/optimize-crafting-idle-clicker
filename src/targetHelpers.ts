@@ -112,14 +112,14 @@ export function getLevelAchievementMultiplier(level: number): number {
 
 export function computeResearchTimeForWorkshop(workshop: Workshop): number {
   let totalResearchNeeded: number = 0;
-  for (const [productName, status] of workshop.statuses.entries()) {
-    if (status.level > 0) {
+  for (const product of workshop.productsInfo.values()) {
+    if (product.status.level > 0) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      totalResearchNeeded += workshop.products.get(productName)!.researchCost;
+      totalResearchNeeded += product.details.researchCost;
     }
   }
-  const researchMultiplierPercentage = workshop.event ? 100 : getMainWorkshopResearchMultiplier(true);
-  const researchPerSecond = workshop.scientists * researchMultiplierPercentage / 100;
+  const researchMultiplierPercentage = workshop.workshopStatus.event ? 100 : getMainWorkshopResearchMultiplier(true);
+  const researchPerSecond = workshop.workshopStatus.scientists * researchMultiplierPercentage / 100;
   return totalResearchNeeded / researchPerSecond;
 }
 

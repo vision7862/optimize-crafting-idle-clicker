@@ -1,15 +1,15 @@
 import { getUpgradedWorkshopAndTimeIfBetter, type WorkshopUpgradeInfo } from './shouldUpgrade';
-import { type Workshop } from './types/Workshop';
+import { type Product, type Workshop } from './types/Workshop';
 
 export function optimizeProductAndBelow(
   target: number,
-  product: ProductDetails,
+  product: Product,
   workshop: Workshop,
 ): Workshop {
   return optimizeProductAndBelowWithTime(target, product, workshop).workshop;
 }
 
-export function optimizeProductAndBelowWithTime(target: number, product: ProductDetails, workshop: Workshop): WorkshopUpgradeInfo {
+export function optimizeProductAndBelowWithTime(target: number, product: Product, workshop: Workshop): WorkshopUpgradeInfo {
   let shouldUpgradeNext = true;
   let modifiedWorkshopInfo: WorkshopUpgradeInfo = {
     workshop,
@@ -34,16 +34,16 @@ export function optimizeEachProductToTarget(
 export function optimizeEachProductToTargetWithTime(target: number, workshop: Workshop): WorkshopUpgradeInfo {
   let modifiedWorkshop: Workshop = workshop;
   let cyclesToTarget = 0;
-  const productsInOrder = Array.from(workshop.products.keys());
+  const productsInOrder = Array.from(workshop.productsInfo.values());
   for (let productIndex = 0; productIndex < productsInOrder.length; productIndex++) {
-    const thisProduct: ProductDetails | undefined = workshop.products.get(productsInOrder[productIndex]);
-    const nextProduct: ProductDetails | undefined = workshop.products.get(productsInOrder[productIndex + 1]);
+    const thisProduct: Product | undefined = productsInOrder[productIndex];
+    const nextProduct: Product | undefined = productsInOrder[productIndex + 1];
     if (thisProduct !== undefined) {
-      const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.buildCost) : target;
+      const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
       const modifiedWorkshopInfo = optimizeProductAndBelowWithTime(currentTarget, thisProduct, modifiedWorkshop);
       modifiedWorkshop = modifiedWorkshopInfo.workshop;
       cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
-      if (nextProduct === undefined || target < nextProduct.buildCost) {
+      if (nextProduct === undefined || target < nextProduct.details.buildCost) {
         break;
       }
     }

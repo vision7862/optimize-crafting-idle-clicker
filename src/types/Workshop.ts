@@ -1,7 +1,12 @@
 export type Workshop = Readonly<{
-  products: Map<string, ProductDetails>
-  statuses: Map<string, ProductStatus>
-}> & WorkshopStatus;
+  productsInfo: Map<string, Product>
+  workshopStatus: WorkshopStatus
+}>;
+
+export type Product = Readonly<{
+  details: ProductDetails
+  status: ProductStatus
+}>;
 
 export type WorkshopStatus = Readonly<{
   event: boolean
@@ -9,7 +14,7 @@ export type WorkshopStatus = Readonly<{
   scientists: number
 }>;
 
-export interface ProductStatus {
+export type ProductStatus = Readonly<{
   level: number
   merchants: number
-}
+}>;

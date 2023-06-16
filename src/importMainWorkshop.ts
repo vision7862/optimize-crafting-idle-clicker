@@ -16,7 +16,7 @@ export function importMainWorkshopAtLevel(level: number): Map<string, ProductDet
     if (details.length !== 7) {
       throw new Error('import poorly formatted ' + line);
     }
-    const product: ProductDetails = {
+    let product: ProductDetails = {
       outputCount: +details[0].split('x ')[0],
       name: details[0].split('x ')[1],
       researchCost: +details[1].replace(/[$, ]/g, ''),
@@ -28,7 +28,10 @@ export function importMainWorkshopAtLevel(level: number): Map<string, ProductDet
     };
     const blueprintInfo = blueprintMap.get(product.name);
     if (blueprintInfo != null) {
-      product.revenue *= blueprintInfo / 10;
+      product = {
+        ...product,
+        revenue: product.revenue * blueprintInfo / 10,
+      };
     }
     productMap.set(product.name, product);
   }

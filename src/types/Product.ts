@@ -1,4 +1,4 @@
-interface ProductDetails {
+type ProductDetails = Readonly<{
   name: string
   researchCost: number
   buildCost: number
@@ -7,9 +7,9 @@ interface ProductDetails {
   outputCount: number
   input1: InputProduct | null
   input2: InputProduct | null
-};
+}>;
 
-interface InputProduct {
+type InputProduct = Readonly<{
   product: ProductDetails
   count: number
-}
+}>;
