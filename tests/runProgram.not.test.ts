@@ -1,6 +1,5 @@
-import { oneByOneToLastItem, oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime } from '../src/computeIdealLevelsForEvent';
-import { getMainWorkshopIncomeMultiplier } from '../src/shouldUpgrade';
-import { computeTargetFromFame, filterOutSkipped, getCostOfScientists } from '../src/targetHelpers';
+import { oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime, type TargetWorkshopInfo } from '../src/computeIdealLevelsForEvent';
+import { computeTargetFromFame, filterOutSkipped, getCostOfScientists, getCostOfScientistsFromSome } from '../src/targetHelpers';
 import { type ProductStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
@@ -148,14 +147,6 @@ describe.only('runProgram', () => {
       console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
     }
 
-    test.skip('uhhhh', () => {
-      console.log(oneByOneToLastItem('Main Workshop'));
-    });
-
-    test.skip('income multiplier', () => {
-      expect(getMainWorkshopIncomeMultiplier(19)).toBe(4e6);
-    });
-
     test('import Everything, fame 15 lvl 19', () => {
       console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(15, 19), 19));
     });
@@ -182,6 +173,67 @@ describe.only('runProgram', () => {
 
     test('15 fame lvl 14', () => {
       printFameTime(15, 14);
+    });
+
+    test('14 fame lvl 14', () => {
+      printFameTime(14, 14);
+    });
+
+    test('15 fame lvl 15', () => {
+      printFameTime(15, 15);
+    });
+
+    test('14 fame lvl 15', () => {
+      printFameTime(14, 15);
+    });
+
+    test('13 fame lvl 15', () => {
+      printFameTime(13, 15);
+    });
+
+    describe('time-based goals', () => {
+      test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
+        const level = 15;
+        const targetTimeInSeconds = 20 * 60;
+        let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
+        let withinTimeFame = 0;
+        for (let fame = 5; fame < 30; fame++) {
+          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), level);
+          const semiActiveTime = targetInfo.cyclesToTarget * 5;
+          if (semiActiveTime < targetTimeInSeconds) {
+            withinTimeTargetInfo = targetInfo;
+            withinTimeFame = fame;
+          } else break;
+        }
+        if (withinTimeTargetInfo !== null) {
+          console.log(filterOutSkipped(withinTimeTargetInfo.statuses));
+          console.log('getting ' + withinTimeFame.toString() + ' fame');
+        } else {
+          console.log('cannot get at least 5 fame within 20 minutes');
+        }
+      });
+
+      test('get as many scientists as possible from 406 in 20 mintues at level 15', () => {
+        const level = 15;
+        const currentScientists = 406;
+        const targetTimeInSeconds = 20 * 60;
+        let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
+        let withinTimeScientists = 0;
+        for (let scientists = currentScientists; scientists < 1000; scientists++) {
+          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getCostOfScientistsFromSome(currentScientists, scientists), level);
+          const semiActiveTime = targetInfo.cyclesToTarget * 5;
+          if (semiActiveTime < targetTimeInSeconds) {
+            withinTimeTargetInfo = targetInfo;
+            withinTimeScientists = scientists;
+          } else break;
+        }
+        if (withinTimeTargetInfo !== null) {
+          console.log(filterOutSkipped(withinTimeTargetInfo.statuses));
+          console.log('getting ' + withinTimeScientists.toString() + ' total scientists');
+        } else {
+          console.log('cannot get at any additional scientists in 20 minutes');
+        }
+      });
     });
   });
 });

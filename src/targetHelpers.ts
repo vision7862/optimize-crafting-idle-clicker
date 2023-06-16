@@ -6,8 +6,12 @@ export function computeTargetFromFame(fame: number, level: number): number {
 }
 
 export function getCostOfScientists(numScientists: number): number {
+  return getCostOfScientistsFromSome(0, numScientists);
+}
+
+export function getCostOfScientistsFromSome(startingScientists: number, finalScientists: number): number {
   let cost = 0;
-  for (let i = 2; i <= numScientists; i++) {
+  for (let i = Math.max(2, startingScientists + 1); i <= finalScientists; i++) {
     cost += Math.round(50 * (1.15 ** (i - 2)));
   }
   return cost;
