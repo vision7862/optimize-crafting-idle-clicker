@@ -1,6 +1,6 @@
 import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
-import { optimizeEachProductToTarget, optimizeProductAndBelow } from './productLooper';
+import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optimizeProductAndBelow } from './productLooper';
 import { type ProductStatus, type Workshop } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
@@ -31,23 +31,42 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
 }
 
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
+  return oneByOneToLastItemWithTime(eventName).statuses;
+}
+
+export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInfo {
   const products: Map<string, Product> = importProducts(eventName);
   const workshop: Workshop = setUpWorkshop(products);
   const productsInOrder = Array.from(products.keys());
-  const upgradedWorkshop = optimizeEachProductToTarget(
+  const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     products.get(productsInOrder[productsInOrder.length - 1])!.buildCost,
     workshop,
   );
-  return upgradedWorkshop.statuses;
+  return {
+    statuses: upgradedWorkshopInfo.workshop.statuses,
+    cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
+  };
 }
 
 export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): Map<string, ProductStatus> {
+  return oneByOneToTargetAtEventLevelWithTime(eventName, target, level).statuses;
+}
+
+export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: number, level: number): TargetWorkshopInfo {
   const products: Map<string, Product> = importProductsAtLevel(eventName, level);
   const workshop: Workshop = setUpWorkshop(products);
-  const upgradedWorkshop = optimizeEachProductToTarget(target, workshop);
-  return upgradedWorkshop.statuses;
+  const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
+  return {
+    statuses: upgradedWorkshopInfo.workshop.statuses,
+    cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
+  };
 }
+
+export type TargetWorkshopInfo = Readonly<{
+  statuses: Map<string, ProductStatus>
+  cyclesToTarget: number
+}>;
 
 export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, ProductStatus> {
   const products: Map<string, Product> = importMainWorkshopAtLevel(level);
@@ -62,10 +81,17 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
+  return oneByOneToTargetAtWorkshopLevelWithTime(target, level).statuses;
+}
+
+export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: number): TargetWorkshopInfo {
   const products: Map<string, Product> = importMainWorkshopAtLevel(level);
   const workshop: Workshop = setUpWorkshop(products);
-  const upgradedWorkshop = optimizeEachProductToTarget(target, workshop);
-  return upgradedWorkshop.statuses;
+  const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
+  return {
+    statuses: upgradedWorkshopInfo.workshop.statuses,
+    cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
+  };
 }
 
 export function oneByOneToTarget(eventName: string, target: number): Map<string, ProductStatus> {
@@ -99,9 +125,9 @@ function setUpWorkshop(products: Map<string, Product>): Workshop {
       statuses.set(productName, status);
     }
   }
-
   return {
     products,
     statuses,
+    event,
   };
 }

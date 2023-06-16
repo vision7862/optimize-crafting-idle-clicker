@@ -1,4 +1,4 @@
-import { getUpgradedWorkshopIfBetter } from './shouldUpgrade';
+import { type WorkshopUpgradeInfo, getUpgradedWorkshopAndTimeIfBetter } from './shouldUpgrade';
 import { type Workshop } from './types/Workshop';
 
 export function optimizeProductAndBelow(
@@ -6,35 +6,51 @@ export function optimizeProductAndBelow(
   product: Product,
   workshop: Workshop,
 ): Workshop {
+  return optimizeProductAndBelowWithTime(target, product, workshop).workshop;
+}
+
+export function optimizeProductAndBelowWithTime(target: number, product: Product, workshop: Workshop): WorkshopUpgradeInfo {
   let shouldUpgradeNext = true;
-  let modifiedWorkshop = workshop;
+  let modifiedWorkshopInfo: WorkshopUpgradeInfo = {
+    workshop,
+    cyclesToTarget: 0,
+  };
   while (shouldUpgradeNext) {
-    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, true, true, product, modifiedWorkshop);
-    shouldUpgradeNext = upgradedWorkshop !== null;
-    if (upgradedWorkshop != null) {
-      modifiedWorkshop = upgradedWorkshop;
+    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopAndTimeIfBetter(target, false, true, product, modifiedWorkshopInfo.workshop);
+    shouldUpgradeNext = upgradedWorkshopInfo !== null;
+    if (upgradedWorkshopInfo != null) {
+      modifiedWorkshopInfo = upgradedWorkshopInfo;
     }
   }
-  return modifiedWorkshop;
+  return modifiedWorkshopInfo;
 }
 
 export function optimizeEachProductToTarget(
   target: number,
   workshop: Workshop,
 ): Workshop {
-  let modifiedWorkshop = workshop;
+  return optimizeEachProductToTargetWithTime(target, workshop).workshop;
+}
+export function optimizeEachProductToTargetWithTime(target: number, workshop: Workshop): WorkshopUpgradeInfo {
+  let modifiedWorkshop: Workshop = workshop;
+  let cyclesToTarget = 0;
   const productsInOrder = Array.from(workshop.products.keys());
   for (let productIndex = 0; productIndex < productsInOrder.length; productIndex++) {
     const thisProduct: Product | undefined = workshop.products.get(productsInOrder[productIndex]);
     const nextProduct: Product | undefined = workshop.products.get(productsInOrder[productIndex + 1]);
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.buildCost) : target;
-      modifiedWorkshop = optimizeProductAndBelow(currentTarget, thisProduct, modifiedWorkshop);
+      const modifiedWorkshopInfo = optimizeProductAndBelowWithTime(currentTarget, thisProduct, modifiedWorkshop);
+      modifiedWorkshop = modifiedWorkshopInfo.workshop;
+      cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
       if (nextProduct === undefined || target < nextProduct.buildCost) {
         break;
       }
     }
   }
 
-  return modifiedWorkshop;
+  return {
+    workshop: modifiedWorkshop,
+    cyclesToTarget,
+  };
 }
