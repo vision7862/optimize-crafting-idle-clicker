@@ -227,6 +227,12 @@ describe.only('runProgram', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 16);
         maximizeTypeInTime('fame', 30, 16, 5, getTarget);
       });
+
+      test('get as many scientists as possible from 422 in 20 mintues at level 16', () => {
+        const currentScientists = 422;
+        const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
+        maximizeTypeInTime('scientists', 10, 16, currentScientists, getTarget);
+      });
     });
   });
 });
