@@ -1,4 +1,5 @@
 import { importProducts } from '../src/importEventProducts';
+import { type ProductDetails } from '../src/types/Product';
 
 describe('importProducts', () => {
   test('should import costs and relationship correctly', () => {

@@ -3,20 +3,20 @@ import { type Product, type Workshop } from './types/Workshop';
 
 export function optimizeProductAndBelow(
   target: number,
-  product: Product,
+  productName: string,
   workshop: Workshop,
 ): Workshop {
-  return optimizeProductAndBelowWithTime(target, product, workshop).workshop;
+  return optimizeProductAndBelowWithTime(target, productName, workshop).workshop;
 }
 
-export function optimizeProductAndBelowWithTime(target: number, product: Product, workshop: Workshop): WorkshopUpgradeInfo {
+export function optimizeProductAndBelowWithTime(target: number, productName: string, workshop: Workshop): WorkshopUpgradeInfo {
   let shouldUpgradeNext = true;
   let modifiedWorkshopInfo: WorkshopUpgradeInfo = {
     workshop,
     cyclesToTarget: 0,
   };
   while (shouldUpgradeNext) {
-    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopAndTimeIfBetter(target, false, true, product, modifiedWorkshopInfo.workshop);
+    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopAndTimeIfBetter(target, false, true, productName, modifiedWorkshopInfo.workshop);
     shouldUpgradeNext = upgradedWorkshopInfo !== null;
     if (upgradedWorkshopInfo != null) {
       modifiedWorkshopInfo = upgradedWorkshopInfo;
@@ -40,7 +40,7 @@ export function optimizeEachProductToTargetWithTime(target: number, workshop: Wo
     const nextProduct: Product | undefined = productsInOrder[productIndex + 1];
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
-      const modifiedWorkshopInfo = optimizeProductAndBelowWithTime(currentTarget, thisProduct, modifiedWorkshop);
+      const modifiedWorkshopInfo = optimizeProductAndBelowWithTime(currentTarget, thisProduct.details.name, modifiedWorkshop);
       modifiedWorkshop = modifiedWorkshopInfo.workshop;
       cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
       if (nextProduct === undefined || target < nextProduct.details.buildCost) {
