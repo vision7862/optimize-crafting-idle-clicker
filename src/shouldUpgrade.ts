@@ -28,7 +28,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBonusActual, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
-  if (getProductLevel(product, workshop) === 0 && scienceIsTight ? cyclesToTarget < 20 : cyclesToTarget < 5) {
+  if (getProductLevel(product, workshop) === 0 && scienceIsTight ? cyclesToTarget < 30 : cyclesToTarget < 5) {
     return null;
   }
 
