@@ -1,5 +1,5 @@
 import { optimizeEachProductToTarget } from '../src/productLooper';
-import { DEFAULT_WORKSHOP } from './helpers';
+import { DEFAULT_WORKSHOP } from './testHelpers';
 
 describe('productLooper', () => {
   test('should do stuff', () => {

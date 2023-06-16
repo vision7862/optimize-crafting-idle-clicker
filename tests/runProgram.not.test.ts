@@ -179,5 +179,9 @@ describe.only('runProgram', () => {
     test('15 fame lvl 13', () => {
       printFameTime(15, 13);
     });
+
+    test('15 fame lvl 14', () => {
+      printFameTime(15, 14);
+    });
   });
 });
