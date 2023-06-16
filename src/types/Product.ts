@@ -1,4 +1,4 @@
-type ProductDetails = Readonly<{
+export type ProductDetails = Readonly<{
   name: string
   researchCost: number
   buildCost: number
@@ -9,7 +9,7 @@ type ProductDetails = Readonly<{
   input2: InputProduct | null
 }>;
 
-type InputProduct = Readonly<{
+export type InputProduct = Readonly<{
   product: ProductDetails
   count: number
 }>;
