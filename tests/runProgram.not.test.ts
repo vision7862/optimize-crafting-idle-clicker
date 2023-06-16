@@ -192,47 +192,36 @@ describe.only('runProgram', () => {
     });
 
     describe('time-based goals', () => {
-      test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
+      function maximizeTypeInTime(startingAmount: number, thingMaxing: string, getTarget: (testingAmount: number) => number): void {
         const level = 15;
-        const targetTimeInSeconds = 20 * 60;
+        const targetTimeInSeconds = 10 * 60;
         let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
-        let withinTimeFame = 0;
-        for (let fame = 5; fame < 30; fame++) {
-          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), level);
+        let withinTimeAmount = 0;
+        for (let amount = startingAmount; amount < 1000; amount++) {
+          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getTarget(amount), level);
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
           if (semiActiveTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;
-            withinTimeFame = fame;
+            withinTimeAmount = amount;
           } else break;
         }
         if (withinTimeTargetInfo !== null) {
           console.log(filterOutSkipped(withinTimeTargetInfo.statuses));
-          console.log('getting ' + withinTimeFame.toString() + ' fame');
+          console.log('getting ' + withinTimeAmount.toString() + ' total ' + thingMaxing);
         } else {
-          console.log('cannot get at least 5 fame within 20 minutes');
+          console.log('cannot get at any additional ' + thingMaxing + ' in 20 minutes');
         }
+      }
+
+      test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 15);
+        maximizeTypeInTime(5, 'fame', getTarget);
       });
 
       test('get as many scientists as possible from 406 in 20 mintues at level 15', () => {
-        const level = 15;
-        const currentScientists = 406;
-        const targetTimeInSeconds = 20 * 60;
-        let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
-        let withinTimeScientists = 0;
-        for (let scientists = currentScientists; scientists < 1000; scientists++) {
-          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getCostOfScientistsFromSome(currentScientists, scientists), level);
-          const semiActiveTime = targetInfo.cyclesToTarget * 5;
-          if (semiActiveTime < targetTimeInSeconds) {
-            withinTimeTargetInfo = targetInfo;
-            withinTimeScientists = scientists;
-          } else break;
-        }
-        if (withinTimeTargetInfo !== null) {
-          console.log(filterOutSkipped(withinTimeTargetInfo.statuses));
-          console.log('getting ' + withinTimeScientists.toString() + ' total scientists');
-        } else {
-          console.log('cannot get at any additional scientists in 20 minutes');
-        }
+        const currentScientists = 411;
+        const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
+        maximizeTypeInTime(currentScientists, 'scientists', getTarget);
       });
     });
   });
