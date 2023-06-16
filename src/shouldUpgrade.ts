@@ -11,7 +11,7 @@ export function getUpgradedWorkshopIfBetter(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
-  product: Product,
+  product: ProductDetails,
   workshop: Workshop,
 ): Workshop | null {
   const workshopUpgradeInfo = getUpgradedWorkshopAndTimeIfBetter(target, clickBonus, merchantBonus, product, workshop);
@@ -22,7 +22,7 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
-  product: Product,
+  product: ProductDetails,
   workshop: Workshop,
 ): WorkshopUpgradeInfo | null {
   const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
@@ -51,7 +51,7 @@ export interface WorkshopUpgradeInfo {
 
 function getCurrentIncome(workshop: Workshop, clickBonus: number, merchantBonus: boolean): number {
   let totalIncome = 0;
-  const topProduct: Product = getTopProduct(workshop);
+  const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.products.values()) {
     totalIncome += applyClickBonus(product, topProduct, clickBonus) *
                    getProductLevel(product, workshop) *
@@ -60,23 +60,23 @@ function getCurrentIncome(workshop: Workshop, clickBonus: number, merchantBonus:
   return totalIncome;
 }
 
-function applyClickBonus(product: Product, topProduct: Product, clickBonus: number): number {
+function applyClickBonus(product: ProductDetails, topProduct: ProductDetails, clickBonus: number): number {
   if ([topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
     return clickBonus;
   } else return 1;
 }
 
-function getIncomeForOneLevelOfItem(workshop: Workshop, product: Product, merchantBonus: boolean): number {
+function getIncomeForOneLevelOfItem(workshop: Workshop, product: ProductDetails, merchantBonus: boolean): number {
   return product.outputCount * product.revenue *
           (workshop.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
           (workshop.event ? 1 : getMainWorkshopIncomeMultiplier(workshop.level)) *
           (workshop.event && merchantBonus ? merchantBonusMultiplier : 1);
 }
 
-function getTopProduct(workshop: Workshop): Product {
+function getTopProduct(workshop: Workshop): ProductDetails {
   const productsInOrder = Array.from(workshop.products.keys());
   for (let productIndex = productsInOrder.length - 1; productIndex >= 0; productIndex--) {
-    const thisProduct: Product | undefined = workshop.products.get(productsInOrder[productIndex]);
+    const thisProduct: ProductDetails | undefined = workshop.products.get(productsInOrder[productIndex]);
     if (thisProduct !== undefined) {
       const productStatus: ProductStatus | undefined = workshop.statuses.get(thisProduct.name);
       if (productStatus !== undefined && productStatus.level > 0) {
@@ -88,7 +88,7 @@ function getTopProduct(workshop: Workshop): Product {
   return workshop.products.get(productsInOrder[0])!;
 }
 
-function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeInfo {
+function getCostToUpgradeProduct(product: ProductDetails, workshop: Workshop): UpgradeInfo {
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
 
@@ -106,7 +106,7 @@ function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeI
   };
 }
 
-function upgradeInputsToProduct(parentProduct: Product, workshop: Workshop): UpgradeInfo {
+function upgradeInputsToProduct(parentProduct: ProductDetails, workshop: Workshop): UpgradeInfo {
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
   if (parentProduct.input1 != null) {
@@ -141,7 +141,7 @@ function getInputItemsNeeded(inputProductName: string, workshop: Workshop): numb
   return itemsNeeded;
 }
 
-function upgradeInput(inputItemsNeeded: number, inputProduct: Product, workshop: Workshop): UpgradeInfo {
+function upgradeInput(inputItemsNeeded: number, inputProduct: ProductDetails, workshop: Workshop): UpgradeInfo {
   let costToUpgradeInput = 0;
   let inputLevel = getProductLevel(inputProduct, workshop);
   let inputItems = inputLevel * inputProduct.outputCount;
@@ -169,7 +169,7 @@ interface UpgradeInfo {
   costOfUpgrade: number
 }
 
-function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
+function upgradeSingleProduct(product: ProductDetails, workshop: Workshop): UpgradeInfo {
   const oldStatus: ProductStatus | undefined = workshop.statuses.get(product.name);
   if (oldStatus === undefined) {
     throw new Error('product ' + product.name + ' does not have a status.');

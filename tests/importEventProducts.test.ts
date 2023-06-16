@@ -2,7 +2,7 @@ import { importProducts } from '../src/importEventProducts';
 
 describe('importProducts', () => {
   test('should import costs and relationship correctly', () => {
-    const products: Map<string, Product> = importProducts('FromDustTillLawn');
+    const products: Map<string, ProductDetails> = importProducts('FromDustTillLawn');
     expect(products.size).toBe(18);
   });
 

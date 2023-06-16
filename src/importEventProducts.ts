@@ -3,17 +3,17 @@ import * as path from 'path';
 import { getUpgradeCostMultiplier } from './importMainWorkshop';
 
 // level must be between 1 and 10
-export function importProductsAtLevel(eventName: string, level: number): Map<string, Product> {
+export function importProductsAtLevel(eventName: string, level: number): Map<string, ProductDetails> {
   const filepath = path.join(__dirname, './products/' + eventName.replace(/\s/g, '') + '.txt');
   const file = fs.readFileSync(filepath, 'utf8');
-  const productMap = new Map<string, Product>();
+  const productMap = new Map<string, ProductDetails>();
 
   for (const line of file.split(/[\r\n]+/)) {
     const details = line.split(/\t+/);
     if (details.length < 7) {
       throw new Error('import poorly formatted ' + line);
     }
-    const product: Product = {
+    const product: ProductDetails = {
       name: details[0],
       researchCost: +details[1].replace(' ', '').replace(',', ''),
       buildCost: +details[2].replace(' ', '').replace(',', ''),
@@ -28,13 +28,13 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
   return productMap;
 }
 
-export function importProducts(eventName: string): Map<string, Product> {
+export function importProducts(eventName: string): Map<string, ProductDetails> {
   return importProductsAtLevel(eventName, 10);
 }
 
-function getInputProduct(inputDescription: string, productMap: Map<string, Product>): InputProduct | null {
+function getInputProduct(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
   if (inputDescription !== '-') {
-    const inputProduct: Product | undefined = productMap.get(inputDescription.split(' x')[0]);
+    const inputProduct: ProductDetails | undefined = productMap.get(inputDescription.split(' x')[0]);
     if (inputProduct === undefined) {
       throw new Error('Product requires input that is missing ' + inputDescription);
     }
