@@ -2,6 +2,7 @@ import { getStatusMap } from './WorkshopHelpers';
 import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optimizeProductAndBelow } from './productLooper';
+import { type ProductDetails } from './types/Product';
 import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
@@ -50,15 +51,17 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder = Array.from(workshop.productsInfo.keys());
-  const upgradedWorkshop = optimizeProductAndBelow(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.productsInfo.get(productName)!.details.buildCost,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.productsInfo.get(productsInOrder[productsInOrder.indexOf(productName) - 1])!,
-    workshop,
-  );
-  return getStatusMap(upgradedWorkshop);
+  let productBeforeTarget = Array.from(workshop.productsInfo.values())[0];
+  for (const product of workshop.productsInfo.values()) {
+    if (product.details.name === productName) {
+      const upgradedWorkshop = optimizeProductAndBelow(product.details.buildCost, productBeforeTarget, workshop);
+      return getStatusMap(upgradedWorkshop);
+    } else {
+      productBeforeTarget = product;
+    }
+  }
+
+  throw new Error('cannot find product ' + productName + ' in workshop ' + JSON.stringify(products));
 }
 
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {

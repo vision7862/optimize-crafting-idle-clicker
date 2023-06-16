@@ -1,4 +1,4 @@
-import { computeTargetFromFame, getCostOfScientists, getLevelAchievementMultiplier, getMainWorkshopIncomeMultiplier } from '../src/targetHelpers';
+import { computeTargetFromFame, getCostOfScientists, getLevelAchievementMultiplier } from '../src/targetHelpers';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {

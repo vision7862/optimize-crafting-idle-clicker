@@ -1,4 +1,5 @@
 import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
+import { type ProductDetails } from './types/Product';
 import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 const clickBonusMultiplier = 3;
