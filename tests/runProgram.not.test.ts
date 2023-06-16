@@ -192,9 +192,8 @@ describe.only('runProgram', () => {
     });
 
     describe('time-based goals', () => {
-      function maximizeTypeInTime(startingAmount: number, thingMaxing: string, getTarget: (testingAmount: number) => number): void {
-        const level = 15;
-        const targetTimeInSeconds = 10 * 60;
+      function maximizeTypeInTime(thingMaxing: string, minutes: number, level: number, startingAmount: number, getTarget: (testingAmount: number) => number): void {
+        const targetTimeInSeconds = minutes * 60;
         let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
         let withinTimeAmount = 0;
         for (let amount = startingAmount; amount < 1000; amount++) {
@@ -215,13 +214,18 @@ describe.only('runProgram', () => {
 
       test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 15);
-        maximizeTypeInTime(5, 'fame', getTarget);
+        maximizeTypeInTime('fame', 10, 15, 5, getTarget);
       });
 
       test('get as many scientists as possible from 406 in 20 mintues at level 15', () => {
         const currentScientists = 411;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
-        maximizeTypeInTime(currentScientists, 'scientists', getTarget);
+        maximizeTypeInTime('scientists', 10, 15, currentScientists, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 30 minutes at level 16', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 16);
+        maximizeTypeInTime('fame', 30, 16, 5, getTarget);
       });
     });
   });
