@@ -1,4 +1,4 @@
-import { getStatusMap } from './WorkshopHelpers';
+import { getProductByName, getStatusMap } from './WorkshopHelpers';
 import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optimizeProductAndBelow } from './productLooper';
@@ -35,7 +35,7 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
   const upgradedWorkshop = optimizeProductAndBelow(
     target,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.productsInfo.get(productName)!,
+    getProductByName(productName, workshop.productsInfo)!,
     workshop,
   );
   return getStatusMap(upgradedWorkshop);

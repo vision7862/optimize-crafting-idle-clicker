@@ -1,3 +1,4 @@
+import { getProductByName } from './WorkshopHelpers';
 import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
 import { type ProductDetails } from './types/Product';
 import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
@@ -139,7 +140,7 @@ function getInputItemsNeeded(inputProductName: string, workshop: Workshop): numb
 function upgradeInput(inputItemsNeeded: number, inputProductName: string, workshop: Workshop): UpgradeInfo {
   let costToUpgradeInput = 0;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const inputProduct = workshop.productsInfo.get(inputProductName)!;
+  const inputProduct = getProductByName(inputProductName, workshop.productsInfo);
   let inputLevel = inputProduct.status.level;
   let inputItems = inputProduct.status.level * inputProduct.details.outputCount;
   let modifiedWorkshop = workshop;
