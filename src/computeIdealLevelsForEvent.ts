@@ -30,6 +30,22 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
   return upgradedWorkshop.statuses;
 }
 
+// for when you have a full workshop and want to build the single next thing without optimizing the whole path up
+// currently looks at the exact previous item
+export function optimizeBuildingSingleProductInWorkshop(productName: string, level: number): Map<string, ProductStatus> {
+  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const workshop: Workshop = setUpWorkshop(products, true, 0);
+  const productsInOrder = Array.from(products.keys());
+  const upgradedWorkshop = optimizeProductAndBelow(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    workshop.products.get(productName)!.buildCost,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    workshop.products.get(productsInOrder[productsInOrder.indexOf(productName) - 1])!,
+    workshop,
+  );
+  return upgradedWorkshop.statuses;
+}
+
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
   return oneByOneToLastItemWithTime(eventName).statuses;
 }
