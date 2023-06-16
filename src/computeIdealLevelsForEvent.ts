@@ -4,7 +4,7 @@ import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optim
 import { type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importProducts(eventName);
+  const products: Map<string, ProductDetails> = importProducts(eventName);
   const workshopStatus: WorkshopStatus = {
     event: true,
     level: 0,
@@ -23,7 +23,7 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
 }
 
 export function optimizeBuildingFromTargetProduct(eventName: string, target: number, productName: string): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importProducts(eventName);
+  const products: Map<string, ProductDetails> = importProducts(eventName);
   const workshopStatus: WorkshopStatus = {
     event: false,
     level: 0,
@@ -43,7 +43,7 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
 // for when you have a full workshop and want to build the single next thing without optimizing the whole path up
 // currently looks at the exact previous item
 export function optimizeBuildingSingleProductInWorkshop(productName: string, level: number): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
   const workshopStatus: WorkshopStatus = {
     event: true,
     level,
@@ -66,7 +66,7 @@ export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus
 }
 
 export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInfo {
-  const products: Map<string, Product> = importProducts(eventName);
+  const products: Map<string, ProductDetails> = importProducts(eventName);
   const workshopStatus: WorkshopStatus = {
     event: true,
     level: 0,
@@ -90,7 +90,7 @@ export function oneByOneToTargetAtEventLevel(eventName: string, target: number, 
 }
 
 export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: number, level: number): TargetWorkshopInfo {
-  const products: Map<string, Product> = importProductsAtLevel(eventName, level);
+  const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, level);
   const workshopStatus: WorkshopStatus = {
     event: true,
     level,
@@ -110,7 +110,7 @@ export type TargetWorkshopInfo = Readonly<{
 }>;
 
 export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
   const workshopStatus: WorkshopStatus = {
     event: false,
     level,
@@ -131,7 +131,7 @@ export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): 
 }
 
 export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: number): TargetWorkshopInfo {
-  const products: Map<string, Product> = importMainWorkshopAtLevel(level);
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
   const workshopStatus: WorkshopStatus = {
     event: false,
     level,
@@ -150,7 +150,7 @@ export function oneByOneToTarget(eventName: string, target: number): Map<string,
 }
 
 export function optimizeToTargetFromStatus(eventName: string, statuses: Map<string, ProductStatus>, target: number): Map<string, ProductStatus> {
-  const products: Map<string, Product> = importProductsAtLevel(eventName, 10);
+  const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, 10);
   const workshopStatus: WorkshopStatus = {
     event: true,
     level: 0,
@@ -165,7 +165,7 @@ export function optimizeToTargetFromStatus(eventName: string, statuses: Map<stri
   return upgradedWorkshop.statuses;
 }
 
-function setUpWorkshop(products: Map<string, Product>, workshopStatus: WorkshopStatus): Workshop {
+function setUpWorkshop(products: Map<string, ProductDetails>, workshopStatus: WorkshopStatus): Workshop {
   const statuses = new Map<string, ProductStatus>();
   const status: ProductStatus = {
     level: 0,

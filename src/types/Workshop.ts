@@ -1,5 +1,5 @@
 export type Workshop = Readonly<{
-  products: Map<string, Product>
+  products: Map<string, ProductDetails>
   statuses: Map<string, ProductStatus>
 }> & WorkshopStatus;
 

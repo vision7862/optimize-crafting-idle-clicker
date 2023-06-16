@@ -1,6 +1,6 @@
 import { type ProductStatus, type Workshop } from '../src/types/Workshop';
 
-export const DEFAULT_PRODUCT: Product = {
+export const DEFAULT_PRODUCT: ProductDetails = {
   name: 'product_name',
   researchCost: 2,
   buildCost: 3.5e18,
@@ -10,7 +10,7 @@ export const DEFAULT_PRODUCT: Product = {
   input2: null,
 };
 
-const DEFAULT_PRODUCTS: Map<string, Product> = new Map<string, Product>().set(DEFAULT_PRODUCT.name, DEFAULT_PRODUCT);
+const DEFAULT_PRODUCTS: Map<string, ProductDetails> = new Map<string, ProductDetails>().set(DEFAULT_PRODUCT.name, DEFAULT_PRODUCT);
 
 const DEFAULT_STATUS: ProductStatus = {
   level: 0,
@@ -24,7 +24,7 @@ export const DEFAULT_WORKSHOP: Workshop = {
   statuses: DEFAULT_STATUSES,
 };
 
-export function getWorkshop (product: Product, level: number): Workshop {
+export function getWorkshop(product: ProductDetails, level: number): Workshop {
   const status: ProductStatus = {
     ...DEFAULT_STATUS,
     level,

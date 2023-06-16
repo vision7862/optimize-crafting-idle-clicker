@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function importMainWorkshopAtLevel(level: number): Map<string, Product> {
+export function importMainWorkshopAtLevel(level: number): Map<string, ProductDetails> {
   const blueprintMap = getBlueprintMap();
 
   const wsPath = path.join(__dirname, './products/MainWorkshopFromWiki.txt');
   const mainWorkshopProducts = fs.readFileSync(wsPath, 'utf8');
-  const productMap = new Map<string, Product>();
+  const productMap = new Map<string, ProductDetails>();
 
   for (const line of mainWorkshopProducts.split(/[\r\n]+/)) {
     if (line.includes('//')) {
@@ -16,7 +16,7 @@ export function importMainWorkshopAtLevel(level: number): Map<string, Product> {
     if (details.length !== 7) {
       throw new Error('import poorly formatted ' + line);
     }
-    const product: Product = {
+    const product: ProductDetails = {
       outputCount: +details[0].split('x ')[0],
       name: details[0].split('x ')[1],
       researchCost: +details[1].replace(/[$, ]/g, ''),
@@ -53,9 +53,9 @@ function getBlueprintMap(): Map<string, number> {
   return blueprintMap;
 }
 
-function getInputProductWiki(inputDescription: string, productMap: Map<string, Product>): InputProduct | null {
+function getInputProductWiki(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
-    const inputProduct: Product | undefined = productMap.get(inputDescription.split('x ')[1]);
+    const inputProduct: ProductDetails | undefined = productMap.get(inputDescription.split('x ')[1]);
     if (inputProduct === undefined) {
       throw new Error('Product requires input that is missing ' + inputDescription);
     }

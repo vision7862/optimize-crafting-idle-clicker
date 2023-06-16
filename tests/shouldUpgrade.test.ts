@@ -3,7 +3,7 @@ import { DEFAULT_PRODUCT, getWorkshop } from './testHelpers';
 
 describe('should Upgrade', () => {
   test('should return true when it will take fewer cycles with upgrade', () => {
-    const product: Product = {
+    const product: ProductDetails = {
       ...DEFAULT_PRODUCT,
       buildCost: 7.78e22,
       revenue: 5.97e20,
@@ -13,7 +13,7 @@ describe('should Upgrade', () => {
   });
 
   test('should return false when it will take more cycles with upgrade', () => {
-    const product: Product = {
+    const product: ProductDetails = {
       ...DEFAULT_PRODUCT,
       buildCost: 7.78e22,
       revenue: 5.97e20,

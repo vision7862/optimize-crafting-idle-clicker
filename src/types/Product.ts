@@ -1,4 +1,4 @@
-interface Product {
+interface ProductDetails {
   name: string
   researchCost: number
   buildCost: number
@@ -10,6 +10,6 @@ interface Product {
 };
 
 interface InputProduct {
-  product: Product
+  product: ProductDetails
   count: number
 }
