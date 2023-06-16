@@ -18,7 +18,7 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     productsInOrder[products.size - 1]!.details.buildCost,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    productsInOrder[products.size - 2]!,
+    productsInOrder[products.size - 2]!.details.name,
     workshop,
   );
   return getStatusMap(upgradedWorkshop);
@@ -35,7 +35,7 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
   const upgradedWorkshop = optimizeProductAndBelow(
     target,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    getProductByName(productName, workshop.productsInfo)!,
+    getProductByName(productName, workshop.productsInfo)!.details.name,
     workshop,
   );
   return getStatusMap(upgradedWorkshop);
@@ -51,13 +51,13 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  let productBeforeTarget = Array.from(workshop.productsInfo.values())[0];
+  let productBeforeTarget: string = Array.from(workshop.productsInfo.keys())[0];
   for (const product of workshop.productsInfo.values()) {
     if (product.details.name === productName) {
       const upgradedWorkshop = optimizeProductAndBelow(product.details.buildCost, productBeforeTarget, workshop);
       return getStatusMap(upgradedWorkshop);
     } else {
-      productBeforeTarget = product;
+      productBeforeTarget = product.details.name;
     }
   }
 
@@ -78,7 +78,7 @@ export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInf
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    workshop.productsInfo[products.size - 1]!.buildCost,
+    Array.from(workshop.productsInfo.values())[products.size - 1]!.details.buildCost,
     workshop,
   );
   return {

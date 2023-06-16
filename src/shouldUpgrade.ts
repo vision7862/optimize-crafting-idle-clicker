@@ -5,17 +5,17 @@ import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } 
 
 const clickBonusMultiplier = 3;
 const merchantBonusMultiplier = 3;
-const ALWAYS_MERCHANT_MULTILIER = 6;
+const ALWAYS_MERCHANT_MULTIPLIER = 6;
 const scienceIsTight = true;
 
 export function getUpgradedWorkshopIfBetter(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
-  product: Product,
+  productName: string,
   workshop: Workshop,
 ): Workshop | null {
-  const workshopUpgradeInfo = getUpgradedWorkshopAndTimeIfBetter(target, clickBonus, merchantBonus, product, workshop);
+  const workshopUpgradeInfo = getUpgradedWorkshopAndTimeIfBetter(target, clickBonus, merchantBonus, productName, workshop);
   return workshopUpgradeInfo !== null ? workshopUpgradeInfo.workshop : null;
 }
 
@@ -23,9 +23,10 @@ export function getUpgradedWorkshopAndTimeIfBetter(
   target: number,
   clickBonus: boolean,
   merchantBonus: boolean,
-  product: Product,
+  productName: string,
   workshop: Workshop,
 ): WorkshopUpgradeInfo | null {
+  const product: Product = getProductByName(productName, workshop.productsInfo);
   const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBonusActual, merchantBonus);
   const cyclesToTarget = target / incomePerCycle;
@@ -69,7 +70,7 @@ function applyClickBonus(product: ProductDetails, topProduct: ProductDetails, cl
 
 function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: ProductDetails, merchantBonus: boolean): number {
   return product.outputCount * product.revenue *
-          (workshopStatus.event ? 1 : ALWAYS_MERCHANT_MULTILIER) *
+          (workshopStatus.event ? 1 : ALWAYS_MERCHANT_MULTIPLIER) *
           (workshopStatus.event ? 1 : getMainWorkshopIncomeMultiplier(workshopStatus.level)) *
           (workshopStatus.event && merchantBonus ? merchantBonusMultiplier : 1);
 }

@@ -18,7 +18,7 @@ const DEFAULT_STATUS: ProductStatus = {
   merchants: 0,
 };
 
-const DEFAULT_PRODUCT: Product = {
+export const DEFAULT_PRODUCT: Product = {
   details: DEFAULT_PRODUCT_DETAILS,
   status: DEFAULT_STATUS,
 };
