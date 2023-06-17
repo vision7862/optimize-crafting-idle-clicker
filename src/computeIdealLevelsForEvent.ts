@@ -51,7 +51,7 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  let productBeforeTarget: string = Array.from(workshop.productsInfo.keys())[0];
+  let productBeforeTarget: string = workshop.productsInfo[0].details.name;
   for (const product of workshop.productsInfo.values()) {
     if (product.details.name === productName) {
       const upgradedWorkshop = optimizeProductAndBelow(product.details.buildCost, productBeforeTarget, workshop);
@@ -167,28 +167,19 @@ export function oneByOneToTarget(eventName: string, target: number): Map<string,
 // }
 
 function setUpWorkshop(products: Map<string, ProductDetails>, workshopStatus: WorkshopStatus): Workshop {
-  const productsInfo = new Map<string, Product>();
+  const productsInfo = new Array<Product>();
   let isFirstItem = true;
-  for (const [productName, details] of products.entries()) {
-    if (isFirstItem) {
-      productsInfo.set(productName, {
-        status: {
-          level: 1,
-          merchants: 0,
-        },
-        details,
-      });
-      isFirstItem = false;
-    } else {
-      productsInfo.set(productName, {
-        status: {
-          level: 0,
-          merchants: 0,
-        },
-        details,
-      });
-    }
+  for (const details of products.values()) {
+    productsInfo.push({
+      status: {
+        level: isFirstItem ? 1 : 0,
+        merchants: 0,
+      },
+      details,
+    });
+    isFirstItem = false;
   }
+
   return {
     productsInfo,
     workshopStatus,

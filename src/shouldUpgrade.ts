@@ -181,11 +181,14 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
 
   const upgradeCostMultiplier: number = product.details.upgradeCostMultiplier !== undefined ? (1 + (product.details.upgradeCostMultiplier / 100)) : 1.07;
 
+  const indexOfProduct: number = workshop.productsInfo.findIndex((testProduct: Product) => testProduct.details.name === product.details.name);
+  const copiedArray = new Array<Product>(...workshop.productsInfo);
+  copiedArray.splice(indexOfProduct, 1, newProduct);
   return {
     costOfUpgrade: product.details.buildCost * (upgradeCostMultiplier ** product.status.level),
     workshop: {
       ...workshop,
-      productsInfo: new Map(workshop.productsInfo).set(product.details.name, newProduct),
+      productsInfo: copiedArray,
     },
   };
 }

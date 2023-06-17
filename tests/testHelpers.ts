@@ -25,8 +25,7 @@ export const DEFAULT_PRODUCT: Product = {
 
 // const DEFAULT_STATUSES: Map<string, ProductStatus> = new Map<string, ProductStatus>().set(DEFAULT_PRODUCT_DETAILS.name, DEFAULT_STATUS);
 
-const products = [[DEFAULT_PRODUCT_DETAILS.name, DEFAULT_PRODUCT]] as const;
-const DEFAULT_PRODUCTS_INFO: Map<string, Product> = new Map<string, Product>(products);
+const DEFAULT_PRODUCTS_INFO: Product[] = new Array<Product>(DEFAULT_PRODUCT);
 
 export const DEFAULT_WORKSHOP: Workshop = {
   productsInfo: DEFAULT_PRODUCTS_INFO,
@@ -42,8 +41,10 @@ export function getWorkshop(product: ProductDetails, level: number): Workshop {
     ...DEFAULT_STATUS,
     level,
   };
+  const productsInfo: Product[] = new Array<Product>(...DEFAULT_PRODUCTS_INFO);
+  productsInfo.splice(0, 1, { details: product, status });
   return {
     ...DEFAULT_WORKSHOP,
-    productsInfo: new Map(DEFAULT_PRODUCTS_INFO).set(product.name, { details: product, status }),
+    productsInfo,
   };
 }

@@ -8,11 +8,11 @@ export function getStatusMap(workshop: Workshop): Map<string, ProductStatus> {
   return statuses;
 }
 
-export function getProductByName(productName: string, productsInfo: Map<string, Product>): Product {
-  const product: Product | undefined = productsInfo.get(productName);
-  if (product !== undefined) {
-    return product;
-  } else {
-    throw new Error('Workshop does not contain ' + productName);
+export function getProductByName(productName: string, productsInfo: readonly Product[]): Product {
+  for (const product of productsInfo) {
+    if (product.details.name === productName) {
+      return product;
+    }
   }
+  throw new Error('Workshop does not contain ' + productName);
 }
