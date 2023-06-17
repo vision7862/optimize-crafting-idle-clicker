@@ -1,7 +1,7 @@
 import { type ProductDetails } from './Product';
 
 export type Workshop = Readonly<{
-  productsInfo: Map<string, Product>
+  productsInfo: readonly Product[]
   workshopStatus: WorkshopStatus
 }>;
 
