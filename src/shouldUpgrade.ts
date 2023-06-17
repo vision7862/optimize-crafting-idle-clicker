@@ -54,7 +54,7 @@ export interface WorkshopUpgradeInfo {
 function getCurrentIncome(workshop: Workshop, clickBonus: number, merchantBonus: boolean): number {
   let totalIncome = 0;
   const topProduct: ProductDetails = getTopProduct(workshop);
-  for (const product of workshop.productsInfo.values()) {
+  for (const product of workshop.productsInfo) {
     totalIncome += applyClickBonus(product.details, topProduct, clickBonus) *
                    product.status.level *
                    getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details, merchantBonus);
@@ -76,7 +76,7 @@ function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: Pro
 }
 
 function getTopProduct(workshop: Workshop): ProductDetails {
-  for (const product of [...workshop.productsInfo.values()].reverse()) {
+  for (const product of [...workshop.productsInfo].reverse()) {
     if (product.status.level > 0) {
       return product.details;
     }
@@ -126,7 +126,7 @@ function upgradeInputsToProduct(parentProduct: ProductDetails, workshop: Worksho
 
 function getInputItemsNeeded(inputProductName: string, workshop: Workshop): number {
   let itemsNeeded = 0;
-  for (const product of workshop.productsInfo.values()) {
+  for (const product of workshop.productsInfo) {
     if (product.details.input1 !== null && product.details.input1.product.name === inputProductName) {
       itemsNeeded += product.details.input1.count * product.status.level;
     }

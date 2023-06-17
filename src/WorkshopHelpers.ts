@@ -2,7 +2,7 @@ import { type Product, type ProductStatus, type Workshop } from './types/Worksho
 
 export function getStatusMap(workshop: Workshop): Map<string, ProductStatus> {
   const statuses = new Map<string, ProductStatus>();
-  for (const product of workshop.productsInfo.values()) {
+  for (const product of workshop.productsInfo) {
     statuses.set(product.details.name, product.status);
   }
   return statuses;
