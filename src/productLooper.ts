@@ -34,10 +34,9 @@ export function optimizeEachProductToTarget(
 export function optimizeEachProductToTargetWithTime(target: number, workshop: Workshop): WorkshopUpgradeInfo {
   let modifiedWorkshop: Workshop = workshop;
   let cyclesToTarget = 0;
-  const productsInOrder = Array.from(workshop.productsInfo.values());
-  for (let productIndex = 0; productIndex < productsInOrder.length; productIndex++) {
-    const thisProduct: Product | undefined = productsInOrder[productIndex];
-    const nextProduct: Product | undefined = productsInOrder[productIndex + 1];
+  for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
+    const thisProduct: Product | undefined = workshop.productsInfo[productIndex];
+    const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
       const modifiedWorkshopInfo = optimizeProductAndBelowWithTime(currentTarget, thisProduct.details.name, modifiedWorkshop);

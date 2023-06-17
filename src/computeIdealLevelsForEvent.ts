@@ -13,12 +13,11 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
     scientists: 100,
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  const productsInOrder: Product[] = Array.from(workshop.productsInfo.values());
   const upgradedWorkshop = optimizeProductAndBelow(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    productsInOrder[products.size - 1]!.details.buildCost,
+    workshop.productsInfo[products.size - 1]!.details.buildCost,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    productsInOrder[products.size - 2]!.details.name,
+    workshop.productsInfo[products.size - 2]!.details.name,
     workshop,
   );
   return getStatusMap(upgradedWorkshop);
@@ -52,7 +51,7 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
   };
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   let productBeforeTarget: string = workshop.productsInfo[0].details.name;
-  for (const product of workshop.productsInfo.values()) {
+  for (const product of workshop.productsInfo) {
     if (product.details.name === productName) {
       const upgradedWorkshop = optimizeProductAndBelow(product.details.buildCost, productBeforeTarget, workshop);
       return getStatusMap(upgradedWorkshop);
@@ -78,7 +77,7 @@ export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInf
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.from(workshop.productsInfo.values())[products.size - 1]!.details.buildCost,
+    workshop.productsInfo[products.size - 1]!.details.buildCost,
     workshop,
   );
   return {
@@ -121,7 +120,7 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshop = optimizeEachProductToTarget(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Array.from(workshop.productsInfo.values())[products.size]!.details.buildCost,
+    workshop.productsInfo[products.size]!.details.buildCost,
     workshop,
   );
   return getStatusMap(upgradedWorkshop);
