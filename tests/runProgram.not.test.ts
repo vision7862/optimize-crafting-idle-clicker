@@ -1,5 +1,6 @@
+import { getStatusMap } from '../src/WorkshopHelpers';
 import { oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime, type TargetWorkshopInfo } from '../src/computeIdealLevelsForEvent';
-import { computeTargetFromFame, filterOutSkipped, getCostOfScientists, getCostOfScientistsFromSome } from '../src/targetHelpers';
+import { computeResearchTimeForWorkshop, computeTargetFromFame, filterOutSkipped, getCostOfScientists, getCostOfScientistsFromSome } from '../src/targetHelpers';
 import { type ProductStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
@@ -17,7 +18,7 @@ describe.only('runProgram', () => {
 
     function printFameTime(fame: number, level: number): void {
       const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, computeTargetFromFame(fame, level), level);
-      console.log(targetInfo.statuses);
+      console.log(getStatusMap(targetInfo.workshop));
       console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
       console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
     }
@@ -79,7 +80,7 @@ describe.only('runProgram', () => {
     describe('10+', () => {
       test('last product level 10', () => {
         const targetInfo = oneByOneToLastItemWithTime(eventName);
-        console.log(targetInfo.statuses);
+        console.log(getStatusMap(targetInfo.workshop));
         console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
         console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
       });
@@ -91,7 +92,7 @@ describe.only('runProgram', () => {
 
         function testNumScientists(numScientists: number): void {
           const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, getCostOfScientists(numScientists), 10);
-          console.log(targetInfo.statuses);
+          console.log(getStatusMap(targetInfo.workshop));
           console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
           console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
         }
@@ -142,7 +143,7 @@ describe.only('runProgram', () => {
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number): void {
       const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), level);
-      console.log(filterOutSkipped(targetInfo.statuses));
+      console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
       console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
       console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
     }
@@ -205,8 +206,10 @@ describe.only('runProgram', () => {
           } else break;
         }
         if (withinTimeTargetInfo !== null) {
-          console.log(filterOutSkipped(withinTimeTargetInfo.statuses));
+          console.log(filterOutSkipped(getStatusMap(withinTimeTargetInfo.workshop)));
           console.log('getting ' + withinTimeAmount.toString() + ' total ' + thingMaxing);
+          console.log('semi-active: ' + toTime(withinTimeTargetInfo.cyclesToTarget * 5));
+          console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(withinTimeTargetInfo.workshop)));
         } else {
           console.log('cannot get at any additional ' + thingMaxing + ' in 20 minutes');
         }
