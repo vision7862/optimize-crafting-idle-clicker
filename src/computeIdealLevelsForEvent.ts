@@ -127,16 +127,11 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
-  return getStatusMap(oneByOneToTargetAtWorkshopLevelWithTime(target, level).workshop);
+  return getStatusMap(oneByOneToTargetAtWorkshopLevelWithTime(target, { scientists: 100, event: false, level }).workshop);
 }
 
-export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: number): TargetWorkshopInfo {
-  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
-  const workshopStatus: WorkshopStatus = {
-    event: false,
-    level,
-    scientists: 100,
-  };
+export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, workshopStatus: WorkshopStatus): TargetWorkshopInfo {
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(workshopStatus.level);
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {

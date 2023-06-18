@@ -1,5 +1,5 @@
 import { type ProductDetails } from '../src/types/Product';
-import { type Product, type ProductStatus, type Workshop } from '../src/types/Workshop';
+import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from '../src/types/Workshop';
 
 export const DEFAULT_PRODUCT_DETAILS: ProductDetails = {
   name: 'product_name',
@@ -27,13 +27,14 @@ export const DEFAULT_PRODUCT: Product = {
 
 const DEFAULT_PRODUCTS_INFO: Product[] = new Array<Product>(DEFAULT_PRODUCT);
 
+export const DEFAULT_WORKSHOP_STATUS: WorkshopStatus = {
+  event: false,
+  level: 1,
+  scientists: 100,
+};
 export const DEFAULT_WORKSHOP: Workshop = {
   productsInfo: DEFAULT_PRODUCTS_INFO,
-  workshopStatus: {
-    event: true,
-    level: 0,
-    scientists: 0,
-  },
+  workshopStatus: DEFAULT_WORKSHOP_STATUS,
 };
 
 export function getWorkshop(product: ProductDetails, level: number): Workshop {
