@@ -12,8 +12,7 @@ import {
   getCostOfScientists,
   getCostOfScientistsFromSome,
 } from '../src/targetHelpers';
-import { type WorkshopStatus } from '../src/types/Workshop';
-import { DEFAULT_WORKSHOP_STATUS } from './testHelpers';
+import { DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
   function toTime(seconds): string {
@@ -149,7 +148,7 @@ describe.only('runProgram', () => {
 
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number, scientists: number = 100): void {
-      const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS;
+      const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
       const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), workshopStatus);
       printInfo(targetInfo);
     }
@@ -211,7 +210,7 @@ describe.only('runProgram', () => {
         const targetTimeInSeconds = minutes * 60;
         let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
         let withinTimeAmount = 0;
-        const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS;
+        const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
         for (let amount = startingAmount; amount < 1000; amount++) {
           const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getTarget(amount), { ...workshopStatus, level });
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
