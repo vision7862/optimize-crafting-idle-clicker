@@ -244,9 +244,9 @@ describe.only('runProgram', () => {
         maximizeTypeInTime('scientists', 10, 16, currentScientists, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 20 minutes at level 17', () => {
+      test('get as much fame as possible in semi-active 60 minutes at level 17', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
-        maximizeTypeInTime('fame', 20, 17, 12, getTarget);
+        maximizeTypeInTime('fame', 60, 17, 12, getTarget);
       });
     });
   });
