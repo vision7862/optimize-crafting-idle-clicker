@@ -119,19 +119,19 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
     }
   }
 
-  return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus, false);
+  return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus);
 }
 
-export function getResearchPerSecond(workshopStatus: WorkshopStatus, researchBoostActive: boolean): number {
-  const researchMultiplierPercentage = workshopStatus.event ? 100 : getMainWorkshopResearchMultiplier(researchBoostActive);
+export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
+  const researchMultiplierPercentage = workshopStatus.event ? 10 : getMainWorkshopResearchMultiplier(workshopStatus.researchBoostActive);
   const researchPerSecond = workshopStatus.scientists * researchMultiplierPercentage;
   return Math.round(researchPerSecond);
 }
 
-const researchBonusMultiplier = 10;
+const researchBoostMultiplier = 10;
 function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
   return 2.8 * // research achivement
          1 * // various blueprint sets
          1.2 * // total blueprint score
-         (researchBoostActive ? researchBonusMultiplier : 1);
+         (researchBoostActive ? researchBoostMultiplier : 1);
 }

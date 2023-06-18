@@ -62,8 +62,9 @@ describe('targetHelpers', () => {
         ...DEFAULT_WORKSHOP_STATUS_MAIN,
         level: 17,
         scientists: 422,
+        researchBoostActive: false,
       };
-      expect(getResearchPerSecond(workshopStatus, false)).toBe(1418);
+      expect(getResearchPerSecond(workshopStatus)).toBe(1418);
     });
 
     it('should account for boost running', () => {
@@ -71,8 +72,9 @@ describe('targetHelpers', () => {
         ...DEFAULT_WORKSHOP_STATUS_MAIN,
         level: 17,
         scientists: 422,
+        researchBoostActive: true,
       };
-      expect(getResearchPerSecond(workshopStatus, true)).toBe(14179);
+      expect(getResearchPerSecond(workshopStatus)).toBe(14179);
     });
   });
 });

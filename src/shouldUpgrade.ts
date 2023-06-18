@@ -3,22 +3,20 @@ import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
 import { type ProductDetails } from './types/Product';
 import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
-const clickBonusMultiplier = 3;
-const merchantBonusMultiplier = 3;
-const ALWAYS_MERCHANT_MULTIPLIER = 6;
+const CLICK_BOOST_MULTIPLIER = 3;
+const MERCHANT_BOOST_MULTIPLIER = 3;
+const MWS_MERCHANT_MULTIPLIER = 6;
 const scienceIsTight = true;
 
 export function getUpgradedWorkshopIfBetter(
   target: number,
-  clickBonus: boolean,
-  merchantBonus: boolean,
   productName: string,
   workshop: Workshop,
   skipBuildIfUnderXCycles: number = 30,
 ): WorkshopUpgradeInfo | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
-  const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
-  const incomePerCycle = getCurrentIncome(workshop, clickBonusActual, merchantBonus);
+  const clickBoost = workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1;
+  const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
   if (product.status.level === 0 && (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)) {
     return null;
@@ -26,7 +24,7 @@ export function getUpgradedWorkshopIfBetter(
 
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
-  const additionalIncomePerCycle = clickBonusActual * getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details, merchantBonus);
+  const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
     return {
@@ -41,28 +39,28 @@ export interface WorkshopUpgradeInfo {
   cyclesToTarget: number
 }
 
-function getCurrentIncome(workshop: Workshop, clickBonus: number, merchantBonus: boolean): number {
+function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
   let totalIncome = 0;
   const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
-    totalIncome += applyClickBonus(product.details, topProduct, clickBonus) *
+    totalIncome += applyClickBoost(product.details, topProduct, clickBoost) *
                    product.status.level *
-                   getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details, merchantBonus);
+                   getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details);
   }
   return totalIncome;
 }
 
-function applyClickBonus(product: ProductDetails, topProduct: ProductDetails, clickBonus: number): number {
+function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, clickBoost: number): number {
   if ([topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
-    return clickBonus;
+    return clickBoost;
   } else return 1;
 }
 
-function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: ProductDetails, merchantBonus: boolean): number {
+function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: ProductDetails): number {
   return product.outputCount * product.revenue *
-          (workshopStatus.event ? 1 : ALWAYS_MERCHANT_MULTIPLIER) *
+          (workshopStatus.event ? 1 : MWS_MERCHANT_MULTIPLIER) *
           (workshopStatus.event ? 1 : getMainWorkshopIncomeMultiplier(workshopStatus.level)) *
-          (workshopStatus.event && merchantBonus ? merchantBonusMultiplier : 1);
+          (workshopStatus.event && workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1);
 }
 
 function getTopProduct(workshop: Workshop): ProductDetails {
@@ -162,7 +160,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
   const newStatus: ProductStatus = {
     ...product.status,
     level: product.status.level + 1,
-    merchants: Math.ceil(((product.status.level + 1) * product.details.outputCount) / 10),
+    merchants: Math.ceil(((product.status.level + 1) * product.details.outputCount) / 10) * (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1),
   };
   const newProduct: Product = {
     ...product,
