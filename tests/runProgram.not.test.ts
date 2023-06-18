@@ -1,7 +1,18 @@
 import { getStatusMap } from '../src/WorkshopHelpers';
-import { oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime, type TargetWorkshopInfo } from '../src/computeIdealLevelsForEvent';
-import { computeResearchTimeForWorkshop, computeTargetFromFame, filterOutSkipped, getCostOfScientists, getCostOfScientistsFromSome } from '../src/targetHelpers';
-import { type ProductStatus, type WorkshopStatus } from '../src/types/Workshop';
+import {
+  oneByOneToLastItemWithTime,
+  oneByOneToTargetAtEventLevelWithTime,
+  oneByOneToTargetAtWorkshopLevelWithTime,
+  type TargetWorkshopInfo,
+} from '../src/computeIdealLevelsForEvent';
+import {
+  computeResearchTimeForWorkshop,
+  computeTargetFromFame,
+  filterOutSkipped,
+  getCostOfScientists,
+  getCostOfScientistsFromSome,
+} from '../src/targetHelpers';
+import { type WorkshopStatus } from '../src/types/Workshop';
 import { DEFAULT_WORKSHOP_STATUS } from './testHelpers';
 
 describe.only('runProgram', () => {
@@ -11,17 +22,18 @@ describe.only('runProgram', () => {
     return date.toISOString().substr(11, 8);
   }
 
+  function printInfo(targetInfo: TargetWorkshopInfo): void {
+    console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
+    console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
+    console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+    console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
+  }
+
   describe('events', () => {
-    const eventName = 'Idle flicker';
-    function getFame(fame: number, level: number): Map<string, ProductStatus> {
-      return oneByOneToTargetAtEventLevel(eventName, computeTargetFromFame(fame, level), level);
-    }
+    const eventName = 'Space Craft';
 
     function printFameTime(fame: number, level: number): void {
-      const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, computeTargetFromFame(fame, level), level);
-      console.log(getStatusMap(targetInfo.workshop));
-      console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-      console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+      printInfo(oneByOneToTargetAtEventLevelWithTime(eventName, computeTargetFromFame(fame, level), level));
     }
 
     describe('leveling', () => {
@@ -30,60 +42,57 @@ describe.only('runProgram', () => {
       });
 
       test('3 fame level 2', () => {
-        console.log(getFame(3, 2));
+        printFameTime(3, 2);
       });
 
       test('5 fame level 3', () => {
-        console.log(getFame(5, 3));
+        printFameTime(5, 3);
       });
 
       test('6 fame level 3', () => {
-        console.log(getFame(6, 3));
+        printFameTime(6, 3);
       });
 
       test('6 fame level 4', () => {
-        console.log(getFame(6, 4));
+        printFameTime(6, 4);
       });
 
       test('6 fame level 5', () => {
-        console.log(getFame(6, 5));
+        printFameTime(6, 5);
       });
 
       test('2 fame level 5', () => {
-        console.log(getFame(2, 5));
+        printFameTime(2, 5);
       });
 
       test('6 fame level 6', () => {
-        console.log(getFame(6, 6));
+        printFameTime(6, 6);
       });
 
       test('6 fame level 7', () => {
-        console.log(getFame(6, 7));
+        printFameTime(6, 7);
       });
 
       test('6 fame level 8', () => {
-        console.log(getFame(6, 8));
+        printFameTime(6, 8);
       });
 
       test('6 fame level 9', () => {
-        console.log(getFame(6, 9));
+        printFameTime(6, 9);
       });
 
       test('5 fame level 9', () => {
-        console.log(getFame(5, 9));
+        printFameTime(5, 9);
       });
 
       test('3 fame level 9', () => {
-        console.log(getFame(3, 9));
+        printFameTime(3, 9);
       });
     });
 
     describe('10+', () => {
       test('last product level 10', () => {
-        const targetInfo = oneByOneToLastItemWithTime(eventName);
-        console.log(getStatusMap(targetInfo.workshop));
-        console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-        console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+        printInfo(oneByOneToLastItemWithTime(eventName));
       });
 
       describe('scientists', () => {
@@ -92,10 +101,7 @@ describe.only('runProgram', () => {
         });
 
         function testNumScientists(numScientists: number): void {
-          const targetInfo = oneByOneToTargetAtEventLevelWithTime(eventName, getCostOfScientists(numScientists), 10);
-          console.log(getStatusMap(targetInfo.workshop));
-          console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-          console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+          printInfo(oneByOneToTargetAtEventLevelWithTime(eventName, getCostOfScientists(numScientists), 10));
         }
 
         test('280 scientists', () => {
@@ -142,24 +148,26 @@ describe.only('runProgram', () => {
   });
 
   describe('main workshop', () => {
-    function printFameTime(fame: number, level: number): void {
+    function printFameTime(fame: number, level: number, scientists: number = 100): void {
       const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS;
       const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), workshopStatus);
-      console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
-      console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-      console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+      printInfo(targetInfo);
     }
 
     test('import Everything, fame 15 lvl 19', () => {
-      console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(15, 19), 19));
+      printFameTime(15, 19);
     });
 
     test('import Everything, fame 14 lvl 19', () => {
-      console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(14, 19), 19));
+      printFameTime(14, 19);
+    });
+
+    test('15 fame lvl 6', () => {
+      printFameTime(15, 6, 160);
     });
 
     test('5 fame lvl 7', () => {
-      console.log(oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(5, 7), 7));
+      printFameTime(5, 7);
     });
 
     test('6 fame lvl 8', () => {

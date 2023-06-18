@@ -14,4 +14,8 @@ describe('importProducts', () => {
   test('Idle Flicker', () => {
     expect(() => importProducts('Idle Flicker')).not.toThrowError();
   });
+
+  test('Space Craft', () => {
+    expect(() => importProducts('Space Craft')).not.toThrowError();
+  });
 });
