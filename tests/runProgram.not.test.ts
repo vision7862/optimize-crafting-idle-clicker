@@ -1,7 +1,8 @@
 import { getStatusMap } from '../src/WorkshopHelpers';
 import { oneByOneToLastItemWithTime, oneByOneToTargetAtEventLevel, oneByOneToTargetAtEventLevelWithTime, oneByOneToTargetAtWorkshopLevel, oneByOneToTargetAtWorkshopLevelWithTime, type TargetWorkshopInfo } from '../src/computeIdealLevelsForEvent';
 import { computeResearchTimeForWorkshop, computeTargetFromFame, filterOutSkipped, getCostOfScientists, getCostOfScientistsFromSome } from '../src/targetHelpers';
-import { type ProductStatus } from '../src/types/Workshop';
+import { type ProductStatus, type WorkshopStatus } from '../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS } from './testHelpers';
 
 describe.only('runProgram', () => {
   function toTime(seconds): string {
@@ -142,7 +143,8 @@ describe.only('runProgram', () => {
 
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number): void {
-      const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), level);
+      const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS;
+      const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(computeTargetFromFame(fame, level), workshopStatus);
       console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
       console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
       console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
@@ -197,8 +199,9 @@ describe.only('runProgram', () => {
         const targetTimeInSeconds = minutes * 60;
         let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
         let withinTimeAmount = 0;
+        const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS;
         for (let amount = startingAmount; amount < 1000; amount++) {
-          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getTarget(amount), level);
+          const targetInfo = oneByOneToTargetAtWorkshopLevelWithTime(getTarget(amount), { ...workshopStatus, level });
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
           if (semiActiveTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;
