@@ -64,7 +64,7 @@ export function optimizeBuildingSingleProductInWorkshop(productName: string, lev
 }
 
 export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus> {
-  return oneByOneToLastItemWithTime(eventName).statuses;
+  return getStatusMap(oneByOneToLastItemWithTime(eventName).workshop);
 }
 
 export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInfo {
@@ -81,13 +81,13 @@ export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInf
     workshop,
   );
   return {
-    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
+    workshop: upgradedWorkshopInfo.workshop,
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
 
 export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): Map<string, ProductStatus> {
-  return oneByOneToTargetAtEventLevelWithTime(eventName, target, level).statuses;
+  return getStatusMap(oneByOneToTargetAtEventLevelWithTime(eventName, target, level).workshop);
 }
 
 export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: number, level: number): TargetWorkshopInfo {
@@ -100,13 +100,13 @@ export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: 
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {
-    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
+    workshop: upgradedWorkshopInfo.workshop,
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
 
 export type TargetWorkshopInfo = Readonly<{
-  statuses: Map<string, ProductStatus>
+  workshop: Workshop
   cyclesToTarget: number
 }>;
 
@@ -127,7 +127,7 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
-  return oneByOneToTargetAtWorkshopLevelWithTime(target, level).statuses;
+  return getStatusMap(oneByOneToTargetAtWorkshopLevelWithTime(target, level).workshop);
 }
 
 export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: number): TargetWorkshopInfo {
@@ -140,7 +140,7 @@ export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, level: n
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {
-    statuses: getStatusMap(upgradedWorkshopInfo.workshop),
+    workshop: upgradedWorkshopInfo.workshop,
     cyclesToTarget: upgradedWorkshopInfo.cyclesToTarget,
   };
 }
