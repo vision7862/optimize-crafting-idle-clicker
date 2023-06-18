@@ -1,5 +1,6 @@
 import { getStatusMap } from '../src/WorkshopHelpers';
-import { oneByOneToLastItem, oneByOneToTargetAtEventLevel, oneByOneToTargetAtWorkshopLevel, type TargetWorkshopInfo } from '../src/computeIdealLevelsForEvent';
+import { oneByOneToLastItem, oneByOneToTargetAtEventLevel, oneByOneToTargetAtWorkshopLevel } from '../src/computeIdealLevelsForEvent';
+import { type WorkshopUpgradeInfo } from '../src/shouldUpgrade';
 import {
   computeResearchTimeForWorkshop,
   computeTargetFromFame,
@@ -10,13 +11,13 @@ import {
 import { DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
-  function toTime(seconds): string {
+  function toTime(seconds: number): string {
     const date = new Date(+0);
     date.setSeconds(seconds);
     return date.toISOString().substr(11, 8);
   }
 
-  function printInfo(targetInfo: TargetWorkshopInfo): void {
+  function printInfo(targetInfo: WorkshopUpgradeInfo): void {
     console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
     console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
     console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
@@ -215,7 +216,7 @@ describe.only('runProgram', () => {
     describe('time-based goals', () => {
       function maximizeTypeInTime(thingMaxing: string, minutes: number, level: number, startingAmount: number, getTarget: (testingAmount: number) => number): void {
         const targetTimeInSeconds = minutes * 60;
-        let withinTimeTargetInfo: TargetWorkshopInfo | null = null;
+        let withinTimeTargetInfo: WorkshopUpgradeInfo | null = null;
         let withinTimeAmount = 0;
         const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
         for (let amount = startingAmount; amount < 1000; amount++) {
