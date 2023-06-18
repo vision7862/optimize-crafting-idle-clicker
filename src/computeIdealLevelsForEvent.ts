@@ -33,8 +33,8 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
 
 // for when you have a full workshop and want to build the single next thing without optimizing the whole path up
 // currently looks at the exact previous item
-export function optimizeBuildingSingleProductInWorkshop(productName: string, level: number): Map<string, ProductStatus> {
-  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
+export function optimizeBuildingSingleProductInWorkshop(productName: string): Map<string, ProductStatus> {
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel();
   const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   let productBeforeTarget: string = workshop.productsInfo[0].details.name;
@@ -80,8 +80,8 @@ export type TargetWorkshopInfo = Readonly<{
   cyclesToTarget: number
 }>;
 
-export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, ProductStatus> {
-  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
+export function oneByOneToLastAtWorkshopLevel(): Map<string, ProductStatus> {
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel();
   const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshop: WorkshopUpgradeInfo = optimizeEachProductToTarget(
@@ -92,7 +92,7 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, workshopStatus: WorkshopStatus): TargetWorkshopInfo {
-  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(workshopStatus.level);
+  const products: Map<string, ProductDetails> = importMainWorkshopAtLevel();
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo: WorkshopUpgradeInfo = optimizeEachProductToTarget(target, workshop);
   return {

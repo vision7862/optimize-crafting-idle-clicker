@@ -71,6 +71,10 @@ describe.only('runProgram', () => {
         printFameTime(6, 6);
       });
 
+      test('5 fame level 6', () => {
+        printFameTime(5, 6);
+      });
+
       test('6 fame level 7', () => {
         printFameTime(6, 7);
       });
