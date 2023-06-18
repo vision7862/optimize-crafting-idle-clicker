@@ -13,8 +13,8 @@ export function importMainWorkshopAtLevel(level: number): Map<string, ProductDet
     if (line.includes('//')) {
       continue;
     }
-    const details = line.split(/\t+/);
-    if (details.length !== 7) {
+    const details = line.split(/ {2,}/gm);
+    if (details.length !== 7 && details.length !== 8) {
       throw new Error('import poorly formatted ' + line);
     }
     let product: ProductDetails = {

@@ -194,6 +194,10 @@ describe.only('runProgram', () => {
       printFameTime(13, 15);
     });
 
+    test('15 fame lvl 17', () => {
+      printFameTime(15, 17);
+    });
+
     describe('time-based goals', () => {
       function maximizeTypeInTime(thingMaxing: string, minutes: number, level: number, startingAmount: number, getTarget: (testingAmount: number) => number): void {
         const targetTimeInSeconds = minutes * 60;
@@ -238,6 +242,11 @@ describe.only('runProgram', () => {
         const currentScientists = 422;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
         maximizeTypeInTime('scientists', 10, 16, currentScientists, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 20 minutes at level 17', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
+        maximizeTypeInTime('fame', 20, 17, 12, getTarget);
       });
     });
   });
