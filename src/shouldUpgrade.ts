@@ -15,18 +15,6 @@ export function getUpgradedWorkshopIfBetter(
   productName: string,
   workshop: Workshop,
   skipBuildIfUnderXCycles: number = 30,
-): Workshop | null {
-  const workshopUpgradeInfo = getUpgradedWorkshopAndTimeIfBetter(target, clickBonus, merchantBonus, productName, workshop, skipBuildIfUnderXCycles);
-  return workshopUpgradeInfo !== null ? workshopUpgradeInfo.workshop : null;
-}
-
-export function getUpgradedWorkshopAndTimeIfBetter(
-  target: number,
-  clickBonus: boolean,
-  merchantBonus: boolean,
-  productName: string,
-  workshop: Workshop,
-  skipBuildIfUnderXCycles: number = 30,
 ): WorkshopUpgradeInfo | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
   const clickBonusActual = clickBonus ? clickBonusMultiplier : 1;
