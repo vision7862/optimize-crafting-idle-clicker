@@ -3,15 +3,11 @@ import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeEachProductToTargetWithTime, optimizeProductAndBelow } from './productLooper';
 import { type ProductDetails } from './types/Product';
-import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): Map<string, ProductStatus> {
   const products: Map<string, ProductDetails> = importProducts(eventName);
-  const workshopStatus: WorkshopStatus = {
-    event: true,
-    level: 0,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_EVENT;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshop = optimizeProductAndBelow(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -25,11 +21,8 @@ export function optimizeBuildingLastItem(eventName: string): Map<string, Product
 
 export function optimizeBuildingFromTargetProduct(eventName: string, target: number, productName: string): Map<string, ProductStatus> {
   const products: Map<string, ProductDetails> = importProducts(eventName);
-  const workshopStatus: WorkshopStatus = {
-    event: false,
-    level: 0,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
+
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshop = optimizeProductAndBelow(
     target,
@@ -44,11 +37,7 @@ export function optimizeBuildingFromTargetProduct(eventName: string, target: num
 // currently looks at the exact previous item
 export function optimizeBuildingSingleProductInWorkshop(productName: string, level: number): Map<string, ProductStatus> {
   const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
-  const workshopStatus: WorkshopStatus = {
-    event: true,
-    level,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   let productBeforeTarget: string = workshop.productsInfo[0].details.name;
   for (const product of workshop.productsInfo) {
@@ -69,11 +58,7 @@ export function oneByOneToLastItem(eventName: string): Map<string, ProductStatus
 
 export function oneByOneToLastItemWithTime(eventName: string): TargetWorkshopInfo {
   const products: Map<string, ProductDetails> = importProducts(eventName);
-  const workshopStatus: WorkshopStatus = {
-    event: true,
-    level: 0,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -92,11 +77,7 @@ export function oneByOneToTargetAtEventLevel(eventName: string, target: number, 
 
 export function oneByOneToTargetAtEventLevelWithTime(eventName: string, target: number, level: number): TargetWorkshopInfo {
   const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, level);
-  const workshopStatus: WorkshopStatus = {
-    event: true,
-    level,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_EVENT;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshopInfo = optimizeEachProductToTargetWithTime(target, workshop);
   return {
@@ -112,11 +93,7 @@ export type TargetWorkshopInfo = Readonly<{
 
 export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, ProductStatus> {
   const products: Map<string, ProductDetails> = importMainWorkshopAtLevel(level);
-  const workshopStatus: WorkshopStatus = {
-    event: false,
-    level,
-    scientists: 100,
-  };
+  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   const upgradedWorkshop = optimizeEachProductToTarget(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -127,7 +104,7 @@ export function oneByOneToLastAtWorkshopLevel(level: number): Map<string, Produc
 }
 
 export function oneByOneToTargetAtWorkshopLevel(target: number, level: number): Map<string, ProductStatus> {
-  return getStatusMap(oneByOneToTargetAtWorkshopLevelWithTime(target, { scientists: 100, event: false, level }).workshop);
+  return getStatusMap(oneByOneToTargetAtWorkshopLevelWithTime(target, { ...DEFAULT_WORKSHOP_STATUS_MAIN, level }).workshop);
 }
 
 export function oneByOneToTargetAtWorkshopLevelWithTime(target: number, workshopStatus: WorkshopStatus): TargetWorkshopInfo {

@@ -1,5 +1,5 @@
 import { computeTargetFromFame, getCostOfScientists, getLevelAchievementMultiplier, getResearchPerSecond } from '../src/targetHelpers';
-import { type WorkshopStatus } from '../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {
@@ -59,7 +59,7 @@ describe('targetHelpers', () => {
   describe('getResearchPerSecond', () => {
     it('should account for no boost running', () => {
       const workshopStatus: WorkshopStatus = {
-        event: false,
+        ...DEFAULT_WORKSHOP_STATUS_MAIN,
         level: 17,
         scientists: 422,
       };
@@ -68,7 +68,7 @@ describe('targetHelpers', () => {
 
     it('should account for boost running', () => {
       const workshopStatus: WorkshopStatus = {
-        event: false,
+        ...DEFAULT_WORKSHOP_STATUS_MAIN,
         level: 17,
         scientists: 422,
       };
