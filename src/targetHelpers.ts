@@ -1,5 +1,5 @@
 import memoize from 'fast-memoize';
-import { type ProductStatus, type Workshop } from './types/Workshop';
+import { type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function computeTargetFromFame(fame: number, level: number): number {
   return 10 ** (fame + level - 1);
@@ -118,15 +118,20 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
       totalResearchNeeded += product.details.researchCost;
     }
   }
-  const researchMultiplierPercentage = workshop.workshopStatus.event ? 100 : getMainWorkshopResearchMultiplier(true);
-  const researchPerSecond = workshop.workshopStatus.scientists * researchMultiplierPercentage / 100;
-  return totalResearchNeeded / researchPerSecond;
+
+  return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus, false);
 }
 
-const researchBonusMultiplier = 6;
-function getMainWorkshopResearchMultiplier(researchBonusActive: boolean): number {
+export function getResearchPerSecond(workshopStatus: WorkshopStatus, researchBoostActive: boolean): number {
+  const researchMultiplierPercentage = workshopStatus.event ? 100 : getMainWorkshopResearchMultiplier(researchBoostActive);
+  const researchPerSecond = workshopStatus.scientists * researchMultiplierPercentage;
+  return Math.round(researchPerSecond);
+}
+
+const researchBonusMultiplier = 10;
+function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
   return 2.8 * // research achivement
          1 * // various blueprint sets
          1.2 * // total blueprint score
-         (researchBonusActive ? researchBonusMultiplier : 1);
+         (researchBoostActive ? researchBonusMultiplier : 1);
 }

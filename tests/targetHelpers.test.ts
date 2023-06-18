@@ -1,4 +1,5 @@
-import { computeTargetFromFame, getCostOfScientists, getLevelAchievementMultiplier } from '../src/targetHelpers';
+import { computeTargetFromFame, getCostOfScientists, getLevelAchievementMultiplier, getResearchPerSecond } from '../src/targetHelpers';
+import { type WorkshopStatus } from '../src/types/Workshop';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {
@@ -52,6 +53,26 @@ describe('targetHelpers', () => {
 
     test('should return correctly', () => {
       expect(getLevelAchievementMultiplier(55)).toBe(640.0e15);
+    });
+  });
+
+  describe('getResearchPerSecond', () => {
+    it('should account for no boost running', () => {
+      const workshopStatus: WorkshopStatus = {
+        event: false,
+        level: 17,
+        scientists: 422,
+      };
+      expect(getResearchPerSecond(workshopStatus, false)).toBe(1418);
+    });
+
+    it('should account for boost running', () => {
+      const workshopStatus: WorkshopStatus = {
+        event: false,
+        level: 17,
+        scientists: 422,
+      };
+      expect(getResearchPerSecond(workshopStatus, true)).toBe(14179);
     });
   });
 });
