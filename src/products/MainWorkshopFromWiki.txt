@@ -21,7 +21,7 @@
 1x Bronze Blades              100.0E+3  1.2E+15     60.0E+9      Blue     2x Bronze Ingots                           
 1x Bronze Dagger              150.0E+3  8.5E+15     430.0E+9     Violet   2x Bronze Blades     1x Hilt               
 1x Bronze Sword               150.0E+3  70.0E+15    1.5E+12      Violet   3x Bronze Blades     1x Hilt               
-1x Sickle                     175.0E+3  100.0E+15   2.0E+12      Violet   3x Bronze Blades     1x Wood               
+// don't have 1x Sickle       175.0E+3  100.0E+15   2.0E+12      Violet   3x Bronze Blades     1x Wood               
 1x Coal                       250.0E+3  600.0E+15   2.0E+12      Green    -                                          
 1x Iron Ore                   260.0E+3  3.5E+18     10.0E+12     Green    -                                          
 5x Iron Ingots                450.0E+3  21.0E+18    18.0E+12     Yellow   2x Iron Ore          3x Coal               

@@ -109,7 +109,7 @@ describe.only('runProgram', () => {
         });
 
         function testNumScientists(numScientists: number): void {
-          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10 };
+          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, scientists: numScientists - 10 };
           printInfo(oneByOneToTargetAtEventLevel(getCostOfScientists(numScientists), workshopStatus, eventName));
         }
 
@@ -121,8 +121,16 @@ describe.only('runProgram', () => {
           testNumScientists(290);
         });
 
+        test('295 scientists', () => {
+          testNumScientists(295);
+        });
+
         test('300 scientists', () => {
           testNumScientists(300);
+        });
+
+        test('305 scientists', () => {
+          testNumScientists(305);
         });
 
         test('310 scientists', () => {
@@ -213,6 +221,22 @@ describe.only('runProgram', () => {
 
     test('15 fame lvl 17', () => {
       printFameTime(15, 17);
+    });
+
+    test('7 fame lvl 11', () => {
+      printFameTime(7, 11);
+    });
+
+    test('8 fame lvl 12', () => {
+      printFameTime(8, 12);
+    });
+
+    test('10 fame lvl 13', () => {
+      printFameTime(10, 13);
+    });
+
+    test('10 fame lvl 14', () => {
+      printFameTime(10, 14);
     });
 
     describe('time-based goals', () => {
