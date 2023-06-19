@@ -1,5 +1,5 @@
 import { getUpgradedWorkshopIfBetter } from '../src/shouldUpgrade';
-import { type Product } from '../src/types/Workshop';
+import { type Product } from '../src/types/Product';
 import { DEFAULT_PRODUCT, DEFAULT_PRODUCT_DETAILS, getWorkshop } from './testHelpers';
 
 describe('should Upgrade', () => {
