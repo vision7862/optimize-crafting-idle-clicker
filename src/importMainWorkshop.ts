@@ -24,8 +24,8 @@ export function importMainWorkshopAtLevel(): Map<string, ProductDetails> {
       buildCost: +details[2].replace(/[$, ]/g, ''),
       revenue: +details[3].replace(/[$, ]/g, ''),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
-      input1: getInputProductWiki(details[5], productMap),
-      input2: getInputProductWiki(details[6], productMap),
+      input1: getInputProduct(details[5], productMap),
+      input2: getInputProduct(details[6], productMap),
     };
     const blueprintInfo = blueprintMap.get(product.name);
     if (blueprintInfo != null) {
@@ -57,7 +57,7 @@ function getBlueprintMap(): Map<string, number> {
   return blueprintMap;
 }
 
-function getInputProductWiki(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
+function getInputProduct(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
     const inputProduct: ProductDetails | undefined = productMap.get(inputDescription.split('x ')[1]);
     if (inputProduct === undefined) {
