@@ -3,7 +3,7 @@ import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
 import { type ProductDetails } from './types/Product';
 import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
 
-const CLICK_BOOST_MULTIPLIER = 3;
+export const CLICK_BOOST_MULTIPLIER = 3;
 const MERCHANT_BOOST_MULTIPLIER = 3;
 const MWS_MERCHANT_MULTIPLIER = 6;
 const scienceIsTight = true;
@@ -131,6 +131,9 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const inputProduct = getProductByName(inputProductName, workshop.productsInfo);
   let inputLevel = inputProduct.status.level;
+  if (inputLevel === 0) {
+    console.log('building product that was skipped: ' + inputProductName);
+  }
   let inputItems = inputProduct.status.level * inputProduct.details.outputCount;
   let modifiedWorkshop = workshop;
 
