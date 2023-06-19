@@ -1,4 +1,4 @@
-import { type ProductDetails } from './Product';
+import { type Product } from './Product';
 
 export type Workshop = Readonly<{
   productsInfo: readonly Product[]
@@ -31,13 +31,3 @@ export const DEFAULT_WORKSHOP_STATUS_EVENT: WorkshopStatus = {
   merchantBoostActive: true,
   researchBoostActive: true,
 };
-
-export type Product = Readonly<{
-  details: ProductDetails
-  status: ProductStatus
-}>;
-
-export type ProductStatus = Readonly<{
-  level: number
-  merchants: number
-}>;

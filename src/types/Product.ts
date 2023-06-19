@@ -1,3 +1,9 @@
+
+export type Product = Readonly<{
+  details: ProductDetails
+  status: ProductStatus
+}>;
+
 export type ProductDetails = Readonly<{
   name: string
   researchCost: number
@@ -12,4 +18,9 @@ export type ProductDetails = Readonly<{
 export type InputProduct = Readonly<{
   product: ProductDetails
   count: number
+}>;
+
+export type ProductStatus = Readonly<{
+  level: number
+  merchants: number
 }>;

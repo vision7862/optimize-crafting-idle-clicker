@@ -3,8 +3,8 @@ import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeProductAndBelow } from './productLooper';
 import { type WorkshopUpgradeInfo } from './shouldUpgrade';
-import { type ProductDetails } from './types/Product';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type Product, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { type Product, type ProductDetails } from './types/Product';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function optimizeBuildingLastItem(eventName: string): WorkshopUpgradeInfo {
   const products: Map<string, ProductDetails> = importProducts(eventName);

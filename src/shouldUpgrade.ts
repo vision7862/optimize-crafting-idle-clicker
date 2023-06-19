@@ -1,7 +1,7 @@
 import { getProductByName } from './WorkshopHelpers';
 import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
-import { type ProductDetails } from './types/Product';
-import { type Product, type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { type Product, type ProductDetails, type ProductStatus } from './types/Product';
+import { type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export const CLICK_BOOST_MULTIPLIER = 3;
 const MERCHANT_BOOST_MULTIPLIER = 3;

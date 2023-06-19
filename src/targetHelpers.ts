@@ -1,5 +1,6 @@
 import memoize from 'fast-memoize';
-import { type ProductStatus, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { type ProductStatus } from './types/Product';
+import { type Workshop, type WorkshopStatus } from './types/Workshop';
 
 export function computeTargetFromFame(fame: number, level: number): number {
   return 10 ** (fame + level - 1);
