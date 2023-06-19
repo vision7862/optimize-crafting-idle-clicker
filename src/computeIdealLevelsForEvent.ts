@@ -57,24 +57,23 @@ export function oneByOneToLastItem(eventName: string): WorkshopUpgradeInfo {
   ));
 }
 
-export function oneByOneToTargetAtEventLevel(eventName: string, target: number, level: number): WorkshopUpgradeInfo {
-  const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, level);
-  const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_EVENT;
-  const workshop: Workshop = setUpWorkshop(products, workshopStatus);
-  return (optimizeEachProductToTarget(target, workshop));
-}
-
 export function oneByOneToLastAtWorkshopLevel(): WorkshopUpgradeInfo {
   const products: Map<string, ProductDetails> = importMainWorkshopAtLevel();
   const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   return (optimizeEachProductToTarget(
-    workshop.productsInfo[products.size].details.buildCost,
+    workshop.productsInfo[products.size - 1].details.buildCost,
     workshop,
   ));
 }
 
-export function oneByOneToTargetAtWorkshopLevel(target: number, workshopStatus: WorkshopStatus): WorkshopUpgradeInfo {
+export function oneByOneToTargetAtEventLevel(target: number, workshopStatus: WorkshopStatus, eventName: string): WorkshopUpgradeInfo {
+  const products: Map<string, ProductDetails> = importProductsAtLevel(eventName, workshopStatus.level);
+  const workshop: Workshop = setUpWorkshop(products, workshopStatus);
+  return (optimizeEachProductToTarget(target, workshop));
+}
+
+export function oneByOneToTarget(target: number, workshopStatus: WorkshopStatus): WorkshopUpgradeInfo {
   const products: Map<string, ProductDetails> = importMainWorkshopAtLevel();
   const workshop: Workshop = setUpWorkshop(products, workshopStatus);
   return (optimizeEachProductToTarget(target, workshop));

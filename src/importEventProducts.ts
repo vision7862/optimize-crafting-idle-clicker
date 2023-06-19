@@ -16,9 +16,9 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
     }
     const product: ProductDetails = {
       name: details[0],
-      researchCost: +details[1].replace(' ', '').replace(',', ''),
-      buildCost: +details[2].replace(' ', '').replace(',', ''),
-      revenue: +details[3].replace(' ', '').replace(',', '') / 2 ** (10 - level),
+      researchCost: +details[1].replace(/[$, ]/g, ''),
+      buildCost: +details[2].replace(/[$, ]/g, ''),
+      revenue: +details[3].replace(/[$, ]/g, '') / 2 ** (10 - level),
       outputCount: +details[4].split('x')[1],
       input1: getInputProduct(details[5], productMap),
       input2: getInputProduct(details[6], productMap),

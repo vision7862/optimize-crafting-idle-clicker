@@ -1,5 +1,5 @@
 import { getStatusMap } from '../src/WorkshopHelpers';
-import { oneByOneToLastItem, oneByOneToTargetAtEventLevel, oneByOneToTargetAtWorkshopLevel } from '../src/computeIdealLevelsForEvent';
+import { oneByOneToLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel } from '../src/computeIdealLevelsForEvent';
 import { type WorkshopUpgradeInfo } from '../src/shouldUpgrade';
 import {
   computeResearchTimeForWorkshop,
@@ -8,7 +8,7 @@ import {
   getCostOfScientists,
   getCostOfScientistsFromSome,
 } from '../src/targetHelpers';
-import { DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
   function toTime(seconds: number): string {
@@ -28,7 +28,8 @@ describe.only('runProgram', () => {
     const eventName = 'Space Craft';
 
     function printFameTime(fame: number, level: number): void {
-      printInfo(oneByOneToTargetAtEventLevel(eventName, computeTargetFromFame(fame, level), level));
+      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10 };
+      printInfo(oneByOneToTargetAtEventLevel(computeTargetFromFame(fame, level), workshopStatus, eventName));
     }
 
     describe('leveling', () => {
@@ -108,7 +109,8 @@ describe.only('runProgram', () => {
         });
 
         function testNumScientists(numScientists: number): void {
-          printInfo(oneByOneToTargetAtEventLevel(eventName, getCostOfScientists(numScientists), 10));
+          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10 };
+          printInfo(oneByOneToTargetAtEventLevel(getCostOfScientists(numScientists), workshopStatus, eventName));
         }
 
         test('280 scientists', () => {
@@ -157,7 +159,7 @@ describe.only('runProgram', () => {
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number, scientists: number = 100): void {
       const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
-      const targetInfo = oneByOneToTargetAtWorkshopLevel(computeTargetFromFame(fame, level), workshopStatus);
+      const targetInfo = oneByOneToTarget(computeTargetFromFame(fame, level), workshopStatus);
       printInfo(targetInfo);
     }
 
@@ -220,7 +222,7 @@ describe.only('runProgram', () => {
         let withinTimeAmount = 0;
         const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
         for (let amount = startingAmount; amount < 1000; amount++) {
-          const targetInfo = oneByOneToTargetAtWorkshopLevel(getTarget(amount), { ...workshopStatus, level });
+          const targetInfo = oneByOneToTarget(getTarget(amount), { ...workshopStatus, level });
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
           if (semiActiveTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;
@@ -262,6 +264,11 @@ describe.only('runProgram', () => {
       test('get as much fame as possible in semi-active 60 minutes at level 17', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
         maximizeTypeInTime('fame', 60, 17, 12, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 10 minutes at level 9', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 9);
+        maximizeTypeInTime('fame', 10, 9, 8, getTarget);
       });
     });
   });

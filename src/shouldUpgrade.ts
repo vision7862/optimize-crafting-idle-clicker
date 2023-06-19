@@ -160,7 +160,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
   const newStatus: ProductStatus = {
     ...product.status,
     level: product.status.level + 1,
-    merchants: Math.ceil(((product.status.level + 1) * product.details.outputCount) / 10) * (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1),
+    merchants: Math.ceil(((product.status.level + 1) * product.details.outputCount * (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1)) / 10),
   };
   const newProduct: Product = {
     ...product,
