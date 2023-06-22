@@ -207,7 +207,7 @@ export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
 const researchBoostMultiplier = 10;
 function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
   return (
-    2.8 * // research achivement
+    3 * // research achivement
     1 * // various blueprint sets
     1.2 * // total blueprint score
     (researchBoostActive ? researchBoostMultiplier : 1)
