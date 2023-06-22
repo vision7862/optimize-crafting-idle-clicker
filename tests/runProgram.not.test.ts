@@ -165,184 +165,184 @@ describe.only('runProgram', () => {
   });
 
   describe('main workshop', () => {
-    function printFameTime(fame: number, level: number, scientists: number = 100): void {
-      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, scientists };
-      const targetInfo = bottomUpToMoney(computeTargetFromFame(fame, level), workshopStatus);
+    function printFameTime(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
+      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+      const targetInfo = bottomUpToMoney(computeTargetFromFame(fame, workshopStatus.level), workshopStatus);
       printInfo(targetInfo);
     }
 
     describe('shooting for half the required fame', () => {
       test('5 fame lvl 7', () => {
-        printFameTime(5, 7);
+        printFameTime(5, { level: 7 });
       });
 
       test('6 fame lvl 8', () => {
-        printFameTime(6, 8);
+        printFameTime(6, { level: 8 });
       });
 
       test('6 fame lvl 9', () => {
-        printFameTime(6, 9);
+        printFameTime(6, { level: 9 });
       });
 
       test('7 fame lvl 11', () => {
-        printFameTime(7, 11);
+        printFameTime(7, { level: 11 });
       });
 
       test('8 fame lvl 12', () => {
-        printFameTime(8, 12);
+        printFameTime(8, { level: 12 });
       });
 
       test('10 fame lvl 13', () => {
-        printFameTime(10, 13);
+        printFameTime(10, { level: 13 });
       });
 
       test('10 fame lvl 14', () => {
-        printFameTime(10, 14);
+        printFameTime(10, { level: 14 });
       });
 
       test('12 fame lvl 16', () => {
-        printFameTime(12, 16);
+        printFameTime(12, { level: 16 });
       });
 
       test('11 fame lvl 18', () => {
-        printFameTime(12, 16);
+        printFameTime(11, { level: 18 });
       });
 
       test('11 fame lvl 19', () => {
-        printFameTime(11, 19);
+        printFameTime(11, { level: 19 });
       });
     });
 
     describe('shooting for gems', () => {
       describe('4% chance', () => {
-        function getGemsLowChance(level: number, scientists: number = 100): void {
-          printFameTime(14, level, scientists);
+        function getGemsLowChance(partialWorkshopStatus: Partial<WorkshopStatus>): void {
+          printFameTime(14, partialWorkshopStatus);
         }
 
         test('lvl 6', () => {
-          getGemsLowChance(6, 160);
+          getGemsLowChance({ level: 6, scientists: 160 });
         });
 
         test('lvl 7', () => {
-          getGemsLowChance(7);
+          getGemsLowChance({ level: 7 });
         });
 
         test('lvl 8', () => {
-          getGemsLowChance(8);
+          getGemsLowChance({ level: 8 });
         });
 
         test('lvl 9', () => {
-          getGemsLowChance(9);
+          getGemsLowChance({ level: 9 });
         });
 
         test('lvl 10', () => {
-          getGemsLowChance(10);
+          getGemsLowChance({ level: 10 });
         });
 
         test('lvl 11', () => {
-          getGemsLowChance(11);
+          getGemsLowChance({ level: 11 });
         });
 
         test('lvl 12', () => {
-          getGemsLowChance(12);
+          getGemsLowChance({ level: 12 });
         });
 
         test('lvl 13', () => {
-          getGemsLowChance(13);
+          getGemsLowChance({ level: 13 });
         });
 
         test('lvl 14', () => {
-          getGemsLowChance(14);
+          getGemsLowChance({ level: 14 });
         });
 
         test('lvl 15', () => {
-          getGemsLowChance(15);
+          getGemsLowChance({ level: 15 });
         });
 
         test('lvl 16', () => {
-          getGemsLowChance(16);
+          getGemsLowChance({ level: 16 });
         });
 
         test('lvl 17', () => {
-          getGemsLowChance(17);
+          getGemsLowChance({ level: 17 });
         });
 
         test('lvl 18', () => {
-          getGemsLowChance(18);
+          getGemsLowChance({ level: 18 });
         });
 
         test('lvl 19', () => {
-          getGemsLowChance(19);
+          getGemsLowChance({ level: 19 });
         });
 
         test('lvl 20', () => {
-          getGemsLowChance(20);
+          getGemsLowChance({ level: 20 });
         });
       });
 
       describe('12% chance', () => {
-        function getGemsHighChance(level: number, scientists: number = 100): void {
-          printFameTime(15, level, scientists);
+        function getGemsHighChance(partialWorkshopStatus: Partial<WorkshopStatus>): void {
+          printFameTime(15, partialWorkshopStatus);
         }
 
         test('lvl 6', () => {
-          getGemsHighChance(6, 160);
+          getGemsHighChance({ level: 6, scientists: 160 });
         });
 
         test('lvl 7', () => {
-          getGemsHighChance(7);
+          getGemsHighChance({ level: 7 });
         });
 
         test('lvl 8', () => {
-          getGemsHighChance(8);
+          getGemsHighChance({ level: 8 });
         });
 
         test('lvl 9', () => {
-          getGemsHighChance(9);
+          getGemsHighChance({ level: 9 });
         });
 
         test('lvl 10', () => {
-          getGemsHighChance(10);
+          getGemsHighChance({ level: 10 });
         });
 
         test('lvl 11', () => {
-          getGemsHighChance(11);
+          getGemsHighChance({ level: 11 });
         });
 
         test('lvl 12', () => {
-          getGemsHighChance(12);
+          getGemsHighChance({ level: 12 });
         });
 
         test('lvl 13', () => {
-          getGemsHighChance(13);
+          getGemsHighChance({ level: 13 });
         });
 
         test('lvl 14', () => {
-          getGemsHighChance(14);
+          getGemsHighChance({ level: 14 });
         });
 
         test('lvl 15', () => {
-          getGemsHighChance(15);
+          getGemsHighChance({ level: 15 });
         });
 
         test('lvl 16', () => {
-          getGemsHighChance(16);
+          getGemsHighChance({ level: 16 });
         });
 
         test('lvl 17', () => {
-          getGemsHighChance(17);
+          getGemsHighChance({ level: 17 });
         });
 
         test('lvl 18', () => {
-          getGemsHighChance(18);
+          getGemsHighChance({ level: 18 });
         });
 
         test('lvl 19', () => {
-          getGemsHighChance(19);
+          getGemsHighChance({ level: 19 });
         });
 
         test('lvl 20', () => {
-          getGemsHighChance(20);
+          getGemsHighChance({ level: 20 });
         });
       });
     });
