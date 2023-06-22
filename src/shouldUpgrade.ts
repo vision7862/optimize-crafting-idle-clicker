@@ -1,5 +1,5 @@
-import { getProductByName } from './WorkshopHelpers';
-import { getMainWorkshopIncomeMultiplier } from './targetHelpers';
+import { getProductByName } from './helpers/WorkshopHelpers';
+import { getMainWorkshopIncomeMultiplier } from './helpers/targetHelpers';
 import { type Product, type ProductDetails, type ProductStatus } from './types/Product';
 import { type Workshop, type WorkshopStatus } from './types/Workshop';
 

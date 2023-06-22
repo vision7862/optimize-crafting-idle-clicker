@@ -1,13 +1,13 @@
-import { getStatusMap } from '../src/WorkshopHelpers';
 import { oneByOneToLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel } from '../src/computeIdealLevelsForEvent';
-import { type WorkshopUpgradeInfo } from '../src/shouldUpgrade';
+import { getStatusMap } from '../src/helpers/WorkshopHelpers';
+import { computeResearchTimeForWorkshop } from '../src/helpers/computeResearchTimeForWorkshop';
 import {
-  computeResearchTimeForWorkshop,
   computeTargetFromFame,
   filterOutSkipped,
   getCostOfScientists,
   getCostOfScientistsFromSome,
-} from '../src/targetHelpers';
+} from '../src/helpers/targetHelpers';
+import { type WorkshopUpgradeInfo } from '../src/shouldUpgrade';
 import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
@@ -166,77 +166,97 @@ describe.only('runProgram', () => {
 
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number, scientists: number = 100): void {
-      const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
+      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, scientists };
       const targetInfo = oneByOneToTarget(computeTargetFromFame(fame, level), workshopStatus);
       printInfo(targetInfo);
     }
 
-    test('import Everything, fame 15 lvl 19', () => {
-      printFameTime(15, 19);
+    describe('shooting for half the required fame', () => {
+      test('5 fame lvl 7', () => {
+        printFameTime(5, 7);
+      });
+
+      test('6 fame lvl 8', () => {
+        printFameTime(6, 8);
+      });
+
+      test('6 fame lvl 9', () => {
+        printFameTime(6, 9);
+      });
+
+      test('7 fame lvl 11', () => {
+        printFameTime(7, 11);
+      });
+
+      test('8 fame lvl 12', () => {
+        printFameTime(8, 12);
+      });
+
+      test('10 fame lvl 13', () => {
+        printFameTime(10, 13);
+      });
+
+      test('10 fame lvl 14', () => {
+        printFameTime(10, 14);
+      });
+
+      test('12 fame lvl 16', () => {
+        printFameTime(12, 16);
+      });
+
+      test('11 fame lvl 18', () => {
+        printFameTime(12, 16);
+      });
+
+      test('11 fame lvl 19', () => {
+        printFameTime(11, 19);
+      });
     });
 
-    test('import Everything, fame 14 lvl 19', () => {
-      printFameTime(14, 19);
-    });
+    describe('shooting for gems', () => {
+      test('15 fame lvl 6', () => {
+        printFameTime(15, 6, 160);
+      });
 
-    test('15 fame lvl 6', () => {
-      printFameTime(15, 6, 160);
-    });
+      test('15 fame lvl 13', () => {
+        printFameTime(15, 13);
+      });
 
-    test('5 fame lvl 7', () => {
-      printFameTime(5, 7);
-    });
+      test('15 fame lvl 14', () => {
+        printFameTime(15, 14);
+      });
 
-    test('6 fame lvl 8', () => {
-      printFameTime(6, 8);
-    });
+      test('14 fame lvl 14', () => {
+        printFameTime(14, 14);
+      });
 
-    test('6 fame lvl 9', () => {
-      printFameTime(6, 9);
-    });
+      test('15 fame lvl 15', () => {
+        printFameTime(15, 15);
+      });
 
-    test('15 fame lvl 13', () => {
-      printFameTime(15, 13);
-    });
+      test('14 fame lvl 15', () => {
+        printFameTime(14, 15);
+      });
 
-    test('15 fame lvl 14', () => {
-      printFameTime(15, 14);
-    });
+      test('13 fame lvl 15', () => {
+        printFameTime(13, 15);
+      });
 
-    test('14 fame lvl 14', () => {
-      printFameTime(14, 14);
-    });
+      test('15 fame lvl 17', () => {
+        printFameTime(15, 17);
+      });
 
-    test('15 fame lvl 15', () => {
-      printFameTime(15, 15);
-    });
+      test('14 fame lvl 19', () => {
+        printFameTime(14, 19);
+      });
 
-    test('14 fame lvl 15', () => {
-      printFameTime(14, 15);
-    });
+      test('15 fame lvl 19', () => {
+        printFameTime(15, 19);
+      });
 
-    test('13 fame lvl 15', () => {
-      printFameTime(13, 15);
-    });
-
-    test('15 fame lvl 17', () => {
-      printFameTime(15, 17);
-    });
-
-    test('7 fame lvl 11', () => {
-      printFameTime(7, 11);
-    });
-
-    test('8 fame lvl 12', () => {
-      printFameTime(8, 12);
-    });
-
-    test('10 fame lvl 13', () => {
-      printFameTime(10, 13);
-    });
-
-    test('10 fame lvl 14', () => {
-      printFameTime(10, 14);
+      test('15 fame lvl 20', () => {
+        printFameTime(15, 20);
+      });
     });
 
     describe('time-based goals', () => {

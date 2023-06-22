@@ -1,5 +1,5 @@
-import { type Product, type ProductDetails, type ProductStatus } from '../src/types/Product';
-import { DEFAULT_WORKSHOP_STATUS_MAIN, type Workshop } from '../src/types/Workshop';
+import { type Product, type ProductDetails, type ProductStatus } from '../../src/types/Product';
+import { DEFAULT_WORKSHOP_STATUS_MAIN, type Workshop } from '../../src/types/Workshop';
 
 export const DEFAULT_PRODUCT_DETAILS: ProductDetails = {
   name: 'product_name',
