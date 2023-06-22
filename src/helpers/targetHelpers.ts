@@ -115,7 +115,6 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
   let totalResearchNeeded: number = 0;
   for (const product of workshop.productsInfo) {
     if (product.status.level > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       totalResearchNeeded += product.details.researchCost;
     }
   }

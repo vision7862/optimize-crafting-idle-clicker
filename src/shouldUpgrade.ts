@@ -12,13 +12,13 @@ export function getUpgradedWorkshopIfBetter(
   target: number,
   productName: string,
   workshop: Workshop,
-  skipBuildIfUnderXCycles: number = 30,
+  skipBuildIfUnderXCycles: number = 60,
 ): WorkshopUpgradeInfo | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
   const clickBoost = workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
-  if (product.status.level === 0 && (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)) {
+  if (product.status.level === 0 && product.details.input1 !== null && (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)) {
     return null;
   }
 
