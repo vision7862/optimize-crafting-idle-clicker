@@ -9,7 +9,11 @@ export function topDownLeveler(target: number, productName: string, workshop: Wo
     cyclesToTarget: 0,
   };
   while (shouldUpgradeNext) {
-    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopIfBetter(target, productName, modifiedWorkshopInfo.workshop);
+    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopIfBetter(
+      target,
+      productName,
+      modifiedWorkshopInfo.workshop,
+    );
     shouldUpgradeNext = upgradedWorkshopInfo !== null;
     if (upgradedWorkshopInfo != null) {
       modifiedWorkshopInfo = upgradedWorkshopInfo;

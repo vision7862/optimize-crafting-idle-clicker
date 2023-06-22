@@ -4,34 +4,42 @@ import { importMainWorkshop } from './importMainWorkshop';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
 import { WorkshopUpgradeInfo } from './shouldUpgrade';
 import { Product, ProductDetails } from './types/Product';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, Workshop, WorkshopStatus } from './types/Workshop';
+import {
+  DEFAULT_WORKSHOP_STATUS_EVENT,
+  DEFAULT_WORKSHOP_STATUS_MAIN,
+  Workshop,
+  WorkshopStatus,
+} from './types/Workshop';
 
 export function topDownToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return (topDownLeveler(
+  return topDownLeveler(
     workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost,
     workshop.productsInfo[workshop.productsInfo.length - 2].details.name,
     workshop,
-  ));
+  );
 }
 
-export function productDownUpToMoney(partialWorkshopStatus: Partial<WorkshopStatus>, target: number, productName: string): WorkshopUpgradeInfo {
+export function productDownUpToMoney(
+  partialWorkshopStatus: Partial<WorkshopStatus>,
+  target: number,
+  productName: string,
+): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return (topDownLeveler(
-    target,
-    getProductByName(productName, workshop.productsInfo).details.name,
-    workshop,
-  ));
+  return topDownLeveler(target, getProductByName(productName, workshop.productsInfo).details.name, workshop);
 }
 
 // for when you have a full workshop and want to build the single next thing without optimizing the whole path up
 // currently looks at the exact previous item
-export function topDownToTargetProduct(partialWorkshopStatus: Partial<WorkshopStatus>, productName: string): WorkshopUpgradeInfo {
+export function topDownToTargetProduct(
+  partialWorkshopStatus: Partial<WorkshopStatus>,
+  productName: string,
+): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
   let productBeforeTarget: string = workshop.productsInfo[0].details.name;
   for (const product of workshop.productsInfo) {
     if (product.details.name === productName) {
-      return (topDownLeveler(product.details.buildCost, productBeforeTarget, workshop));
+      return topDownLeveler(product.details.buildCost, productBeforeTarget, workshop);
     } else {
       productBeforeTarget = product.details.name;
     }
@@ -42,15 +50,12 @@ export function topDownToTargetProduct(partialWorkshopStatus: Partial<WorkshopSt
 
 export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return (bottomUpBuilder(
-    workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost,
-    workshop,
-  ));
+  return bottomUpBuilder(workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost, workshop);
 }
 
 export function bottomUpToMoney(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return (bottomUpBuilder(target, workshop));
+  return bottomUpBuilder(target, workshop);
 }
 
 function setUpWorkshop(partialWorkshopStatus: Partial<WorkshopStatus>): Workshop {
@@ -65,11 +70,15 @@ function setUpWorkshop(partialWorkshopStatus: Partial<WorkshopStatus>): Workshop
 }
 
 function getWorkshopStatus(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopStatus {
-  return isEvent(partialWorkshopStatus) ? { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus } : { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+  return isEvent(partialWorkshopStatus)
+    ? { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus }
+    : { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
 }
 
 function getProductDetails(workshopStatus: WorkshopStatus): ProductDetails[] {
-  return isEvent(workshopStatus) ? importProductsAtLevel(workshopStatus.eventName, workshopStatus.level) : importMainWorkshop();
+  return isEvent(workshopStatus)
+    ? importProductsAtLevel(workshopStatus.eventName, workshopStatus.level)
+    : importMainWorkshop();
 }
 
 function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {

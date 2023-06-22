@@ -31,7 +31,7 @@ export function importMainWorkshop(): ProductDetails[] {
     if (blueprintInfo != null) {
       product = {
         ...product,
-        revenue: product.revenue * blueprintInfo / 10,
+        revenue: product.revenue * (blueprintInfo / 10),
       };
     }
     productMap.set(product.name, product);
@@ -73,11 +73,16 @@ function getInputProduct(inputDescription: string, productMap: Map<string, Produ
 
 export function getUpgradeCostMultiplier(color: string): number {
   switch (color) {
-    case 'Green': return 7;
-    case 'Yellow': return 8;
-    case 'Blue': return 9;
-    case 'Red': return 10;
-    case 'Violet': return 11;
+    case 'Green':
+      return 7;
+    case 'Yellow':
+      return 8;
+    case 'Blue':
+      return 9;
+    case 'Red':
+      return 10;
+    case 'Violet':
+      return 11;
     default: {
       console.error('color does not exist ' + color);
       return 9;
