@@ -4,7 +4,7 @@ import { getUpgradeCostMultiplier } from './importMainWorkshop';
 import { type InputProduct, type ProductDetails } from './types/Product';
 
 // level must be between 1 and 10
-export function importProductsAtLevel(eventName: string, level: number): Map<string, ProductDetails> {
+export function importProductsAtLevel(eventName: string, level: number): ProductDetails[] {
   const filepath = path.join(__dirname, './products/' + eventName.replace(/\s/g, '') + '.txt');
   const file = fs.readFileSync(filepath, 'utf8');
   const productMap = new Map<string, ProductDetails>();
@@ -26,10 +26,10 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
     };
     productMap.set(product.name, product);
   }
-  return productMap;
+  return Array.from(productMap.values());
 }
 
-export function importProducts(eventName: string): Map<string, ProductDetails> {
+export function importProducts(eventName: string): ProductDetails[] {
   return importProductsAtLevel(eventName, 10);
 }
 

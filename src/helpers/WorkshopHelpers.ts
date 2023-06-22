@@ -18,6 +18,6 @@ export function getProductByName(productName: string, productsInfo: readonly Pro
   throw new Error('Workshop does not contain ' + productName);
 }
 
-export function isEvent(workshopStatus: WorkshopStatus): workshopStatus is EventWorkshopStatus {
+export function isEvent(workshopStatus: Partial<WorkshopStatus>): workshopStatus is EventWorkshopStatus {
   return (workshopStatus as EventWorkshopStatus).eventName !== undefined;
 }

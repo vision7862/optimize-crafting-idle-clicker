@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { type InputProduct, type ProductDetails } from './types/Product';
 
-export function importMainWorkshop(): Map<string, ProductDetails> {
+export function importMainWorkshop(): ProductDetails[] {
   const blueprintMap = getBlueprintMap();
 
   const wsPath = path.join(__dirname, './products/MainWorkshopFromWiki.txt');
@@ -36,7 +36,7 @@ export function importMainWorkshop(): Map<string, ProductDetails> {
     }
     productMap.set(product.name, product);
   }
-  return productMap;
+  return Array.from(productMap.values());
 }
 
 function getBlueprintMap(): Map<string, number> {
