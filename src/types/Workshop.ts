@@ -5,8 +5,9 @@ export type Workshop = Readonly<{
   workshopStatus: WorkshopStatus
 }>;
 
-export type WorkshopStatus = Readonly<{
-  event: boolean
+export type WorkshopStatus = MainWorkshopStatus | EventWorkshopStatus;
+
+export type MainWorkshopStatus = Readonly<{
   level: number
   scientists: number
   clickBoostActive: boolean
@@ -14,8 +15,11 @@ export type WorkshopStatus = Readonly<{
   researchBoostActive: boolean
 }>;
 
+export type EventWorkshopStatus = MainWorkshopStatus & Readonly <{
+  eventName: string
+}>;
+
 export const DEFAULT_WORKSHOP_STATUS_MAIN: WorkshopStatus = {
-  event: false,
   level: 8,
   scientists: 200,
   clickBoostActive: false,
@@ -24,10 +28,10 @@ export const DEFAULT_WORKSHOP_STATUS_MAIN: WorkshopStatus = {
 };
 
 export const DEFAULT_WORKSHOP_STATUS_EVENT: WorkshopStatus = {
-  event: true,
   level: 10,
   scientists: 100,
   clickBoostActive: true,
   merchantBoostActive: true,
   researchBoostActive: true,
+  eventName: 'eventName',
 };

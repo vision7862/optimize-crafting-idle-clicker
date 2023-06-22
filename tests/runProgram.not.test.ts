@@ -1,4 +1,4 @@
-import { oneByOneToLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel } from '../src/computeIdealLevelsForEvent';
+import { bottomUpToLastItem, bottomUpToMoney } from '../src/computeIdealLevelsForEvent';
 import { getStatusMap } from '../src/helpers/WorkshopHelpers';
 import {
   computeResearchTimeForWorkshop,
@@ -28,8 +28,8 @@ describe.only('runProgram', () => {
     const eventName = 'Space Craft';
 
     function printFameTime(fame: number, level: number): void {
-      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10 };
-      printInfo(oneByOneToTargetAtEventLevel(computeTargetFromFame(fame, level), workshopStatus, eventName));
+      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, eventName };
+      printInfo(bottomUpToMoney(computeTargetFromFame(fame, level), workshopStatus));
     }
 
     describe('leveling', () => {
@@ -100,7 +100,7 @@ describe.only('runProgram', () => {
 
     describe('10+', () => {
       test('last product level 10', () => {
-        printInfo(oneByOneToLastItem(eventName));
+        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName }));
       });
 
       describe('scientists', () => {
@@ -109,8 +109,8 @@ describe.only('runProgram', () => {
         });
 
         function testNumScientists(numScientists: number): void {
-          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, scientists: numScientists - 10 };
-          printInfo(oneByOneToTargetAtEventLevel(getCostOfScientists(numScientists), workshopStatus, eventName));
+          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, scientists: numScientists - 10, eventName };
+          printInfo(bottomUpToMoney(getCostOfScientists(numScientists), workshopStatus));
         }
 
         test('280 scientists', () => {
@@ -167,7 +167,7 @@ describe.only('runProgram', () => {
   describe('main workshop', () => {
     function printFameTime(fame: number, level: number, scientists: number = 100): void {
       const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, scientists };
-      const targetInfo = oneByOneToTarget(computeTargetFromFame(fame, level), workshopStatus);
+      const targetInfo = bottomUpToMoney(computeTargetFromFame(fame, level), workshopStatus);
       printInfo(targetInfo);
     }
 
@@ -354,7 +354,7 @@ describe.only('runProgram', () => {
         let withinTimeAmount = 0;
         const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
         for (let amount = startingAmount; amount < 1000; amount++) {
-          const targetInfo = oneByOneToTarget(getTarget(amount), { ...workshopStatus, level });
+          const targetInfo = bottomUpToMoney(getTarget(amount), { ...workshopStatus, level });
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
           if (semiActiveTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;

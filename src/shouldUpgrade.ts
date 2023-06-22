@@ -1,4 +1,4 @@
-import { getProductByName } from './helpers/WorkshopHelpers';
+import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getMainWorkshopIncomeMultiplier } from './helpers/targetHelpers';
 import { type Product, type ProductDetails, type ProductStatus } from './types/Product';
 import { type Workshop, type WorkshopStatus } from './types/Workshop';
@@ -58,9 +58,9 @@ function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, cl
 
 function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: ProductDetails): number {
   return product.outputCount * product.revenue *
-          (workshopStatus.event ? 1 : MWS_MERCHANT_MULTIPLIER) *
-          (workshopStatus.event ? 1 : getMainWorkshopIncomeMultiplier(workshopStatus.level)) *
-          (workshopStatus.event && workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1);
+          (!isEvent(workshopStatus) ? MWS_MERCHANT_MULTIPLIER : 1) *
+          (!isEvent(workshopStatus) ? getMainWorkshopIncomeMultiplier(workshopStatus.level) : 1) *
+          (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1);
 }
 
 function getTopProduct(workshop: Workshop): ProductDetails {

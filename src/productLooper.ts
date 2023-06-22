@@ -2,7 +2,7 @@ import { getUpgradedWorkshopIfBetter, type WorkshopUpgradeInfo } from './shouldU
 import { type Product } from './types/Product';
 import { type Workshop } from './types/Workshop';
 
-export function optimizeProductAndBelow(target: number, productName: string, workshop: Workshop): WorkshopUpgradeInfo {
+export function topDownLeveler(target: number, productName: string, workshop: Workshop): WorkshopUpgradeInfo {
   let shouldUpgradeNext = true;
   let modifiedWorkshopInfo: WorkshopUpgradeInfo = {
     workshop,
@@ -17,7 +17,7 @@ export function optimizeProductAndBelow(target: number, productName: string, wor
   }
   return modifiedWorkshopInfo;
 }
-export function optimizeEachProductToTarget(target: number, workshop: Workshop): WorkshopUpgradeInfo {
+export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpgradeInfo {
   let modifiedWorkshop: Workshop = workshop;
   let cyclesToTarget = 0;
   for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
@@ -25,7 +25,7 @@ export function optimizeEachProductToTarget(target: number, workshop: Workshop):
     const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
-      const modifiedWorkshopInfo = optimizeProductAndBelow(currentTarget, thisProduct.details.name, modifiedWorkshop);
+      const modifiedWorkshopInfo = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop);
       modifiedWorkshop = modifiedWorkshopInfo.workshop;
       cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
       if (nextProduct === undefined || target < nextProduct.details.buildCost) {

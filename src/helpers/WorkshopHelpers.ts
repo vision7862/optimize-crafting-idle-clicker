@@ -1,5 +1,5 @@
 import { type Product, type ProductStatus } from '../types/Product';
-import { type Workshop } from '../types/Workshop';
+import { type EventWorkshopStatus, type Workshop, type WorkshopStatus } from '../types/Workshop';
 
 export function getStatusMap(workshop: Workshop): Map<string, ProductStatus> {
   const statuses = new Map<string, ProductStatus>();
@@ -16,4 +16,8 @@ export function getProductByName(productName: string, productsInfo: readonly Pro
     }
   }
   throw new Error('Workshop does not contain ' + productName);
+}
+
+export function isEvent(workshopStatus: WorkshopStatus): workshopStatus is EventWorkshopStatus {
+  return (workshopStatus as EventWorkshopStatus).eventName !== undefined;
 }
