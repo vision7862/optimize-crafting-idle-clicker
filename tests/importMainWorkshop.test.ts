@@ -1,7 +1,7 @@
-import { importMainWorkshopAtLevel } from '../src/importMainWorkshop';
+import { importMainWorkshop } from '../src/importMainWorkshop';
 
 describe('importProducts', () => {
   test('Main Workshop Wiki Vers', () => {
-    expect(() => importMainWorkshopAtLevel()).not.toThrowError();
+    expect(() => importMainWorkshop()).not.toThrowError();
   });
 });

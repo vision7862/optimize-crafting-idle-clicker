@@ -1,6 +1,7 @@
 import memoize from 'fast-memoize';
 import { type ProductStatus } from '../types/Product';
 import { type Workshop, type WorkshopStatus } from '../types/Workshop';
+import { isEvent } from './WorkshopHelpers';
 
 export function computeTargetFromFame(fame: number, level: number): number {
   return 10 ** (fame + level - 1);
@@ -123,7 +124,7 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
 }
 
 export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
-  const researchMultiplierPercentage = workshopStatus.event ? 10 : getMainWorkshopResearchMultiplier(workshopStatus.researchBoostActive);
+  const researchMultiplierPercentage = isEvent(workshopStatus) ? 10 : getMainWorkshopResearchMultiplier(workshopStatus.researchBoostActive);
   const researchPerSecond = workshopStatus.scientists * researchMultiplierPercentage;
   return Math.round(researchPerSecond);
 }
