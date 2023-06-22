@@ -1,5 +1,5 @@
 import { computeTargetFromFame, getCostOfScientists, getResearchPerSecond } from '../../src/helpers/targetHelpers';
-import { DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../../src/types/Workshop';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {

@@ -2,9 +2,9 @@ import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
-import { type WorkshopUpgradeInfo } from './shouldUpgrade';
-import { type Product, type ProductDetails } from './types/Product';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type Workshop, type WorkshopStatus } from './types/Workshop';
+import { WorkshopUpgradeInfo } from './shouldUpgrade';
+import { Product, ProductDetails } from './types/Product';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, Workshop, WorkshopStatus } from './types/Workshop';
 
 export function topDownToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
