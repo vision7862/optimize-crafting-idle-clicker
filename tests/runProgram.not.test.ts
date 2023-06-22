@@ -1,12 +1,12 @@
 import { bottomUpToLastItem, bottomUpToMoney } from '../src/computeIdealLevelsForEvent';
-import { getStatusMap } from '../src/helpers/WorkshopHelpers';
 import {
   computeResearchTimeForWorkshop,
-  computeTargetFromFame,
-  filterOutSkipped,
   getCostOfScientists,
   getCostOfScientistsFromSome,
-} from '../src/helpers/targetHelpers';
+  getFinalNumScientistsCanAfford,
+} from '../src/helpers/ResearchHelpers';
+import { getStatusMap } from '../src/helpers/WorkshopHelpers';
+import { computeTargetFromFame, filterOutSkipped } from '../src/helpers/targetHelpers';
 import { WorkshopUpgradeInfo } from '../src/shouldUpgrade';
 import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../src/types/Workshop';
 
@@ -17,11 +17,22 @@ describe.only('runProgram', () => {
     return date.toISOString().substr(11, 8);
   }
 
-  function printInfo(targetInfo: WorkshopUpgradeInfo): void {
+  function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): void {
     console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
     console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
     console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
     console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
+    if (target !== undefined) {
+      const startingScientists = targetInfo.workshop.workshopStatus.scientists;
+      const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.01);
+      console.log(
+        'can easily afford ' +
+          affordableScientists.toString() +
+          ' total scientists (' +
+          (affordableScientists - startingScientists).toString() +
+          ' additional)',
+      );
+    }
   }
 
   describe('events', () => {
@@ -29,7 +40,8 @@ describe.only('runProgram', () => {
 
     function printFameTime(fame: number, level: number): void {
       const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, eventName };
-      printInfo(bottomUpToMoney(computeTargetFromFame(fame, level), workshopStatus));
+      const target = computeTargetFromFame(fame, level);
+      printInfo(bottomUpToMoney(target, workshopStatus), target);
     }
 
     describe('leveling', () => {
@@ -115,7 +127,8 @@ describe.only('runProgram', () => {
             scientists: numScientists - 10,
             eventName,
           };
-          printInfo(bottomUpToMoney(getCostOfScientists(numScientists), workshopStatus));
+          const target = getCostOfScientists(numScientists);
+          printInfo(bottomUpToMoney(target, workshopStatus), target);
         }
 
         test('280 scientists', () => {
@@ -172,8 +185,9 @@ describe.only('runProgram', () => {
   describe('main workshop', () => {
     function printFameTime(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
       const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
-      const targetInfo = bottomUpToMoney(computeTargetFromFame(fame, workshopStatus.level), workshopStatus);
-      printInfo(targetInfo);
+      const target = computeTargetFromFame(fame, workshopStatus.level);
+      const targetInfo = bottomUpToMoney(target, workshopStatus);
+      printInfo(targetInfo, target);
     }
 
     describe('shooting for half the required fame', () => {
@@ -227,7 +241,7 @@ describe.only('runProgram', () => {
     });
 
     describe('shooting for gems', () => {
-      describe('4% chance', () => {
+      describe('8% chance', () => {
         function getGemsLowChance(partialWorkshopStatus: Partial<WorkshopStatus>): void {
           printFameTime(14, partialWorkshopStatus);
         }
@@ -290,6 +304,10 @@ describe.only('runProgram', () => {
 
         test('lvl 20', () => {
           getGemsLowChance({ level: 20 });
+        });
+
+        test('lvl 22', () => {
+          getGemsLowChance({ level: 22, scientists: 520, researchBoostActive: true });
         });
       });
 
@@ -357,6 +375,10 @@ describe.only('runProgram', () => {
         test('lvl 20', () => {
           getGemsHighChance({ level: 20 });
         });
+
+        test('lvl 22', () => {
+          getGemsHighChance({ level: 22, scientists: 520 });
+        });
       });
     });
 
@@ -397,7 +419,7 @@ describe.only('runProgram', () => {
         maximizeTypeInTime('fame', 10, 15, 5, getTarget);
       });
 
-      test('get as many scientists as possible from 406 in 20 mintues at level 15', () => {
+      test('get as many scientists as possible from 406 in 20 minutes at level 15', () => {
         const currentScientists = 411;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
         maximizeTypeInTime('scientists', 10, 15, currentScientists, getTarget);
@@ -408,7 +430,7 @@ describe.only('runProgram', () => {
         maximizeTypeInTime('fame', 30, 16, 5, getTarget);
       });
 
-      test('get as many scientists as possible from 422 in 20 mintues at level 16', () => {
+      test('get as many scientists as possible from 422 in 20 minutes at level 16', () => {
         const currentScientists = 422;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
         maximizeTypeInTime('scientists', 10, 16, currentScientists, getTarget);
