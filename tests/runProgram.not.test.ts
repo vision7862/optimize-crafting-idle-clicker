@@ -109,7 +109,12 @@ describe.only('runProgram', () => {
         });
 
         function testNumScientists(numScientists: number): void {
-          const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, scientists: numScientists - 10, eventName };
+          const workshopStatus: WorkshopStatus = {
+            ...DEFAULT_WORKSHOP_STATUS_EVENT,
+            level: 10,
+            scientists: numScientists - 10,
+            eventName,
+          };
           printInfo(bottomUpToMoney(getCostOfScientists(numScientists), workshopStatus));
         }
 
@@ -348,7 +353,13 @@ describe.only('runProgram', () => {
     });
 
     describe('time-based goals', () => {
-      function maximizeTypeInTime(thingMaxing: string, minutes: number, level: number, startingAmount: number, getTarget: (testingAmount: number) => number): void {
+      function maximizeTypeInTime(
+        thingMaxing: string,
+        minutes: number,
+        level: number,
+        startingAmount: number,
+        getTarget: (testingAmount: number) => number,
+      ): void {
         const targetTimeInSeconds = minutes * 60;
         let withinTimeTargetInfo: WorkshopUpgradeInfo | null = null;
         let withinTimeAmount = 0;
@@ -365,7 +376,9 @@ describe.only('runProgram', () => {
           console.log(filterOutSkipped(getStatusMap(withinTimeTargetInfo.workshop)));
           console.log('getting ' + withinTimeAmount.toString() + ' total ' + thingMaxing);
           console.log('semi-active: ' + toTime(withinTimeTargetInfo.cyclesToTarget * 5));
-          console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(withinTimeTargetInfo.workshop)));
+          console.log(
+            'research time minimum: ' + toTime(computeResearchTimeForWorkshop(withinTimeTargetInfo.workshop)),
+          );
         } else {
           console.log('cannot get at any additional ' + thingMaxing + ' in 20 minutes');
         }

@@ -16,7 +16,11 @@ export function getUpgradedWorkshopIfBetter(
   const clickBoost = workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
-  if (product.status.level === 0 && product.details.input1 !== null && (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)) {
+  if (
+    product.status.level === 0 &&
+    product.details.input1 !== null &&
+    (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)
+  ) {
     return null;
   }
 
@@ -32,18 +36,19 @@ export function getUpgradedWorkshopIfBetter(
   } else return null;
 }
 
-export interface WorkshopUpgradeInfo {
-  workshop: Workshop
-  cyclesToTarget: number
-}
+export type WorkshopUpgradeInfo = Readonly<{
+  workshop: Workshop;
+  cyclesToTarget: number;
+}>;
 
 function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
   let totalIncome = 0;
   const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
-    totalIncome += applyClickBoost(product.details, topProduct, clickBoost) *
-                   product.status.level *
-                   getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
+    totalIncome +=
+      applyClickBoost(product.details, topProduct, clickBoost) *
+      product.status.level *
+      getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;
 }
@@ -133,7 +138,10 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
   let modifiedWorkshop = workshop;
 
   while (inputItems < inputItemsNeeded) {
-    const inputUpgradeInfo = upgradeSingleProduct(getProductByName(inputProductName, modifiedWorkshop.productsInfo), modifiedWorkshop);
+    const inputUpgradeInfo = upgradeSingleProduct(
+      getProductByName(inputProductName, modifiedWorkshop.productsInfo),
+      modifiedWorkshop,
+    );
     costToUpgradeInput += inputUpgradeInfo.costOfUpgrade;
     inputItems = ++inputLevel * inputProduct.details.outputCount;
     modifiedWorkshop = inputUpgradeInfo.workshop;
@@ -149,29 +157,37 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
   };
 }
 
-interface UpgradeInfo {
-  workshop: Workshop
-  costOfUpgrade: number
-}
+type UpgradeInfo = Readonly<{
+  workshop: Workshop;
+  costOfUpgrade: number;
+}>;
 
 function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
     level: product.status.level + 1,
-    merchants: Math.ceil(((product.status.level + 1) * product.details.outputCount * (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1)) / 10),
+    merchants: Math.ceil(
+      ((product.status.level + 1) *
+        product.details.outputCount *
+        (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1)) /
+        10,
+    ),
   };
   const newProduct: Product = {
     ...product,
     status: newStatus,
   };
 
-  const upgradeCostMultiplier: number = product.details.upgradeCostMultiplier !== undefined ? (1 + (product.details.upgradeCostMultiplier / 100)) : 1.07;
+  const upgradeCostMultiplier: number =
+    product.details.upgradeCostMultiplier !== undefined ? 1 + product.details.upgradeCostMultiplier / 100 : 1.07;
 
-  const indexOfProduct: number = workshop.productsInfo.findIndex((testProduct: Product) => testProduct.details.name === product.details.name);
+  const indexOfProduct: number = workshop.productsInfo.findIndex(
+    (testProduct: Product) => testProduct.details.name === product.details.name,
+  );
   const copiedArray = new Array<Product>(...workshop.productsInfo);
   copiedArray.splice(indexOfProduct, 1, newProduct);
   return {
-    costOfUpgrade: product.details.buildCost * (upgradeCostMultiplier ** product.status.level),
+    costOfUpgrade: product.details.buildCost * upgradeCostMultiplier ** product.status.level,
     workshop: {
       ...workshop,
       productsInfo: copiedArray,
