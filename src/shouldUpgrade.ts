@@ -1,11 +1,9 @@
-import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
-import { getMainWorkshopIncomeMultiplier } from './helpers/targetHelpers';
+import { getProductByName } from './helpers/WorkshopHelpers';
+import { getWorkshopIncomeMultiplier } from './helpers/targetHelpers';
 import { type Product, type ProductDetails, type ProductStatus } from './types/Product';
 import { type Workshop, type WorkshopStatus } from './types/Workshop';
 
-export const CLICK_BOOST_MULTIPLIER = 3;
-const MERCHANT_BOOST_MULTIPLIER = 3;
-const MWS_MERCHANT_MULTIPLIER = 6;
+const CLICK_BOOST_MULTIPLIER = 3;
 const scienceIsTight = true;
 
 export function getUpgradedWorkshopIfBetter(
@@ -24,7 +22,7 @@ export function getUpgradedWorkshopIfBetter(
 
   const upgradeProductInfo = getCostToUpgradeProduct(product, workshop);
   const cyclesToRaiseUpgradeMoney = upgradeProductInfo.costOfUpgrade / incomePerCycle;
-  const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details);
+  const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
     return {
@@ -45,7 +43,7 @@ function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
   for (const product of workshop.productsInfo) {
     totalIncome += applyClickBoost(product.details, topProduct, clickBoost) *
                    product.status.level *
-                   getIncomeForOneLevelOfItem(workshop.workshopStatus, product.details);
+                   getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;
 }
@@ -56,11 +54,8 @@ function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, cl
   } else return 1;
 }
 
-function getIncomeForOneLevelOfItem(workshopStatus: WorkshopStatus, product: ProductDetails): number {
-  return product.outputCount * product.revenue *
-          (!isEvent(workshopStatus) ? MWS_MERCHANT_MULTIPLIER : 1) *
-          (!isEvent(workshopStatus) ? getMainWorkshopIncomeMultiplier(workshopStatus.level) : 1) *
-          (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1);
+function getIncomeForOneLevelOfItem(product: ProductDetails, workshopStatus: WorkshopStatus): number {
+  return product.outputCount * product.revenue * getWorkshopIncomeMultiplier(workshopStatus);
 }
 
 function getTopProduct(workshop: Workshop): ProductDetails {
