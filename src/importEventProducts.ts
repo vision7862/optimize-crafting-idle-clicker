@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { getUpgradeCostMultiplier } from './importMainWorkshop';
-import { type InputProduct, type ProductDetails } from './types/Product';
+import { InputProduct, ProductDetails } from './types/Product';
 
 // level must be between 1 and 10
 export function importProductsAtLevel(eventName: string, level: number): ProductDetails[] {

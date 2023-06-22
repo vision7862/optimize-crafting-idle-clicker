@@ -1,6 +1,6 @@
-import { getUpgradedWorkshopIfBetter, type WorkshopUpgradeInfo } from './shouldUpgrade';
-import { type Product } from './types/Product';
-import { type Workshop } from './types/Workshop';
+import { getUpgradedWorkshopIfBetter, WorkshopUpgradeInfo } from './shouldUpgrade';
+import { Product } from './types/Product';
+import { Workshop } from './types/Workshop';
 
 export function topDownLeveler(target: number, productName: string, workshop: Workshop): WorkshopUpgradeInfo {
   let shouldUpgradeNext = true;

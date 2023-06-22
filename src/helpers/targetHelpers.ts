@@ -1,6 +1,6 @@
 import memoize from 'fast-memoize';
-import { type ProductStatus } from '../types/Product';
-import { type Workshop, type WorkshopStatus } from '../types/Workshop';
+import { ProductStatus } from '../types/Product';
+import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 export function computeTargetFromFame(fame: number, level: number): number {

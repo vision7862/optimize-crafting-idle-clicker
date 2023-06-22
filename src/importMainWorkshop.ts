@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { type InputProduct, type ProductDetails } from './types/Product';
+import { InputProduct, ProductDetails } from './types/Product';
 
 export function importMainWorkshop(): ProductDetails[] {
   const blueprintMap = getBlueprintMap();

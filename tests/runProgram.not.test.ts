@@ -7,8 +7,8 @@ import {
   getCostOfScientists,
   getCostOfScientistsFromSome,
 } from '../src/helpers/targetHelpers';
-import { type WorkshopUpgradeInfo } from '../src/shouldUpgrade';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, type WorkshopStatus } from '../src/types/Workshop';
+import { WorkshopUpgradeInfo } from '../src/shouldUpgrade';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
   function toTime(seconds: number): string {
