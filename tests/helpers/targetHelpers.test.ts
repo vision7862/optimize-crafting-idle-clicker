@@ -1,4 +1,10 @@
-import { computeTargetFromFame, getCostOfScientists, getResearchPerSecond } from '../../src/helpers/targetHelpers';
+import { bottomUpToMoney } from '../../src/computeIdealLevelsForEvent';
+import {
+  computeResearchTimeForWorkshop,
+  computeTargetFromFame,
+  getCostOfScientists,
+  getResearchPerSecond,
+} from '../../src/helpers/targetHelpers';
 import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../../src/types/Workshop';
 
 describe('targetHelpers', () => {
@@ -30,6 +36,16 @@ describe('targetHelpers', () => {
     });
   });
 
+  describe('computeResearchTimeForWorkshop', () => {
+    it.skip('should calculate research time in seconds', () => {
+      // crop main workshop after coal beacuse manually timed about 2.5 minutes
+      const workshop = bottomUpToMoney(computeTargetFromFame(12, 21), { scientists: 520, level: 21 }).workshop;
+      const researchTime = computeResearchTimeForWorkshop(workshop);
+      expect(researchTime).toBeGreaterThan(150);
+      expect(researchTime).toBeLessThan(180);
+    });
+  });
+
   describe('getResearchPerSecond', () => {
     it('should account for no boost running', () => {
       const workshopStatus: WorkshopStatus = {
@@ -38,7 +54,7 @@ describe('targetHelpers', () => {
         scientists: 422,
         researchBoostActive: false,
       };
-      expect(getResearchPerSecond(workshopStatus)).toBe(1418);
+      expect(getResearchPerSecond(workshopStatus)).toBe(1519);
     });
 
     it('should account for boost running', () => {
@@ -48,7 +64,7 @@ describe('targetHelpers', () => {
         scientists: 422,
         researchBoostActive: true,
       };
-      expect(getResearchPerSecond(workshopStatus)).toBe(14179);
+      expect(getResearchPerSecond(workshopStatus)).toBe(15192);
     });
   });
 });

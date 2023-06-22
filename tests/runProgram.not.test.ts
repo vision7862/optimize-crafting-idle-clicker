@@ -216,6 +216,14 @@ describe.only('runProgram', () => {
       test('11 fame lvl 19', () => {
         printFameTime(11, { level: 19 });
       });
+
+      test('12 fame lvl 21', () => {
+        printFameTime(12, { level: 21, scientists: 520, researchBoostActive: true });
+      });
+
+      test('13 fame lvl 22', () => {
+        printFameTime(13, { level: 22, scientists: 520, researchBoostActive: true });
+      });
     });
 
     describe('shooting for gems', () => {
