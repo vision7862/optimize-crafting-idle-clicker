@@ -1,4 +1,4 @@
-import { getProductByName } from './WorkshopHelpers';
+import { getProductByName } from './helpers/WorkshopHelpers';
 import { importProducts, importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshopAtLevel } from './importMainWorkshop';
 import { optimizeEachProductToTarget, optimizeProductAndBelow } from './productLooper';

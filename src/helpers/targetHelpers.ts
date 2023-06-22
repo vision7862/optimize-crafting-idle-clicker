@@ -1,6 +1,6 @@
 import memoize from 'fast-memoize';
-import { type ProductStatus } from './types/Product';
-import { type Workshop, type WorkshopStatus } from './types/Workshop';
+import { type ProductStatus } from '../types/Product';
+import { type Workshop, type WorkshopStatus } from '../types/Workshop';
 
 export function computeTargetFromFame(fame: number, level: number): number {
   return 10 ** (fame + level - 1);
@@ -136,3 +136,7 @@ function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number
          1.2 * // total blueprint score
          (researchBoostActive ? researchBoostMultiplier : 1);
 }
+
+// export function computeBuildTimeForWorkshop(workshop: Workshop): number {
+
+// }
