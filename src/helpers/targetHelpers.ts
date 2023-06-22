@@ -29,10 +29,17 @@ export function filterOutSkipped(statuses: Map<string, ProductStatus>): Map<stri
   return filteredStatuses;
 }
 
-export const getMainWorkshopIncomeMultiplier = memoize(getMainWorkshopIncomeMultiplierNonMemo);
+const MERCHANT_BOOST_MULTIPLIER = 3;
+export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
+  return (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
+         (!isEvent(workshopStatus) ? getMainWorkshopIncomeMultiplier(workshopStatus.level) : 1);
+}
 
+const MWS_MERCHANT_MULTIPLIER = 6;
+const getMainWorkshopIncomeMultiplier = memoize(getMainWorkshopIncomeMultiplierNonMemo);
 function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
-  return getLevelAchievementMultiplier(level) *
+  return MWS_MERCHANT_MULTIPLIER *
+        getMWSLevelAchievementMultiplier(level) *
         1.2 * // wood
         1.2 * // leather
         1.4 * // copper
@@ -43,10 +50,12 @@ function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
         1 * // industrial
         1 * // vehicles
         1 * // entertainment
-        2.6; // event
+        2.6 // event
+  ;
 }
 
-export function getLevelAchievementMultiplier(level: number): number {
+// only applies to main workshop because the events are imported with revenue relative to their level
+function getMWSLevelAchievementMultiplier(level: number): number {
   switch (level) {
     case 1: return 1;
     case 2: return 2;
