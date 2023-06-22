@@ -1,11 +1,15 @@
 import { bottomUpToMoney } from '../../src/computeIdealLevelsForEvent';
 import {
-  computeResearchTimeForWorkshop,
   computeTargetFromFame,
-  getCostOfScientists,
-  getResearchPerSecond,
+
+
 } from '../../src/helpers/targetHelpers';
 import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../../src/types/Workshop';
+import {
+    computeResearchTimeForWorkshop,
+    getCostOfScientists,
+    getResearchPerSecond
+} from "../../src/helpers/ResearchHelpers";
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {
