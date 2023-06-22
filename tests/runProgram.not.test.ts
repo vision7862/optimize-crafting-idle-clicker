@@ -1,7 +1,7 @@
 import { oneByOneToLastItem, oneByOneToTarget, oneByOneToTargetAtEventLevel } from '../src/computeIdealLevelsForEvent';
 import { getStatusMap } from '../src/helpers/WorkshopHelpers';
-import { computeResearchTimeForWorkshop } from '../src/helpers/computeResearchTimeForWorkshop';
 import {
+  computeResearchTimeForWorkshop,
   computeTargetFromFame,
   filterOutSkipped,
   getCostOfScientists,
@@ -214,48 +214,136 @@ describe.only('runProgram', () => {
     });
 
     describe('shooting for gems', () => {
-      test('15 fame lvl 6', () => {
-        printFameTime(15, 6, 160);
+      describe('4% chance', () => {
+        function getGemsLowChance(level: number, scientists: number = 100): void {
+          printFameTime(14, level, scientists);
+        }
+
+        test('lvl 6', () => {
+          getGemsLowChance(6, 160);
+        });
+
+        test('lvl 7', () => {
+          getGemsLowChance(7);
+        });
+
+        test('lvl 8', () => {
+          getGemsLowChance(8);
+        });
+
+        test('lvl 9', () => {
+          getGemsLowChance(9);
+        });
+
+        test('lvl 10', () => {
+          getGemsLowChance(10);
+        });
+
+        test('lvl 11', () => {
+          getGemsLowChance(11);
+        });
+
+        test('lvl 12', () => {
+          getGemsLowChance(12);
+        });
+
+        test('lvl 13', () => {
+          getGemsLowChance(13);
+        });
+
+        test('lvl 14', () => {
+          getGemsLowChance(14);
+        });
+
+        test('lvl 15', () => {
+          getGemsLowChance(15);
+        });
+
+        test('lvl 16', () => {
+          getGemsLowChance(16);
+        });
+
+        test('lvl 17', () => {
+          getGemsLowChance(17);
+        });
+
+        test('lvl 18', () => {
+          getGemsLowChance(18);
+        });
+
+        test('lvl 19', () => {
+          getGemsLowChance(19);
+        });
+
+        test('lvl 20', () => {
+          getGemsLowChance(20);
+        });
       });
 
-      test('15 fame lvl 13', () => {
-        printFameTime(15, 13);
-      });
+      describe('12% chance', () => {
+        function getGemsHighChance(level: number, scientists: number = 100): void {
+          printFameTime(15, level, scientists);
+        }
 
-      test('15 fame lvl 14', () => {
-        printFameTime(15, 14);
-      });
+        test('lvl 6', () => {
+          getGemsHighChance(6, 160);
+        });
 
-      test('14 fame lvl 14', () => {
-        printFameTime(14, 14);
-      });
+        test('lvl 7', () => {
+          getGemsHighChance(7);
+        });
 
-      test('15 fame lvl 15', () => {
-        printFameTime(15, 15);
-      });
+        test('lvl 8', () => {
+          getGemsHighChance(8);
+        });
 
-      test('14 fame lvl 15', () => {
-        printFameTime(14, 15);
-      });
+        test('lvl 9', () => {
+          getGemsHighChance(9);
+        });
 
-      test('13 fame lvl 15', () => {
-        printFameTime(13, 15);
-      });
+        test('lvl 10', () => {
+          getGemsHighChance(10);
+        });
 
-      test('15 fame lvl 17', () => {
-        printFameTime(15, 17);
-      });
+        test('lvl 11', () => {
+          getGemsHighChance(11);
+        });
 
-      test('14 fame lvl 19', () => {
-        printFameTime(14, 19);
-      });
+        test('lvl 12', () => {
+          getGemsHighChance(12);
+        });
 
-      test('15 fame lvl 19', () => {
-        printFameTime(15, 19);
-      });
+        test('lvl 13', () => {
+          getGemsHighChance(13);
+        });
 
-      test('15 fame lvl 20', () => {
-        printFameTime(15, 20);
+        test('lvl 14', () => {
+          getGemsHighChance(14);
+        });
+
+        test('lvl 15', () => {
+          getGemsHighChance(15);
+        });
+
+        test('lvl 16', () => {
+          getGemsHighChance(16);
+        });
+
+        test('lvl 17', () => {
+          getGemsHighChance(17);
+        });
+
+        test('lvl 18', () => {
+          getGemsHighChance(18);
+        });
+
+        test('lvl 19', () => {
+          getGemsHighChance(19);
+        });
+
+        test('lvl 20', () => {
+          getGemsHighChance(20);
+        });
       });
     });
 
