@@ -1,7 +1,7 @@
 import { getProductByName } from './helpers/WorkshopHelpers';
+import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
 import { Workshop, WorkshopStatus } from './types/Workshop';
-import {getWorkshopIncomeMultiplier} from "./helpers/getWorkshopIncomeMultiplier";
 
 const CLICK_BOOST_MULTIPLIER = 3;
 const scienceIsTight = true;
@@ -18,7 +18,7 @@ export function getUpgradedWorkshopIfBetter(
   const cyclesToTarget = target / incomePerCycle;
   if (
     product.status.level === 0 &&
-    product.details.input1 !== null &&
+    // product.details.input1 !== null &&
     (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)
   ) {
     return null;
@@ -132,7 +132,7 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
   const inputProduct = getProductByName(inputProductName, workshop.productsInfo);
   let inputLevel = inputProduct.status.level;
   if (inputLevel === 0) {
-    console.log('building product that was skipped: ' + inputProductName);
+    // console.log('building product that was skipped: ' + inputProductName);
   }
   let inputItems = inputProduct.status.level * inputProduct.details.outputCount;
   let modifiedWorkshop = workshop;

@@ -1,4 +1,4 @@
-import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
+import { isEvent } from './helpers/WorkshopHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
@@ -26,7 +26,7 @@ export function productDownUpToMoney(
   productName: string,
 ): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return topDownLeveler(target, getProductByName(productName, workshop.productsInfo).details.name, workshop);
+  return topDownLeveler(target, productName, workshop);
 }
 
 // for when you have a full workshop and want to build the single next thing without optimizing the whole path up
