@@ -21,4 +21,14 @@ describe('importProducts', () => {
     const products: ProductDetails[] = importProducts('Space Craft');
     expect(products.length).toBe(25);
   });
+
+  test('Vital Science', () => {
+    const products: ProductDetails[] = importProducts('Vital Science');
+    expect(products.length).toBe(22);
+  });
+
+  test('A Car is Born', () => {
+    const products: ProductDetails[] = importProducts('A Car is Born');
+    expect(products.length).toBe(22);
+  });
 });

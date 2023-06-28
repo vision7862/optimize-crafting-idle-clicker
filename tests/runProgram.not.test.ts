@@ -1,4 +1,4 @@
-import { bottomUpToLastItem, bottomUpToMoney } from '../src/computeIdealLevelsForEvent';
+import { bottomUpToLastItem, bottomUpToMoney, productDownUpToMoney } from '../src/computeIdealLevelsForEvent';
 import {
   computeResearchTimeForWorkshop,
   getCostOfScientists,
@@ -36,10 +36,25 @@ describe.only('runProgram', () => {
   }
 
   describe('events', () => {
-    const eventName = 'Space Craft';
+    const eventName = 'A Car is Born';
 
-    function printFameTime(fame: number, level: number): void {
-      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level: 10, eventName };
+    function printFameTime(fame: number, level: number, scientists: number = 100): void {
+      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level, eventName, scientists };
+      const target = computeTargetFromFame(fame, level);
+      printInfo(bottomUpToMoney(target, workshopStatus), target);
+    }
+
+    function printFameTimeNoClicking(
+      fame: number,
+      level: number,
+      partialWorkshopStatus: Partial<WorkshopStatus>,
+    ): void {
+      const workshopStatus: WorkshopStatus = {
+        ...DEFAULT_WORKSHOP_STATUS_EVENT,
+        level,
+        eventName,
+        ...partialWorkshopStatus,
+      };
       const target = computeTargetFromFame(fame, level);
       printInfo(bottomUpToMoney(target, workshopStatus), target);
     }
@@ -54,7 +69,7 @@ describe.only('runProgram', () => {
       });
 
       test('5 fame level 3', () => {
-        printFameTime(5, 3);
+        printFameTime(5, 3, 1);
       });
 
       test('6 fame level 3', () => {
@@ -62,7 +77,7 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 4', () => {
-        printFameTime(6, 4);
+        printFameTime(6, 4, 16);
       });
 
       test('5 fame level 4', () => {
@@ -70,31 +85,39 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 5', () => {
-        printFameTime(6, 5);
-      });
-
-      test('5 fame level 5', () => {
-        printFameTime(5, 5);
+        printFameTime(6, 5, 78);
       });
 
       test('2 fame level 5', () => {
-        printFameTime(2, 5);
+        printFameTime(2, 5, 92);
       });
 
       test('6 fame level 6', () => {
-        printFameTime(6, 6);
+        printFameTime(6, 6, 92);
       });
 
       test('5 fame level 6', () => {
         printFameTime(5, 6);
       });
 
+      test('3 fame level 6', () => {
+        printFameTime(3, 6);
+      });
+
       test('6 fame level 7', () => {
-        printFameTime(6, 7);
+        printFameTime(6, 7, 108);
+      });
+
+      test('4 fame level 7', () => {
+        printFameTime(4, 7);
       });
 
       test('6 fame level 8', () => {
-        printFameTime(6, 8);
+        printFameTime(6, 8, 124);
+      });
+
+      test('5 fame level 9', () => {
+        printFameTime(5, 8, 164);
       });
 
       test('6 fame level 9', () => {
@@ -112,10 +135,25 @@ describe.only('runProgram', () => {
 
     describe('10+', () => {
       test('last product level 10', () => {
-        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName }));
+        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 211 }));
       });
 
       describe('scientists', () => {
+        function printTimeToScientist(): void {
+          for (let numScientists = 255; numScientists < 261; numScientists++) {
+            const workshopStatus: WorkshopStatus = {
+              ...DEFAULT_WORKSHOP_STATUS_EVENT,
+              level: 10,
+              scientists: numScientists - 10,
+              eventName,
+            };
+            const target = getCostOfScientists(numScientists);
+            printInfo(bottomUpToMoney(target, workshopStatus), target);
+          }
+        }
+        it('test time altogether', () => {
+          printTimeToScientist();
+        });
         beforeEach(() => {
           console.log(expect.getState().currentTestName);
         });
@@ -143,6 +181,17 @@ describe.only('runProgram', () => {
           testNumScientists(295);
         });
 
+        test('300 top down', () => {
+          const workshopStatus: WorkshopStatus = {
+            ...DEFAULT_WORKSHOP_STATUS_EVENT,
+            level: 10,
+            scientists: 293,
+            eventName: 'A Car is Born Click Last Three',
+          };
+          const target = getCostOfScientists(300);
+          printInfo(productDownUpToMoney(workshopStatus, target, 'Truck'), target);
+        });
+
         test('300 scientists', () => {
           testNumScientists(300);
         });
@@ -161,7 +210,20 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 10+', () => {
-        printFameTime(6, 10);
+        printFameTime(6, 10, 300);
+      });
+
+      test('6 fame level 10+ no clicking', () => {
+        printFameTimeNoClicking(6, 10, { scientists: 300, clickBoostActive: false });
+      });
+
+      test('6 fame level 10+ no boosts', () => {
+        printFameTimeNoClicking(6, 10, {
+          scientists: 300,
+          clickBoostActive: false,
+          researchBoostActive: false,
+          merchantBoostActive: false,
+        });
       });
 
       test('7 fame level 10+', () => {
@@ -231,12 +293,32 @@ describe.only('runProgram', () => {
         printFameTime(11, { level: 19 });
       });
 
+      test('12 fame lvl 20', () => {
+        printFameTime(12, { level: 20, scientists: 501, researchBoostActive: true, merchantBoostActive: true });
+      });
+
       test('12 fame lvl 21', () => {
-        printFameTime(12, { level: 21, scientists: 520, researchBoostActive: true });
+        printFameTime(12, { level: 21, scientists: 520, researchBoostActive: true, merchantBoostActive: true });
+      });
+
+      test('8 fame lvl 21', () => {
+        printFameTime(8, { level: 21, scientists: 504, researchBoostActive: true, merchantBoostActive: true });
       });
 
       test('13 fame lvl 22', () => {
         printFameTime(13, { level: 22, scientists: 520, researchBoostActive: true });
+      });
+
+      test('9 fame lvl 22', () => {
+        printFameTime(9, { level: 22, scientists: 504, researchBoostActive: true, merchantBoostActive: true });
+      });
+
+      test('13 fame lvl 23', () => {
+        printFameTime(13, { level: 23, scientists: 520, researchBoostActive: true });
+      });
+
+      test('9 fame lvl 23', () => {
+        printFameTime(9, { level: 23, scientists: 520, researchBoostActive: true });
       });
     });
 
@@ -255,15 +337,15 @@ describe.only('runProgram', () => {
         });
 
         test('lvl 8', () => {
-          getGemsLowChance({ level: 8 });
+          getGemsLowChance({ level: 8, scientists: 174 });
         });
 
         test('lvl 9', () => {
-          getGemsLowChance({ level: 9 });
+          getGemsLowChance({ level: 9, scientists: 274, researchBoostActive: true });
         });
 
         test('lvl 10', () => {
-          getGemsLowChance({ level: 10 });
+          getGemsLowChance({ level: 10, scientists: 274, researchBoostActive: true });
         });
 
         test('lvl 11', () => {
@@ -302,8 +384,21 @@ describe.only('runProgram', () => {
           getGemsLowChance({ level: 19 });
         });
 
+        test('lvl 19, boosts', () => {
+          getGemsLowChance({ level: 19, clickBoostActive: true, researchBoostActive: true, merchantBoostActive: true });
+        });
+
         test('lvl 20', () => {
-          getGemsLowChance({ level: 20 });
+          getGemsLowChance({ level: 20, researchBoostActive: true, merchantBoostActive: true });
+        });
+
+        test('lvl 21, boosts', () => {
+          getGemsLowChance({
+            level: 21,
+            clickBoostActive: false,
+            researchBoostActive: true,
+            merchantBoostActive: true,
+          });
         });
 
         test('lvl 22', () => {
@@ -376,8 +471,12 @@ describe.only('runProgram', () => {
           getGemsHighChance({ level: 20 });
         });
 
+        test('lvl 21', () => {
+          getGemsHighChance({ level: 21, scientists: 501, researchBoostActive: true, merchantBoostActive: true });
+        });
+
         test('lvl 22', () => {
-          getGemsHighChance({ level: 22, scientists: 520 });
+          getGemsHighChance({ level: 22, scientists: 520, researchBoostActive: true });
         });
       });
     });
@@ -386,16 +485,16 @@ describe.only('runProgram', () => {
       function maximizeTypeInTime(
         thingMaxing: string,
         minutes: number,
-        level: number,
         startingAmount: number,
+        partialWorkshopStatus: Partial<WorkshopStatus>,
         getTarget: (testingAmount: number) => number,
       ): void {
         const targetTimeInSeconds = minutes * 60;
         let withinTimeTargetInfo: WorkshopUpgradeInfo | null = null;
         let withinTimeAmount = 0;
-        const workshopStatus: WorkshopStatus = DEFAULT_WORKSHOP_STATUS_MAIN;
+        const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
         for (let amount = startingAmount; amount < 1000; amount++) {
-          const targetInfo = bottomUpToMoney(getTarget(amount), { ...workshopStatus, level });
+          const targetInfo = bottomUpToMoney(getTarget(amount), workshopStatus);
           const semiActiveTime = targetInfo.cyclesToTarget * 5;
           if (semiActiveTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;
@@ -409,6 +508,18 @@ describe.only('runProgram', () => {
           console.log(
             'research time minimum: ' + toTime(computeResearchTimeForWorkshop(withinTimeTargetInfo.workshop)),
           );
+          const startingScientists = withinTimeTargetInfo.workshop.workshopStatus.scientists;
+          const affordableScientists = getFinalNumScientistsCanAfford(
+            startingScientists,
+            getTarget(withinTimeAmount) * 0.01,
+          );
+          console.log(
+            'can easily afford ' +
+              affordableScientists.toString() +
+              ' total scientists (' +
+              (affordableScientists - startingScientists).toString() +
+              ' additional)',
+          );
         } else {
           console.log('cannot get at any additional ' + thingMaxing + ' in 20 minutes');
         }
@@ -416,34 +527,71 @@ describe.only('runProgram', () => {
 
       test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 15);
-        maximizeTypeInTime('fame', 10, 15, 5, getTarget);
+        maximizeTypeInTime('fame', 10, 5, { level: 15 }, getTarget);
       });
 
       test('get as many scientists as possible from 406 in 20 minutes at level 15', () => {
         const currentScientists = 411;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
-        maximizeTypeInTime('scientists', 10, 15, currentScientists, getTarget);
+        maximizeTypeInTime(
+          'scientists',
+          10,
+          currentScientists,
+          { level: 15, scientists: currentScientists },
+          getTarget,
+        );
       });
 
       test('get as much fame as possible in semi-active 30 minutes at level 16', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 16);
-        maximizeTypeInTime('fame', 30, 16, 5, getTarget);
+        maximizeTypeInTime('fame', 30, 5, { level: 16 }, getTarget);
       });
 
       test('get as many scientists as possible from 422 in 20 minutes at level 16', () => {
         const currentScientists = 422;
         const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
-        maximizeTypeInTime('scientists', 10, 16, currentScientists, getTarget);
+        maximizeTypeInTime(
+          'scientists',
+          10,
+          currentScientists,
+          { level: 16, scientists: currentScientists },
+          getTarget,
+        );
       });
 
       test('get as much fame as possible in semi-active 60 minutes at level 17', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
-        maximizeTypeInTime('fame', 60, 17, 12, getTarget);
+        maximizeTypeInTime('fame', 60, 12, { level: 17 }, getTarget);
       });
 
       test('get as much fame as possible in semi-active 10 minutes at level 9', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 9);
-        maximizeTypeInTime('fame', 10, 9, 8, getTarget);
+        maximizeTypeInTime('fame', 10, 8, { level: 9 }, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 10 minutes at level 2', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 2);
+        maximizeTypeInTime('fame', 10, 0, { level: 2, scientists: 98 }, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 10 minutes at level 3', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
+        maximizeTypeInTime('fame', 10, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 5 minutes at level 3', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
+        maximizeTypeInTime('fame', 5, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 5 minutes at level 4', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 4);
+        maximizeTypeInTime('fame', 5, 0, { level: 4, scientists: 150, researchBoostActive: true }, getTarget);
+      });
+
+      test('get as much fame as possible in semi-active 5 minutes at level 5', () => {
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 5);
+        maximizeTypeInTime('fame', 5, 0, { level: 5, scientists: 173, researchBoostActive: true }, getTarget);
       });
     });
   });
