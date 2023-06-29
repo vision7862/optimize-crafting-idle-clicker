@@ -20,13 +20,16 @@ export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): voi
   if (target !== undefined) {
     const startingScientists = targetInfo.workshop.workshopStatus.scientists;
     const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.01);
-    console.log(
-      'can easily afford ' +
-        affordableScientists.toString() +
-        ' total scientists (' +
-        (affordableScientists - startingScientists).toString() +
-        ' additional)',
-    );
+    const additionalScientists = affordableScientists - startingScientists;
+    if (additionalScientists > 0) {
+      console.log(
+        'can easily afford ' +
+          affordableScientists.toString() +
+          ' total scientists (' +
+          additionalScientists.toString() +
+          ' additional)',
+      );
+    }
   }
 }
 
