@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import { input } from '@inquirer/prompts';
+import { runCLI } from './src/CLI';
 
-const answer = await input({ message: 'do you want to optimize an event?' });
-
-console.log('boo! ' + answer);
+void runCLI();

@@ -5,8 +5,7 @@ import { InputProduct, ProductDetails } from './types/Product';
 export function importMainWorkshop(): ProductDetails[] {
   const blueprintMap = getBlueprintMap();
 
-  const wsPath = path.join(__dirname, '../../products/MainWorkshopFromWiki.txt');
-  const mainWorkshopProducts = fs.readFileSync(wsPath, 'utf8');
+  const mainWorkshopProducts = getFile('MainWorkshopFromWiki');
   const productMap = new Map<string, ProductDetails>();
 
   for (const line of mainWorkshopProducts.split(/[\r\n]+/)) {
@@ -40,8 +39,7 @@ export function importMainWorkshop(): ProductDetails[] {
 }
 
 function getBlueprintMap(): Map<string, number> {
-  const blueprintPath = path.join(__dirname, '../../products/MWSBlueprintMultipliers.txt');
-  const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
+  const blueprintProducts = getFile('MWSBlueprintMultipliers');
   const blueprintMap = new Map<string, number>();
 
   for (const line of blueprintProducts.split(/[\r\n]+/)) {
@@ -55,6 +53,13 @@ function getBlueprintMap(): Map<string, number> {
     blueprintMap.set(details[0], +details[1]);
   }
   return blueprintMap;
+}
+
+function getFile(fileName: string): string {
+  const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
+  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../products/${fileName}.txt`);
+  const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
+  return blueprintProducts;
 }
 
 function getInputProduct(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
