@@ -1,4 +1,4 @@
-import { getProductByName } from './helpers/WorkshopHelpers';
+import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
 import { Workshop, WorkshopStatus } from './types/Workshop';
@@ -162,6 +162,7 @@ type UpgradeInfo = Readonly<{
   costOfUpgrade: number;
 }>;
 
+const MAIN_WORKSHOP_MERCHANT_CAPACITY = 11;
 function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
@@ -170,7 +171,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
       ((product.status.level + 1) *
         product.details.outputCount *
         (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1)) /
-        10,
+        (isEvent(workshop.workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY),
     ),
   };
   const newProduct: Product = {
