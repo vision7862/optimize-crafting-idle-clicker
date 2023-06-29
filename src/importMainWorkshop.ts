@@ -5,7 +5,7 @@ import { InputProduct, ProductDetails } from './types/Product';
 export function importMainWorkshop(): ProductDetails[] {
   const blueprintMap = getBlueprintMap();
 
-  const wsPath = path.join(__dirname, './products/MainWorkshopFromWiki.txt');
+  const wsPath = path.join(__dirname, '../../products/MainWorkshopFromWiki.txt');
   const mainWorkshopProducts = fs.readFileSync(wsPath, 'utf8');
   const productMap = new Map<string, ProductDetails>();
 
@@ -40,7 +40,7 @@ export function importMainWorkshop(): ProductDetails[] {
 }
 
 function getBlueprintMap(): Map<string, number> {
-  const blueprintPath = path.join(__dirname, './products/MWSBlueprintMultipliers.txt');
+  const blueprintPath = path.join(__dirname, '../../products/MWSBlueprintMultipliers.txt');
   const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
   const blueprintMap = new Map<string, number>();
 
