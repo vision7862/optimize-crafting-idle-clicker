@@ -1,12 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { getUpgradeCostMultiplier } from './importMainWorkshop';
+import { getFile, getUpgradeCostMultiplier } from './importMainWorkshop';
 import { InputProduct, ProductDetails } from './types/Product';
 
 // level must be between 1 and 10
 export function importProductsAtLevel(eventName: string, level: number): ProductDetails[] {
-  const filepath = path.join(__dirname, './products/' + eventName.replace(/\s/g, '') + '.txt');
-  const file = fs.readFileSync(filepath, 'utf8');
+  const file = getFile(eventName.replace(/\s/g, ''));
   const productMap = new Map<string, ProductDetails>();
 
   for (const line of file.split(/[\r\n]+/)) {

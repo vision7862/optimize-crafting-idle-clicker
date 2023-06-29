@@ -55,7 +55,7 @@ function getBlueprintMap(): Map<string, number> {
   return blueprintMap;
 }
 
-function getFile(fileName: string): string {
+export function getFile(fileName: string): string {
   const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
   const blueprintPath = path.join(__dirname, extraStepUpForDist + `../products/${fileName}.txt`);
   const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
