@@ -6,130 +6,85 @@ import {
   getFinalNumScientistsCanAfford,
 } from '../src/helpers/ResearchHelpers';
 import { getStatusMap } from '../src/helpers/WorkshopHelpers';
+import { printFameTime, printInfo, toTime } from '../src/helpers/printResults';
 import { computeTargetFromFame, filterOutSkipped } from '../src/helpers/targetHelpers';
 import { WorkshopUpgradeInfo } from '../src/shouldUpgrade';
 import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../src/types/Workshop';
 
 describe.only('runProgram', () => {
-  function toTime(seconds: number): string {
-    const date = new Date(+0);
-    date.setSeconds(seconds);
-    return date.toISOString().substr(11, 8);
-  }
-
-  function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): void {
-    console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
-    console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-    console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
-    console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
-    if (target !== undefined) {
-      const startingScientists = targetInfo.workshop.workshopStatus.scientists;
-      const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.01);
-      console.log(
-        'can easily afford ' +
-          affordableScientists.toString() +
-          ' total scientists (' +
-          (affordableScientists - startingScientists).toString() +
-          ' additional)',
-      );
-    }
-  }
-
   describe('events', () => {
     const eventName = 'A Car is Born';
-
-    function printFameTime(fame: number, level: number, scientists: number = 100): void {
-      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_EVENT, level, eventName, scientists };
-      const target = computeTargetFromFame(fame, level);
-      printInfo(bottomUpToMoney(target, workshopStatus), target);
-    }
-
-    function printFameTimeNoClicking(
-      fame: number,
-      level: number,
-      partialWorkshopStatus: Partial<WorkshopStatus>,
-    ): void {
-      const workshopStatus: WorkshopStatus = {
-        ...DEFAULT_WORKSHOP_STATUS_EVENT,
-        level,
-        eventName,
-        ...partialWorkshopStatus,
-      };
-      const target = computeTargetFromFame(fame, level);
-      printInfo(bottomUpToMoney(target, workshopStatus), target);
-    }
-
     describe('leveling', () => {
       test('2 fame level 1', () => {
-        printFameTime(2, 1);
+        printFameTime(2, { level: 1 });
       });
 
       test('3 fame level 2', () => {
-        printFameTime(3, 2);
+        printFameTime(3, { level: 2 });
       });
 
       test('5 fame level 3', () => {
-        printFameTime(5, 3, 1);
+        printFameTime(5, { level: 3, scientists: 1 });
       });
 
       test('6 fame level 3', () => {
-        printFameTime(6, 3);
+        printFameTime(6, { level: 3 });
       });
 
       test('6 fame level 4', () => {
-        printFameTime(6, 4, 16);
+        printFameTime(6, { level: 4, scientists: 16 });
       });
 
       test('5 fame level 4', () => {
-        printFameTime(5, 4);
+        printFameTime(5, { level: 4 });
       });
 
       test('6 fame level 5', () => {
-        printFameTime(6, 5, 78);
+        printFameTime(6, { level: 5, scientists: 78 });
       });
 
       test('2 fame level 5', () => {
-        printFameTime(2, 5, 92);
+        printFameTime(2, { level: 5, scientists: 92 });
       });
 
       test('6 fame level 6', () => {
-        printFameTime(6, 6, 92);
+        printFameTime(6, { level: 6, scientists: 92 });
       });
 
       test('5 fame level 6', () => {
-        printFameTime(5, 6);
+        printFameTime(5, { level: 6 });
       });
 
       test('3 fame level 6', () => {
-        printFameTime(3, 6);
+        printFameTime(3, { level: 6 });
       });
 
       test('6 fame level 7', () => {
-        printFameTime(6, 7, 108);
+        printFameTime(6, { level: 7, scientists: 108 });
       });
 
       test('4 fame level 7', () => {
-        printFameTime(4, 7);
+        printFameTime(4, { level: 7 });
       });
 
       test('6 fame level 8', () => {
-        printFameTime(6, 8, 124);
+        printFameTime(6, { level: 8, scientists: 124 });
       });
 
       test('5 fame level 9', () => {
-        printFameTime(5, 8, 164);
+        printFameTime(5, { level: 8, scientists: 164 });
       });
 
       test('6 fame level 9', () => {
-        printFameTime(6, 9);
+        printFameTime(6, { level: 9 });
       });
 
       test('5 fame level 9', () => {
-        printFameTime(5, 9);
+        printFameTime(5, { level: 9 });
       });
 
       test('3 fame level 9', () => {
-        printFameTime(3, 9);
+        printFameTime(3, { level: 9 });
       });
     });
 
@@ -210,15 +165,16 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 10+', () => {
-        printFameTime(6, 10, 300);
+        printFameTime(6, { level: 10, scientists: 300 });
       });
 
       test('6 fame level 10+ no clicking', () => {
-        printFameTimeNoClicking(6, 10, { scientists: 300, clickBoostActive: false });
+        printFameTime(6, { level: 10, scientists: 300, clickBoostActive: false });
       });
 
       test('6 fame level 10+ no boosts', () => {
-        printFameTimeNoClicking(6, 10, {
+        printFameTime(6, {
+          level: 10,
           scientists: 300,
           clickBoostActive: false,
           researchBoostActive: false,
@@ -227,31 +183,24 @@ describe.only('runProgram', () => {
       });
 
       test('7 fame level 10+', () => {
-        printFameTime(7, 10);
+        printFameTime(7, { level: 10 });
       });
 
       test('5 fame level 10+', () => {
-        printFameTime(5, 10);
+        printFameTime(5, { level: 10 });
       });
 
       test('4 fame level 10+', () => {
-        printFameTime(4, 10);
+        printFameTime(4, { level: 10 });
       });
 
       test('3 fame level 10+', () => {
-        printFameTime(6, 10);
+        printFameTime(6, { level: 10 });
       });
     });
   });
 
   describe('main workshop', () => {
-    function printFameTime(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
-      const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
-      const target = computeTargetFromFame(fame, workshopStatus.level);
-      const targetInfo = bottomUpToMoney(target, workshopStatus);
-      printInfo(targetInfo, target);
-    }
-
     describe('shooting for half the required fame', () => {
       test('5 fame lvl 7', () => {
         printFameTime(5, { level: 7 });
