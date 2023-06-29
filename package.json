@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "devDependencies": {
     "@types/jest": "^29.5.2",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
@@ -33,8 +32,9 @@
     "test": "jest",
     "lint": "eslint \"**/*.{js,jsx}\"",
     "lintFix": "eslint \"**/*.{js,jsx}\" \"--fix\"",
+    "compile": "npx tsc",
     "prettier": "prettier --write .",
-    "build": "npx tsc",
-    "local": "yarn build && npm i -g && optimizer"
+    "build": "yarn prettier && yarn compile",
+    "local": "yarn compile && npm i -g && optimizer"
   }
 }
