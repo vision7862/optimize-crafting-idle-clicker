@@ -11,24 +11,25 @@ export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): num
   );
 }
 
-const MWS_MERCHANT_MULTIPLIER = 6;
+const MWS_MERCHANT_MULTIPLIER = 7;
 const getMainWorkshopIncomeMultiplier = memoize(getMainWorkshopIncomeMultiplierNonMemo);
 
 function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
   return (
     MWS_MERCHANT_MULTIPLIER *
     getMWSLevelAchievementMultiplier(level) *
-    1.2 * // wood
-    1.2 * // leather
+    1.4 * // wood
+    1.4 * // leather
     1.4 * // copper
-    1.2 * // bronze
+    1.4 * // bronze
     1.4 * // iron
-    1 * // precious
+    1.2 * // precious
     1 * // renaissance
     1 * // industrial
     1 * // vehicles
     1 * // entertainment
-    2.6 // event
+    3.5 * // event
+    30 // TEMPORARY dynasty friend bonus
   );
 }
 
