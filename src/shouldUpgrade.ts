@@ -29,7 +29,7 @@ export function getUpgradedWorkshopIfBetter(
   const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
-    console.log(`upgrading ${productName} from level ${product.status.level} in ${upgradedCyclesToTarget} cycles`);
+    // console.log(`upgrading ${productName} from level ${product.status.level} in ${upgradedCyclesToTarget} cycles`);
     return {
       workshop: upgradeProductInfo.workshop,
       cyclesToTarget: upgradedCyclesToTarget,
@@ -55,7 +55,7 @@ export function getCurrentIncome(workshop: Workshop, clickBoost: number): number
 }
 
 function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, clickBoost: number): number {
-  if ([topProduct.name, topProduct.input1?.product.name, topProduct.input2?.product.name].includes(product.name)) {
+  if ([topProduct.name, topProduct.input1?.name, topProduct.input2?.name].includes(product.name)) {
     return clickBoost;
   } else return 1;
 }
@@ -96,14 +96,14 @@ function upgradeInputsToProduct(parentProduct: ProductDetails, workshop: Worksho
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
   if (parentProduct.input1 != null) {
-    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input1.product.name, workshop);
-    const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input1.product.name, modifiedWorkshop);
+    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input1.name, workshop);
+    const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input1.name, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
   }
   if (parentProduct.input2 != null) {
-    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input2.product.name, workshop);
-    const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input2.product.name, modifiedWorkshop);
+    const inputItemsNeeded = getInputItemsNeeded(parentProduct.input2.name, workshop);
+    const inputUpgradeInfo = upgradeInput(inputItemsNeeded, parentProduct.input2.name, modifiedWorkshop);
     costToUpgradeProduct += inputUpgradeInfo.costOfUpgrade;
     modifiedWorkshop = inputUpgradeInfo.workshop;
   }
@@ -116,10 +116,10 @@ function upgradeInputsToProduct(parentProduct: ProductDetails, workshop: Worksho
 function getInputItemsNeeded(inputProductName: string, workshop: Workshop): number {
   let itemsNeeded = 0;
   for (const product of workshop.productsInfo) {
-    if (product.details.input1 !== null && product.details.input1.product.name === inputProductName) {
+    if (product.details.input1 !== null && product.details.input1.name === inputProductName) {
       itemsNeeded += product.details.input1.count * product.status.level;
     }
-    if (product.details.input2 !== null && product.details.input2.product.name === inputProductName) {
+    if (product.details.input2 !== null && product.details.input2.name === inputProductName) {
       itemsNeeded += product.details.input2.count * product.status.level;
     }
   }

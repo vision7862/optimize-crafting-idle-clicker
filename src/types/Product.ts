@@ -15,7 +15,7 @@ export type ProductDetails = Readonly<{
 }>;
 
 export type InputProduct = Readonly<{
-  product: ProductDetails;
+  name: string;
   count: number;
 }>;
 
