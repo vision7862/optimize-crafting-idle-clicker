@@ -81,7 +81,7 @@ export function getUpgradeCostMultiplier(color: string): number {
     case 'Blue':
       return 1.09;
     case 'Red':
-      return 1.10;
+      return 1.1;
     case 'Violet':
       return 1.11;
     default: {
