@@ -33,7 +33,7 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
   let bestCyclesToTarget = Number.MAX_VALUE;
   let bestWorkshop: Workshop = workshop;
   let bestCyclesSkipped: number = 0;
-  for (let belowThisCyclesSkip = 0; belowThisCyclesSkip < 50; belowThisCyclesSkip++) {
+  for (let belowThisCyclesSkip = 1; belowThisCyclesSkip < 50; belowThisCyclesSkip++) {
     // let cyclesToTarget = 0;
     let modifiedWorkshop: Workshop = workshop;
     for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
@@ -54,7 +54,7 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
         }
       }
     }
-    const cyclesToTarget = computeBuildTimeForWorkshop(modifiedWorkshop);
+    const cyclesToTarget = computeBuildTimeForWorkshop(modifiedWorkshop, target);
     if (cyclesToTarget < bestCyclesToTarget) {
       bestCyclesToTarget = cyclesToTarget;
       bestWorkshop = modifiedWorkshop;

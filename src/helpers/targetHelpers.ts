@@ -23,7 +23,7 @@ export function filterOutSkippedFullWorkshop(workshop: Workshop): Workshop {
   };
 }
 
-export function computeBuildTimeForWorkshop(workshop: Workshop): number {
+export function computeBuildTimeForWorkshop(workshop: Workshop, target: number): number {
   // assume there are no half-cycles. it takes a full cycle to build something, and everything ticks together.
   let money = 10;
   // build wood
@@ -56,6 +56,7 @@ export function computeBuildTimeForWorkshop(workshop: Workshop): number {
       cycleNum++;
     }
   }
+  cycleNum += Math.ceil((target - money) / getCurrentIncome(workshop, 1));
   return cycleNum;
 }
 

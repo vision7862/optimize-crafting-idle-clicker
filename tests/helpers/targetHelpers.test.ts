@@ -120,7 +120,7 @@ describe('targetHelpers', () => {
           researchBoostActive: false,
         },
       };
-      expect(computeBuildTimeForWorkshop(workshop)).toBe(4);
+      expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(4);
 
       /**
        * cycle 0    we have 10 money, no income
@@ -177,7 +177,7 @@ describe('targetHelpers', () => {
           researchBoostActive: false,
         },
       };
-      expect(computeBuildTimeForWorkshop(workshop)).toBe(1);
+      expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(1);
     });
 
     it('should build just wood with some additional levels in two cycles', () => {
@@ -205,7 +205,7 @@ describe('targetHelpers', () => {
           researchBoostActive: false,
         },
       };
-      expect(computeBuildTimeForWorkshop(workshop)).toBe(2);
+      expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(2);
     });
   });
 });

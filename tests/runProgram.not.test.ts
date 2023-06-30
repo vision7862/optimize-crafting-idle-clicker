@@ -1,4 +1,9 @@
-import { bottomUpToLastItem, bottomUpToMoney, productDownUpToMoney } from '../src/computeIdealLevelsForEvent';
+import {
+  bottomUpToLastItem,
+  bottomUpToMoney,
+  productDownUpToMoney,
+  quickestNewLevel,
+} from '../src/computeIdealLevelsForEvent';
 import {
   computeResearchTimeForWorkshop,
   getCostOfScientists,
@@ -548,6 +553,68 @@ describe.only('runProgram', () => {
       test('get as much fame as possible in semi-active 5 minutes at level 5', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 5);
         maximizeTypeInTime('fame', 5, 0, { level: 5, scientists: 173, researchBoostActive: true }, getTarget);
+      });
+    });
+
+    describe('fastest level up', () => {
+      function quick(partialWorkshopStatus: Partial<WorkshopStatus>): void {
+        const moreWorkshopStatus = {
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: false,
+          ...partialWorkshopStatus,
+        };
+        const targetInfo = quickestNewLevel(moreWorkshopStatus);
+        printInfo(targetInfo);
+      }
+
+      it('lvl 24', () => {
+        quick({
+          level: 23,
+          scientists: 546,
+        });
+      });
+
+      it('lvl 25', () => {
+        quick({
+          level: 25,
+          scientists: 546,
+        });
+      });
+
+      it('lvl 26', () => {
+        quick({
+          level: 26,
+          scientists: 600,
+        });
+      });
+
+      it('lvl 27', () => {
+        quick({
+          level: 27,
+          scientists: 600,
+        });
+      });
+
+      it('lvl 28', () => {
+        quick({
+          level: 28,
+          scientists: 600,
+        });
+      });
+
+      it('lvl 29', () => {
+        quick({
+          level: 29,
+          scientists: 600,
+        });
+      });
+
+      it('lvl 30', () => {
+        quick({
+          level: 30,
+          scientists: 600,
+        });
       });
     });
   });
