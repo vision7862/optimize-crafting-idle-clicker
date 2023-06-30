@@ -1,4 +1,6 @@
+import { computeResearchTimeForWorkshop } from './helpers/ResearchHelpers';
 import { isEvent } from './helpers/WorkshopHelpers';
+import { computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
@@ -51,6 +53,29 @@ export function topDownToTargetProduct(
 export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
   return bottomUpBuilder(workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost, workshop);
+}
+
+export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+  const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+  const fameRequiredToLevelUp = workshopStatus.level + 3;
+  let bestTime = Number.MAX_VALUE;
+  let bestFame = fameRequiredToLevelUp;
+  let bestWorkshopUpgrade;
+  for (let fame = 1; fame < Math.min(fameRequiredToLevelUp, 17); fame++) {
+    const target = computeTargetFromFame(fame, workshopStatus.level);
+    const targetInfo = bottomUpToMoney(target, workshopStatus);
+    const idleBuildTime = targetInfo.cyclesToTarget * 10;
+    const researchTime = computeResearchTimeForWorkshop(targetInfo.workshop);
+    const finalTime = (Math.max(idleBuildTime, researchTime) + 10) * Math.ceil(fameRequiredToLevelUp / fame);
+    if (finalTime < bestTime) {
+      bestTime = finalTime;
+      bestFame = fame;
+      bestWorkshopUpgrade = targetInfo;
+    }
+  }
+  console.log('best fame: ' + bestFame.toString());
+  console.log(`repeats ${Math.ceil(fameRequiredToLevelUp / bestFame)} times`);
+  return bestWorkshopUpgrade;
 }
 
 export function bottomUpToMoney(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {

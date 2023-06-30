@@ -1,4 +1,4 @@
-// countx                     name      research    upgradeCost  revenue  color                input1                input2  
+// countx           name      research  upgradeCost revenue      color    input1              input2  
 1x Wood                       1.0E+0    10.0E+0     1.0E+0       Green    -                                          
 1x Club                       30.0E+0   40.0E+0     10.0E+0      Red      4x Wood                                    
 3x Arrows                     90.0E+0   200.0E+0    7.0E+0       Blue     1x Wood                                    
