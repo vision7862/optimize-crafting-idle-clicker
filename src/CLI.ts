@@ -1,22 +1,28 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { printFameTime } from './helpers/printResults';
+import { quickestNewLevel } from './computeIdealLevelsForEvent';
+import { printFameTime, printInfo } from './helpers/printResults';
 import { WorkshopStatus } from './types/Workshop';
 
 export async function runCLI(): Promise<void> {
-  const fame = Number(await input({ message: 'what is your fame target?' }));
-  const configOptions = await input({
-    message: 'if you have a config object, enter it here. otherwise, just hit enter.',
-  });
-  if (configOptions !== '') {
-    printFameTime(fame, JSON.parse(configOptions));
-    console.log('your config options are: ' + JSON.stringify(JSON.parse(configOptions)));
+  const workshopStatus = await getWorkshopStatus();
+  const haveDesiredFame = await booleanChoice('do you have a fame target in mind?');
+  if (haveDesiredFame) {
+    const fame = Number(await input({ message: 'what is your fame target?' }));
+    printFameTime(fame, workshopStatus);
   } else {
-    const workshopStatusFromUser = await getWorkshopStatusFromUser();
-    printFameTime(fame, workshopStatusFromUser);
-    console.log('your config options are: ' + JSON.stringify(workshopStatusFromUser));
+    const targetInfo = quickestNewLevel(workshopStatus);
+    printInfo(targetInfo);
   }
+  console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
+}
+
+async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
+  const configOptions = await input({
+    message: 'if you have a workshop status object, enter it here. otherwise, just hit enter.',
+  });
+  return configOptions !== '' ? JSON.parse(configOptions) : await getWorkshopStatusFromUser();
 }
 
 async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
