@@ -16,9 +16,9 @@ export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): voi
   console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
   console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
   console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
-  console.log('cycles reported from building: ', targetInfo.cyclesToTarget);
-  console.log('more accurate cycles? ' + computeBuildTimeForWorkshop(targetInfo.workshop).toString());
-  console.log('fully idle accurate cycles ' + toTime(computeBuildTimeForWorkshop(targetInfo.workshop) * 10));
+  console.log('cycles: ', targetInfo.cyclesToTarget);
+  // console.log('more accurate cycles? ' + computeBuildTimeForWorkshop(targetInfo.workshop).toString());
+  // console.log('fully idle accurate cycles ' + toTime(computeBuildTimeForWorkshop(targetInfo.workshop) * 10));
   console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
   if (target !== undefined) {
     const startingScientists = targetInfo.workshop.workshopStatus.scientists;
