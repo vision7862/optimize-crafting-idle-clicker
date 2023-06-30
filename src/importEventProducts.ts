@@ -1,10 +1,10 @@
 import { getFile, getUpgradeCostMultiplier } from './importMainWorkshop';
 import { InputProduct, ProductDetails } from './types/Product';
 
-// level must be between 1 and 10
 export function importProductsAtLevel(eventName: string, level: number): ProductDetails[] {
+  const levelForMultiplier = Math.min(10, level);
   const file = getFile(eventName.replace(/\s/g, ''));
-  const productMap = new Map<string, ProductDetails>();
+  const products = new Array<ProductDetails>();
 
   for (const line of file.split(/[\r\n]+/)) {
     const details = line.split(/\t+/);
@@ -15,31 +15,26 @@ export function importProductsAtLevel(eventName: string, level: number): Product
       name: details[0],
       researchCost: +details[1].replace(/[$, ]/g, ''),
       buildCost: +details[2].replace(/[$, ]/g, ''),
-      revenue: +details[3].replace(/[$, ]/g, '') / 2 ** (10 - level),
+      revenue: +details[3].replace(/[$, ]/g, '') / 2 ** (10 - levelForMultiplier),
       outputCount: +details[4].split('x')[1],
-      input1: getInputProduct(details[5], productMap),
-      input2: getInputProduct(details[6], productMap),
+      input1: getInputProduct(details[5]),
+      input2: getInputProduct(details[6]),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[7]),
     };
-    productMap.set(product.name, product);
+    products.push(product);
   }
-  return Array.from(productMap.values());
+  return products;
 }
 
 export function importProducts(eventName: string): ProductDetails[] {
   return importProductsAtLevel(eventName, 10);
 }
 
-function getInputProduct(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
-  if (inputDescription !== '-') {
-    const inputProduct: ProductDetails | undefined = productMap.get(inputDescription.split(' x')[0]);
-    if (inputProduct === undefined) {
-      throw new Error('Product requires input that is missing ' + inputDescription);
-    }
-    return {
-      product: inputProduct,
-      count: +inputDescription.split(' x')[1],
-    };
-  }
-  return null;
+function getInputProduct(inputDescription: string): InputProduct | null {
+  return inputDescription !== '-'
+    ? {
+        name: inputDescription.split(' x')[0],
+        count: +inputDescription.split(' x')[1],
+      }
+    : null;
 }

@@ -6,7 +6,7 @@ export function importMainWorkshop(): ProductDetails[] {
   const blueprintMap = getBlueprintMap();
 
   const mainWorkshopProducts = getFile('MainWorkshopFromWiki');
-  const productMap = new Map<string, ProductDetails>();
+  const products = new Array<ProductDetails>();
 
   for (const line of mainWorkshopProducts.split(/[\r\n]+/)) {
     if (line.includes('//')) {
@@ -23,19 +23,19 @@ export function importMainWorkshop(): ProductDetails[] {
       buildCost: +details[2].replace(/[$, ]/g, ''),
       revenue: +details[3].replace(/[$, ]/g, ''),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
-      input1: getInputProduct(details[5], productMap),
-      input2: getInputProduct(details[6], productMap),
+      input1: getInputProduct(details[5]),
+      input2: getInputProduct(details[6]),
     };
-    const blueprintInfo = blueprintMap.get(product.name);
-    if (blueprintInfo != null) {
+    const blueprintScore = blueprintMap.get(product.name);
+    if (blueprintScore != null) {
       product = {
         ...product,
-        revenue: product.revenue * (blueprintInfo / 10),
+        revenue: product.revenue * (blueprintScore / 10),
       };
     }
-    productMap.set(product.name, product);
+    products.push(product);
   }
-  return Array.from(productMap.values());
+  return products;
 }
 
 function getBlueprintMap(): Map<string, number> {
@@ -62,14 +62,10 @@ export function getFile(fileName: string): string {
   return blueprintProducts;
 }
 
-function getInputProduct(inputDescription: string, productMap: Map<string, ProductDetails>): InputProduct | null {
+function getInputProduct(inputDescription: string): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
-    const inputProduct: ProductDetails | undefined = productMap.get(inputDescription.split('x ')[1]);
-    if (inputProduct === undefined) {
-      throw new Error('Product requires input that is missing ' + inputDescription);
-    }
     return {
-      product: inputProduct,
+      name: inputDescription.split('x ')[1],
       count: +inputDescription.split('x ')[0],
     };
   }
@@ -89,7 +85,11 @@ export function getUpgradeCostMultiplier(color: string): number {
     case 'Violet':
       return 11;
     default: {
-      console.error('color does not exist ' + color);
+      if (color === '') {
+        console.log('color not imported');
+      } else {
+        console.error('color does not exist ' + color);
+      }
       return 9;
     }
   }
