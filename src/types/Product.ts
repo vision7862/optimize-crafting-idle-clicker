@@ -7,7 +7,7 @@ export type ProductDetails = Readonly<{
   name: string;
   researchCost: number;
   buildCost: number;
-  upgradeCostMultiplier?: number;
+  upgradeCostMultiplier: number;
   revenue: number;
   outputCount: number;
   input1: InputProduct | null;

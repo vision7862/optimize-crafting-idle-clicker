@@ -180,8 +180,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
     status: newStatus,
   };
 
-  const upgradeCostMultiplier: number =
-    product.details.upgradeCostMultiplier !== undefined ? 1 + product.details.upgradeCostMultiplier / 100 : 1.07;
+  const upgradeCostMultiplier: number = 1 + product.details.upgradeCostMultiplier / 100;
 
   const indexOfProduct: number = workshop.productsInfo.findIndex(
     (testProduct: Product) => testProduct.details.name === product.details.name,
