@@ -44,12 +44,11 @@ export type WorkshopUpgradeInfo = Readonly<{
 
 export function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
   let totalIncome = 0;
-  const topProduct: ProductDetails = getTopProduct(workshop);
+  // const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
     totalIncome +=
-      applyClickBoost(product.details, topProduct, clickBoost) *
-      product.status.level *
-      getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
+      // applyClickBoost(product.details, topProduct, clickBoost) *
+      product.status.level * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;
 }

@@ -1,4 +1,4 @@
-import { filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
+import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
 import { getUpgradedWorkshopIfBetter, WorkshopUpgradeInfo } from './shouldUpgrade';
 import { Product } from './types/Product';
 import { Workshop } from './types/Workshop';
@@ -34,7 +34,7 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
   let bestWorkshop: Workshop = workshop;
   let bestCyclesSkipped: number = 0;
   for (let belowThisCyclesSkip = 0; belowThisCyclesSkip < 50; belowThisCyclesSkip++) {
-    let cyclesToTarget = 0;
+    // let cyclesToTarget = 0;
     let modifiedWorkshop: Workshop = workshop;
     for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
       const thisProduct: Product | undefined = workshop.productsInfo[productIndex];
@@ -48,12 +48,13 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
           belowThisCyclesSkip,
         );
         modifiedWorkshop = modifiedWorkshopInfo.workshop;
-        cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
+        // cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
         if (nextProduct === undefined || target < nextProduct.details.buildCost) {
           break;
         }
       }
     }
+    const cyclesToTarget = computeBuildTimeForWorkshop(modifiedWorkshop);
     if (cyclesToTarget < bestCyclesToTarget) {
       bestCyclesToTarget = cyclesToTarget;
       bestWorkshop = modifiedWorkshop;

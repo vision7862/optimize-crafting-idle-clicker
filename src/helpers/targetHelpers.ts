@@ -17,24 +17,58 @@ export function filterOutSkipped(statuses: Map<string, ProductStatus>): Map<stri
 }
 
 export function filterOutSkippedFullWorkshop(workshop: Workshop): Workshop {
-  const filteredProducts = workshop.productsInfo.filter((product: Product) => product.status.level > 0);
   return {
-    productsInfo: filteredProducts,
+    productsInfo: workshop.productsInfo.filter((product: Product) => product.status.level > 0),
     workshopStatus: workshop.workshopStatus,
   };
 }
 
 export function computeBuildTimeForWorkshop(workshop: Workshop): number {
-  const buildCycles = 0;
+  // assume there are no half-cycles. it takes a full cycle to build something, and everything ticks together.
+  let money = 10;
+  // build wood
+  money -= 10;
+  let cycleNum = 1;
+
   for (let i = 0; i < workshop.productsInfo.length; i++) {
-    if (workshop.productsInfo[i].status.level > 0) {
-      // buildCycles += 1; // every product takes at
-      const croppedProducts = workshop.productsInfo.slice(0, i);
-      const incomeWithThisProductAsMax = getCurrentIncome(
-        { productsInfo: croppedProducts, workshopStatus: workshop.workshopStatus },
-        1,
+    let inProgressLevel = i === 0 ? 1 : 0; // start wood at level 1
+    let inProgressWorkshop = {
+      ...workshop,
+      productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, inProgressLevel),
+    };
+    const productDetails = inProgressWorkshop.productsInfo[i].details;
+    // until fully leveled, cycles ticking as necessary
+    while (inProgressLevel < workshop.productsInfo[i].status.level) {
+      let costToUpgrade = Math.round(
+        productDetails.buildCost * productDetails.upgradeCostMultiplier ** inProgressLevel,
       );
+      inProgressWorkshop = {
+        ...workshop,
+        productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, inProgressLevel),
+      };
+      money += getCurrentIncome(inProgressWorkshop, 1);
+      // one cycle: start with money, get as far as you can up to where we want to be
+      while (money >= costToUpgrade && inProgressLevel < workshop.productsInfo[i].status.level) {
+        money -= costToUpgrade;
+        inProgressLevel++;
+        costToUpgrade = Math.round(productDetails.buildCost * productDetails.upgradeCostMultiplier ** inProgressLevel);
+      }
+      cycleNum++;
     }
   }
-  return buildCycles;
+  return cycleNum;
+}
+
+function getProductsCroppedAndWithProductLevelChanged(workshop: Workshop, i: number, level: number): Product[] {
+  const croppedProducts = workshop.productsInfo.slice(0, i + 1);
+  const newProduct: Product = {
+    ...workshop.productsInfo[i],
+    status: {
+      ...workshop.productsInfo[i].status,
+      level,
+    },
+  };
+  const productsWithProductDownleveled = new Array<Product>(...croppedProducts);
+  productsWithProductDownleveled.splice(i, 1, newProduct);
+  return productsWithProductDownleveled;
 }
