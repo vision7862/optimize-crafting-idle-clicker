@@ -5,6 +5,7 @@ export const DEFAULT_PRODUCT_DETAILS: ProductDetails = {
   name: 'product_name',
   researchCost: 2,
   buildCost: 3.5e18,
+  upgradeCostMultiplier: 9,
   revenue: 1.5e18,
   outputCount: 1,
   input1: null,
