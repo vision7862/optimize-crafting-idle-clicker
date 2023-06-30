@@ -23,7 +23,7 @@ function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
     1.4 * // copper
     1.4 * // bronze
     1.4 * // iron
-    1.2 * // precious
+    1.4 * // precious
     1 * // renaissance
     1 * // industrial
     1 * // vehicles

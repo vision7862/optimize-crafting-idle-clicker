@@ -47,9 +47,12 @@ export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
 const RESEARCH_BOOST_MULTIPLIER = 10;
 function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
   return (
-    3 * // research achievement
-    1 * // various blueprint sets
-    1.2 * // total blueprint score
+    4 * // research achievement
+    1.25 * // science tools
+    1 * // exploration
+    1.5 * // modern exploration
+    1 * // modern technology
+    1.3 * // total blueprint score
     (researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1)
   );
 }
