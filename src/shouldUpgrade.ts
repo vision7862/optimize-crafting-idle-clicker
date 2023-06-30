@@ -29,6 +29,7 @@ export function getUpgradedWorkshopIfBetter(
   const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
+    console.log(`upgrading ${productName} from level ${product.status.level} in ${upgradedCyclesToTarget} cycles`);
     return {
       workshop: upgradeProductInfo.workshop,
       cyclesToTarget: upgradedCyclesToTarget,
@@ -41,7 +42,7 @@ export type WorkshopUpgradeInfo = Readonly<{
   cyclesToTarget: number;
 }>;
 
-function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
+export function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
   let totalIncome = 0;
   const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
