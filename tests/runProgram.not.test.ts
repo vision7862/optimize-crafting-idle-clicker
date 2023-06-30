@@ -14,77 +14,80 @@ import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopSt
 describe.only('runProgram', () => {
   describe('events', () => {
     const eventName = 'A Car is Born';
+    function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
+      printFameTime(fame, { ...partialWorkshopStatus, eventName });
+    }
     describe('leveling', () => {
       test('2 fame level 1', () => {
-        printFameTime(2, { level: 1 });
+        printFameTimeEvent(2, { level: 1 });
       });
 
       test('3 fame level 2', () => {
-        printFameTime(3, { level: 2 });
+        printFameTimeEvent(3, { level: 2 });
       });
 
       test('5 fame level 3', () => {
-        printFameTime(5, { level: 3, scientists: 1 });
+        printFameTimeEvent(5, { level: 3, scientists: 1 });
       });
 
       test('6 fame level 3', () => {
-        printFameTime(6, { level: 3 });
+        printFameTimeEvent(6, { level: 3 });
       });
 
       test('6 fame level 4', () => {
-        printFameTime(6, { level: 4, scientists: 16 });
+        printFameTimeEvent(6, { level: 4, scientists: 16 });
       });
 
       test('5 fame level 4', () => {
-        printFameTime(5, { level: 4 });
+        printFameTimeEvent(5, { level: 4 });
       });
 
       test('6 fame level 5', () => {
-        printFameTime(6, { level: 5, scientists: 78 });
+        printFameTimeEvent(6, { level: 5, scientists: 78 });
       });
 
       test('2 fame level 5', () => {
-        printFameTime(2, { level: 5, scientists: 92 });
+        printFameTimeEvent(2, { level: 5, scientists: 92 });
       });
 
       test('6 fame level 6', () => {
-        printFameTime(6, { level: 6, scientists: 92 });
+        printFameTimeEvent(6, { level: 6, scientists: 92 });
       });
 
       test('5 fame level 6', () => {
-        printFameTime(5, { level: 6 });
+        printFameTimeEvent(5, { level: 6 });
       });
 
       test('3 fame level 6', () => {
-        printFameTime(3, { level: 6 });
+        printFameTimeEvent(3, { level: 6 });
       });
 
       test('6 fame level 7', () => {
-        printFameTime(6, { level: 7, scientists: 108 });
+        printFameTimeEvent(6, { level: 7, scientists: 108 });
       });
 
       test('4 fame level 7', () => {
-        printFameTime(4, { level: 7 });
+        printFameTimeEvent(4, { level: 7 });
       });
 
       test('6 fame level 8', () => {
-        printFameTime(6, { level: 8, scientists: 124 });
+        printFameTimeEvent(6, { level: 8, scientists: 124 });
       });
 
       test('5 fame level 9', () => {
-        printFameTime(5, { level: 8, scientists: 164 });
+        printFameTimeEvent(5, { level: 8, scientists: 164 });
       });
 
       test('6 fame level 9', () => {
-        printFameTime(6, { level: 9 });
+        printFameTimeEvent(6, { level: 9 });
       });
 
       test('5 fame level 9', () => {
-        printFameTime(5, { level: 9 });
+        printFameTimeEvent(5, { level: 9 });
       });
 
       test('3 fame level 9', () => {
-        printFameTime(3, { level: 9 });
+        printFameTimeEvent(3, { level: 9 });
       });
     });
 
@@ -165,15 +168,15 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 10+', () => {
-        printFameTime(6, { level: 10, scientists: 300 });
+        printFameTimeEvent(6, { level: 10, scientists: 300 });
       });
 
       test('6 fame level 10+ no clicking', () => {
-        printFameTime(6, { level: 10, scientists: 300, clickBoostActive: false });
+        printFameTimeEvent(6, { level: 10, scientists: 300, clickBoostActive: false });
       });
 
       test('6 fame level 10+ no boosts', () => {
-        printFameTime(6, {
+        printFameTimeEvent(6, {
           level: 10,
           scientists: 300,
           clickBoostActive: false,
@@ -183,19 +186,19 @@ describe.only('runProgram', () => {
       });
 
       test('7 fame level 10+', () => {
-        printFameTime(7, { level: 10 });
+        printFameTimeEvent(7, { level: 10 });
       });
 
       test('5 fame level 10+', () => {
-        printFameTime(5, { level: 10 });
+        printFameTimeEvent(5, { level: 10 });
       });
 
       test('4 fame level 10+', () => {
-        printFameTime(4, { level: 10 });
+        printFameTimeEvent(4, { level: 10 });
       });
 
       test('3 fame level 10+', () => {
-        printFameTime(6, { level: 10 });
+        printFameTimeEvent(6, { level: 10 });
       });
     });
   });
