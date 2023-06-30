@@ -11,6 +11,7 @@ export async function runCLI(): Promise<void> {
   });
   if (configOptions !== '') {
     printFameTime(fame, JSON.parse(configOptions));
+    console.log('your config options are: ' + JSON.stringify(JSON.parse(configOptions)));
   } else {
     const workshopStatusFromUser = await getWorkshopStatusFromUser();
     printFameTime(fame, workshopStatusFromUser);

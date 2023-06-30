@@ -202,6 +202,10 @@ describe.only('runProgram', () => {
 
   describe('main workshop', () => {
     describe('shooting for half the required fame', () => {
+      test('6 fame lvl 2', () => {
+        printFameTime(6, { level: 2 });
+      });
+
       test('5 fame lvl 7', () => {
         printFameTime(5, { level: 7 });
       });

@@ -19,7 +19,7 @@ export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): voi
   console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
   if (target !== undefined) {
     const startingScientists = targetInfo.workshop.workshopStatus.scientists;
-    const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.01);
+    const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.2);
     const additionalScientists = affordableScientists - startingScientists;
     if (additionalScientists > 0) {
       console.log(

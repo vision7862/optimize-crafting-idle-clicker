@@ -1,3 +1,4 @@
+import { filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
 import { getUpgradedWorkshopIfBetter, WorkshopUpgradeInfo } from './shouldUpgrade';
 import { Product } from './types/Product';
 import { Workshop } from './types/Workshop';
@@ -60,8 +61,9 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
     }
   }
 
-  console.debug('best cycles skipped: ' + bestCyclesSkipped.toString());
+  console.log('best cycles skipped: ' + bestCyclesSkipped.toString());
 
+  console.log(JSON.stringify(filterOutSkippedFullWorkshop(bestWorkshop)));
   return {
     workshop: bestWorkshop,
     cyclesToTarget: bestCyclesToTarget,
