@@ -75,22 +75,22 @@ function getInputProduct(inputDescription: string): InputProduct | null {
 export function getUpgradeCostMultiplier(color: string): number {
   switch (color) {
     case 'Green':
-      return 7;
+      return 1.07;
     case 'Yellow':
-      return 8;
+      return 1.08;
     case 'Blue':
-      return 9;
+      return 1.09;
     case 'Red':
-      return 10;
+      return 1.10;
     case 'Violet':
-      return 11;
+      return 1.11;
     default: {
       if (color === '') {
         console.log('color not imported');
       } else {
         console.error('color does not exist ' + color);
       }
-      return 9;
+      return 1.09;
     }
   }
 }
