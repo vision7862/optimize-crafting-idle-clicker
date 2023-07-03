@@ -7,10 +7,12 @@ import { WorkshopStatus } from './types/Workshop';
 
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
-  const haveDesiredFame = await booleanChoice('do you have a fame target in mind?');
-  if (haveDesiredFame) {
-    const fame = Number(await input({ message: 'what is your fame target?' }));
-    printFameTime(fame, workshopStatus);
+  const desiredFame = await input({
+    message:
+      'if you have a Fame target in mind, enter it here. otherwise, just hit enter, and calculate the fastest way to level up.',
+  });
+  if (desiredFame !== '') {
+    printFameTime(Number(desiredFame), workshopStatus);
   } else {
     const targetInfo = quickestNewLevel(workshopStatus);
     printInfo(targetInfo);
