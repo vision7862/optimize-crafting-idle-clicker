@@ -1,7 +1,7 @@
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from '../../src/helpers/targetHelpers';
 import { importMainWorkshop } from '../../src/importMainWorkshop';
 import { Product, ProductDetails, ProductStatus } from '../../src/types/Product';
-import { Workshop } from '../../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_MAIN, Workshop } from '../../src/types/Workshop';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {
@@ -17,55 +17,21 @@ describe('targetHelpers', () => {
   describe('computeBuildTimeForWorkshop', () => {
     it('building multiple products with plenty of money should be numProducts + 1', () => {
       const workshop: Workshop = {
-        productsInfo: [
+        productsInfo: getProductsInfoFromProductAndLevel([
           {
-            status: { level: 3, merchants: 1 },
-            details: {
-              outputCount: 1,
-              name: 'Wood',
-              researchCost: 1,
-              buildCost: 10,
-              revenue: 12,
-              upgradeCostMultiplier: 1.07,
-              input1: null,
-              input2: null,
-            },
+            level: 3,
+            name: 'Wood',
           },
           {
-            status: { level: 2, merchants: 1 },
-            details: {
-              outputCount: 1,
-              name: 'Rawhide',
-              researchCost: 500,
-              buildCost: 10000,
-              revenue: 3000,
-              upgradeCostMultiplier: 1.07,
-              input1: null,
-              input2: null,
-            },
+            level: 2,
+            name: 'Rawhide',
           },
           {
-            status: { level: 2, merchants: 1 },
-            details: {
-              outputCount: 3,
-              name: 'Leather',
-              researchCost: 900,
-              buildCost: 50000,
-              revenue: 900,
-              upgradeCostMultiplier: 1.08,
-              input1: { name: 'Rawhide', count: 1 },
-              input2: null,
-            },
+            level: 2,
+            name: 'Leather',
           },
-        ],
-        workshopStatus: {
-          level: 1,
-          scientists: 1,
-          clickBoostActive: false,
-          merchantBoostActive: false,
-          researchBoostActive: false,
-          speedBoostActive: false,
-        },
+        ]),
+        workshopStatus: DEFAULT_WORKSHOP_STATUS_MAIN,
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(4);
 
@@ -101,60 +67,45 @@ describe('targetHelpers', () => {
 
     it('should build just wood with no additional levels in one cycle', () => {
       const workshop: Workshop = {
-        productsInfo: [
+        productsInfo: getProductsInfoFromProductAndLevel([
           {
-            status: { level: 1, merchants: 1 },
-            details: {
-              outputCount: 1,
-              name: 'Wood',
-              researchCost: 1,
-              buildCost: 10,
-              revenue: 12,
-              upgradeCostMultiplier: 1.07,
-              input1: null,
-              input2: null,
-            },
+            level: 1,
+            name: 'Wood',
           },
-        ],
-        workshopStatus: {
-          level: 1,
-          scientists: 1,
-          clickBoostActive: false,
-          merchantBoostActive: false,
-          researchBoostActive: false,
-          speedBoostActive: false,
-        },
+        ]),
+        workshopStatus: DEFAULT_WORKSHOP_STATUS_MAIN,
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(1);
     });
 
     it('should build just wood with some additional levels in two cycles', () => {
       const workshop: Workshop = {
-        productsInfo: [
+        productsInfo: getProductsInfoFromProductAndLevel([
           {
-            status: { level: 3, merchants: 1 },
-            details: {
-              outputCount: 1,
-              name: 'Wood',
-              researchCost: 1,
-              buildCost: 10,
-              revenue: 12,
-              upgradeCostMultiplier: 1.07,
-              input1: null,
-              input2: null,
-            },
+            level: 3,
+            name: 'Wood',
           },
-        ],
-        workshopStatus: {
-          level: 1,
-          scientists: 1,
-          clickBoostActive: false,
-          merchantBoostActive: false,
-          researchBoostActive: false,
-          speedBoostActive: false,
-        },
+        ]),
+        workshopStatus: DEFAULT_WORKSHOP_STATUS_MAIN,
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(2);
     });
+
+    function getProductsInfoFromProductAndLevel(products: Array<{ name: string; level: number }>): Product[] {
+      const productsInfo = new Array<Product>();
+      const mainWorkshopProducts = importMainWorkshop();
+      products.forEach((product: { name: string; level: number }) => {
+        const status: ProductStatus = {
+          level: product.level,
+          merchants: 1,
+        };
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const details: ProductDetails = mainWorkshopProducts.find(
+          (productDetails) => productDetails.name === product.name,
+        )!;
+        productsInfo.push({ status, details });
+      });
+      return productsInfo;
+    }
   });
 });
