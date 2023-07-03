@@ -18,7 +18,7 @@ import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopSt
 
 describe.only('runProgram', () => {
   describe('events', () => {
-    const eventName = 'A Car is Born';
+    const eventName = 'Craft for Freedom';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
       printFameTime(fame, { ...partialWorkshopStatus, eventName });
     }

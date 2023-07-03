@@ -85,8 +85,8 @@ export function getUpgradeCostMultiplier(color: string): number {
     case 'Violet':
       return 1.11;
     default: {
-      if (color === '') {
-        console.log('color not imported');
+      if (color === undefined) {
+        console.debug('color not imported');
       } else {
         console.error('color does not exist ' + color);
       }

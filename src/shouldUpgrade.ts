@@ -162,7 +162,7 @@ type UpgradeInfo = Readonly<{
   costOfUpgrade: number;
 }>;
 
-const MAIN_WORKSHOP_MERCHANT_CAPACITY = 11;
+const MAIN_WORKSHOP_MERCHANT_CAPACITY = 12;
 function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
