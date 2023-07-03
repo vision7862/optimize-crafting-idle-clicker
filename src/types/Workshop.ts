@@ -13,6 +13,7 @@ export type MainWorkshopStatus = Readonly<{
   clickBoostActive: boolean;
   merchantBoostActive: boolean;
   researchBoostActive: boolean;
+  speedBoostActive: boolean;
 }>;
 
 export type EventWorkshopStatus = MainWorkshopStatus &
@@ -26,6 +27,7 @@ export const DEFAULT_WORKSHOP_STATUS_MAIN: WorkshopStatus = {
   clickBoostActive: false,
   merchantBoostActive: false,
   researchBoostActive: false,
+  speedBoostActive: false,
 };
 
 export const DEFAULT_WORKSHOP_STATUS_EVENT: WorkshopStatus = {
@@ -35,4 +37,5 @@ export const DEFAULT_WORKSHOP_STATUS_EVENT: WorkshopStatus = {
   merchantBoostActive: true,
   researchBoostActive: true,
   eventName: 'eventName',
+  speedBoostActive: false,
 };

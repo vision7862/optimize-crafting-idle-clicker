@@ -20,7 +20,7 @@ describe.only('runProgram', () => {
   describe('events', () => {
     const eventName = 'Craft for Freedom';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
-      printFameTime(fame, { ...partialWorkshopStatus, eventName });
+      printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
     }
     describe('leveling', () => {
       test('2 fame level 1', () => {
@@ -177,7 +177,7 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 10+ no clicking', () => {
-        printFameTimeEvent(6, { level: 10, scientists: 300, clickBoostActive: false });
+        printFameTimeEvent(6, { level: 10, scientists: 306, clickBoostActive: false, speedBoostActive: true });
       });
 
       test('6 fame level 10+ no boosts', () => {
@@ -195,11 +195,11 @@ describe.only('runProgram', () => {
       });
 
       test('5 fame level 10+', () => {
-        printFameTimeEvent(5, { level: 10 });
+        printFameTimeEvent(5, { level: 10, scientists: 306, clickBoostActive: false, speedBoostActive: true });
       });
 
       test('4 fame level 10+', () => {
-        printFameTimeEvent(4, { level: 10 });
+        printFameTimeEvent(4, { level: 10, scientists: 306, clickBoostActive: false, speedBoostActive: true });
       });
 
       test('3 fame level 10+', () => {
