@@ -3,7 +3,7 @@ import { WorkshopUpgradeInfo } from '../shouldUpgrade';
 import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../types/Workshop';
 import { computeResearchTimeForWorkshop, getFinalNumScientistsCanAfford } from './ResearchHelpers';
 import { getStatusMap } from './WorkshopHelpers';
-import { computeBuildTimeForWorkshop, computeTargetFromFame, filterOutSkipped } from './targetHelpers';
+import { computeTargetFromFame, filterOutSkipped } from './targetHelpers';
 
 export function printFameTime(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
@@ -14,15 +14,16 @@ export function printFameTime(fame: number, partialWorkshopStatus: Partial<Works
 
 export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): void {
   console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
-  console.log('fully idle: ' + toTime(targetInfo.cyclesToTarget * 10));
-  console.log('aggro: ' + toTime(targetInfo.cyclesToTarget * 3));
+  const speedBoost = targetInfo.workshop.workshopStatus.speedBoostActive ? 2 : 1;
+  console.log('fully idle: ' + toTime((targetInfo.cyclesToTarget * 10) / speedBoost));
+  console.log('aggro: ' + toTime((targetInfo.cyclesToTarget * 3) / speedBoost));
   console.log('cycles: ', targetInfo.cyclesToTarget);
   // console.log('more accurate cycles? ' + computeBuildTimeForWorkshop(targetInfo.workshop).toString());
   // console.log('fully idle accurate cycles ' + toTime(computeBuildTimeForWorkshop(targetInfo.workshop) * 10));
   console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(targetInfo.workshop)));
   if (target !== undefined) {
     const startingScientists = targetInfo.workshop.workshopStatus.scientists;
-    const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.2);
+    const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.5);
     const additionalScientists = affordableScientists - startingScientists;
     if (additionalScientists > 0) {
       console.log(

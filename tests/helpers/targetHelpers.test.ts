@@ -116,6 +116,7 @@ describe('targetHelpers', () => {
           clickBoostActive: false,
           merchantBoostActive: false,
           researchBoostActive: false,
+          speedBoostActive: false,
         },
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(4);
@@ -173,6 +174,7 @@ describe('targetHelpers', () => {
           clickBoostActive: false,
           merchantBoostActive: false,
           researchBoostActive: false,
+          speedBoostActive: false,
         },
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(1);
@@ -201,6 +203,7 @@ describe('targetHelpers', () => {
           clickBoostActive: false,
           merchantBoostActive: false,
           researchBoostActive: false,
+          speedBoostActive: false,
         },
       };
       expect(computeBuildTimeForWorkshop(workshop, 0)).toBe(2);
