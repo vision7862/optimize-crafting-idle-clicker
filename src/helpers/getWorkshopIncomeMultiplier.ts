@@ -3,7 +3,6 @@ import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 const MERCHANT_BOOST_MULTIPLIER = 3;
-
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
   return (
     (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
@@ -28,8 +27,7 @@ function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
     1 * // industrial
     1 * // vehicles
     1 * // entertainment
-    3.5 * // event
-    30 // TEMPORARY dynasty friend bonus
+    3.5 // event
   );
 }
 

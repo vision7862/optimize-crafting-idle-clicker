@@ -31,4 +31,9 @@ describe('importProducts', () => {
     const products: ProductDetails[] = importProducts('A Car is Born');
     expect(products.length).toBe(22);
   });
+
+  test('Craft For Freedom', () => {
+    const products: ProductDetails[] = importProducts('Craft For Freedom');
+    expect(products.length).toBe(25);
+  });
 });

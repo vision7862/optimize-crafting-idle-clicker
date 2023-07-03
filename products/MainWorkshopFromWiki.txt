@@ -49,14 +49,14 @@
 // 5x Paper Sheets            55.0E+6   2.0E+42     10.0E+27     Blue     2x Paper                                   
 1x Steel                      60.0E+6   10.0E+42    170.0E+27    Yellow   2x Iron Ingots       4x Coal               
 1x Pickaxe                    65.0E+6   75.0E+42    550.0E+27    Red      2x Steel             2x Wood               
-1x War Hammer                 70.0E+6   600.0E+42   900.0E+27    Red      4x Steel             4x Wood               
-1x Entrenching Tool           80.0E+6   5.0E+45     3.0E+30      Red      1x Wood              3x Iron Ingots        
+// don't have 1x War Hammer                 70.0E+6   600.0E+42   900.0E+27    Red      4x Steel             4x Wood               
+// don't have 1x Entrenching Tool           80.0E+6   5.0E+45     3.0E+30      Red      1x Wood              3x Iron Ingots        
 1x Steel Blades               90.0E+6   40.0E+45    7.1E+30      Blue     2x Steel             2x Coal               
 // don't have 1x Cut Ruby                   100.0E+6  750.0E+45   60.0E+30     Yellow   1x Uncut Ruby                              
 // 1x Map                     110.0E+6  5.0E+48     200.0E+30    Violet   4x Paper                                   
 // don't have 1x Ruby Ring                  120.0E+6  30.0E+48    500.0E+30    Violet   2x Gold Ingots       2x Cut Ruby           
 // 1x Book                    160.0E+6  500.0E+48   1.0E+33      Violet   1x Leather           10x Paper Sheets      
-1x Tent                       130.0E+6  3.0E+51     4.0E+33      Red      3x Leather           1x Iron Ingots        
+// don't have 1x Tent                       130.0E+6  3.0E+51     4.0E+33      Red      3x Leather           1x Iron Ingots        
 1x Katana                     140.0E+6  10.0E+51    17.0E+33     Red      1x Steel Blades      1x Hilt               
 1x Magnificent Bow            260.0E+6  800.0E+51   420.0E+33    Violet   5x Wood              4x Gold Ingots        
 1x Backpack                   280.0E+6  50.0E+54    2.0E+36      Red      2x Leather                                 

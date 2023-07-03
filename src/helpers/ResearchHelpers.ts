@@ -47,7 +47,7 @@ export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
 const RESEARCH_BOOST_MULTIPLIER = 10;
 function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
   return (
-    4 * // research achievement
+    5 * // research achievement
     1.25 * // science tools
     1 * // exploration
     1.5 * // modern exploration
