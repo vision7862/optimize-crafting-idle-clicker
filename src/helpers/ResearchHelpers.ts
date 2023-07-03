@@ -36,23 +36,23 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
   return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus);
 }
 
+const RESEARCH_BOOST_MULTIPLIER = 10;
 export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
-  const researchMultiplierPercentage = isEvent(workshopStatus)
-    ? 10
-    : getMainWorkshopResearchMultiplier(workshopStatus.researchBoostActive);
-  const researchPerSecond = workshopStatus.scientists * researchMultiplierPercentage;
+  const researchMultiplierPercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
+  const researchPerSecond =
+    workshopStatus.scientists *
+    researchMultiplierPercentage *
+    (workshopStatus.researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1);
   return Math.round(researchPerSecond);
 }
 
-const RESEARCH_BOOST_MULTIPLIER = 10;
-function getMainWorkshopResearchMultiplier(researchBoostActive: boolean): number {
+function getMainWorkshopResearchMultiplier(): number {
   return (
     5 * // research achievement
     1.25 * // science tools
     1 * // exploration
     1.5 * // modern exploration
     1 * // modern technology
-    1.3 * // total blueprint score
-    (researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1)
+    1.3 // total blueprint score
   );
 }
