@@ -1,0 +1,22 @@
+Wood							1	10	512	x1										-	-																		Green
+Copper Ore				10	80	2,048	x1								-	-																		Green
+Copper Ingot			50	700	4,096	x3								Copper Ore x1	-												Yellow
+Coal							100	6,000	51,200	x1						-	-																		Green
+Iron Ore					500	50,000	204,800	x1					-	-																		Green
+Iron Ingot				1,000	600,000	307,200	x5				Coal x3	Iron Ore x2										Yellow
+Rubber						2,000	5.0 E6	2.5 E6	x1				-	-																		Green
+Stethoscope				5,000	60.0 E6	20.4 E6	x1				Iron Ingot x1	Rubber x1								Red
+Iron Rivets				10,000	400.0 E6	25.6 E6	x5		Iron Ingot x1	-												Blue
+Mech Parts				25,000	5.0 E9	307.2 E6	x2		Wood x2	Iron Rivets x8								Blue
+Tungsten					50,000	30.0 E9	2.0 E9	x1			-	-																		Green
+X-ray Generator		75,000	200.0 E9	15.3 E9	x1		Mech Parts x4	Tungsten x3							Blue
+Caesium						100,000	1.0 E12	30.7 E9	x1			-	-																		Green
+Iodine						150,000	7.0 E12	204.8 E9	x1		-	-																		Green
+Scintillator			200,000	90.0 E12	1.5 E12	x1		Caesium x2	Iodine x2									Blue
+Silicon						250,000	700.0 E12	4.6 E12	x1		-	-																		Green
+X-ray Detector		300,000	5.0 E15	25.6 E12	x1		Scintillator x1	Silicon x2						Blue
+X-ray Machine			350,000	20.0 E15	51.2 E12	x1	X-ray Generator x 1	X-ray Detector x1	Violet
+Electrical Parts	400,000	150.0 E15	76.8 E12	x2	Copper Ingot x2	Iron Rivets x8				Blue
+Electrode					500,000	500.0 E15	512.0 E12	x1	Iron Ingot x1	Electrical Parts x2			Blue
+Control Unit			600,000	2.0 E18	2.5 E15	x1			Silicon x4	Electrical Parts x4				Blue
+Defibrillator			700,000	10.0 E18	10.2 E15	x1	Electrode x2	Control Unit x1					Violet

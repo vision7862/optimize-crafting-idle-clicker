@@ -1,0 +1,25 @@
+Cotton							1	10	512	x5	-	-																											Green
+White Fabric				10	175	10,240	x1	Cotton x3	-																				Yellow
+White Stripes				50	1,000	12,800	x3	White Fabric x1	-																Blue
+Stars								100	9,000	15,360	x13	White Fabric x1	-																Blue
+Red Plant						500	70,000	307,200	x1	-	-																						Green
+Red Dye							1,000	500,000	2.0 E6	x1	Red Plant x2	-															Yellow
+Red Stripes					2,000	3.0 E6	1.0 E6	x5	White Stripes x5	Red Dye x1								Blue
+Flag Background			5,000	20.0 E6	20.4 E6	x1	White Stripes x6	Red Stripes x7						Red
+Blue Plant					10,000	80.0 E6	25.6 E6	x1	-	-																				Green
+Blue Dye						20,000	600.0 E6	153.6 E6	x1	Blue Plant x1	-												Yellow
+Blue Fabric					50,000	4.0 E9	204.8 E6	x2	White Fabric x2	Blue Dye x1							Yellow
+Canton							75,000	20.0 E9	1.5 E9	x1	Blue Fabric x1	Stars x50									Red
+Stars & Stripes			100,000	80.0 E9	4.6 E9	x1	Flag Background x1	Canton x1							Violet
+Gold Ore						150,000	500.0 E9	15.3 E9	x1	-	-																			Green
+Gold Ingot					200,000	3.0 E12	20.4 E9	x3	Gold Ore x1	-															Yellow
+Uncut Sapphire			250,000	15.0 E12	128.0 E9	x1	-	-																		Green
+Cut Sapphire				300,000	60.0 E12	409.6 E9	x1	Uncut Sapphire x1	-										Yellow
+Sapphire Ring				350,000	350.0 E12	2.3 E12	x1	Gold Ingot x2	Cut Sapphire x2						Violet
+Sulphur							400,000	2.0 E15	4.6 E12	x1	-	-																				Green
+Saltpeter						450,000	9.0 E15	15.3 E12	x1	-	-																			Green
+Blackpowder					500,000	30.0 E15	30.7 E12	x3	Sulphur x1	Saltpeter x3							Blue
+Red Firework				550,000	150.0 E15	76.8 E12	x3	Blackpowder x2	Red Dye x1						Red
+Blue Firework				600,000	700.0 E15	179.2 E12	x3	Blackpowder x2	Blue Dye x1						Red
+July 4th Fireworks	700,000	2.5 E18	2.5 E15	x1	Red Firework x4	Blue Firework x4					Violet
+July 4th Equipment	800,000	5.0 E18	5.1 E15	x1	Stars & Stripes x1	July 4th Fireworks x1	Violet
