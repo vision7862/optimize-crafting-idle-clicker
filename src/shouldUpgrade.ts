@@ -48,6 +48,7 @@ export function getCurrentIncome(workshop: Workshop, clickBoost: number): number
   for (const product of workshop.productsInfo) {
     totalIncome +=
       // applyClickBoost(product.details, topProduct, clickBoost) *
+      // TODO: only count items that merchants are selling, not items consumed
       product.status.level * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;

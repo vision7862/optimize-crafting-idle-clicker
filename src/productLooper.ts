@@ -64,7 +64,7 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
 
   console.log('best cycles skipped: ' + bestCyclesSkipped.toString());
 
-  console.log(JSON.stringify(filterOutSkippedFullWorkshop(bestWorkshop)));
+  // console.log(JSON.stringify(filterOutSkippedFullWorkshop(bestWorkshop)));
   return {
     workshop: bestWorkshop,
     cyclesToTarget: bestCyclesToTarget,

@@ -1,4 +1,3 @@
-import { computeResearchTimeForWorkshop } from './helpers/ResearchHelpers';
 import { isEvent } from './helpers/WorkshopHelpers';
 import { computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from './importEventProducts';
@@ -61,12 +60,13 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
   let bestTime = Number.MAX_VALUE;
   let bestFame = fameRequiredToLevelUp;
   let bestWorkshopUpgrade;
-  for (let fame = 1; fame < Math.min(fameRequiredToLevelUp, 17); fame++) {
+  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 17); fame++) {
+    console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level);
     const targetInfo = bottomUpToMoney(target, workshopStatus);
-    const idleBuildTime = targetInfo.cyclesToTarget * 10;
-    const researchTime = computeResearchTimeForWorkshop(targetInfo.workshop);
-    const finalTime = (Math.max(idleBuildTime, researchTime) + 10) * Math.ceil(fameRequiredToLevelUp / fame);
+    const idleBuildTime = targetInfo.cyclesToTarget;
+    // const researchTime = computeResearchTimeForWorkshop(targetInfo.workshop);
+    const finalTime = (idleBuildTime + 10) * Math.ceil(fameRequiredToLevelUp / fame);
     if (finalTime < bestTime) {
       bestTime = finalTime;
       bestFame = fame;

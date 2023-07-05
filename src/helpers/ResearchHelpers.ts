@@ -1,3 +1,4 @@
+import memoize from 'fast-memoize';
 import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
@@ -25,7 +26,7 @@ export function getFinalNumScientistsCanAfford(startingScientists: number, money
   return finalNumScientists;
 }
 
-export function computeResearchTimeForWorkshop(workshop: Workshop): number {
+export const computeResearchTimeForWorkshop = memoize((workshop: Workshop): number => {
   let totalResearchNeeded: number = 0;
   for (const product of workshop.productsInfo) {
     if (product.status.level > 0) {
@@ -34,7 +35,7 @@ export function computeResearchTimeForWorkshop(workshop: Workshop): number {
   }
 
   return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus);
-}
+});
 
 const RESEARCH_BOOST_MULTIPLIER = 10;
 export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
