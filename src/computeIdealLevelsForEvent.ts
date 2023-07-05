@@ -78,6 +78,18 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
   return bestWorkshopUpgrade;
 }
 
+export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+  const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+  const targetInfo14 = bottomUpToMoney(computeTargetFromFame(14, workshopStatus.level), workshopStatus);
+  const timePerGemChance14 = targetInfo14.cyclesToTarget / 8;
+
+  const targetInfo15 = bottomUpToMoney(computeTargetFromFame(15, workshopStatus.level), workshopStatus);
+  const timePerGemChance15 = targetInfo15.cyclesToTarget / 12;
+
+  console.log(`best gem chance per time at ${timePerGemChance14 < timePerGemChance15 ? 14 : 15}`);
+  return timePerGemChance14 < timePerGemChance15 ? targetInfo14 : targetInfo15;
+}
+
 export function bottomUpToMoney(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
   return bottomUpBuilder(target, workshop);

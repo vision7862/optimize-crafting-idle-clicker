@@ -18,7 +18,7 @@ import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopSt
 
 describe.only('runProgram', () => {
   describe('events', () => {
-    const eventName = 'Craft for Freedom';
+    const eventName = 'Game Changer';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
       printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
     }
@@ -439,6 +439,16 @@ describe.only('runProgram', () => {
         test('lvl 22', () => {
           getGemsHighChance({ level: 22, scientists: 520, researchBoostActive: true });
         });
+
+        test('lvl 24', () => {
+          getGemsHighChance({
+            level: 24,
+            scientists: 564,
+            researchBoostActive: true,
+            merchantBoostActive: true,
+            speedBoostActive: true,
+          });
+        });
       });
     });
 
@@ -567,6 +577,16 @@ describe.only('runProgram', () => {
         const targetInfo = quickestNewLevel(moreWorkshopStatus);
         printInfo(targetInfo);
       }
+
+      it('lvl 1 event', () => {
+        quick({
+          level: 1,
+          scientists: 1,
+          eventName: 'Game Changer',
+          merchantBoostActive: true,
+          speedBoostActive: true,
+        });
+      });
 
       it('lvl 24', () => {
         quick({
