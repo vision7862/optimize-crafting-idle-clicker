@@ -1,4 +1,4 @@
-enum SetMultiplier {
+export enum SetMultiplier {
   Income,
   Ore,
   Research,
@@ -8,7 +8,13 @@ enum SetMultiplier {
   MerchantRevenue,
 }
 
-const blueprintSets: Array<{ setName: string; multiplier: SetMultiplier; blueprints: string[] }> = [
+export type BlueprintSet = Readonly<{
+  setName: string;
+  multiplier: SetMultiplier;
+  blueprints: string[];
+}>;
+
+export const blueprintSets: BlueprintSet[] = [
   {
     setName: 'Wood',
     multiplier: SetMultiplier.Income,
@@ -186,4 +192,3 @@ const blueprintSets: Array<{ setName: string; multiplier: SetMultiplier; bluepri
     blueprints: ['Bicycle', 'Glider', 'Combustion Engine', 'Motorcycle', 'Car', 'Truck', 'Airplane'],
   },
 ];
-console.log(blueprintSets);
