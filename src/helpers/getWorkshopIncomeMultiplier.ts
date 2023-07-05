@@ -2,11 +2,11 @@ import memoize from 'fast-memoize';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
-const MERCHANT_BOOST_MULTIPLIER = 3;
+const MERCHANT_BOOST_MULTIPLIER = 5;
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
   return (
     (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
-    (!isEvent(workshopStatus) ? getMainWorkshopIncomeMultiplier(workshopStatus.level) : 1)
+    (isEvent(workshopStatus) ? 1 : getMainWorkshopIncomeMultiplier(workshopStatus.level))
   );
 }
 

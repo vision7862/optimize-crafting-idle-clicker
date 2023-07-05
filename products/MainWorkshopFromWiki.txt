@@ -40,7 +40,7 @@
 // 5x Paper                   4.0E+6    200.0E+27   8.0E+18      Red      1x Wood                                    
 1x Gold Ore                   5.0E+6    1.0E+30     180.0E+18    Green    -                                          
 3x Gold Ingots                8.0E+6    500.0E+30   3.0E+21      Yellow   1x Gold Ore                                
-// don't have 1x Uncut Emerald              10.0E+6   25.0E+33    60.0E+21     Green    -                                          
+1x Uncut Emerald              10.0E+6   25.0E+33    60.0E+21     Green    -                                          
 1x Gold Ring                  13.0E+6   500.0E+33   880.0E+21    Red      1x Gold Ingots                             
 // don't have 1x Cut Emerald                15.0E+6   14.0E+36    90.0E+24     Yellow   1x Uncut Emerald                           
 1x Gold Necklace              20.0E+6   5.0E+39     860.0E+24    Violet   3x Gold Ingots                             
