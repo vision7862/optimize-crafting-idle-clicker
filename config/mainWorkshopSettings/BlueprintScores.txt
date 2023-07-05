@@ -1,4 +1,4 @@
-// product name		top score
+// product name			top score
 Wood								120
 Rawhide							120
 Copper Ore					120
