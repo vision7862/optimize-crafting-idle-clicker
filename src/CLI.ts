@@ -1,21 +1,27 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { quickestNewLevel } from './computeIdealLevelsForEvent';
+import { bestGemChance, quickestNewLevel } from './computeIdealLevelsForEvent';
 import { printFameTime, printInfo } from './helpers/printResults';
 import { WorkshopStatus } from './types/Workshop';
 
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
-  const desiredFame = await input({
-    message:
-      'if you have a Fame target in mind, enter it here. otherwise, just hit enter, and calculate the fastest way to level up.',
-  });
-  if (desiredFame !== '') {
-    printFameTime(Number(desiredFame), workshopStatus);
-  } else {
-    const targetInfo = quickestNewLevel(workshopStatus);
+  const desireGems = await booleanChoice('are you shooting for gems?');
+  if (desireGems) {
+    const targetInfo = bestGemChance(workshopStatus);
     printInfo(targetInfo);
+  } else {
+    const desiredFame = await input({
+      message:
+        'if you have a Fame target in mind, enter it here. otherwise, hit enter to calculate the fastest way to level up.',
+    });
+    if (desiredFame !== '') {
+      printFameTime(Number(desiredFame), workshopStatus);
+    } else {
+      const targetInfo = quickestNewLevel(workshopStatus);
+      printInfo(targetInfo);
+    }
   }
   console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
 }
