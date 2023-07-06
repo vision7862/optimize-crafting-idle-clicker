@@ -39,7 +39,7 @@ export function importMainWorkshop(): ProductDetails[] {
 }
 
 function getBlueprintMap(): Map<string, number> {
-  const blueprintProducts = getFile('../mainWorkshopSettings/BlueprintScores');
+  const blueprintProducts = getFile('../src/config/BlueprintScores');
   const blueprintMap = new Map<string, number>();
 
   for (const line of blueprintProducts.split(/[\r\n]+/)) {
@@ -57,7 +57,7 @@ function getBlueprintMap(): Map<string, number> {
 
 export function getFile(fileName: string): string {
   const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
-  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../config/products/${fileName}.txt`);
+  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../products/${fileName}.txt`);
   const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
   return blueprintProducts;
 }
