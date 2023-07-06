@@ -1,4 +1,13 @@
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
+import { Blueprint } from '../types/Blueprint';
+
+export function convertBlueprintLibraryToScores(blueprints: Blueprint[]): Map<string, number> {
+  const scores = new Map<string, number>();
+  blueprints.forEach((blueprint: Blueprint) => {
+    scores.set(blueprint.productName, Math.max(scores.get(blueprint.productName) ?? 0, blueprint.score));
+  });
+  return scores;
+}
 
 export function getIncomeMultiplierFromSets(blueprintScores: Map<string, number>): number {
   let multiplier = 1;
