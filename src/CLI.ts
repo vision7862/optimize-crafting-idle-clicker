@@ -1,8 +1,8 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { bestGemChance, quickestNewLevel } from './computeIdealLevelsForEvent';
-import { printFameTime, printInfo } from './helpers/printResults';
+import { bestGemChance, quickestNewLevel } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
+import { printFameTime, printInfo } from './optimizeBuildingWorkshop/helpers/printResults';
 import { WorkshopStatus } from './types/Workshop';
 
 export async function runCLI(): Promise<void> {
