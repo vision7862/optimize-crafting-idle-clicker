@@ -125,7 +125,7 @@ describe('targetHelpers', () => {
           ),
           workshopStatus: { ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName: 'Game Changer' },
         };
-        const seconds = computeBuildTimeForWorkshop(workshop, 0);
+        const seconds = computeBuildTimeForWorkshop(workshop, 1e15);
         console.log(`building whatsit in ${toTime(seconds)}`);
         expect(seconds).toBeGreaterThan(200);
       });
