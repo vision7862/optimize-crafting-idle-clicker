@@ -1,6 +1,6 @@
-import { getUpgradedWorkshopIfBetter } from '../src/shouldUpgrade';
-import { Product } from '../src/types/Product';
-import { DEFAULT_PRODUCT, DEFAULT_PRODUCT_DETAILS, getWorkshop } from './helpers/testHelpers';
+import { getUpgradedWorkshopIfBetter } from '../../src/optimizeBuildingWorkshop/shouldUpgrade';
+import { Product } from '../../src/types/Product';
+import { DEFAULT_PRODUCT, DEFAULT_PRODUCT_DETAILS, getWorkshop } from '../helpers/testHelpers';
 
 describe('should Upgrade', () => {
   test('should return true when it will take fewer cycles with upgrade', () => {

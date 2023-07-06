@@ -1,7 +1,7 @@
-import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
-import { getUpgradedWorkshopIfBetter, WorkshopUpgradeInfo } from './shouldUpgrade';
-import { Product } from './types/Product';
-import { Workshop } from './types/Workshop';
+import { Product } from '../types/Product';
+import { Workshop } from '../types/Workshop';
+import { computeBuildTimeForWorkshop } from './helpers/targetHelpers';
+import { WorkshopUpgradeInfo, getUpgradedWorkshopIfBetter } from './shouldUpgrade';
 
 export function topDownLeveler(
   target: number,

@@ -1,5 +1,5 @@
-import { Product, ProductStatus } from '../types/Product';
-import { EventWorkshopStatus, Workshop, WorkshopStatus } from '../types/Workshop';
+import { Product, ProductStatus } from '../../types/Product';
+import { EventWorkshopStatus, Workshop, WorkshopStatus } from '../../types/Workshop';
 
 export function getStatusMap(workshop: Workshop): Map<string, ProductStatus> {
   const statuses = new Map<string, ProductStatus>();

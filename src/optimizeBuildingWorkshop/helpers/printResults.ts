@@ -1,6 +1,6 @@
+import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../../types/Workshop';
 import { bottomUpToMoney } from '../computeIdealLevelsForEvent';
 import { WorkshopUpgradeInfo } from '../shouldUpgrade';
-import { DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../types/Workshop';
 import { computeResearchTimeForWorkshop, getFinalNumScientistsCanAfford } from './ResearchHelpers';
 import { getStatusMap } from './WorkshopHelpers';
 import { computeBuildTimeForWorkshop, computeTargetFromFame, filterOutSkipped } from './targetHelpers';

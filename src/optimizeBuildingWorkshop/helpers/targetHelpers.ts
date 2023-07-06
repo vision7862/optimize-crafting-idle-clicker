@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize';
+import { Product, ProductStatus } from '../../types/Product';
+import { Workshop } from '../../types/Workshop';
 import { getCurrentIncome } from '../shouldUpgrade';
-import { Product, ProductStatus } from '../types/Product';
-import { Workshop } from '../types/Workshop';
 import { computeResearchTimeForWorkshop } from './ResearchHelpers';
 
 export function computeTargetFromFame(fame: number, level: number): number {
