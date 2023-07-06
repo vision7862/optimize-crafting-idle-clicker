@@ -1,11 +1,50 @@
+import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT } from '../../src/config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet } from '../../src/constants/BlueprintSets';
 import {
+  convertBlueprintLibraryToScores,
   getIncomeMultiplierFromSets,
   getSetAchievementMultiplier,
   getSetBlueprintScore,
 } from '../../src/helpers/blueprintScoreHelpers';
+import { Blueprint } from '../../src/types/Blueprint';
 
 describe('blueprintScoreHelpers', () => {
+  describe('convertBlueprintLibraryToScores', () => {
+    it('should use the score of the top scoring blueprint', () => {
+      const blueprints: Blueprint[] = [
+        {
+          productName: 'Wood',
+          evolutionStage: 2,
+          upgradeLevel: 1,
+          score: 120,
+        },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+      ];
+      const scores = convertBlueprintLibraryToScores(blueprints);
+      expect(scores.get('Wood')).toBe(120);
+    });
+
+    it('should use the score of the top scoring blueprint alone, even if other non-default blueprints exist', () => {
+      const blueprints: Blueprint[] = [
+        {
+          productName: 'Wood',
+          evolutionStage: 2,
+          upgradeLevel: 1,
+          score: 120,
+        },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood', score: 60 },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood', evolutionStage: 2 },
+      ];
+      const scores = convertBlueprintLibraryToScores(blueprints);
+      expect(scores.get('Wood')).toBe(120);
+    });
+
+    it('temp test', () => {
+      console.log(getIncomeMultiplierFromSets(convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)));
+    });
+  });
+
   function getBlueprintSet(setName: string): BlueprintSet {
     const setsMatchingName = BLUEPRINT_SETS.filter((set: BlueprintSet) => {
       return set.setName === setName;
