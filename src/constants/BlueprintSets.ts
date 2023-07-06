@@ -10,29 +10,36 @@ export enum SetMultiplier {
 
 export type BlueprintSet = Readonly<{
   setName: string;
-  multiplier: SetMultiplier;
+  multiplierType: SetMultiplier;
   blueprints: string[];
+  scoreBoundaries?: number[]; // TODO: fill in score boundaries for other sets
+  multiplierAmountPerRank?: number | null; // null if the ranks are not fully even // TODO: fill in multiplier amount for other sets
 }>;
 
-export const blueprintSets: BlueprintSet[] = [
+export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Wood',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: ['Wood', 'Club', 'Arrows', 'Bow', 'Copper Axe', 'Bronze Spear'],
+    scoreBoundaries: [
+      96, 180, 435, 750, 1470, 2100, 4350, 7500, 14700, 21000, 43500, 75000, 147000, 210000, 435000, 750000, 1500000,
+      2100000, 4400000, 7500000, 12700000, 20200000, 27700000, 35200000, 42700000,
+    ],
+    multiplierAmountPerRank: 0.2,
   },
   {
     setName: 'Leather',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: ['Rawhide', 'Leather', 'Boots', 'Hilt', 'Leather Armor', 'Imp. Leather Armor'],
   },
   {
     setName: 'Copper',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: ['Copper Ore', 'Copper Ingots', 'Copper Axe', 'Copper Blades', 'Copper Knife', 'Copper Dagger'],
   },
   {
     setName: 'Bronze',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: [
       'Tin Ore',
       'Bronze Ingots',
@@ -45,7 +52,7 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Iron',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: [
       'Coal',
       'Iron Ore',
@@ -63,7 +70,7 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Precious',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: [
       'Gold Ore',
       'Gold Ingots',
@@ -79,7 +86,7 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Renaissance',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: [
       'Mechanical Parts',
       'Magnificent Crossbow',
@@ -95,7 +102,7 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Industrial',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: [
       'Microscope',
       'Clockwork',
@@ -113,62 +120,62 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Mining Tools',
-    multiplier: SetMultiplier.Ore,
+    multiplierType: SetMultiplier.Ore,
     blueprints: ['Shovel', 'Lump Hammer', 'Pickaxe', 'Gunpowder'],
   },
   {
     setName: 'Science Tools',
-    multiplier: SetMultiplier.Research,
+    multiplierType: SetMultiplier.Research,
     blueprints: ['Sickle', 'Chisel', 'Mechanical Parts', 'Compass'],
   },
   {
     setName: 'Exploration',
-    multiplier: SetMultiplier.Research,
+    multiplierType: SetMultiplier.Research,
     blueprints: ['Paper', 'Paper Sheets', 'Map', 'Book', 'Rowboat', 'Spyglass', 'Compass'],
   },
   {
     setName: 'Modern Exploration',
-    multiplier: SetMultiplier.Research,
+    multiplierType: SetMultiplier.Research,
     blueprints: ['Entrenching Tool', 'Tent', 'Backpack', 'Diving Gear', 'Electric Motor', 'Submarine'],
   },
   {
     setName: 'Cut Gems',
-    multiplier: SetMultiplier.FreeGems,
+    multiplierType: SetMultiplier.FreeGems,
     blueprints: ['Cut Emerald', 'Cut Ruby', 'Cut Sapphire', 'Cut Onyx'],
   },
   {
     setName: 'Emerald',
-    multiplier: SetMultiplier.OfflineProduction,
+    multiplierType: SetMultiplier.OfflineProduction,
     blueprints: ['Uncut Emerald', 'Cut Emerald', 'Emerald Ring'],
   },
   {
     setName: 'Ruby',
-    multiplier: SetMultiplier.OfflineProduction,
+    multiplierType: SetMultiplier.OfflineProduction,
     blueprints: ['Uncut Ruby', 'Cut Ruby', 'Ruby Ring'],
   },
   {
     setName: 'Sapphire',
-    multiplier: SetMultiplier.OfflineProduction,
+    multiplierType: SetMultiplier.OfflineProduction,
     blueprints: ['Uncut Sapphire', 'Cut Sapphire', 'Sapphire Ring'],
   },
   {
     setName: 'Onyx',
-    multiplier: SetMultiplier.OfflineProduction,
+    multiplierType: SetMultiplier.OfflineProduction,
     blueprints: ['Uncut Onyx', 'Cut Onyx', 'Onyx Ring'],
   },
   {
     setName: 'Hammer',
-    multiplier: SetMultiplier.ClickOutput,
+    multiplierType: SetMultiplier.ClickOutput,
     blueprints: ['Lump Hammer', 'War Hammer', 'Magnificent Hammer'],
   },
   {
     setName: 'Knife',
-    multiplier: SetMultiplier.MerchantRevenue,
+    multiplierType: SetMultiplier.MerchantRevenue,
     blueprints: ['Sickle', 'Magnificent Dagger'],
   },
   {
     setName: 'Modern Weapons',
-    multiplier: SetMultiplier.MerchantRevenue,
+    multiplierType: SetMultiplier.MerchantRevenue,
     blueprints: [
       'Magnificent Bow',
       'Mortar',
@@ -183,12 +190,12 @@ export const blueprintSets: BlueprintSet[] = [
   },
   {
     setName: 'Music Instruments',
-    multiplier: SetMultiplier.MerchantRevenue,
+    multiplierType: SetMultiplier.MerchantRevenue,
     blueprints: ['Flute', 'Bongos', 'Harp', 'Tambourine', 'Trumpet', 'Viola', 'Harpsichord', 'Snare Drum', 'Saxophone'],
   },
   {
     setName: 'Vehicles',
-    multiplier: SetMultiplier.Income,
+    multiplierType: SetMultiplier.Income,
     blueprints: ['Bicycle', 'Glider', 'Combustion Engine', 'Motorcycle', 'Car', 'Truck', 'Airplane'],
   },
 ];
