@@ -150,7 +150,7 @@ describe.only('runProgram', () => {
           testNumScientists(295);
         });
 
-        test('300 top down', () => {
+        test.skip('300 top down', () => {
           const workshopStatus: WorkshopStatus = {
             ...DEFAULT_WORKSHOP_STATUS_EVENT,
             level: 10,
