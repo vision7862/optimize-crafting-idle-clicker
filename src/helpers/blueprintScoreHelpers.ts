@@ -9,13 +9,16 @@ export function convertBlueprintLibraryToScores(blueprints: Blueprint[]): Map<st
   return scores;
 }
 
-export function getIncomeMultiplierFromSets(blueprintScores: Map<string, number>): number {
+export function getSpecifiedMultiplierFromSets(
+  multiplierType: SetMultiplierType,
+  blueprintScores: Map<string, number>,
+): number {
   let multiplier = 1;
-  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income).forEach(
-    (set: BlueprintSet) => {
-      multiplier *= getMultiplierForSet(set, blueprintScores);
-    },
-  );
+  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === multiplierType).forEach((set: BlueprintSet) => {
+    const setMultiplier = getMultiplierForSet(set, blueprintScores);
+    multiplier *= setMultiplier;
+    console.log(`${set.setName} set: ${setMultiplier}`);
+  });
   return multiplier;
 }
 
