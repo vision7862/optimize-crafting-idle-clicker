@@ -1,6 +1,9 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
+import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from './blueprintScoreHelpers';
+import { SetMultiplierType } from '../constants/BlueprintSets';
 
 const MERCHANT_BOOST_MULTIPLIER = 5;
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
@@ -10,26 +13,15 @@ export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): num
   );
 }
 
-const MWS_MERCHANT_MULTIPLIER = 7;
-const getMainWorkshopIncomeMultiplier = memoize(getMainWorkshopIncomeMultiplierNonMemo);
-
-function getMainWorkshopIncomeMultiplierNonMemo(level: number): number {
+const MWS_MERCHANT_MULTIPLIER = 7.5;
+const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
     MWS_MERCHANT_MULTIPLIER *
     getMWSLevelAchievementMultiplier(level) *
-    1.4 * // wood
-    1.4 * // leather
-    1.4 * // copper
-    1.4 * // bronze
-    1.4 * // iron
-    1.4 * // precious
-    1 * // renaissance
-    1 * // industrial
-    1 * // vehicles
-    1 * // entertainment
-    3.5 // event
+    getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)) *
+    4 // event
   );
-}
+});
 
 // only applies to main workshop because the events are imported with revenue relative to their level
 function getMWSLevelAchievementMultiplier(level: number): number {

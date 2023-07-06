@@ -1,10 +1,10 @@
 import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT } from '../../src/config/BlueprintLibrary';
-import { BLUEPRINT_SETS, BlueprintSet } from '../../src/constants/BlueprintSets';
+import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../../src/constants/BlueprintSets';
 import {
   convertBlueprintLibraryToScores,
-  getIncomeMultiplierFromSets,
   getSetAchievementMultiplier,
   getSetBlueprintScore,
+  getSpecifiedMultiplierFromSets,
 } from '../../src/helpers/blueprintScoreHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
 
@@ -41,7 +41,9 @@ describe('blueprintScoreHelpers', () => {
     });
 
     it('temp test', () => {
-      console.log(getIncomeMultiplierFromSets(convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)));
+      console.log(
+        getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)),
+      );
     });
   });
 
@@ -61,7 +63,7 @@ describe('blueprintScoreHelpers', () => {
         ['Wood', 120],
         ['Rawhide', 120],
       ]);
-      expect(getIncomeMultiplierFromSets(blueprintScores)).toBe(1.2 * 1.2);
+      expect(getSpecifiedMultiplierFromSets(SetMultiplierType.Income, blueprintScores)).toBe(1.2 * 1.2);
     });
   });
 
