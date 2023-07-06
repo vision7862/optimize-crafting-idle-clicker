@@ -1,9 +1,12 @@
-import { toTime } from '../../src/helpers/printResults';
-import { computeBuildTimeForWorkshop, computeTargetFromFame } from '../../src/helpers/targetHelpers';
-import { importProductsAtLevel } from '../../src/importEventProducts';
-import { importMainWorkshop } from '../../src/importMainWorkshop';
-import { Product, ProductDetails, ProductStatus } from '../../src/types/Product';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, Workshop } from '../../src/types/Workshop';
+import { importProductsAtLevel } from '../../../src/importEventProducts';
+import { importMainWorkshop } from '../../../src/importMainWorkshop';
+import { toTime } from '../../../src/optimizeBuildingWorkshop/helpers/printResults';
+import {
+  computeBuildTimeForWorkshop,
+  computeTargetFromFame,
+} from '../../../src/optimizeBuildingWorkshop/helpers/targetHelpers';
+import { Product, ProductDetails, ProductStatus } from '../../../src/types/Product';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, Workshop } from '../../../src/types/Workshop';
 
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {

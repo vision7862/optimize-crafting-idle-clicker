@@ -1,7 +1,7 @@
+import { Product, ProductDetails, ProductStatus } from '../types/Product';
+import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
-import { Product, ProductDetails, ProductStatus } from './types/Product';
-import { Workshop, WorkshopStatus } from './types/Workshop';
 
 const CLICK_BOOST_MULTIPLIER = 3;
 const scienceIsTight = true;

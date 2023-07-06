@@ -1,9 +1,9 @@
 import memoize from 'fast-memoize';
-import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
-import { WorkshopStatus } from '../types/Workshop';
+import { BLUEPRINT_LIBRARY } from '../../config/BlueprintLibrary';
+import { SetMultiplierType } from '../../constants/BlueprintSets';
 import { isEvent } from './WorkshopHelpers';
-import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from './blueprintScoreHelpers';
-import { SetMultiplierType } from '../constants/BlueprintSets';
+import { WorkshopStatus } from '../../types/Workshop';
+import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
 
 const MERCHANT_BOOST_MULTIPLIER = 5;
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {

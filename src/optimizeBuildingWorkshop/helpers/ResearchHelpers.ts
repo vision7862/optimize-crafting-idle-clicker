@@ -1,5 +1,5 @@
 import memoize from 'fast-memoize';
-import { Workshop, WorkshopStatus } from '../types/Workshop';
+import { Workshop, WorkshopStatus } from '../../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 export function getCostOfScientists(numScientists: number): number {

@@ -3,18 +3,18 @@ import {
   bottomUpToMoney,
   productDownUpToMoney,
   quickestNewLevel,
-} from '../src/computeIdealLevelsForEvent';
+} from '../../src/optimizeBuildingWorkshop/computeIdealLevelsForEvent';
 import {
-  computeResearchTimeForWorkshop,
   getCostOfScientists,
-  getCostOfScientistsFromSome,
+  computeResearchTimeForWorkshop,
   getFinalNumScientistsCanAfford,
-} from '../src/helpers/ResearchHelpers';
-import { getStatusMap } from '../src/helpers/WorkshopHelpers';
-import { printFameTime, printInfo, toTime } from '../src/helpers/printResults';
-import { computeTargetFromFame, filterOutSkipped } from '../src/helpers/targetHelpers';
-import { WorkshopUpgradeInfo } from '../src/shouldUpgrade';
-import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../src/types/Workshop';
+  getCostOfScientistsFromSome,
+} from '../../src/optimizeBuildingWorkshop/helpers/ResearchHelpers';
+import { getStatusMap } from '../../src/optimizeBuildingWorkshop/helpers/WorkshopHelpers';
+import { printFameTime, printInfo, toTime } from '../../src/optimizeBuildingWorkshop/helpers/printResults';
+import { filterOutSkipped, computeTargetFromFame } from '../../src/optimizeBuildingWorkshop/helpers/targetHelpers';
+import { WorkshopUpgradeInfo } from '../../src/optimizeBuildingWorkshop/shouldUpgrade';
+import { WorkshopStatus, DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN } from '../../src/types/Workshop';
 
 describe.only('runProgram', () => {
   describe('events', () => {
