@@ -94,6 +94,10 @@ describe.only('runProgram', () => {
       test('3 fame level 9', () => {
         printFameTimeEvent(3, { level: 9 });
       });
+
+      test('6 fame level 10', () => {
+        printFameTimeEvent(6, { level: 10, clickBoostActive: false, speedBoostActive: true });
+      });
     });
 
     describe('10+', () => {
@@ -127,6 +131,8 @@ describe.only('runProgram', () => {
             level: 10,
             scientists: numScientists - 10,
             eventName,
+            speedBoostActive: true,
+            clickBoostActive: false,
           };
           const target = getCostOfScientists(numScientists);
           printInfo(bottomUpToMoney(target, workshopStatus), target);
