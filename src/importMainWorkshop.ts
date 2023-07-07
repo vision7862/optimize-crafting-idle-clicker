@@ -1,8 +1,9 @@
+import memoize from 'fast-memoize';
 import * as fs from 'fs';
 import * as path from 'path';
 import { InputProduct, ProductDetails } from './types/Product';
 
-export function importMainWorkshop(): ProductDetails[] {
+export const importMainWorkshop = memoize((): ProductDetails[] => {
   const blueprintMap = getBlueprintMap();
 
   const mainWorkshopProducts = getFile('MainWorkshop');
@@ -36,7 +37,7 @@ export function importMainWorkshop(): ProductDetails[] {
     products.push(product);
   }
   return products;
-}
+});
 
 function getBlueprintMap(): Map<string, number> {
   const blueprintProducts = getFile('../src/config/BlueprintScores');

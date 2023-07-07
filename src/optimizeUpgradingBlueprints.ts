@@ -11,8 +11,9 @@ export function getBestBlueprintToUpgrade(): BlueprintUpgradeInfo | null {
   let bestImprovement: number = 0;
   let bestUpgrade: BlueprintUpgradeInfo | null = null;
   for (let i = 0; i < BLUEPRINT_LIBRARY.length; i++) {
+    // TODO: only upgrade top scoring blueprints
     const blueprintToUpgrade: Blueprint = inProgressLibrary.splice(i, 1)[0];
-    const blueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgrade);
+    const blueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgrade, 10);
 
     inProgressLibrary.splice(i, 0, blueprintUpgradeInfo.blueprint);
     const newIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, inProgressLibrary);
