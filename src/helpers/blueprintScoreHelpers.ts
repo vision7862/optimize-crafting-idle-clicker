@@ -2,6 +2,13 @@ import memoize from 'fast-memoize';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
 import { Blueprint } from '../types/Blueprint';
 
+export const getSpecifiedMultiplierFromLibrary = memoize(
+  (multiplierType: SetMultiplierType, blueprints: Blueprint[]) => {
+    const scores: Map<string, number> = convertBlueprintLibraryToScores(blueprints);
+    return getSpecifiedMultiplierFromSets(multiplierType, scores);
+  },
+);
+
 export const convertBlueprintLibraryToScores = memoize((blueprints: Blueprint[]): Map<string, number> => {
   const scores = new Map<string, number>();
   blueprints.forEach((blueprint: Blueprint) => {
