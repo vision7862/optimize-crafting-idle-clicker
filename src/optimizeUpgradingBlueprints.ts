@@ -1,30 +1,41 @@
-import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
 import { SetMultiplierType } from './constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from './helpers/blueprintScoreHelpers';
 import { upgradeBlueprint } from './helpers/blueprintUpgradeHelpers';
 import { Blueprint } from './types/Blueprint';
 
-export function getBestBlueprintToUpgrade(): BlueprintUpgradeInfo | null {
-  const startingIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, BLUEPRINT_LIBRARY);
-  const inProgressLibrary = Array.from(BLUEPRINT_LIBRARY);
+export function getBestBlueprintToUpgrade(library: Blueprint[]): BlueprintUpgradeInfo | null {
+  const startingIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, library);
 
   let bestImprovement: number = 0;
   let bestUpgrade: BlueprintUpgradeInfo | null = null;
-  for (let i = 0; i < BLUEPRINT_LIBRARY.length; i++) {
-    // TODO: only upgrade top scoring blueprints
-    const blueprintToUpgrade: Blueprint = inProgressLibrary.splice(i, 1)[0];
-    const blueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgrade, 10);
+  let hasBeenImproved = false;
+  let levelsToUpgrade = 10;
+  while (!hasBeenImproved && levelsToUpgrade <= 90) {
+    for (let i = 0; i < library.length; i++) {
+      // TODO: only upgrade top scoring blueprints
+      const blueprintToUpgrade: Blueprint = library.splice(i, 1)[0];
+      const topUpgradeLevel = 51 + (blueprintToUpgrade.evolutionStage - 1) * 10;
+      if (blueprintToUpgrade.upgradeLevel >= topUpgradeLevel) {
+        library.splice(i, 0, blueprintToUpgrade);
+        continue;
+      }
 
-    inProgressLibrary.splice(i, 0, blueprintUpgradeInfo.blueprint);
-    const newIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, inProgressLibrary);
-    const improvement = newIncomeMultiplier / startingIncomeMultiplier / blueprintUpgradeInfo.costOfUpgrade;
-    if (improvement > bestImprovement) {
-      bestImprovement = improvement;
-      bestUpgrade = blueprintUpgradeInfo;
+      const blueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgrade, levelsToUpgrade);
+
+      const inProgressLibrary = Array.from(library);
+      inProgressLibrary.splice(i, 0, blueprintUpgradeInfo.blueprint);
+      const newIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, inProgressLibrary);
+      const improvement = newIncomeMultiplier / startingIncomeMultiplier / blueprintUpgradeInfo.costOfUpgrade;
+      if (improvement > bestImprovement) {
+        hasBeenImproved = hasBeenImproved || newIncomeMultiplier > startingIncomeMultiplier;
+        bestImprovement = improvement;
+        bestUpgrade = blueprintUpgradeInfo;
+      }
     }
+    levelsToUpgrade += 10;
   }
 
-  return bestUpgrade;
+  return hasBeenImproved ? bestUpgrade : null;
 }
 
 export type BlueprintUpgradeInfo = Readonly<{

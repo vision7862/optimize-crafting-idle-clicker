@@ -30,7 +30,7 @@
 5x Iron Rivets                400.0E+3  900.0E+18   140.0E+12    Blue     1x Iron Ingots                             
 // not worth 1x Shovel        400.0E+3  1.0E+21     800.0E+12    Red      1x Iron Ingots       2x Wood               
 // don't have 1x Lump Hammer  350.0E+3  3.0E+21     900.0E+12    Red      2x Iron Ingots       2x Wood               
-// not worth 1x Iron Helmet   550.0E+3  8.0E+21     5.0E+15      Red      5x Iron Rivets       2x Iron Ingots        
+1x Iron Helmet   550.0E+3  8.0E+21     5.0E+15      Red      5x Iron Rivets       2x Iron Ingots        
 1x Iron Plates                450.0E+3  75.0E+21    15.0E+15     Blue     2x Iron Rivets       3x Iron Ingots        
 1x Imp. Leather Armor         600.0E+3  700.0E+21   130.0E+15    Violet   1x Leather Armor     2x Iron Plates        
 1x Iron Blades                2.0E+6    7.0E+24     300.0E+15    Blue     2x Iron Ingots                             
