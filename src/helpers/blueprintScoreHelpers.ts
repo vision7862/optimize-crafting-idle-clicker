@@ -9,6 +9,23 @@ export const getSpecifiedMultiplierFromLibrary = memoize(
   },
 );
 
+export const getOnlyTopBlueprints = memoize((blueprints: Blueprint[]): Blueprint[] => {
+  const scores = new Map<string, number>();
+  blueprints.forEach((blueprint: Blueprint) => {
+    scores.set(blueprint.productName, Math.max(scores.get(blueprint.productName) ?? 0, blueprint.score));
+  });
+  const onlyTopBlueprints = new Map<string, Blueprint>();
+  blueprints.forEach((blueprint: Blueprint) => {
+    if (
+      blueprint.score === scores.get(blueprint.productName) &&
+      onlyTopBlueprints.get(blueprint.productName) === undefined
+    ) {
+      onlyTopBlueprints.set(blueprint.productName, blueprint);
+    }
+  });
+  return Array.from(onlyTopBlueprints.values());
+});
+
 export const convertBlueprintLibraryToScores = memoize((blueprints: Blueprint[]): Map<string, number> => {
   const scores = new Map<string, number>();
   blueprints.forEach((blueprint: Blueprint) => {
@@ -58,4 +75,64 @@ export function getSetAchievementMultiplier(set: BlueprintSet, score: number): n
     multiplier = set.achievementRanks[i].totalMultiplier;
   }
   return Math.round(multiplier);
+}
+
+// export function getNextScoreBoundaryForBlueprint(blueprint: Blueprint, blueprintScores: Map<string, number>): number {
+//   let nearestBoundaryDistance = Number.MAX_VALUE;
+//   BLUEPRINT_SETS.filter((set: BlueprintSet) => set.blueprints.includes(blueprint.productName)).forEach(
+//     (set: BlueprintSet) => {
+//       if (set.achievementRanks === undefined) {
+//         throw new Error(`trying to get set boundaries for ${set.setName} failed`);
+//       }
+//       const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+//       for (let i = 0; i < set.achievementRanks.length - 1; i++) {
+//         if (setScore > set.achievementRanks[i].scoreBoundary && setScore > set.achievementRanks[i + 1].scoreBoundary) {
+//           nearestBoundaryDistance = Math.min(
+//             nearestBoundaryDistance,
+//             set.achievementRanks[i + 1].scoreBoundary - setScore,
+//           );
+//         }
+//       }
+//     },
+//   );
+// }
+
+export function getSetClosestToBoundary(
+  blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
+  blueprintScores: Map<string, number>,
+): string {
+  let closestDistance = Number.MAX_VALUE;
+  let closestSetName = 'no close set';
+  blueprintSets
+    .filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income)
+    .forEach((set: BlueprintSet) => {
+      const distanceToNextRank = getDistanceToNextRank(set, blueprintScores);
+      if (distanceToNextRank < closestDistance) {
+        closestDistance = distanceToNextRank;
+        closestSetName = set.setName;
+      }
+    });
+  return closestSetName;
+}
+
+export function getDistanceToNextRank(set: BlueprintSet, blueprintScores: Map<string, number>): number {
+  const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+  if (set.achievementRanks === undefined) {
+    console.error(`Set ${set.setName} does not have score boundaries`);
+    return 1;
+  }
+  for (let i = 1; i < set.achievementRanks.length; i++) {
+    if (setScore < set.achievementRanks[i].scoreBoundary && setScore > set.achievementRanks[i - 1].scoreBoundary) {
+      const distanceToNextRank = set.achievementRanks[i].scoreBoundary - setScore;
+      console.log(`${set.setName} is ${distanceToNextRank} score points away from rank ${i}`);
+      console.log(
+        `next rank would be ${
+          Math.round((set.achievementRanks[i].totalMultiplier / set.achievementRanks[i - 1].totalMultiplier) * 100) /
+          100
+        }x better (${set.achievementRanks[i - 1].totalMultiplier} to ${set.achievementRanks[i].totalMultiplier})`,
+      );
+      return distanceToNextRank;
+    }
+  }
+  return Number.MAX_VALUE;
 }

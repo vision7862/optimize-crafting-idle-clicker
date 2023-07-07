@@ -1,5 +1,10 @@
-import { DEFAULT_BLUEPRINT, DEFAULT_STAGE_2 } from '../../src/config/BlueprintLibrary';
-import { getCostToUpgradeBlueprint, upgradeBlueprint } from '../../src/helpers/blueprintUpgradeHelpers';
+import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT, DEFAULT_STAGE_2 } from '../../src/config/BlueprintLibrary';
+import { BLUEPRINT_SETS } from '../../src/constants/BlueprintSets';
+import {
+  getCostToUpgradeBlueprint,
+  getMinimumCostToUpgradeSetToNextRank,
+  upgradeBlueprint,
+} from '../../src/helpers/blueprintUpgradeHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
 
 describe('blueprintUpgradeHelpers', () => {
@@ -82,6 +87,12 @@ describe('blueprintUpgradeHelpers', () => {
       };
       expect(upgradeBlueprint(blueprint, 10).blueprint.upgradeLevel).toBe(11);
       expect(upgradeBlueprint(blueprint, 10).blueprint.score).toBe(240);
+    });
+  });
+
+  describe('getMinimumCostToUpgradeSetToNextRank', () => {
+    it('should do things', () => {
+      console.log(getMinimumCostToUpgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY));
     });
   });
 });

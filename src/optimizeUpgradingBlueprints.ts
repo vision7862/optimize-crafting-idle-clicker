@@ -3,6 +3,11 @@ import { getSpecifiedMultiplierFromLibrary } from './helpers/blueprintScoreHelpe
 import { upgradeBlueprint } from './helpers/blueprintUpgradeHelpers';
 import { Blueprint } from './types/Blueprint';
 
+export type BlueprintUpgradeInfo = Readonly<{
+  blueprint: Blueprint;
+  costOfUpgrade: number;
+}>;
+
 export function getBestBlueprintToUpgrade(library: Blueprint[]): BlueprintUpgradeInfo | null {
   const startingIncomeMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income, library);
 
@@ -37,8 +42,3 @@ export function getBestBlueprintToUpgrade(library: Blueprint[]): BlueprintUpgrad
 
   return hasBeenImproved ? bestUpgrade : null;
 }
-
-export type BlueprintUpgradeInfo = Readonly<{
-  blueprint: Blueprint;
-  costOfUpgrade: number;
-}>;

@@ -26,6 +26,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
     multiplierType: SetMultiplierType.Income,
     blueprints: ['Wood', 'Club', 'Arrows', 'Bow', 'Copper Axe', 'Bronze Spear'],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 96, totalMultiplier: 1.2 },
       { scoreBoundary: 180, totalMultiplier: 1.4 },
       { scoreBoundary: 435, totalMultiplier: 1.6 },
@@ -58,6 +59,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
     multiplierType: SetMultiplierType.Income,
     blueprints: ['Rawhide', 'Leather', 'Boots', 'Hilt', 'Leather Armor', 'Imp. Leather Armor'],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 96, totalMultiplier: 1.2 },
       { scoreBoundary: 180, totalMultiplier: 1.4 },
       { scoreBoundary: 435, totalMultiplier: 1.6 },
@@ -90,6 +92,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
     multiplierType: SetMultiplierType.Income,
     blueprints: ['Copper Ore', 'Copper Ingots', 'Copper Axe', 'Copper Blades', 'Copper Knife', 'Copper Dagger'],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 96, totalMultiplier: 1.2 },
       { scoreBoundary: 180, totalMultiplier: 1.4 },
       { scoreBoundary: 435, totalMultiplier: 1.6 },
@@ -130,6 +133,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Bronze Sword',
     ],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 112, totalMultiplier: 1.2 },
       { scoreBoundary: 210, totalMultiplier: 1.4 },
       { scoreBoundary: 508, totalMultiplier: 1.6 },
@@ -175,6 +179,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Iron Claymore',
     ],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 192, totalMultiplier: 1.2 },
       { scoreBoundary: 360, totalMultiplier: 1.4 },
       { scoreBoundary: 870, totalMultiplier: 1.6 },
@@ -218,6 +223,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Magnificent Armor',
     ],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 160, totalMultiplier: 1.2 },
       { scoreBoundary: 300, totalMultiplier: 1.4 },
       { scoreBoundary: 725, totalMultiplier: 1.6 },
@@ -261,6 +267,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Musket',
     ],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 100, totalMultiplier: 1.5 },
       { scoreBoundary: 300, totalMultiplier: 2.0 },
       { scoreBoundary: 1200, totalMultiplier: 2.5 },
@@ -311,6 +318,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Locomotive',
     ],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 100, totalMultiplier: 1.5 },
       { scoreBoundary: 300, totalMultiplier: 2.0 },
       { scoreBoundary: 1200, totalMultiplier: 2.5 },
@@ -418,6 +426,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
     multiplierType: SetMultiplierType.Income,
     blueprints: ['Bicycle', 'Glider', 'Combustion Engine', 'Motorcycle', 'Car', 'Truck', 'Airplane'],
     achievementRanks: [
+      { scoreBoundary: 0, totalMultiplier: 1 },
       { scoreBoundary: 100, totalMultiplier: 1.5 },
       { scoreBoundary: 300, totalMultiplier: 2.0 },
       { scoreBoundary: 1200, totalMultiplier: 2.5 },
