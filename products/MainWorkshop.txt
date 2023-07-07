@@ -1,4 +1,4 @@
-// countx           name      research  upgradeCost revenue      color    input1              input2  
+// countx           name      research  buildCost revenue      color    input1              input2  
 1x Wood                       1.0E+0    10.0E+0     1.0E+0       Green    -                                          
 1x Club                       30.0E+0   40.0E+0     10.0E+0      Red      4x Wood                                    
 3x Arrows                     90.0E+0   200.0E+0    7.0E+0       Blue     1x Wood                                    
@@ -73,7 +73,7 @@
 1x Magnificent Crossbow       1.0E+9    20.0E+69    1.0E+42      Violet   3x Mechanical Parts  4x Gold Ingots        
 1x Sulfur                     1.0E+9    100.0E+69   1.0E+42      Green    -                                          
 1x Bongos                     700.0E+6  600.0E+69   3.0E+42      Red      2x Wood              1x Rawhide            
-// don't have 1x Cut Sapphire               800.0E+6  1.0E+72     8.0E+42      Yellow   1x Uncut Sapphire                          
+1x Cut Sapphire               800.0E+6  1.0E+72     8.0E+42      Yellow   1x Uncut Sapphire                          
 1x Halberd                    900.0E+6  3.0E+72     20.0E+42     Red      2x Steel             3x Wood               
 1x Microscope                 950.0E+6  40.0E+72    25.0E+42     Violet   2x Mechanical Parts                        
 1x Compass                    1.1E+9    600.0E+72   30.0E+42     Violet   1x Mechanical Parts  1x Steel              
