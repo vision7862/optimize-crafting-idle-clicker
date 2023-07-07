@@ -1,9 +1,11 @@
-import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT } from '../../src/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT, DEFAULT_STAGE_2 } from '../../src/config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../../src/constants/BlueprintSets';
 import {
   convertBlueprintLibraryToScores,
+  getOnlyTopBlueprints,
   getSetAchievementMultiplier,
   getSetBlueprintScore,
+  getSetClosestToBoundary,
   getSpecifiedMultiplierFromSets,
 } from '../../src/helpers/blueprintScoreHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
@@ -44,6 +46,39 @@ describe('blueprintScoreHelpers', () => {
       console.log(
         getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)),
       );
+    });
+  });
+
+  describe('getOnlyTopBlueprints', () => {
+    it('should filter to only one blueprint per product', () => {
+      const blueprints: Blueprint[] = [
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
+      ];
+      expect(getOnlyTopBlueprints(blueprints).length).toBe(3);
+    });
+
+    it('should filter to only the top scoring blueprint even if it is later in the list', () => {
+      const blueprints: Blueprint[] = [
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_STAGE_2, productName: 'Wood' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Club' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
+        { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
+      ];
+      const topBlueprints = getOnlyTopBlueprints(blueprints);
+      expect(topBlueprints.length).toBe(3);
+      expect(topBlueprints.filter((blueprint: Blueprint) => blueprint.productName === 'Wood')[0].score).toBe(120);
     });
   });
 
@@ -95,6 +130,47 @@ describe('blueprintScoreHelpers', () => {
 
     it('should return 6 if the score is very high', () => {
       expect(getSetAchievementMultiplier(getBlueprintSet('Wood'), 50e6)).toBe(6);
+    });
+  });
+
+  describe('getSetClosestToBoundary', () => {
+    it('should return the set closest to the boundary, even if another set is a higher score', () => {
+      const blueprintSets: BlueprintSet[] = [
+        {
+          setName: 'Set A',
+          blueprints: ['a apple', 'a apricot'],
+          achievementRanks: [
+            { scoreBoundary: 0, totalMultiplier: 1 },
+            { scoreBoundary: 100, totalMultiplier: 2 },
+            { scoreBoundary: 200, totalMultiplier: 3 },
+          ],
+          multiplierType: SetMultiplierType.Income,
+        },
+        {
+          setName: 'Set B',
+          blueprints: ['b baseball', 'b bat'],
+          achievementRanks: [
+            { scoreBoundary: 0, totalMultiplier: 1 },
+            { scoreBoundary: 100, totalMultiplier: 2 },
+            { scoreBoundary: 200, totalMultiplier: 3 },
+          ],
+          multiplierType: SetMultiplierType.Income,
+        },
+      ];
+      const blueprintScores = new Map<string, number>([
+        ['a apple', 60],
+        ['a apricot', 10],
+        ['b baseball', 50],
+        ['b bat', 40],
+      ]);
+      const closestSet = getSetClosestToBoundary(blueprintSets, blueprintScores);
+      expect(closestSet).toBe('Set A');
+    });
+  });
+
+  describe('not test', () => {
+    it('should', () => {
+      console.log(getSetClosestToBoundary(BLUEPRINT_SETS, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)));
     });
   });
 });
