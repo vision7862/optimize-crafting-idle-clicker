@@ -2,8 +2,8 @@ import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT, DEFAULT_STAGE_2 } from '../../src
 import { BLUEPRINT_SETS } from '../../src/constants/BlueprintSets';
 import {
   getCostToUpgradeBlueprint,
-  getMinimumCostToUpgradeSetToNextRank,
   upgradeBlueprint,
+  upgradeSetToNextRank,
 } from '../../src/helpers/blueprintUpgradeHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
 
@@ -90,9 +90,11 @@ describe('blueprintUpgradeHelpers', () => {
     });
   });
 
-  describe('getMinimumCostToUpgradeSetToNextRank', () => {
+  describe('upgradeSetToNextRank', () => {
     it('should do things', () => {
-      console.log(getMinimumCostToUpgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY));
+      const upgradeSetInfo = upgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY);
+      console.log(`cost is ${upgradeSetInfo.cost}`);
+      console.log(upgradeSetInfo.upgradedBlueprints);
     });
   });
 });
