@@ -3,6 +3,7 @@ import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from './constants/Blu
 import {
   convertBlueprintLibraryToScores,
   getDistanceToNextRank,
+  getOnlyTopBlueprints,
   getSpecifiedMultiplierFromLibrary,
 } from './helpers/blueprintScoreHelpers';
 import { SetUpgradeInfo, upgradeBlueprint, upgradeSetToNextRank } from './helpers/blueprintUpgradeHelpers';
@@ -67,4 +68,28 @@ export function upgradeMostImpactfulSet(blueprints: Blueprint[] = BLUEPRINT_LIBR
   );
   console.log(`to get to next rank of ${setName}`);
   return bestUpgradeInfo;
+}
+
+export function upgradeAllBlueprintsToLoreLimit(
+  lore: number,
+  blueprints: Blueprint[] = BLUEPRINT_LIBRARY,
+): SetUpgradeInfo {
+  const allUpgradedBlueprints: Blueprint[] = [];
+  let totalCost = 0;
+  let inProgressBlueprintLibrary = Array.from(blueprints);
+  while (totalCost < lore) {
+    const upgradeInfo = upgradeMostImpactfulSet(inProgressBlueprintLibrary);
+    if (upgradeInfo === null || totalCost + upgradeInfo.cost >= lore) {
+      break;
+    }
+    totalCost += upgradeInfo.cost;
+    inProgressBlueprintLibrary = upgradeInfo.allBlueprintsWithUpgradedReplacements;
+    allUpgradedBlueprints.push(...upgradeInfo.upgradedBlueprints);
+  }
+  const upgradedBlueprints = getOnlyTopBlueprints(allUpgradedBlueprints);
+  return {
+    upgradedBlueprints,
+    cost: totalCost,
+    allBlueprintsWithUpgradedReplacements: inProgressBlueprintLibrary,
+  };
 }

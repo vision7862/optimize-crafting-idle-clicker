@@ -1,5 +1,9 @@
 import { BLUEPRINT_LIBRARY } from '../src/config/BlueprintLibrary';
-import { getBestBlueprintToUpgrade, upgradeMostImpactfulSet } from '../src/optimizeUpgradingBlueprints';
+import {
+  getBestBlueprintToUpgrade,
+  upgradeAllBlueprintsToLoreLimit,
+  upgradeMostImpactfulSet,
+} from '../src/optimizeUpgradingBlueprints';
 
 describe('optimizeUpgradingBlueprints', () => {
   describe('getBestBlueprintToUpgrade', () => {
@@ -11,8 +15,16 @@ describe('optimizeUpgradingBlueprints', () => {
   });
 
   describe('upgradeMostImpactfulSet', () => {
-    it('not test', () => {
+    it('next rank on one set', () => {
       const setUpgradeInfo = upgradeMostImpactfulSet();
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
+    });
+  });
+
+  describe('upgradeAllBlueprintsToLoreLimit', () => {
+    it('next rank on as many sets as possible', () => {
+      const setUpgradeInfo = upgradeAllBlueprintsToLoreLimit(50000);
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);
     });
