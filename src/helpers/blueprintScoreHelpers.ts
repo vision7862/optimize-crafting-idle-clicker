@@ -106,33 +106,37 @@ export function getSetClosestToBoundary(
   blueprintSets
     .filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income)
     .forEach((set: BlueprintSet) => {
-      const distanceToNextRank = getDistanceToNextRank(set, blueprintScores);
-      if (distanceToNextRank < closestDistance) {
-        closestDistance = distanceToNextRank;
+      const distanceInfo = getDistanceToNextRank(set, blueprintScores);
+      if (distanceInfo.distance < closestDistance) {
+        closestDistance = distanceInfo.distance;
         closestSetName = set.setName;
       }
     });
   return closestSetName;
 }
 
-export function getDistanceToNextRank(set: BlueprintSet, blueprintScores: Map<string, number>): number {
-  const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
-  if (set.achievementRanks === undefined) {
-    console.error(`Set ${set.setName} does not have score boundaries`);
-    return 1;
-  }
-  for (let i = 1; i < set.achievementRanks.length; i++) {
-    if (setScore < set.achievementRanks[i].scoreBoundary && setScore > set.achievementRanks[i - 1].scoreBoundary) {
-      const distanceToNextRank = set.achievementRanks[i].scoreBoundary - setScore;
-      console.log(`${set.setName} is ${distanceToNextRank} score points away from rank ${i}`);
-      console.log(
-        `next rank would be ${
-          Math.round((set.achievementRanks[i].totalMultiplier / set.achievementRanks[i - 1].totalMultiplier) * 100) /
-          100
-        }x better (${set.achievementRanks[i - 1].totalMultiplier} to ${set.achievementRanks[i].totalMultiplier})`,
-      );
-      return distanceToNextRank;
+export const getDistanceToNextRank = memoize(
+  (set: BlueprintSet, blueprintScores: Map<string, number>): { distance: number; improvement: number } => {
+    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    if (set.achievementRanks === undefined) {
+      console.error(`Set ${set.setName} does not have score boundaries`);
+      return { distance: Number.MAX_VALUE, improvement: 1 };
     }
-  }
-  return Number.MAX_VALUE;
-}
+    for (let i = 1; i < set.achievementRanks.length; i++) {
+      if (setScore < set.achievementRanks[i].scoreBoundary && setScore >= set.achievementRanks[i - 1].scoreBoundary) {
+        const distanceToNextRank = set.achievementRanks[i].scoreBoundary - setScore;
+        // console.log(`${set.setName} is ${distanceToNextRank} score points away from rank ${i}`);
+        const improvement =
+          Math.round((set.achievementRanks[i].totalMultiplier / set.achievementRanks[i - 1].totalMultiplier) * 100) /
+          100;
+        // console.log(
+        //   `next rank would be ${improvement}x better (${set.achievementRanks[i - 1].totalMultiplier} to ${
+        //     set.achievementRanks[i].totalMultiplier
+        //   })`,
+        // );
+        return { distance: distanceToNextRank, improvement };
+      }
+    }
+    return { distance: Number.MAX_VALUE, improvement: 1 };
+  },
+);

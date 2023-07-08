@@ -1,11 +1,17 @@
-import { SetMultiplierType } from './constants/BlueprintSets';
-import { getSpecifiedMultiplierFromLibrary } from './helpers/blueprintScoreHelpers';
-import { upgradeBlueprint } from './helpers/blueprintUpgradeHelpers';
+import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
+import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from './constants/BlueprintSets';
+import {
+  convertBlueprintLibraryToScores,
+  getDistanceToNextRank,
+  getSpecifiedMultiplierFromLibrary,
+} from './helpers/blueprintScoreHelpers';
+import { SetUpgradeInfo, upgradeBlueprint, upgradeSetToNextRank } from './helpers/blueprintUpgradeHelpers';
 import { Blueprint } from './types/Blueprint';
 
 export type BlueprintUpgradeInfo = Readonly<{
   blueprint: Blueprint;
   costOfUpgrade: number;
+  scoreChange: number;
 }>;
 
 export function getBestBlueprintToUpgrade(library: Blueprint[]): BlueprintUpgradeInfo | null {
@@ -41,4 +47,24 @@ export function getBestBlueprintToUpgrade(library: Blueprint[]): BlueprintUpgrad
   }
 
   return hasBeenImproved ? bestUpgrade : null;
+}
+
+export function upgradeMostImpactfulSet(blueprints: Blueprint[] = BLUEPRINT_LIBRARY): SetUpgradeInfo | null {
+  let bestROI = 0;
+  let bestUpgradeInfo: SetUpgradeInfo | null = null;
+  let setName = '';
+  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income).forEach(
+    (set: BlueprintSet) => {
+      const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
+      const upgradeInfo: SetUpgradeInfo = upgradeSetToNextRank(set, blueprints);
+      const roi = distanceInfo.improvement / upgradeInfo.cost;
+      if (roi > bestROI) {
+        bestROI = roi;
+        bestUpgradeInfo = upgradeInfo;
+        setName = set.setName;
+      }
+    },
+  );
+  console.log(`to get to next rank of ${setName}`);
+  return bestUpgradeInfo;
 }
