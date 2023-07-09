@@ -45,6 +45,74 @@ export type SetUpgradeInfo = Readonly<{
   allBlueprintsWithUpgradedReplacements: Blueprint[];
 }>;
 
+export function mergeBlueprint(blueprintToUpgrade: Blueprint, allBlueprints: Blueprint[]): BlueprintUpgradeInfo {
+  // assume that the blueprint passed in is at top level
+  // remove this blueprint from all blueprints
+  // const blueprintsWithoutTarget = Array.from(allBlueprints);
+  // const targetBlueprintIndex = blueprintsWithoutTarget.findIndex(
+  //   (blueprint) =>
+  //     blueprint.productName === blueprintToUpgrade.productName &&
+  //     blueprint.evolutionStage === blueprintToUpgrade.evolutionStage &&
+  //     blueprint.upgradeLevel === blueprintToUpgrade.upgradeLevel,
+  // );
+  // blueprintsWithoutTarget.splice(targetBlueprintIndex, 1);
+  // get cost to get a blueprint up to match this one
+  //  find next-closest bp
+  // const blueprintsMatchingStage = blueprintsWithoutTarget.filter((blueprint: Blueprint) => {
+  //   return (
+  //     blueprint.productName === blueprintToUpgrade.productName &&
+  //     blueprint.evolutionStage === blueprintToUpgrade.evolutionStage
+  //   );
+  // });
+
+  // if (blueprintsMatchingStage.length > 0) {
+  //   blueprintsMatchingStage.sort((a, b) => a.upgradeLevel - b.upgradeLevel);
+  //   const blueprintToUpgradeToMatch = blueprintsMatchingStage[0];
+  // const topUpgradeLevel = 51 + (blueprintToUpgrade.evolutionStage - 1) * 10;
+  // const numLevelsToUpgrade = topUpgradeLevel - blueprintToUpgradeToMatch.upgradeLevel;
+  //   const BlueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgradeToMatch, numLevelsToUpgrade);
+  // }
+
+  // assume we have a bp of the stage
+  const assumedBaseBlueprintOfStage: Blueprint = {
+    ...blueprintToUpgrade,
+    upgradeLevel: 1,
+    score:
+      blueprintToUpgrade.evolutionStage === 1
+        ? 10
+        : blueprintToUpgrade.evolutionStage === 2
+        ? 10 * 12
+        : blueprintToUpgrade.evolutionStage === 3
+        ? 10 * 12 * 14
+        : blueprintToUpgrade.evolutionStage === 4
+        ? 10 * 12 * 14 * 16
+        : 0,
+  };
+
+  //  upgrade it to top of its tier
+  const topUpgradeLevel = 51 + (blueprintToUpgrade.evolutionStage - 1) * 10;
+  const numLevelsToUpgrade = topUpgradeLevel - assumedBaseBlueprintOfStage.upgradeLevel;
+  const upgradedSecondBlueprint = upgradeBlueprint(assumedBaseBlueprintOfStage, numLevelsToUpgrade);
+
+  //  merge if necessary which recursively goes back to this
+
+  // make new blueprint with evolution increased, score * 2, and reset level to 1
+  const mergedBlueprint: Blueprint = {
+    ...blueprintToUpgrade,
+    evolutionStage: blueprintToUpgrade.evolutionStage + 1,
+    score: blueprintToUpgrade.score * 2,
+    upgradeLevel: 1,
+  };
+
+  // remove both old blueprints and add in the new one (unneeded? dont return all? need to return all?)
+
+  return {
+    blueprint: mergedBlueprint,
+    costOfUpgrade: upgradedSecondBlueprint.costOfUpgrade,
+    scoreChange: blueprintToUpgrade.score,
+  };
+}
+
 export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[]): SetUpgradeInfo {
   let totalScoreIncreased = 0;
   let totalCost = 0;

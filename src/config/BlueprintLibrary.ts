@@ -13,15 +13,32 @@ export const TOP_STAGE_1: Blueprint = {
   score: 60,
 };
 
-export const DEFAULT_STAGE_2: Blueprint = {
+export const BOTTOM_STAGE_2: Blueprint = {
   ...DEFAULT_BLUEPRINT,
   evolutionStage: 2,
-  upgradeLevel: 1,
-  score: 120,
+  score: TOP_STAGE_1.score * 2,
+};
+
+export const TOP_STAGE_2: Blueprint = {
+  ...BOTTOM_STAGE_2,
+  upgradeLevel: 61,
+  score: BOTTOM_STAGE_2.score + (BOTTOM_STAGE_2.score / 10) * 60,
+};
+
+export const BOTTOM_STAGE_3: Blueprint = {
+  ...DEFAULT_BLUEPRINT,
+  evolutionStage: 3,
+  score: TOP_STAGE_2.score * 2,
+};
+
+export const TOP_STAGE_3: Blueprint = {
+  ...BOTTOM_STAGE_3,
+  upgradeLevel: 71,
+  score: BOTTOM_STAGE_3.score + (BOTTOM_STAGE_3.score / 10) * 70,
 };
 
 export const BLUEPRINT_LIBRARY: Blueprint[] = [
-  { ...DEFAULT_STAGE_2, productName: 'Wood' },
+  { ...BOTTOM_STAGE_2, productName: 'Wood' },
   { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
   { ...DEFAULT_BLUEPRINT, productName: 'Wood' },
   { ...DEFAULT_BLUEPRINT, productName: 'Club' },
@@ -40,7 +57,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...TOP_STAGE_1, productName: 'Bronze Spear' },
   { ...DEFAULT_BLUEPRINT, productName: 'Bronze Spear' },
   { ...DEFAULT_BLUEPRINT, productName: 'Bronze Spear' },
-  { ...DEFAULT_STAGE_2, productName: 'Rawhide' },
+  { ...BOTTOM_STAGE_2, productName: 'Rawhide' },
   { ...DEFAULT_BLUEPRINT, productName: 'Rawhide' },
   { ...DEFAULT_BLUEPRINT, productName: 'Leather' },
   { ...DEFAULT_BLUEPRINT, productName: 'Leather' },
@@ -58,8 +75,8 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...DEFAULT_BLUEPRINT, productName: 'Leather Armor' },
   { ...DEFAULT_BLUEPRINT, productName: 'Leather Armor' },
   { ...DEFAULT_BLUEPRINT, productName: 'Leather Armor' },
-  { ...DEFAULT_STAGE_2, productName: 'Copper Ore' },
-  { ...DEFAULT_STAGE_2, productName: 'Copper Ingots' },
+  { ...BOTTOM_STAGE_2, productName: 'Copper Ore' },
+  { ...BOTTOM_STAGE_2, productName: 'Copper Ingots' },
   { ...TOP_STAGE_1, productName: 'Copper Axe' },
   { ...DEFAULT_BLUEPRINT, productName: 'Copper Axe' },
   { ...DEFAULT_BLUEPRINT, productName: 'Copper Axe' },
@@ -79,8 +96,8 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...DEFAULT_BLUEPRINT, productName: 'Bronze Blades' },
   { ...DEFAULT_BLUEPRINT, productName: 'Bronze Dagger' },
   { ...DEFAULT_BLUEPRINT, productName: 'Bronze Sword' },
-  { ...DEFAULT_STAGE_2, productName: 'Coal' },
-  { ...DEFAULT_STAGE_2, productName: 'Iron Ore' },
+  { ...BOTTOM_STAGE_2, productName: 'Coal' },
+  { ...BOTTOM_STAGE_2, productName: 'Iron Ore' },
   { ...TOP_STAGE_1, productName: 'Iron Ingots' },
   { ...DEFAULT_BLUEPRINT, productName: 'Iron Mace' },
   { ...DEFAULT_BLUEPRINT, productName: 'Iron Rivets' },
@@ -94,8 +111,8 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...DEFAULT_BLUEPRINT, productName: 'Iron Sword' },
   { ...DEFAULT_BLUEPRINT, productName: 'Iron Armor' },
   { ...DEFAULT_BLUEPRINT, productName: 'Iron Claymore' },
-  { ...DEFAULT_STAGE_2, productName: 'Gold Ore' },
-  { ...DEFAULT_STAGE_2, productName: 'Gold Ingots' },
+  { ...BOTTOM_STAGE_2, productName: 'Gold Ore' },
+  { ...BOTTOM_STAGE_2, productName: 'Gold Ingots' },
   { ...DEFAULT_BLUEPRINT, productName: 'Uncut Emerald' },
   { ...DEFAULT_BLUEPRINT, productName: 'Gold Ring' },
   { ...DEFAULT_BLUEPRINT, productName: 'Gold Necklace' },
