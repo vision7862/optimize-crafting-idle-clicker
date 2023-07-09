@@ -1,12 +1,12 @@
-import { BLUEPRINT_LIBRARY, DEFAULT_BLUEPRINT, DEFAULT_STAGE_2 } from '../../src/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY, BOTTOM_STAGE_2, DEFAULT_BLUEPRINT } from '../../src/config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../../src/constants/BlueprintSets';
 import {
-  convertBlueprintLibraryToScores,
-  getOnlyTopBlueprints,
-  getSetAchievementMultiplier,
-  getSetBlueprintScore,
-  getSetClosestToBoundary,
-  getSpecifiedMultiplierFromSets,
+    convertBlueprintLibraryToScores,
+    getOnlyTopBlueprints,
+    getSetAchievementMultiplier,
+    getSetBlueprintScore,
+    getSetClosestToBoundary,
+    getSpecifiedMultiplierFromSets,
 } from '../../src/helpers/blueprintScoreHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
 
@@ -71,7 +71,7 @@ describe('blueprintScoreHelpers', () => {
         { ...DEFAULT_BLUEPRINT, productName: 'Club' },
         { ...DEFAULT_BLUEPRINT, productName: 'Club' },
         { ...DEFAULT_BLUEPRINT, productName: 'Club' },
-        { ...DEFAULT_STAGE_2, productName: 'Wood' },
+        { ...BOTTOM_STAGE_2, productName: 'Wood' },
         { ...DEFAULT_BLUEPRINT, productName: 'Club' },
         { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
         { ...DEFAULT_BLUEPRINT, productName: 'Arrows' },
