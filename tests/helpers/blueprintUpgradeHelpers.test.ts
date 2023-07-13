@@ -1,4 +1,10 @@
-import { BLUEPRINT_LIBRARY, BOTTOM_STAGE_2, DEFAULT_BLUEPRINT, TOP_STAGE_1, TOP_STAGE_2 } from '../../src/config/BlueprintLibrary';
+import {
+  BLUEPRINT_LIBRARY,
+  BOTTOM_STAGE_1,
+  BOTTOM_STAGE_2,
+  TOP_STAGE_1,
+  TOP_STAGE_2,
+} from '../../src/config/BlueprintLibrary';
 import { BLUEPRINT_SETS } from '../../src/constants/BlueprintSets';
 import {
   getCostToUpgradeBlueprint,
@@ -13,7 +19,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('getCostToUpgradeBlueprint', () => {
     it('should add up from the base correctly', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Wood',
       };
 
@@ -22,7 +28,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should add up from not the base correctly', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Wood',
         upgradeLevel: 11,
         score: 20,
@@ -33,7 +39,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with later blueprints', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Cut Sapphire',
       };
 
@@ -42,7 +48,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should work for any number of levels', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Cut Sapphire',
       };
 
@@ -51,7 +57,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with non-resource products', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Iron Armor',
       };
 
@@ -73,7 +79,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('upgradeBlueprint', () => {
     it('should get the cost and score correctly for a stage 1 bp', () => {
       const blueprint: Blueprint = {
-        ...DEFAULT_BLUEPRINT,
+        ...BOTTOM_STAGE_1,
         productName: 'Wood',
       };
       expect(upgradeBlueprint(blueprint, 10).blueprint.upgradeLevel).toBe(11);
