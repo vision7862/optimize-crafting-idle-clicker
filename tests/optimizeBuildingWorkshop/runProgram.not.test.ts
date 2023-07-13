@@ -5,20 +5,20 @@ import {
   quickestNewLevel,
 } from '../../src/optimizeBuildingWorkshop/computeIdealLevelsForEvent';
 import {
-  getCostOfScientists,
   computeResearchTimeForWorkshop,
-  getFinalNumScientistsCanAfford,
+  getCostOfScientists,
   getCostOfScientistsFromSome,
+  getFinalNumScientistsCanAfford,
 } from '../../src/optimizeBuildingWorkshop/helpers/ResearchHelpers';
 import { getStatusMap } from '../../src/optimizeBuildingWorkshop/helpers/WorkshopHelpers';
 import { printFameTime, printInfo, toTime } from '../../src/optimizeBuildingWorkshop/helpers/printResults';
-import { filterOutSkipped, computeTargetFromFame } from '../../src/optimizeBuildingWorkshop/helpers/targetHelpers';
+import { computeTargetFromFame, filterOutSkipped } from '../../src/optimizeBuildingWorkshop/helpers/targetHelpers';
 import { WorkshopUpgradeInfo } from '../../src/optimizeBuildingWorkshop/shouldUpgrade';
-import { WorkshopStatus, DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN } from '../../src/types/Workshop';
+import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopStatus } from '../../src/types/Workshop';
 
 describe.only('runProgram', () => {
   describe('events', () => {
-    const eventName = 'Game Changer';
+    const eventName = 'Game of Phones';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
       printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
     }
@@ -84,7 +84,7 @@ describe.only('runProgram', () => {
       });
 
       test('6 fame level 9', () => {
-        printFameTimeEvent(6, { level: 9 });
+        printFameTimeEvent(6, { level: 9, scientists: 164, clickBoostActive: false });
       });
 
       test('5 fame level 9', () => {
@@ -102,7 +102,9 @@ describe.only('runProgram', () => {
 
     describe('10+', () => {
       test('last product level 10', () => {
-        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 211 }));
+        printInfo(
+          bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 164, clickBoostActive: false }),
+        );
       });
 
       describe('scientists', () => {

@@ -1,0 +1,19 @@
+Wood								1	10	512	x1	-	-																												Green
+Copper Ore					10	80	4,096	x1	-	-																										Green
+Copper Ingot				50	2,000	10,240	x3	Copper Ore x1	-																		Yellow
+Wire								100	25,000	35,840	x5	Copper Ingot x1	-																Blue
+Tin Ore							500	200,000	409,600	x1	-	-																							Green
+Tin Can							1,000	2.5 E6	1.2 E6	x2	Tin Ore x1	-																	Blue
+Tin Can Telephone		2,000	15.0 E6	15.3 E6	x1	Wire x5	Tin Can x2														Red
+Coal								5,000	200.0 E6	51.2 E6	x1	-	-																					Green
+Iron Ore						10,000	900.0 E6	204.8 E6	x1	-	-																			Green
+Iron Ingots					20,000	10.0 E9	358.4 E6	x5	Coal x3	Iron Ore x2												Yellow
+Iron Rivets					50,000	70.0 E9	1.0 E9	x5	Iron Ingots x1	-														Blue
+Mech Parts					100,000	600.0 E9	12.8 E9	x2	Wood x2	Iron Rivets x8										Blue
+Electro Magnet			150,000	5.5 E12	153.6 E9	x1	Wire x3	Iron Ingots x1										Red
+Electrical Parts		200,000	60.0 E12	256.0 E9	x2	Copper Ingot x2	Iron Rivets x8					Blue
+Electrical Circuit	300,000	400.0 E12	3.0 E12	x1	Wire x6	Electrical Parts x4								Blue
+Transmitter					400,000	3.0 E15	15.3 E12	x1	Electro Magnet x1	Electrical Circuit x1		Red
+Receiver						500,000	15.0 E15	40.9 E12	x1	Mech Parts x4	Electro Magnet x1					Red
+Telegraph						600,000	100.0 E15	256.0 E12	x1	Transmitter x1	Receiver x1							Violet
+Telephone						700,000	900.0 E15	1.1 E15	x1	Electrical Parts x4	Telegraph x1					Violet
