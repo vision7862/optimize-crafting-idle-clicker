@@ -2,6 +2,7 @@ import { Product, ProductDetails, ProductStatus } from '../types/Product';
 import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
+import memoize from 'fast-memoize';
 
 const CLICK_BOOST_MULTIPLIER = 3;
 const scienceIsTight = true;
@@ -42,7 +43,7 @@ export type WorkshopUpgradeInfo = Readonly<{
   cyclesToTarget: number;
 }>;
 
-export function getCurrentIncome(workshop: Workshop, clickBoost: number): number {
+export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number): number => {
   let totalIncome = 0;
   // const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
@@ -52,7 +53,7 @@ export function getCurrentIncome(workshop: Workshop, clickBoost: number): number
       product.status.level * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;
-}
+});
 
 function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, clickBoost: number): number {
   if ([topProduct.name, topProduct.input1?.name, topProduct.input2?.name].includes(product.name)) {
