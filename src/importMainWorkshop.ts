@@ -1,13 +1,15 @@
 import memoize from 'fast-memoize';
 import * as fs from 'fs';
 import * as path from 'path';
+import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
+import { convertBlueprintLibraryToScores } from './helpers/blueprintScoreHelpers';
 import { InputProduct, ProductDetails } from './types/Product';
 
 export const importMainWorkshop = memoize((): ProductDetails[] => {
-  const blueprintMap = getBlueprintMap();
+  const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
 
   const mainWorkshopProducts = getFile('MainWorkshop');
-  const products = new Array<ProductDetails>();
+  const products = new Map<string, ProductDetails>();
 
   for (const line of mainWorkshopProducts.split(/[\r\n]+/)) {
     if (line.includes('//')) {
@@ -17,44 +19,33 @@ export const importMainWorkshop = memoize((): ProductDetails[] => {
     if (details.length !== 7 && details.length !== 8) {
       throw new Error('import poorly formatted ' + line);
     }
-    let product: ProductDetails = {
-      outputCount: +details[0].split('x ')[0],
-      name: details[0].split('x ')[1],
-      researchCost: +details[1].replace(/[$, ]/g, ''),
-      buildCost: +details[2].replace(/[$, ]/g, ''),
-      revenue: +details[3].replace(/[$, ]/g, ''),
-      upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
-      input1: getInputProduct(details[5]),
-      input2: getInputProduct(details[6]),
-    };
-    const blueprintScore = blueprintMap.get(product.name);
-    if (blueprintScore != null) {
-      product = {
-        ...product,
-        revenue: product.revenue * (blueprintScore / 10),
+    try {
+      let product: ProductDetails = {
+        outputCount: +details[0].split('x ')[0],
+        name: details[0].split('x ')[1],
+        researchCost: +details[1].replace(/[$, ]/g, ''),
+        buildCost: +details[2].replace(/[$, ]/g, ''),
+        revenue: +details[3].replace(/[$, ]/g, ''),
+        upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
+        input1: getInputProduct(details[5], products),
+        input2: getInputProduct(details[6], products),
       };
+      const blueprintScore = blueprintMap.get(product.name);
+      if (blueprintScore !== undefined) {
+        product = {
+          ...product,
+          revenue: product.revenue * (blueprintScore / 10),
+        };
+        products.set(product.name, product);
+      }
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      console.info(`Cannot import ${details[0].split('x ')[1]} because ${e.message}`);
     }
-    products.push(product);
   }
-  return products;
+
+  return Array.from(products.values());
 });
-
-function getBlueprintMap(): Map<string, number> {
-  const blueprintProducts = getFile('../src/config/BlueprintScores');
-  const blueprintMap = new Map<string, number>();
-
-  for (const line of blueprintProducts.split(/[\r\n]+/)) {
-    if (line.includes('//')) {
-      continue;
-    }
-    const details = line.split(/\t+/);
-    if (details.length !== 2) {
-      throw new Error('import poorly formatted ' + line);
-    }
-    blueprintMap.set(details[0], +details[1]);
-  }
-  return blueprintMap;
-}
 
 export function getFile(fileName: string): string {
   const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
@@ -63,12 +54,17 @@ export function getFile(fileName: string): string {
   return blueprintProducts;
 }
 
-function getInputProduct(inputDescription: string): InputProduct | null {
+function getInputProduct(inputDescription: string, products: Map<string, ProductDetails>): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
-    return {
-      name: inputDescription.split('x ')[1],
-      count: +inputDescription.split('x ')[0],
-    };
+    const name = inputDescription.split('x ')[1];
+    if (products.get(name) !== undefined) {
+      return {
+        name,
+        count: +inputDescription.split('x ')[0],
+      };
+    } else {
+      throw new ReferenceError(`product ${name} does not exist`);
+    }
   }
   return null;
 }

@@ -153,8 +153,8 @@ describe('blueprintUpgradeHelpers', () => {
   describe('upgradeSetToNextRank', () => {
     it('should do things', () => {
       const upgradeSetInfo = upgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY);
-      console.log(`cost is ${upgradeSetInfo.cost}`);
-      console.log(upgradeSetInfo.upgradedBlueprints);
+      console.log(`cost is ${upgradeSetInfo?.cost}`);
+      console.log(upgradeSetInfo?.upgradedBlueprints);
     });
   });
 });

@@ -40,7 +40,7 @@ export const getSpecifiedMultiplierFromSets = memoize(
     BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === multiplierType).forEach((set: BlueprintSet) => {
       const setMultiplier = getMultiplierForSet(set, blueprintScores);
       multiplier *= setMultiplier;
-      console.info(`${set.setName} set: ${setMultiplier}`);
+      // console.info(`${set.setName} set: ${setMultiplier}`);
     });
     return multiplier;
   },
