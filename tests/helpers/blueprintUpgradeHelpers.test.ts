@@ -82,8 +82,9 @@ describe('blueprintUpgradeHelpers', () => {
         ...BOTTOM_STAGE_1,
         productName: 'Wood',
       };
-      expect(upgradeBlueprint(blueprint, 10).blueprint.upgradeLevel).toBe(11);
-      expect(upgradeBlueprint(blueprint, 10).blueprint.score).toBe(20);
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo.blueprint.upgradeLevel).toBe(11);
+      expect(upgradeInfo.blueprint.score).toBe(20);
     });
 
     it('should get the cost and score correctly for a stage 2 bp', () => {
@@ -93,8 +94,21 @@ describe('blueprintUpgradeHelpers', () => {
         upgradeLevel: 1,
         score: 120,
       };
-      expect(upgradeBlueprint(blueprint, 10).blueprint.upgradeLevel).toBe(11);
-      expect(upgradeBlueprint(blueprint, 10).blueprint.score).toBe(240);
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo.blueprint.upgradeLevel).toBe(11);
+      expect(upgradeInfo.blueprint.score).toBe(240);
+    });
+
+    it('should merge instead of normal upgrading if a bp is at the top of its stage', () => {
+      const blueprint: Blueprint = {
+        ...TOP_STAGE_1,
+        productName: 'Copper Ingots',
+      };
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo.blueprint.upgradeLevel).toBe(1);
+      expect(upgradeInfo.blueprint.score).toBe(120);
+      expect(upgradeInfo.costOfUpgrade).toBe(10834); // cost of upgrading base copper ingot 50 times
+      expect(upgradeInfo.scoreChange).toBe(60);
     });
   });
 
@@ -104,8 +118,7 @@ describe('blueprintUpgradeHelpers', () => {
         ...TOP_STAGE_1,
         productName: 'mergingBP',
       };
-      const blueprints: Blueprint[] = [blueprintToUpgrade, blueprintToUpgrade];
-      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade, blueprints);
+      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint.blueprint.score).toBe(120);
       expect(upgradedBlueprint.blueprint.evolutionStage).toBe(2);
       expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);
@@ -117,8 +130,19 @@ describe('blueprintUpgradeHelpers', () => {
         ...TOP_STAGE_2,
         productName: 'mergingBP',
       };
-      const blueprints: Blueprint[] = [blueprintToUpgrade, blueprintToUpgrade];
-      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade, blueprints);
+      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
+      expect(upgradedBlueprint.blueprint.score).toBe(1680);
+      expect(upgradedBlueprint.blueprint.evolutionStage).toBe(3);
+      expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);
+      expect(upgradedBlueprint.scoreChange).toBe(840);
+    });
+
+    it('should merge the given blueprint with a fresh one of its stage if it is at max level already', () => {
+      const blueprintToUpgrade: Blueprint = {
+        ...TOP_STAGE_2,
+        productName: 'mergingBP',
+      };
+      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint.blueprint.score).toBe(1680);
       expect(upgradedBlueprint.blueprint.evolutionStage).toBe(3);
       expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);

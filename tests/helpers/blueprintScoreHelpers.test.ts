@@ -1,12 +1,12 @@
 import { BLUEPRINT_LIBRARY, BOTTOM_STAGE_1, BOTTOM_STAGE_2 } from '../../src/config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../../src/constants/BlueprintSets';
 import {
-    convertBlueprintLibraryToScores,
-    getOnlyTopBlueprints,
-    getSetAchievementMultiplier,
-    getSetBlueprintScore,
-    getSetClosestToBoundary,
-    getSpecifiedMultiplierFromSets,
+  convertBlueprintLibraryToScores,
+  getOnlyTopBlueprints,
+  getSetAchievementMultiplier,
+  getSetBlueprintScore,
+  getSetClosestToBoundary,
+  getSpecifiedMultiplierFromSets,
 } from '../../src/helpers/blueprintScoreHelpers';
 import { Blueprint } from '../../src/types/Blueprint';
 

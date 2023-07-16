@@ -54,18 +54,21 @@ export function upgradeMostImpactfulSet(blueprints: Blueprint[] = BLUEPRINT_LIBR
   let bestROI = 0;
   let bestUpgradeInfo: SetUpgradeInfo | null = null;
   let setName = '';
-  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income).forEach(
-    (set: BlueprintSet) => {
-      const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
-      const upgradeInfo: SetUpgradeInfo = upgradeSetToNextRank(set, blueprints);
+  BLUEPRINT_SETS.filter(
+    (set: BlueprintSet) =>
+      set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
+  ).forEach((set: BlueprintSet) => {
+    const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
+    const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
+    if (upgradeInfo !== null) {
       const roi = distanceInfo.improvement / upgradeInfo.cost;
       if (roi > bestROI) {
         bestROI = roi;
         bestUpgradeInfo = upgradeInfo;
         setName = set.setName;
       }
-    },
-  );
+    }
+  });
   console.log(`to get to next rank of ${setName}`);
   return bestUpgradeInfo;
 }
