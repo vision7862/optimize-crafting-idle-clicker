@@ -104,7 +104,10 @@ export function getSetClosestToBoundary(
   let closestDistance = Number.MAX_VALUE;
   let closestSetName = 'no close set';
   blueprintSets
-    .filter((set: BlueprintSet) => set.multiplierType === SetMultiplierType.Income)
+    .filter(
+      (set: BlueprintSet) =>
+        set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
+    )
     .forEach((set: BlueprintSet) => {
       const distanceInfo = getDistanceToNextRank(set, blueprintScores);
       if (distanceInfo.distance < closestDistance) {
@@ -121,6 +124,10 @@ export const getDistanceToNextRank = memoize(
     if (set.achievementRanks === undefined) {
       console.error(`Set ${set.setName} does not have score boundaries`);
       return { distance: Number.MAX_VALUE, improvement: 1 };
+    }
+    if (set.achievementRanks[0].scoreBoundary !== 0) {
+      // throw new Error('first set boundary score must be 0');
+      set.achievementRanks?.splice(0, 0, { scoreBoundary: 0, totalMultiplier: 1 });
     }
     for (let i = 1; i < set.achievementRanks.length; i++) {
       if (setScore < set.achievementRanks[i].scoreBoundary && setScore >= set.achievementRanks[i - 1].scoreBoundary) {

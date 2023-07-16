@@ -1,4 +1,4 @@
-// countx           name      research  buildCost revenue      color    input1              input2  
+// countx           name      research  buildCost   revenue      color    input1              input2
 1x Wood                       1.0E+0    10.0E+0     1.0E+0       Green    -                                          
 1x Club                       30.0E+0   40.0E+0     10.0E+0      Red      4x Wood                                    
 3x Arrows                     90.0E+0   200.0E+0    7.0E+0       Blue     1x Wood                                    
@@ -123,8 +123,42 @@
 1x Car                        2.2E+9    10.0E+105   80.0E+60     Violet   6x Steel             1x Combustion Engine  
 1x Truck                      2.2E+9    60.0E+105   200.0E+60    Violet   8x Steel             1x Combustion Engine  
 1x Flashlight                 2.2E+9    90.0E+105   400.0E+60    Violet   4x Electrical Parts  1x Light Bulb         
-1x Airplane                   2.3E+9    200.0E+105  700.0E+60    Violet   8x Steel             2x Combustion Engine  
-1x Electric Motor             2.3E+9    700.0E+105  1.0E+63      Blue     1x Iron Ingots       3x Electrical Parts   
-1x Submarine                  2.3E+9    3.0E+108    4.0E+63      Violet   10x Steel            2x Electric Motor     
-1x Space Probe                2.4E+9    8.0E+108    5.0E+63      Violet   8x Electrical Parts  1x Antenna            
+1x Airplane                   2.3E+9    200.0E+105  700.0E+60    Violet   8x Steel             2x Combustion Engine
+// quantities for vv are probably not correct
+1x Movie Projector            2.3E9     500.0E105   900.0E60     Violet   1x Mechanical Parts  1x Electrical Parts
+1x Electric Motor             2.3E+9    700.0E+105  1.0E+63      Blue     1x Iron Ingots       3x Electrical Parts
+// quantities for vv are probably not correct
+1x Monitor                    2.30E+09  1.00E+108   1.50E+63     Red      1x Mechanical Parts  1x Electrical Parts
+1x Submarine                  2.3E+9    3.0E+108    4.0E+63      Violet   10x Steel            2x Electric Motor
+// quantities for vv are probably not correct
+1x Defibrillator              2.30E+09  5.00E+108    3.00E+63     Violet    1x Iron Ingots       1x Electrical Parts
+// quantities for vv are probably not correct
+1x Walkie Talkie              2.30E+09  6.00E+108    4.00E+63     Violet   -  
+1x Space Probe                2.4E+9    8.0E+108    5.0E+63      Violet   8x Electrical Parts  1x Antenna
+// quantities for vv are probably not correct
+1x TV Set                      2.30E+09  1.00E+109    6.00E+63     Violet    1x Electrical Parts  1x Antenna
 1x Rocket                     2.4E+9    40.0E+108   8.0E+63      Violet   12x Steel            18x Electrical Parts
+// quantities for vv are probably not correct
+1x Nylon                      2.40E+09  5.00E+109    9.00E+63     Yellow    1x Petroleum  
+// quantities for vv are probably not correct
+1x Microchip                  2.40E+09  7.00E+109    2.00E+64     Blue      1x Electrical Parts  
+// quantities for vv are probably not correct
+1x PC                          2.40E+09  1.00E+110    5.00E+64     Violet    1x Microchip         1x Electrical Parts
+// quantities for vv are probably not correct
+1x Kevlar  2.50E+09  8.00E+111  1.00E+65  Green  -  
+// quantities for vv are probably not correct
+1x Headset  2.50E+09  7.00E+113  2.00E+66  Red  1x Leather  1x Electrical Parts
+// quantities for vv are probably not correct
+1x Gaming Console  2.60E+09  6.00E+115  5.00E+67  Violet  1x Plastic  1x Microchip
+// quantities for vv are probably not correct
+1x Parachute  2.50E+09  8.00E+117  4.00E+68  Violet  1x Leather  1x Nylon
+// quantities for vv are probably not correct
+1x Gaming Controller  2.60E+09  1.00E+120  3.00E+69  Red  1x Plastic  1x Electrical Parts
+// quantities for vv are probably not correct
+1x Combat Vest  2.60E+09  8.00E+121  5.00E+70  Violet  1x Cloth  1x Boron Carbide
+// quantities for vv are probably not correct
+1x Laptop  2.60E+09  2.00E+124  4.00E+72  Violet  1x Electrical Parts  1x Microchip
+// quantities for vv are probably not correct
+1x Combat Helmet  2.60E+09  3.00E+127  1.00E+74  Violet  1x Cloth  1x Kevlar
+// quantities for vv are probably not correct
+1x Flatscreen TV  2.70E+09  1.00E+130  1.00E+75  Violet  1x Plastic  1x Electrical Parts
