@@ -40,7 +40,7 @@ export const importMainWorkshop = memoize((): ProductDetails[] => {
       }
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      console.info(`Cannot import ${details[0].split('x ')[1]} because ${e.message}`);
+      // console.info(`Cannot import ${details[0].split('x ')[1]} because ${e.message}`);
     }
   }
 
