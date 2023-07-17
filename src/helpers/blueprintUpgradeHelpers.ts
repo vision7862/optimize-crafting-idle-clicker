@@ -7,10 +7,8 @@ import { ProductDetails } from '../types/Product';
 import { convertBlueprintLibraryToScores, getDistanceToNextRank, getOnlyTopBlueprints } from './blueprintScoreHelpers';
 
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
-  const products: ProductDetails[] = importMainWorkshop();
-  const product: ProductDetails = products.filter((product: ProductDetails) => {
-    return product.name === blueprint.productName;
-  })[0];
+  const products: Map<string, ProductDetails> = importMainWorkshop();
+  const product: ProductDetails | undefined = products.get(blueprint.productName);
   if (product === undefined) {
     console.error(`Did not find ${blueprint.productName} in products`);
     return Number.MAX_VALUE;

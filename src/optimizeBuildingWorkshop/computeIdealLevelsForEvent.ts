@@ -114,8 +114,8 @@ function getWorkshopStatus(partialWorkshopStatus: Partial<WorkshopStatus>): Work
 
 function getProductDetails(workshopStatus: WorkshopStatus): ProductDetails[] {
   return isEvent(workshopStatus)
-    ? importProductsAtLevel(workshopStatus.eventName, workshopStatus.level)
-    : importMainWorkshop();
+    ? Array.from(importProductsAtLevel(workshopStatus.eventName, workshopStatus.level).values())
+    : Array.from(importMainWorkshop().values());
 }
 
 function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {

@@ -3,37 +3,37 @@ import { ProductDetails } from '../src/types/Product';
 
 describe('importProducts', () => {
   test('should import costs and relationship correctly', () => {
-    const products: ProductDetails[] = importProducts('FromDustTillLawn');
+    const products: ProductDetails[] = Array.from(importProducts('FromDustTillLawn').values());
     expect(products.length).toBe(18);
   });
 
   test('Wind it up', () => {
-    const products: ProductDetails[] = importProducts('Wind it up');
+    const products: ProductDetails[] = Array.from(importProducts('Wind it up').values());
     expect(products.length).toBe(20);
   });
 
   test('Idle Flicker', () => {
-    const products: ProductDetails[] = importProducts('Idle Flicker');
+    const products: ProductDetails[] = Array.from(importProducts('Idle Flicker').values());
     expect(products.length).toBe(20);
   });
 
   test('Space Craft', () => {
-    const products: ProductDetails[] = importProducts('Space Craft');
+    const products: ProductDetails[] = Array.from(importProducts('Space Craft').values());
     expect(products.length).toBe(25);
   });
 
   test('Vital Science', () => {
-    const products: ProductDetails[] = importProducts('Vital Science');
+    const products: ProductDetails[] = Array.from(importProducts('Vital Science').values());
     expect(products.length).toBe(22);
   });
 
   test('A Car is Born', () => {
-    const products: ProductDetails[] = importProducts('A Car is Born');
+    const products: ProductDetails[] = Array.from(importProducts('A Car is Born').values());
     expect(products.length).toBe(22);
   });
 
   test('Craft For Freedom', () => {
-    const products: ProductDetails[] = importProducts('Craft For Freedom');
+    const products: ProductDetails[] = Array.from(importProducts('Craft For Freedom').values());
     expect(products.length).toBe(25);
   });
 });

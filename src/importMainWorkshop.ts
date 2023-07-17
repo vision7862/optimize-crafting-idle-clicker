@@ -5,7 +5,7 @@ import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
 import { convertBlueprintLibraryToScores } from './helpers/blueprintScoreHelpers';
 import { InputProduct, ProductDetails } from './types/Product';
 
-export const importMainWorkshop = memoize((): ProductDetails[] => {
+export const importMainWorkshop = memoize((): Map<string, ProductDetails> => {
   const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
 
   const mainWorkshopProducts = getFile('MainWorkshop');
@@ -44,7 +44,7 @@ export const importMainWorkshop = memoize((): ProductDetails[] => {
     }
   }
 
-  return Array.from(products.values());
+  return products;
 });
 
 export function getFile(fileName: string): string {
