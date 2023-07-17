@@ -25,7 +25,7 @@ export function filterOutSkippedFullWorkshop(workshop: Workshop): Workshop {
   };
 }
 
-export function computeBuildTimeForWorkshop(workshop: Workshop, target: number): number {
+export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, abandonIfOver: number = 10000): number {
   // assume there are no half-cycles. it takes a full cycle to build something, and everything ticks together.
   let money = 10;
   // build wood
@@ -33,6 +33,10 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number):
   let cycleNum = 1;
 
   for (let i = 0; i < workshop.productsInfo.length; i++) {
+    const targetLevel = workshop.productsInfo[i].status.level;
+    if (targetLevel === 0) {
+      continue;
+    }
     let inProgressLevel = i === 0 ? 1 : 0; // start wood at level 1
     let inProgressWorkshop = {
       ...workshop,
@@ -50,8 +54,7 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number):
 
     // until fully leveled, cycles ticking as necessary
     const productDetails = inProgressWorkshop.productsInfo[i].details;
-    const targetLevel = workshop.productsInfo[i].status.level;
-    while (inProgressLevel < targetLevel) {
+    while (inProgressLevel < targetLevel && cycleNum < Math.min(abandonIfOver, 10000)) {
       let costToUpgrade = Math.round(
         productDetails.buildCost * productDetails.upgradeCostMultiplier ** inProgressLevel,
       );

@@ -67,7 +67,7 @@ function trimWorkshop(
     let product = bestWorkshop.productsInfo[productIndex];
     if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {
       const workshopWithProductZeroed = getWorkshopWithProductLevelAsZero(product, bestWorkshop);
-      const buildTime = computeBuildTimeForWorkshop(workshopWithProductZeroed, target);
+      const buildTime = computeBuildTimeForWorkshop(workshopWithProductZeroed, target, bestBuildTime);
       if (buildTime <= bestBuildTime) {
         bestBuildTime = buildTime;
         bestWorkshop = workshopWithProductZeroed;
