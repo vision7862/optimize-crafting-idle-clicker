@@ -5,7 +5,7 @@ import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
 import { convertBlueprintLibraryToScores } from './helpers/blueprintScoreHelpers';
 import { InputProduct, ProductDetails } from './types/Product';
 
-export const importMainWorkshop = memoize((): Map<string, ProductDetails> => {
+export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {
   const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
 
   const mainWorkshopProducts = getFile('MainWorkshop');
@@ -27,8 +27,8 @@ export const importMainWorkshop = memoize((): Map<string, ProductDetails> => {
         buildCost: +details[2].replace(/[$, ]/g, ''),
         revenue: +details[3].replace(/[$, ]/g, ''),
         upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
-        input1: getInputProduct(details[5], products),
-        input2: getInputProduct(details[6], products),
+        input1: getInputProduct(details[5], products, onlyReturnBuildable),
+        input2: getInputProduct(details[6], products, onlyReturnBuildable),
       };
       const blueprintScore = blueprintMap.get(product.name);
       if (blueprintScore !== undefined) {
@@ -54,16 +54,23 @@ export function getFile(fileName: string): string {
   return blueprintProducts;
 }
 
-function getInputProduct(inputDescription: string, products: Map<string, ProductDetails>): InputProduct | null {
+function getInputProduct(
+  inputDescription: string,
+  products: Map<string, ProductDetails>,
+  onlyReturnBuildable: boolean,
+): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
     const name = inputDescription.split('x ')[1];
+    let inputProduct = {
+      name,
+      count: +inputDescription.split('x ')[0],
+    };
     if (products.get(name) !== undefined) {
-      return {
-        name,
-        count: +inputDescription.split('x ')[0],
-      };
+      return inputProduct;
     } else {
-      throw new ReferenceError(`product ${name} does not exist`);
+      if (onlyReturnBuildable) {
+        throw new ReferenceError(`product ${name} does not exist`);
+      } else return inputProduct;
     }
   }
   return null;

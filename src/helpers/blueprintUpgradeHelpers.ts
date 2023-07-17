@@ -6,15 +6,28 @@ import { Blueprint } from '../types/Blueprint';
 import { ProductDetails } from '../types/Product';
 import { convertBlueprintLibraryToScores, getDistanceToNextRank, getOnlyTopBlueprints } from './blueprintScoreHelpers';
 
+// for BPs without all details in MainWorkshop.txt, maps name to upgrade cost of 1 > 2
+const fillInMissingBuildCost: Map<string, number> = new Map([
+  ['Hedge Trimmer', 117],
+  ['Tiki Torch', 122],
+  ['Lawn Mower', 127],
+  ['Stethoscope', 113],
+  ['X-Ray Machine', 125],
+]);
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
-  const products: Map<string, ProductDetails> = importMainWorkshop();
+  const products: Map<string, ProductDetails> = importMainWorkshop(false);
   const product: ProductDetails | undefined = products.get(blueprint.productName);
-  if (product === undefined) {
+  let filledInBuildCost = fillInMissingBuildCost.get(blueprint.productName);
+  if (product === undefined && filledInBuildCost === undefined) {
     console.error(`Did not find ${blueprint.productName} in products`);
     return Number.MAX_VALUE;
   }
 
-  const actualBaseCost = Math.log10(product.buildCost) + 9;
+  const actualBaseCost = product
+    ? Math.log10(product.buildCost) + 9
+    : filledInBuildCost
+    ? filledInBuildCost / 1.08
+    : Number.MAX_VALUE;
   let upgradeCost: number = 0;
   for (let i = 0; i < levels; i++) {
     upgradeCost += Math.round(actualBaseCost * 1.08 ** (blueprint.upgradeLevel + i));
@@ -167,6 +180,9 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   const blueprintsWithUpgradedReplacements = Array.from(blueprints);
   const upgradedBlueprints: Blueprint[] = [];
   const distanceToNextRank = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints)).distance;
+  if (distanceToNextRank === Number.MAX_VALUE) {
+    return null;
+  }
   while (totalScoreIncreased < distanceToNextRank) {
     const relevantSetBlueprints = getOnlyTopBlueprints(blueprintsWithUpgradedReplacements).filter(
       (blueprint: Blueprint) => set.blueprints.includes(blueprint.productName),
