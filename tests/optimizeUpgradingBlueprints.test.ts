@@ -1,22 +1,23 @@
 import { BLUEPRINT_LIBRARY } from '../src/config/BlueprintLibrary';
 import {
-  getBestBlueprintToUpgrade,
+  printUpgradeInfoOfEachSet,
   upgradeAllBlueprintsToLoreLimit,
-  upgradeMostImpactfulSet,
+  upgradeMostImpactfulIncomeSet,
+  upgradeMostImpactfulResearchSet,
 } from '../src/optimizeUpgradingBlueprints';
 
 describe('optimizeUpgradingBlueprints', () => {
-  describe('getBestBlueprintToUpgrade', () => {
-    it.skip('should do something right', () => {
-      const best = getBestBlueprintToUpgrade(BLUEPRINT_LIBRARY);
-      console.log(best);
-      expect(best).not.toBeNull();
+  describe('upgradeMostImpactfulSet', () => {
+    it('next rank on one set', () => {
+      const setUpgradeInfo = upgradeMostImpactfulIncomeSet();
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
     });
   });
 
-  describe('upgradeMostImpactfulSet', () => {
+  describe('upgradeMostImpactfulResearchSet', () => {
     it('next rank on one set', () => {
-      const setUpgradeInfo = upgradeMostImpactfulSet();
+      const setUpgradeInfo = upgradeMostImpactfulResearchSet();
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);
     });
@@ -27,6 +28,12 @@ describe('optimizeUpgradingBlueprints', () => {
       const setUpgradeInfo = upgradeAllBlueprintsToLoreLimit(50000);
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);
+    });
+  });
+
+  describe('printUpgradeInfoOfEachSet', () => {
+    it('prints it', () => {
+      printUpgradeInfoOfEachSet();
     });
   });
 });
