@@ -1,4 +1,5 @@
 import {
+  bestGemChance,
   bottomUpToLastItem,
   bottomUpToMoney,
   productDownUpToMoney,
@@ -292,189 +293,122 @@ describe.only('runProgram', () => {
     });
 
     describe('shooting for gems', () => {
-      describe('8% chance', () => {
-        function getGemsLowChance(partialWorkshopStatus: Partial<WorkshopStatus>): void {
-          printFameTime(14, partialWorkshopStatus);
-        }
+      test('lvl 6', () => {
+        printInfo(bestGemChance({ level: 6, scientists: 160 }));
+      });
 
-        test('lvl 6', () => {
-          getGemsLowChance({ level: 6, scientists: 160 });
-        });
+      test('lvl 7', () => {
+        printInfo(bestGemChance({ level: 7 }));
+      });
 
-        test('lvl 7', () => {
-          getGemsLowChance({ level: 7 });
-        });
+      test('lvl 8', () => {
+        printInfo(bestGemChance({ level: 8, scientists: 174 }));
+      });
 
-        test('lvl 8', () => {
-          getGemsLowChance({ level: 8, scientists: 174 });
-        });
+      test('lvl 9', () => {
+        printInfo(bestGemChance({ level: 9, scientists: 274, researchBoostActive: true }));
+      });
 
-        test('lvl 9', () => {
-          getGemsLowChance({ level: 9, scientists: 274, researchBoostActive: true });
-        });
+      test('lvl 10', () => {
+        printInfo(bestGemChance({ level: 10, scientists: 274, researchBoostActive: true }));
+      });
 
-        test('lvl 10', () => {
-          getGemsLowChance({ level: 10, scientists: 274, researchBoostActive: true });
-        });
+      test('lvl 11', () => {
+        printInfo(bestGemChance({ level: 11 }));
+      });
 
-        test('lvl 11', () => {
-          getGemsLowChance({ level: 11 });
-        });
+      test('lvl 12', () => {
+        printInfo(bestGemChance({ level: 12 }));
+      });
 
-        test('lvl 12', () => {
-          getGemsLowChance({ level: 12 });
-        });
+      test('lvl 13', () => {
+        printInfo(bestGemChance({ level: 13 }));
+      });
 
-        test('lvl 13', () => {
-          getGemsLowChance({ level: 13 });
-        });
+      test('lvl 14', () => {
+        printInfo(bestGemChance({ level: 14 }));
+      });
 
-        test('lvl 14', () => {
-          getGemsLowChance({ level: 14 });
-        });
+      test('lvl 15', () => {
+        printInfo(bestGemChance({ level: 15 }));
+      });
 
-        test('lvl 15', () => {
-          getGemsLowChance({ level: 15 });
-        });
+      test('lvl 16', () => {
+        printInfo(bestGemChance({ level: 16 }));
+      });
 
-        test('lvl 16', () => {
-          getGemsLowChance({ level: 16 });
-        });
+      test('lvl 17', () => {
+        printInfo(bestGemChance({ level: 17 }));
+      });
 
-        test('lvl 17', () => {
-          getGemsLowChance({ level: 17 });
-        });
+      test('lvl 18', () => {
+        printInfo(bestGemChance({ level: 18 }));
+      });
 
-        test('lvl 18', () => {
-          getGemsLowChance({ level: 18 });
-        });
+      test('lvl 19', () => {
+        printInfo(bestGemChance({ level: 19 }));
+      });
 
-        test('lvl 19', () => {
-          getGemsLowChance({ level: 19 });
-        });
+      test('lvl 19, boosts', () => {
+        printInfo(
+          bestGemChance({
+            level: 19,
+            clickBoostActive: true,
+            researchBoostActive: true,
+            merchantBoostActive: true,
+          }),
+        );
+      });
 
-        test('lvl 19, boosts', () => {
-          getGemsLowChance({ level: 19, clickBoostActive: true, researchBoostActive: true, merchantBoostActive: true });
-        });
+      test('lvl 20', () => {
+        printInfo(bestGemChance({ level: 20, researchBoostActive: true, merchantBoostActive: true }));
+      });
 
-        test('lvl 20', () => {
-          getGemsLowChance({ level: 20, researchBoostActive: true, merchantBoostActive: true });
-        });
-
-        test('lvl 21, boosts', () => {
-          getGemsLowChance({
+      test('lvl 21, boosts', () => {
+        printInfo(
+          bestGemChance({
             level: 21,
             clickBoostActive: false,
             researchBoostActive: true,
             merchantBoostActive: true,
-          });
-        });
-
-        test('lvl 22', () => {
-          getGemsLowChance({ level: 22, scientists: 520, researchBoostActive: true });
-        });
-
-        test('lvl 31', () => {
-          getGemsLowChance({ level: 31, scientists: 700, researchBoostActive: true });
-        });
-
-        test('lvl 32', () => {
-          getGemsLowChance({ level: 32, scientists: 700, researchBoostActive: true });
-        });
-
-        test('lvl 37', () => {
-          getGemsLowChance({
-            level: 37,
-            scientists: 792,
-            speedBoostActive: true,
-            merchantBoostActive: true,
-            researchBoostActive: true,
-          });
-        });
+          }),
+        );
       });
 
-      describe('12% chance', () => {
-        function getGemsHighChance(partialWorkshopStatus: Partial<WorkshopStatus>): void {
-          printFameTime(15, partialWorkshopStatus);
-        }
+      test('lvl 22', () => {
+        printInfo(bestGemChance({ level: 22, scientists: 520, researchBoostActive: true }));
+      });
 
-        test('lvl 6', () => {
-          getGemsHighChance({ level: 6, scientists: 160 });
-        });
-
-        test('lvl 7', () => {
-          getGemsHighChance({ level: 7 });
-        });
-
-        test('lvl 8', () => {
-          getGemsHighChance({ level: 8 });
-        });
-
-        test('lvl 9', () => {
-          getGemsHighChance({ level: 9 });
-        });
-
-        test('lvl 10', () => {
-          getGemsHighChance({ level: 10 });
-        });
-
-        test('lvl 11', () => {
-          getGemsHighChance({ level: 11 });
-        });
-
-        test('lvl 12', () => {
-          getGemsHighChance({ level: 12 });
-        });
-
-        test('lvl 13', () => {
-          getGemsHighChance({ level: 13 });
-        });
-
-        test('lvl 14', () => {
-          getGemsHighChance({ level: 14 });
-        });
-
-        test('lvl 15', () => {
-          getGemsHighChance({ level: 15 });
-        });
-
-        test('lvl 16', () => {
-          getGemsHighChance({ level: 16 });
-        });
-
-        test('lvl 17', () => {
-          getGemsHighChance({ level: 17 });
-        });
-
-        test('lvl 18', () => {
-          getGemsHighChance({ level: 18 });
-        });
-
-        test('lvl 19', () => {
-          getGemsHighChance({ level: 19 });
-        });
-
-        test('lvl 20', () => {
-          getGemsHighChance({ level: 20 });
-        });
-
-        test('lvl 21', () => {
-          getGemsHighChance({ level: 21, scientists: 501, researchBoostActive: true, merchantBoostActive: true });
-        });
-
-        test('lvl 22', () => {
-          getGemsHighChance({ level: 22, scientists: 520, researchBoostActive: true });
-        });
-
-        test('lvl 24', () => {
-          getGemsHighChance({
+      test('lvl 24', () => {
+        printInfo(
+          bestGemChance({
             level: 24,
             scientists: 564,
             researchBoostActive: true,
             merchantBoostActive: true,
             speedBoostActive: true,
-          });
-        });
+          }),
+        );
+      });
+
+      test('lvl 31', () => {
+        printInfo(bestGemChance({ level: 31, scientists: 700, researchBoostActive: true }));
+      });
+
+      test('lvl 32', () => {
+        printInfo(bestGemChance({ level: 32, scientists: 700, researchBoostActive: true }));
+      });
+
+      test('lvl 37', () => {
+        printInfo(
+          bestGemChance({
+            level: 37,
+            scientists: 792,
+            speedBoostActive: true,
+            merchantBoostActive: true,
+            researchBoostActive: true,
+          }),
+        );
       });
     });
 
