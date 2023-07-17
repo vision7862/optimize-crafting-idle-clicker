@@ -140,7 +140,7 @@ describe('targetHelpers', () => {
     ): Product[] {
       const productsInfo = new Array<Product>();
       const mainWorkshopProducts: Map<string, ProductDetails> =
-        eventName !== undefined ? importProductsAtLevel(eventName, 10) : importMainWorkshop();
+        eventName !== undefined ? importProductsAtLevel(eventName, 10) : importMainWorkshop(true);
       products.forEach((product: { name: string; level: number }) => {
         const status: ProductStatus = {
           level: product.level,
