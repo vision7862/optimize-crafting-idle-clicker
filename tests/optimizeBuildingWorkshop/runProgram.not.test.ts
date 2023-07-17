@@ -381,6 +381,16 @@ describe.only('runProgram', () => {
         test('lvl 32', () => {
           getGemsLowChance({ level: 32, scientists: 700, researchBoostActive: true });
         });
+
+        test('lvl 37', () => {
+          getGemsLowChance({
+            level: 37,
+            scientists: 792,
+            speedBoostActive: true,
+            merchantBoostActive: true,
+            researchBoostActive: true,
+          });
+        });
       });
 
       describe('12% chance', () => {
@@ -650,6 +660,36 @@ describe.only('runProgram', () => {
         quick({
           level: 30,
           scientists: 700,
+        });
+      });
+
+      it('lvl 35', () => {
+        quick({
+          level: 35,
+          scientists: 777,
+          speedBoostActive: true,
+          merchantBoostActive: true,
+          researchBoostActive: true,
+        });
+      });
+
+      it('lvl 36', () => {
+        quick({
+          level: 36,
+          scientists: 780,
+          speedBoostActive: true,
+          merchantBoostActive: true,
+          researchBoostActive: true,
+        });
+      });
+
+      it('lvl 37', () => {
+        quick({
+          level: 37,
+          scientists: 792,
+          speedBoostActive: true,
+          merchantBoostActive: true,
+          researchBoostActive: true,
         });
       });
     });

@@ -13,7 +13,7 @@ export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): num
   );
 }
 
-const MWS_MERCHANT_MULTIPLIER = 7.5;
+const MWS_MERCHANT_MULTIPLIER = 8;
 const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
     MWS_MERCHANT_MULTIPLIER *
