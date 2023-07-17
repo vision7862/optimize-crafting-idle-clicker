@@ -1,6 +1,9 @@
 import memoize from 'fast-memoize';
 import { Workshop, WorkshopStatus } from '../../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
+import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
+import { SetMultiplierType } from '../../constants/BlueprintSets';
+import { BLUEPRINT_LIBRARY } from '../../config/BlueprintLibrary';
 
 export function getCostOfScientists(numScientists: number): number {
   return getCostOfScientistsFromSome(0, numScientists);
@@ -38,22 +41,19 @@ export const computeResearchTimeForWorkshop = memoize((workshop: Workshop): numb
 });
 
 const RESEARCH_BOOST_MULTIPLIER = 10;
-export function getResearchPerSecond(workshopStatus: WorkshopStatus): number {
+export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): number => {
   const researchMultiplierPercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
   const researchPerSecond =
     workshopStatus.scientists *
     researchMultiplierPercentage *
     (workshopStatus.researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1);
   return Math.round(researchPerSecond);
-}
+});
 
 function getMainWorkshopResearchMultiplier(): number {
   return (
-    5 * // research achievement
-    1.25 * // science tools
-    1 * // exploration
-    1.5 * // modern exploration
-    1 * // modern technology
-    1.3 // total blueprint score
+    6.5 * // research achievement
+    getSpecifiedMultiplierFromSets(SetMultiplierType.Research, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)) *
+    1.8 // total blueprint score
   );
 }
