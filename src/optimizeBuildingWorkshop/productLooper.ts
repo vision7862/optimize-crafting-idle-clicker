@@ -1,7 +1,11 @@
-import { Product } from '../types/Product';
+import { Product, ProductStatus } from '../types/Product';
 import { Workshop } from '../types/Workshop';
-import { computeBuildTimeForWorkshop } from './helpers/targetHelpers';
-import { WorkshopUpgradeInfo, getUpgradedWorkshopIfBetter } from './shouldUpgrade';
+import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
+import {
+  getProductsInfoWithNewStatusForProduct,
+  getUpgradedWorkshopIfBetter,
+  WorkshopUpgradeInfo,
+} from './shouldUpgrade';
 
 export function topDownLeveler(
   target: number,
@@ -30,43 +34,68 @@ export function topDownLeveler(
 }
 
 export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpgradeInfo {
-  let bestCyclesToTarget = Number.MAX_VALUE;
-  let bestWorkshop: Workshop = workshop;
-  let bestCyclesSkipped: number = 0;
-  for (let belowThisCyclesSkip = 1; belowThisCyclesSkip < 50; belowThisCyclesSkip++) {
-    // let cyclesToTarget = 0;
-    let modifiedWorkshop: Workshop = workshop;
-    for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
-      const thisProduct: Product | undefined = workshop.productsInfo[productIndex];
-      const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
-      if (thisProduct !== undefined) {
-        const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
-        const modifiedWorkshopInfo = topDownLeveler(
-          currentTarget,
-          thisProduct.details.name,
-          modifiedWorkshop,
-          belowThisCyclesSkip,
-        );
-        modifiedWorkshop = modifiedWorkshopInfo.workshop;
-        // cyclesToTarget += modifiedWorkshopInfo.cyclesToTarget;
-        if (nextProduct === undefined || target < nextProduct.details.buildCost) {
-          break;
-        }
+  let firstPassOptimizedWorkshop = getFirstPassOptimizedWorkshop(workshop, target);
+  let firstPassBuildTime = computeBuildTimeForWorkshop(firstPassOptimizedWorkshop, target);
+
+  return trimWorkshop(target, workshop, firstPassOptimizedWorkshop, firstPassBuildTime);
+}
+
+function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Workshop {
+  let modifiedWorkshop: Workshop = workshop;
+  for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
+    const thisProduct: Product | undefined = workshop.productsInfo[productIndex];
+    const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
+    if (thisProduct !== undefined) {
+      const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
+      const modifiedWorkshopInfo = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop, 1);
+      modifiedWorkshop = modifiedWorkshopInfo.workshop;
+      if (nextProduct === undefined || target < nextProduct.details.buildCost) {
+        break;
       }
     }
-    const cyclesToTarget = computeBuildTimeForWorkshop(modifiedWorkshop, target);
-    if (cyclesToTarget < bestCyclesToTarget) {
-      bestCyclesToTarget = cyclesToTarget;
-      bestWorkshop = modifiedWorkshop;
-      bestCyclesSkipped = belowThisCyclesSkip;
+  }
+  return modifiedWorkshop;
+}
+
+function trimWorkshop(
+  target: number,
+  workshop: Workshop,
+  bestWorkshop: Workshop,
+  bestBuildTime: number,
+): WorkshopUpgradeInfo {
+  for (let productIndex = workshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
+    let product = bestWorkshop.productsInfo[productIndex];
+    if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {
+      const workshopWithProductZeroed = getWorkshopWithProductLevelAsZero(product, bestWorkshop);
+      const buildTime = computeBuildTimeForWorkshop(workshopWithProductZeroed, target);
+      if (buildTime <= bestBuildTime) {
+        bestBuildTime = buildTime;
+        bestWorkshop = workshopWithProductZeroed;
+      }
     }
   }
-
-  console.log('best cycles skipped: ' + bestCyclesSkipped.toString());
-
-  // console.log(JSON.stringify(filterOutSkippedFullWorkshop(bestWorkshop)));
   return {
     workshop: bestWorkshop,
-    cyclesToTarget: bestCyclesToTarget,
+    cyclesToTarget: bestBuildTime,
+  };
+}
+function isProductLeaf(productName: string, workshop: Workshop): boolean {
+  const onlyBuiltProducts = filterOutSkippedFullWorkshop(workshop).productsInfo;
+  for (const product of onlyBuiltProducts) {
+    if (product.details.input1?.name === productName || product.details.input2?.name === productName) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function getWorkshopWithProductLevelAsZero(product: Product, workshop: Workshop): Workshop {
+  const newStatus: ProductStatus = {
+    ...product.status,
+    level: 0,
+  };
+  return {
+    ...workshop,
+    productsInfo: getProductsInfoWithNewStatusForProduct(product, newStatus, workshop),
   };
 }

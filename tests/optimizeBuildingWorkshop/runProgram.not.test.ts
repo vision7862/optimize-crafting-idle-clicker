@@ -373,6 +373,14 @@ describe.only('runProgram', () => {
         test('lvl 22', () => {
           getGemsLowChance({ level: 22, scientists: 520, researchBoostActive: true });
         });
+
+        test('lvl 31', () => {
+          getGemsLowChance({ level: 31, scientists: 700, researchBoostActive: true });
+        });
+
+        test('lvl 32', () => {
+          getGemsLowChance({ level: 32, scientists: 700, researchBoostActive: true });
+        });
       });
 
       describe('12% chance', () => {
@@ -641,7 +649,7 @@ describe.only('runProgram', () => {
       it('lvl 30', () => {
         quick({
           level: 30,
-          scientists: 600,
+          scientists: 700,
         });
       });
     });
