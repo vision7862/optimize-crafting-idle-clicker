@@ -1,10 +1,10 @@
 import { getFile, getUpgradeCostMultiplier } from './importMainWorkshop';
 import { InputProduct, ProductDetails } from './types/Product';
 
-export function importProductsAtLevel(eventName: string, level: number): ProductDetails[] {
+export function importProductsAtLevel(eventName: string, level: number): Map<string, ProductDetails> {
   const levelForMultiplier = Math.min(10, level);
   const file = getFile(eventName.replace(/\s/g, ''));
-  const products = new Array<ProductDetails>();
+  const products = new Map<string, ProductDetails>();
 
   for (const line of file.split(/[\r\n]+/)) {
     const details = line.split(/\t+/);
@@ -21,12 +21,12 @@ export function importProductsAtLevel(eventName: string, level: number): Product
       input2: getInputProduct(details[6]),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[7]),
     };
-    products.push(product);
+    products.set(product.name, product);
   }
   return products;
 }
 
-export function importProducts(eventName: string): ProductDetails[] {
+export function importProducts(eventName: string): Map<string, ProductDetails> {
   return importProductsAtLevel(eventName, 10);
 }
 

@@ -139,7 +139,7 @@ describe('targetHelpers', () => {
       eventName?: string,
     ): Product[] {
       const productsInfo = new Array<Product>();
-      const mainWorkshopProducts =
+      const mainWorkshopProducts: Map<string, ProductDetails> =
         eventName !== undefined ? importProductsAtLevel(eventName, 10) : importMainWorkshop();
       products.forEach((product: { name: string; level: number }) => {
         const status: ProductStatus = {
@@ -147,9 +147,7 @@ describe('targetHelpers', () => {
           merchants: 1,
         };
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const details: ProductDetails = mainWorkshopProducts.find(
-          (productDetails) => productDetails.name === product.name,
-        )!;
+        const details: ProductDetails = mainWorkshopProducts.get(product.name)!;
         productsInfo.push({ status, details });
       });
       return productsInfo;
