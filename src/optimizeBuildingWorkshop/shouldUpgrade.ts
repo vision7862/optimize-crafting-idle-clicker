@@ -176,6 +176,16 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
         (isEvent(workshop.workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY),
     ),
   };
+  return {
+    costOfUpgrade: product.details.buildCost * product.details.upgradeCostMultiplier ** product.status.level,
+    workshop: {
+      ...workshop,
+      productsInfo: getProductsInfoWithNewStatusForProduct(product, newStatus, workshop),
+    },
+  };
+}
+
+export function getProductsInfoWithNewStatusForProduct(product: Product, newStatus: ProductStatus, workshop: Workshop) {
   const newProduct: Product = {
     ...product,
     status: newStatus,
@@ -185,11 +195,5 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
   );
   const copiedArray = new Array<Product>(...workshop.productsInfo);
   copiedArray.splice(indexOfProduct, 1, newProduct);
-  return {
-    costOfUpgrade: product.details.buildCost * product.details.upgradeCostMultiplier ** product.status.level,
-    workshop: {
-      ...workshop,
-      productsInfo: copiedArray,
-    },
-  };
+  return copiedArray;
 }
