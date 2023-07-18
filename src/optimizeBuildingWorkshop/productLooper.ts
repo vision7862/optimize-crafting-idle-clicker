@@ -80,6 +80,7 @@ function trimWorkshop(
     cyclesToTarget: bestBuildTime,
   };
 }
+
 function isProductLeaf(productName: string, workshop: Workshop): boolean {
   const onlyBuiltProducts = filterOutSkippedFullWorkshop(workshop).productsInfo;
   for (const product of onlyBuiltProducts) {

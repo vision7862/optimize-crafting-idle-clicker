@@ -1,11 +1,12 @@
 import memoize from 'fast-memoize';
 import { BLUEPRINT_LIBRARY } from '../../config/BlueprintLibrary';
+import { MERCHANT_BOOST_MULTIPLIER } from '../../config/BoostMultipliers';
+import { MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER } from '../../constants/Achievements';
 import { SetMultiplierType } from '../../constants/BlueprintSets';
-import { isEvent } from './WorkshopHelpers';
-import { WorkshopStatus } from '../../types/Workshop';
 import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
+import { WorkshopStatus } from '../../types/Workshop';
+import { isEvent } from './WorkshopHelpers';
 
-const MERCHANT_BOOST_MULTIPLIER = 5;
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
   return (
     (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
@@ -13,10 +14,9 @@ export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): num
   );
 }
 
-const MWS_MERCHANT_MULTIPLIER = 8;
 const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
-    MWS_MERCHANT_MULTIPLIER *
+    MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getMWSLevelAchievementMultiplier(level) *
     getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)) *
     4 // event

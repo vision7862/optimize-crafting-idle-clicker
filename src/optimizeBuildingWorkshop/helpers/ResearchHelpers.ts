@@ -1,9 +1,10 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../../config/BlueprintLibrary';
+import { RESEARCH_BOOST_MULTIPLIER } from '../../config/BoostMultipliers';
+import { SetMultiplierType } from '../../constants/BlueprintSets';
+import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
 import { Workshop, WorkshopStatus } from '../../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
-import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
-import { SetMultiplierType } from '../../constants/BlueprintSets';
-import { BLUEPRINT_LIBRARY } from '../../config/BlueprintLibrary';
 
 export function getCostOfScientists(numScientists: number): number {
   return getCostOfScientistsFromSome(0, numScientists);
@@ -40,7 +41,6 @@ export const computeResearchTimeForWorkshop = memoize((workshop: Workshop): numb
   return totalResearchNeeded / getResearchPerSecond(workshop.workshopStatus);
 });
 
-const RESEARCH_BOOST_MULTIPLIER = 10;
 export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): number => {
   const researchMultiplierPercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
   const researchPerSecond =

@@ -1,4 +1,10 @@
-import { BOTTOM_STAGE_1, BOTTOM_STAGE_2, BOTTOM_STAGE_3, TOP_STAGE_2 } from '../config/BlueprintLibrary';
+import {
+  BOTTOM_STAGE_1,
+  BOTTOM_STAGE_2,
+  BOTTOM_STAGE_3,
+  BPS_WITHOUT_DUPES,
+  BUILD_COST_OF_BPS_WITHOUT_DETAILS,
+} from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { importMainWorkshop } from '../importMainWorkshop';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
@@ -6,28 +12,21 @@ import { Blueprint } from '../types/Blueprint';
 import { ProductDetails } from '../types/Product';
 import { convertBlueprintLibraryToScores, getDistanceToNextRank, getOnlyTopBlueprints } from './blueprintScoreHelpers';
 
-// for BPs without all details in MainWorkshop.txt, maps name to upgrade cost of 1 > 2
-const fillInMissingBuildCost: Map<string, number> = new Map([
-  ['Hedge Trimmer', 117],
-  ['Tiki Torch', 122],
-  ['Lawn Mower', 127],
-  ['Stethoscope', 113],
-  ['X-Ray Machine', 125],
-]);
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
   const products: Map<string, ProductDetails> = importMainWorkshop(false);
   const product: ProductDetails | undefined = products.get(blueprint.productName);
-  let filledInBuildCost = fillInMissingBuildCost.get(blueprint.productName);
+  const filledInBuildCost = BUILD_COST_OF_BPS_WITHOUT_DETAILS.get(blueprint.productName);
   if (product === undefined && filledInBuildCost === undefined) {
     console.error(`Did not find ${blueprint.productName} in products`);
     return Number.MAX_VALUE;
   }
 
-  const actualBaseCost = product
-    ? Math.log10(product.buildCost) + 9
-    : filledInBuildCost
-    ? filledInBuildCost / 1.08
-    : Number.MAX_VALUE;
+  const actualBaseCost =
+    product != null
+      ? Math.log10(product.buildCost) + 9
+      : filledInBuildCost !== undefined
+      ? filledInBuildCost / 1.08
+      : Number.MAX_VALUE;
   let upgradeCost: number = 0;
   for (let i = 0; i < levels; i++) {
     upgradeCost += Math.round(actualBaseCost * 1.08 ** (blueprint.upgradeLevel + i));
@@ -35,13 +34,11 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
   return upgradeCost;
 }
 
-// TODO: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
-const blueprintsWithoutDupes = ['Chisel'];
 // Assume 51 + 10 strategy
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
   const topUpgradeLevel = 51 + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
-    return !blueprintsWithoutDupes.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
+    return !BPS_WITHOUT_DUPES.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
