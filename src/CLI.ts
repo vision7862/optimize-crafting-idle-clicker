@@ -1,42 +1,83 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { bestGemChance, bottomUpToMoney, quickestNewLevel } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
+import {
+  bestGemChance,
+  bottomUpToMoney,
+  quickestNewLevel,
+} from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
+import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
 import { printFameTime, printInfo } from './optimizeBuildingWorkshop/helpers/printResults';
 import { computeTargetFromFame } from './optimizeBuildingWorkshop/helpers/targetHelpers';
 import { WorkshopStatus } from './types/Workshop';
-import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
+
+enum OptimizationGoal {
+  LevelUp,
+  Gems,
+  Scientists,
+  Fame,
+}
 
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
-  const desireGems = await booleanChoice('are you shooting for gems?');
-  if (desireGems) {
-    const targetInfo = bestGemChance(workshopStatus);
-    printInfo(
-      targetInfo.upgradeInfo,
-      computeTargetFromFame(targetInfo.fame, targetInfo.upgradeInfo.workshop.workshopStatus.level),
-    );
-  } else {
-    const desiredScientists = await input({
-      message: 'if you have a desired number of scientists, enter it here. otherwise, hit enter to continue.',
-    });
-    if (desiredScientists !== '') {
-      const target = getCostOfScientistsFromSome(workshopStatus.scientists ?? 0, Number(desiredScientists));
-      printInfo(bottomUpToMoney(target, workshopStatus), target);
-    } else {
-      const desiredFame = await input({
-        message:
-          'if you have a Fame target in mind, enter it here. otherwise, hit enter to calculate the fastest way to level up.',
-      });
-      if (desiredFame !== '') {
-        printFameTime(Number(desiredFame), workshopStatus);
-      } else {
-        const targetInfo = quickestNewLevel(workshopStatus);
-        printInfo(targetInfo);
-      }
-    }
+
+  const goal: OptimizationGoal = await select<OptimizationGoal>({
+    message: 'what is your goal?',
+    choices: [
+      { value: OptimizationGoal.LevelUp, name: 'level up', description: 'get to next level quickly' },
+      {
+        value: OptimizationGoal.Gems,
+        name: 'gems',
+        description: 'most efficient time per gem percentage of 14 vs 15 fame',
+      },
+      { value: OptimizationGoal.Scientists, name: 'scientists', description: 'buy a specified number of scientists' },
+      { value: OptimizationGoal.Fame, name: 'fame', description: 'a specific fame number' },
+    ],
+  });
+  switch (goal) {
+    case OptimizationGoal.LevelUp:
+      optimizeForLevelUp(workshopStatus);
+      break;
+    case OptimizationGoal.Fame:
+      await optimizeForFame(workshopStatus);
+      break;
+    case OptimizationGoal.Gems:
+      optimizeForGems(workshopStatus);
+      break;
+    case OptimizationGoal.Scientists:
+      await optimizeForScientists(workshopStatus);
+      break;
   }
+
   console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
+}
+
+function optimizeForLevelUp(workshopStatus: Partial<WorkshopStatus>): void {
+  const targetInfo = quickestNewLevel(workshopStatus);
+  printInfo(targetInfo);
+}
+
+async function optimizeForFame(workshopStatus: Partial<WorkshopStatus>): Promise<void> {
+  const desiredFame = await input({
+    message: 'how much fame do you want?',
+  });
+  printFameTime(Number(desiredFame), workshopStatus);
+}
+
+function optimizeForGems(workshopStatus: Partial<WorkshopStatus>): void {
+  const targetInfo = bestGemChance(workshopStatus);
+  printInfo(
+    targetInfo.upgradeInfo,
+    computeTargetFromFame(targetInfo.fame, targetInfo.upgradeInfo.workshop.workshopStatus.level),
+  );
+}
+
+async function optimizeForScientists(workshopStatus: Partial<WorkshopStatus>): Promise<void> {
+  const desiredScientists = await input({
+    message: 'how many scientists do you want?',
+  });
+  const target = getCostOfScientistsFromSome(workshopStatus.scientists ?? 0, Number(desiredScientists));
+  printInfo(bottomUpToMoney(target, workshopStatus), target);
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
