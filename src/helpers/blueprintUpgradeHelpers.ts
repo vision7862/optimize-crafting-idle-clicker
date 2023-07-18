@@ -35,11 +35,13 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
   return upgradeCost;
 }
 
+// TODO: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
+const blueprintsWithoutDupes = ['Chisel'];
 // Assume 51 + 10 strategy
-export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo {
+export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
   const topUpgradeLevel = 51 + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
-    return mergeBlueprint(blueprint);
+    return !blueprintsWithoutDupes.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
@@ -95,26 +97,26 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
   if (blueprintToUpgrade.evolutionStage === 1) {
     const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
     // we have one at the top of 1, need to get one to the top of 1 from the bottom of 1
-    costOfUpgrade += topStage1.costOfUpgrade;
+    costOfUpgrade += topStage1!.costOfUpgrade;
   }
   if (blueprintToUpgrade.evolutionStage === 2) {
     // we have one at the top of 2, need to get 2 to the top of 1 from the bottom of 1
     const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
-    costOfUpgrade += topStage1.costOfUpgrade * 2;
+    costOfUpgrade += topStage1!.costOfUpgrade * 2;
     // then merge, then level to top of 2
     const topStage2 = upgradeBlueprint({ ...BOTTOM_STAGE_2, productName: blueprintToUpgrade.productName }, 60);
-    costOfUpgrade += topStage2.costOfUpgrade;
+    costOfUpgrade += topStage2!.costOfUpgrade;
   }
   if (blueprintToUpgrade.evolutionStage === 3) {
     // we have one at the top of 3. need to get 4 from bottom 1 to top 1
     const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
-    costOfUpgrade += topStage1.costOfUpgrade * 4;
+    costOfUpgrade += topStage1!.costOfUpgrade * 4;
     // need to get 2 to the top of 2 from the bottom of 2
     const topStage2 = upgradeBlueprint({ ...BOTTOM_STAGE_2, productName: blueprintToUpgrade.productName }, 60);
-    costOfUpgrade += topStage2.costOfUpgrade * 2;
+    costOfUpgrade += topStage2!.costOfUpgrade * 2;
     // merge and level to top of 3
     const topStage3 = upgradeBlueprint({ ...BOTTOM_STAGE_3, productName: blueprintToUpgrade.productName }, 70);
-    costOfUpgrade += topStage3.costOfUpgrade;
+    costOfUpgrade += topStage3!.costOfUpgrade;
   }
   // if (blueprintToUpgrade.evolutionStage > 3) {
   //   // we have one at the top of 3. need to get 4 from bottom 1 to top 1
@@ -218,10 +220,12 @@ function upgradeMostImpactfulBlueprintInSet(relevantSetBlueprints: Blueprint[]):
   let bestUpgrade: BlueprintUpgradeInfo | null = null;
   relevantSetBlueprints.forEach((blueprint: Blueprint) => {
     const upgradeInfo = upgradeBlueprint(blueprint, 10);
-    const roi = upgradeInfo.scoreChange / upgradeInfo.costOfUpgrade;
-    if (roi > bestROI) {
-      bestROI = roi;
-      bestUpgrade = upgradeInfo;
+    if (upgradeInfo !== null) {
+      const roi = upgradeInfo.scoreChange / upgradeInfo.costOfUpgrade;
+      if (roi > bestROI) {
+        bestROI = roi;
+        bestUpgrade = upgradeInfo;
+      }
     }
   });
   return bestUpgrade;
