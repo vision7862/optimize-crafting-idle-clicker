@@ -44,8 +44,11 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, 
     };
 
     // make sure the product has been researched, wait for it if necessary
-    let secondsSoFar = cycleNum * (workshop.workshopStatus.speedBoostActive ? 5 : 10);
-    const secondsNeededToResearch = computeResearchTimeForWorkshop(inProgressWorkshop);
+    const secondsSoFar = cycleNum * (workshop.workshopStatus.speedBoostActive ? 5 : 10);
+    const secondsNeededToResearch = computeResearchTimeForWorkshop({
+      ...workshop,
+      productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
+    });
     if (secondsSoFar < secondsNeededToResearch) {
       cycleNum += Math.ceil(
         (secondsNeededToResearch - secondsSoFar) / (workshop.workshopStatus.speedBoostActive ? 5 : 10),
