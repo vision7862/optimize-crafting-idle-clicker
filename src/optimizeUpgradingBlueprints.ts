@@ -4,6 +4,7 @@ import {
   convertBlueprintLibraryToScores,
   getDistanceToNextRank,
   getOnlyTopBlueprints,
+  getSetBlueprintScore,
 } from './helpers/blueprintScoreHelpers';
 import { SetUpgradeInfo, upgradeSetToNextRank } from './helpers/blueprintUpgradeHelpers';
 import { Blueprint } from './types/Blueprint';
@@ -18,11 +19,13 @@ export function upgradeMostImpactfulIncomeSet(blueprints: Blueprint[] = BLUEPRIN
   let bestROI = 0;
   let bestUpgradeInfo: SetUpgradeInfo | null = null;
   let setName = '';
+  const blueprintScores = convertBlueprintLibraryToScores(blueprints);
   BLUEPRINT_SETS.filter(
     (set: BlueprintSet) =>
       set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
   ).forEach((set: BlueprintSet) => {
-    const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
+    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    const distanceInfo = getDistanceToNextRank(set, setScore);
     const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
     if (upgradeInfo !== null) {
       const roi = distanceInfo.improvement / upgradeInfo.cost;
@@ -44,8 +47,10 @@ export function upgradeMostImpactfulSetOfType(
   let bestROI = 0;
   let bestUpgradeInfo: SetUpgradeInfo | null = null;
   let setName = '';
+  const blueprintScores = convertBlueprintLibraryToScores(blueprints);
   BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === type).forEach((set: BlueprintSet) => {
-    const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
+    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    const distanceInfo = getDistanceToNextRank(set, setScore);
     const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
     if (upgradeInfo !== null) {
       const roi = distanceInfo.improvement / upgradeInfo.cost;
@@ -61,8 +66,10 @@ export function upgradeMostImpactfulSetOfType(
 }
 
 export function printUpgradeInfoOfEachSet(blueprints: Blueprint[] = BLUEPRINT_LIBRARY): void {
+  const blueprintScores = convertBlueprintLibraryToScores(blueprints);
   BLUEPRINT_SETS.forEach((set: BlueprintSet) => {
-    const distanceInfo = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints));
+    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    const distanceInfo = getDistanceToNextRank(set, setScore);
     const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
     if (upgradeInfo !== null) {
       const roi = distanceInfo.improvement / upgradeInfo.cost;

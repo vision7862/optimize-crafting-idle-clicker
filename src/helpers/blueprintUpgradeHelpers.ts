@@ -10,7 +10,12 @@ import { importMainWorkshop } from '../importMainWorkshop';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
 import { ProductDetails } from '../types/Product';
-import { convertBlueprintLibraryToScores, getDistanceToNextRank, getOnlyTopBlueprints } from './blueprintScoreHelpers';
+import {
+  convertBlueprintLibraryToScores,
+  getDistanceToNextRank,
+  getOnlyTopBlueprints,
+  getSetBlueprintScore,
+} from './blueprintScoreHelpers';
 
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
   const products: Map<string, ProductDetails> = importMainWorkshop(false);
@@ -178,7 +183,9 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   let totalCost = 0;
   const blueprintsWithUpgradedReplacements = Array.from(blueprints);
   const upgradedBlueprints: Blueprint[] = [];
-  const distanceToNextRank = getDistanceToNextRank(set, convertBlueprintLibraryToScores(blueprints)).distance;
+  const blueprintScores = convertBlueprintLibraryToScores(blueprints);
+  const startingSetScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+  const distanceToNextRank = getDistanceToNextRank(set, startingSetScore).distance;
   if (distanceToNextRank === Number.MAX_VALUE) {
     return null;
   }
@@ -191,10 +198,14 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
     }
     const bestUpgrade = upgradeMostImpactfulBlueprintInSet(relevantSetBlueprints);
     if (bestUpgrade !== null) {
-      totalScoreIncreased += bestUpgrade.scoreChange;
       totalCost += bestUpgrade.costOfUpgrade;
       replaceBlueprintInPlace(blueprintsWithUpgradedReplacements, bestUpgrade.blueprint);
       replaceBlueprintInPlace(upgradedBlueprints, bestUpgrade.blueprint);
+      const newSetScore = getSetBlueprintScore(
+        set.blueprints,
+        convertBlueprintLibraryToScores(blueprintsWithUpgradedReplacements),
+      );
+      totalScoreIncreased = newSetScore - startingSetScore;
     }
   }
 
