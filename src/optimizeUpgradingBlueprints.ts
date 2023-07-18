@@ -36,6 +36,7 @@ export function upgradeMostImpactfulIncomeSet(blueprints: Blueprint[] = BLUEPRIN
   console.log(`to get to next rank of ${setName}`);
   return bestUpgradeInfo;
 }
+
 export function upgradeMostImpactfulSetOfType(
   type: SetMultiplierType,
   blueprints: Blueprint[] = BLUEPRINT_LIBRARY,
@@ -74,6 +75,7 @@ export function printUpgradeInfoOfEachSet(blueprints: Blueprint[] = BLUEPRINT_LI
     }
   });
 }
+
 export function upgradeAllIncomeBlueprintsToLoreLimit(
   lore: number,
   blueprints: Blueprint[] = BLUEPRINT_LIBRARY,

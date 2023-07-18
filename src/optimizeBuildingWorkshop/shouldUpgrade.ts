@@ -1,10 +1,11 @@
 import memoize from 'fast-memoize';
+import { CLICK_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
+import { MAIN_WORKSHOP_MERCHANT_CAPACITY } from '../constants/Achievements';
 import { Product, ProductDetails, ProductStatus } from '../types/Product';
 import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 
-const CLICK_BOOST_MULTIPLIER = 5;
 const scienceIsTight = true;
 
 export function getUpgradedWorkshopIfBetter(
@@ -164,7 +165,6 @@ type UpgradeInfo = Readonly<{
   costOfUpgrade: number;
 }>;
 
-const MAIN_WORKSHOP_MERCHANT_CAPACITY = 12;
 function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
