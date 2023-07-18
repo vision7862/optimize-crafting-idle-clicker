@@ -2,7 +2,8 @@ import memoize from 'fast-memoize';
 import * as fs from 'fs';
 import * as path from 'path';
 import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
-import { convertBlueprintLibraryToScores } from './helpers/blueprintScoreHelpers';
+import { SetMultiplierType } from './constants/BlueprintSets';
+import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from './helpers/blueprintScoreHelpers';
 import { InputProduct, ProductDetails } from './types/Product';
 
 export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {
@@ -36,6 +37,13 @@ export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<st
           ...product,
           revenue: product.revenue * (blueprintScore / 10),
         };
+        if (product.name.includes('Ore') || product.name === 'Coal') {
+          const oreMultiplier = getSpecifiedMultiplierFromSets(SetMultiplierType.Ore, blueprintMap);
+          product = {
+            ...product,
+            outputCount: product.outputCount * oreMultiplier,
+          };
+        }
         products.set(product.name, product);
       }
     } catch (e) {
@@ -61,7 +69,7 @@ function getInputProduct(
 ): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
     const name = inputDescription.split('x ')[1];
-    let inputProduct = {
+    const inputProduct = {
       name,
       count: +inputDescription.split('x ')[0],
     };
