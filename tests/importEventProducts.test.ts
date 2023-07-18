@@ -36,4 +36,9 @@ describe('importProducts', () => {
     const products: ProductDetails[] = Array.from(importProducts('Craft For Freedom').values());
     expect(products.length).toBe(25);
   });
+
+  test('Hammer Time', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Hammer Time').values());
+    expect(products.length).toBe(23);
+  });
 });
