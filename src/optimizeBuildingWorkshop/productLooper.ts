@@ -2,9 +2,9 @@ import { Product, ProductStatus } from '../types/Product';
 import { Workshop } from '../types/Workshop';
 import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
 import {
+  WorkshopUpgradeInfo,
   getProductsInfoWithNewStatusForProduct,
   getUpgradedWorkshopIfBetter,
-  WorkshopUpgradeInfo,
 } from './shouldUpgrade';
 
 export function topDownLeveler(
@@ -34,8 +34,8 @@ export function topDownLeveler(
 }
 
 export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpgradeInfo {
-  let firstPassOptimizedWorkshop = getFirstPassOptimizedWorkshop(workshop, target);
-  let firstPassBuildTime = computeBuildTimeForWorkshop(firstPassOptimizedWorkshop, target);
+  const firstPassOptimizedWorkshop = getFirstPassOptimizedWorkshop(workshop, target);
+  const firstPassBuildTime = computeBuildTimeForWorkshop(firstPassOptimizedWorkshop, target);
 
   return trimWorkshop(target, workshop, firstPassOptimizedWorkshop, firstPassBuildTime);
 }
@@ -64,13 +64,14 @@ function trimWorkshop(
   bestBuildTime: number,
 ): WorkshopUpgradeInfo {
   for (let productIndex = workshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
-    let product = bestWorkshop.productsInfo[productIndex];
+    const product = bestWorkshop.productsInfo[productIndex];
     if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {
       const workshopWithProductZeroed = getWorkshopWithProductLevelAsZero(product, bestWorkshop);
       const buildTime = computeBuildTimeForWorkshop(workshopWithProductZeroed, target, bestBuildTime);
       if (buildTime <= bestBuildTime) {
         bestBuildTime = buildTime;
         bestWorkshop = workshopWithProductZeroed;
+        // console.log(`trim off ${product.details.name}`);
       }
     }
   }

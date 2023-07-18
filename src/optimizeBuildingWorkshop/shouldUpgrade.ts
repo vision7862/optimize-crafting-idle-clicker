@@ -1,10 +1,10 @@
+import memoize from 'fast-memoize';
 import { Product, ProductDetails, ProductStatus } from '../types/Product';
 import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
-import memoize from 'fast-memoize';
 
-const CLICK_BOOST_MULTIPLIER = 3;
+const CLICK_BOOST_MULTIPLIER = 5;
 const scienceIsTight = true;
 
 export function getUpgradedWorkshopIfBetter(
@@ -185,7 +185,11 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
   };
 }
 
-export function getProductsInfoWithNewStatusForProduct(product: Product, newStatus: ProductStatus, workshop: Workshop) {
+export function getProductsInfoWithNewStatusForProduct(
+  product: Product,
+  newStatus: ProductStatus,
+  workshop: Workshop,
+): Product[] {
   const newProduct: Product = {
     ...product,
     status: newStatus,

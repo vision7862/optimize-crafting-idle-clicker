@@ -12,7 +12,7 @@ export type BlueprintSet = Readonly<{
   setName: string;
   multiplierType: SetMultiplierType;
   blueprints: string[];
-  achievementRanks?: AchievementRank[]; // TODO: fill in score boundaries for other sets
+  achievementRanks: AchievementRank[]; // TODO: fill in score boundaries for other sets
 }>;
 
 type AchievementRank = Readonly<{
@@ -20,7 +20,7 @@ type AchievementRank = Readonly<{
   totalMultiplier: number;
 }>;
 
-let BEGINNER_SET_ACHIEVEMENT_RANKS = [
+const BEGINNER_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 96, totalMultiplier: 1.2 },
   { scoreBoundary: 180, totalMultiplier: 1.4 },
   { scoreBoundary: 435, totalMultiplier: 1.6 },
@@ -48,7 +48,7 @@ let BEGINNER_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 4.27e7, totalMultiplier: 6.0 },
 ];
 
-let GEM_SET_ACHIEVEMENT_RANKS = [
+const GEM_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 48, totalMultiplier: 1.02 },
   { scoreBoundary: 90, totalMultiplier: 1.04 },
   { scoreBoundary: 218, totalMultiplier: 1.06 },
@@ -405,6 +405,18 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
     setName: 'Cut Gems',
     multiplierType: SetMultiplierType.FreeGems,
     blueprints: ['Cut Emerald', 'Cut Ruby', 'Cut Sapphire', 'Cut Onyx'],
+    achievementRanks: [
+      { scoreBoundary: 75, totalMultiplier: 1 },
+      { scoreBoundary: 300, totalMultiplier: 2 },
+      { scoreBoundary: 800, totalMultiplier: 3 },
+      { scoreBoundary: 2500, totalMultiplier: 4 },
+      { scoreBoundary: 10000, totalMultiplier: 5 },
+      { scoreBoundary: 40000, totalMultiplier: 6 },
+      { scoreBoundary: 200000, totalMultiplier: 7 },
+      { scoreBoundary: 1000000, totalMultiplier: 8 },
+      { scoreBoundary: 4000000, totalMultiplier: 9 },
+      { scoreBoundary: 15000000, totalMultiplier: 10 },
+    ],
   },
   {
     setName: 'Emerald',
