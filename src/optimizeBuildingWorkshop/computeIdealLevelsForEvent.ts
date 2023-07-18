@@ -1,5 +1,3 @@
-import { isEvent } from './helpers/WorkshopHelpers';
-import { computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from '../importEventProducts';
 import { importMainWorkshop } from '../importMainWorkshop';
 import { Product, ProductDetails } from '../types/Product';
@@ -9,6 +7,8 @@ import {
   Workshop,
   WorkshopStatus,
 } from '../types/Workshop';
+import { isEvent } from './helpers/WorkshopHelpers';
+import { computeTargetFromFame } from './helpers/targetHelpers';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
 import { WorkshopUpgradeInfo } from './shouldUpgrade';
 
@@ -60,7 +60,7 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
   let bestTime = Number.MAX_VALUE;
   let bestFame = fameRequiredToLevelUp;
   let bestWorkshopUpgrade;
-  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 17); fame++) {
+  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 12); fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level);
     const targetInfo = bottomUpToMoney(target, workshopStatus);
@@ -78,7 +78,10 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
   return bestWorkshopUpgrade;
 }
 
-export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): {
+  upgradeInfo: WorkshopUpgradeInfo;
+  fame: number;
+} {
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
   const targetInfo14 = bottomUpToMoney(computeTargetFromFame(14, workshopStatus.level), workshopStatus);
   const timePerGemChance14 = targetInfo14.cyclesToTarget / 8;
@@ -87,7 +90,9 @@ export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): W
   const timePerGemChance15 = targetInfo15.cyclesToTarget / 12;
 
   console.log(`best gem chance per time at ${timePerGemChance14 < timePerGemChance15 ? 14 : 15}`);
-  return timePerGemChance14 < timePerGemChance15 ? targetInfo14 : targetInfo15;
+  return timePerGemChance14 < timePerGemChance15
+    ? { upgradeInfo: targetInfo14, fame: 14 }
+    : { upgradeInfo: targetInfo15, fame: 15 };
 }
 
 export function bottomUpToMoney(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
