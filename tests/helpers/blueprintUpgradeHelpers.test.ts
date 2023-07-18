@@ -83,8 +83,8 @@ describe('blueprintUpgradeHelpers', () => {
         productName: 'Wood',
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
-      expect(upgradeInfo.blueprint.upgradeLevel).toBe(11);
-      expect(upgradeInfo.blueprint.score).toBe(20);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(11);
+      expect(upgradeInfo?.blueprint.score).toBe(20);
     });
 
     it('should get the cost and score correctly for a stage 2 bp', () => {
@@ -95,8 +95,8 @@ describe('blueprintUpgradeHelpers', () => {
         score: 120,
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
-      expect(upgradeInfo.blueprint.upgradeLevel).toBe(11);
-      expect(upgradeInfo.blueprint.score).toBe(240);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(11);
+      expect(upgradeInfo?.blueprint.score).toBe(240);
     });
 
     it('should merge instead of normal upgrading if a bp is at the top of its stage', () => {
@@ -105,10 +105,10 @@ describe('blueprintUpgradeHelpers', () => {
         productName: 'Copper Ingots',
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
-      expect(upgradeInfo.blueprint.upgradeLevel).toBe(1);
-      expect(upgradeInfo.blueprint.score).toBe(120);
-      expect(upgradeInfo.costOfUpgrade).toBe(10834); // cost of upgrading base copper ingot 50 times
-      expect(upgradeInfo.scoreChange).toBe(60);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradeInfo?.blueprint.score).toBe(120);
+      expect(upgradeInfo?.costOfUpgrade).toBe(10834); // cost of upgrading base copper ingot 50 times
+      expect(upgradeInfo?.scoreChange).toBe(60);
     });
   });
 
@@ -153,7 +153,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('upgradeSetToNextRank', () => {
     it('should do things', () => {
       const upgradeSetInfo = upgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY);
-      console.log(`cost is ${upgradeSetInfo?.cost}`);
+      console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
       console.log(upgradeSetInfo?.upgradedBlueprints);
     });
   });

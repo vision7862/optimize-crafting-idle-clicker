@@ -1,9 +1,9 @@
-import { BLUEPRINT_LIBRARY } from '../src/config/BlueprintLibrary';
+import { SetMultiplierType } from '../src/constants/BlueprintSets';
 import {
   printUpgradeInfoOfEachSet,
-  upgradeAllBlueprintsToLoreLimit,
+  upgradeAllIncomeBlueprintsToLoreLimit,
   upgradeMostImpactfulIncomeSet,
-  upgradeMostImpactfulResearchSet,
+  upgradeMostImpactfulSetOfType,
 } from '../src/optimizeUpgradingBlueprints';
 
 describe('optimizeUpgradingBlueprints', () => {
@@ -15,9 +15,33 @@ describe('optimizeUpgradingBlueprints', () => {
     });
   });
 
-  describe('upgradeMostImpactfulResearchSet', () => {
-    it('next rank on one set', () => {
-      const setUpgradeInfo = upgradeMostImpactfulResearchSet();
+  describe('upgradeMostImpactfulSetOfType', () => {
+    it('ore', () => {
+      const setUpgradeInfo = upgradeMostImpactfulSetOfType(SetMultiplierType.Ore);
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
+    });
+
+    it('research', () => {
+      const setUpgradeInfo = upgradeMostImpactfulSetOfType(SetMultiplierType.Research);
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
+    });
+
+    it('gems', () => {
+      const setUpgradeInfo = upgradeMostImpactfulSetOfType(SetMultiplierType.FreeGems);
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
+    });
+
+    it('offline', () => {
+      const setUpgradeInfo = upgradeMostImpactfulSetOfType(SetMultiplierType.OfflineProduction);
+      console.log(setUpgradeInfo?.upgradedBlueprints);
+      console.log(setUpgradeInfo?.cost);
+    });
+
+    it('click', () => {
+      const setUpgradeInfo = upgradeMostImpactfulSetOfType(SetMultiplierType.ClickOutput);
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);
     });
@@ -25,7 +49,7 @@ describe('optimizeUpgradingBlueprints', () => {
 
   describe('upgradeAllBlueprintsToLoreLimit', () => {
     it('next rank on as many sets as possible', () => {
-      const setUpgradeInfo = upgradeAllBlueprintsToLoreLimit(50000);
+      const setUpgradeInfo = upgradeAllIncomeBlueprintsToLoreLimit(50000);
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);
     });
