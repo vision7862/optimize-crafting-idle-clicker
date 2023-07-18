@@ -1,26 +1,39 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { bestGemChance, quickestNewLevel } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
+import { bestGemChance, bottomUpToMoney, quickestNewLevel } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
 import { printFameTime, printInfo } from './optimizeBuildingWorkshop/helpers/printResults';
+import { computeTargetFromFame } from './optimizeBuildingWorkshop/helpers/targetHelpers';
 import { WorkshopStatus } from './types/Workshop';
+import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
 
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
   const desireGems = await booleanChoice('are you shooting for gems?');
   if (desireGems) {
     const targetInfo = bestGemChance(workshopStatus);
-    printInfo(targetInfo);
+    printInfo(
+      targetInfo.upgradeInfo,
+      computeTargetFromFame(targetInfo.fame, targetInfo.upgradeInfo.workshop.workshopStatus.level),
+    );
   } else {
-    const desiredFame = await input({
-      message:
-        'if you have a Fame target in mind, enter it here. otherwise, hit enter to calculate the fastest way to level up.',
+    const desiredScientists = await input({
+      message: 'if you have a desired number of scientists, enter it here. otherwise, hit enter to continue.',
     });
-    if (desiredFame !== '') {
-      printFameTime(Number(desiredFame), workshopStatus);
+    if (desiredScientists !== '') {
+      const target = getCostOfScientistsFromSome(workshopStatus.scientists ?? 0, Number(desiredScientists));
+      printInfo(bottomUpToMoney(target, workshopStatus), target);
     } else {
-      const targetInfo = quickestNewLevel(workshopStatus);
-      printInfo(targetInfo);
+      const desiredFame = await input({
+        message:
+          'if you have a Fame target in mind, enter it here. otherwise, hit enter to calculate the fastest way to level up.',
+      });
+      if (desiredFame !== '') {
+        printFameTime(Number(desiredFame), workshopStatus);
+      } else {
+        const targetInfo = quickestNewLevel(workshopStatus);
+        printInfo(targetInfo);
+      }
     }
   }
   console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
