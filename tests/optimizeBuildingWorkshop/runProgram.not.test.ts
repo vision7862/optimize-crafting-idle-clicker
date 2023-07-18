@@ -19,7 +19,7 @@ import { DEFAULT_WORKSHOP_STATUS_EVENT, DEFAULT_WORKSHOP_STATUS_MAIN, WorkshopSt
 
 describe.only('runProgram', () => {
   describe('events', () => {
-    const eventName = 'Art of Artillery';
+    const eventName = 'Hammer Time';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
       printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
     }
@@ -103,9 +103,7 @@ describe.only('runProgram', () => {
 
     describe('10+', () => {
       test('last product level 10', () => {
-        printInfo(
-          bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 164, clickBoostActive: false }),
-        );
+        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 169 }));
       });
 
       describe('scientists', () => {
@@ -293,122 +291,131 @@ describe.only('runProgram', () => {
     });
 
     describe('shooting for gems', () => {
+      function getGems(partialWorkshopStatus: Partial<WorkshopStatus>): void {
+        const ret = bestGemChance(partialWorkshopStatus);
+        const target = computeTargetFromFame(ret.fame, ret.upgradeInfo.workshop.workshopStatus.level);
+        printInfo(ret.upgradeInfo, target);
+      }
+
       test('lvl 6', () => {
-        printInfo(bestGemChance({ level: 6, scientists: 160 }));
+        getGems({ level: 6, scientists: 160 });
       });
 
       test('lvl 7', () => {
-        printInfo(bestGemChance({ level: 7 }));
+        getGems({ level: 7 });
       });
 
       test('lvl 8', () => {
-        printInfo(bestGemChance({ level: 8, scientists: 174 }));
+        getGems({ level: 8, scientists: 174 });
       });
 
       test('lvl 9', () => {
-        printInfo(bestGemChance({ level: 9, scientists: 274, researchBoostActive: true }));
+        getGems({ level: 9, scientists: 274, researchBoostActive: true });
       });
 
       test('lvl 10', () => {
-        printInfo(bestGemChance({ level: 10, scientists: 274, researchBoostActive: true }));
+        getGems({ level: 10, scientists: 274, researchBoostActive: true });
       });
 
       test('lvl 11', () => {
-        printInfo(bestGemChance({ level: 11 }));
+        getGems({ level: 11 });
       });
 
       test('lvl 12', () => {
-        printInfo(bestGemChance({ level: 12 }));
+        getGems({ level: 12 });
       });
 
       test('lvl 13', () => {
-        printInfo(bestGemChance({ level: 13 }));
+        getGems({ level: 13 });
       });
 
       test('lvl 14', () => {
-        printInfo(bestGemChance({ level: 14 }));
+        getGems({ level: 14 });
       });
 
       test('lvl 15', () => {
-        printInfo(bestGemChance({ level: 15 }));
+        getGems({ level: 15 });
       });
 
       test('lvl 16', () => {
-        printInfo(bestGemChance({ level: 16 }));
+        getGems({ level: 16 });
       });
 
       test('lvl 17', () => {
-        printInfo(bestGemChance({ level: 17 }));
+        getGems({ level: 17 });
       });
 
       test('lvl 18', () => {
-        printInfo(bestGemChance({ level: 18 }));
+        getGems({ level: 18 });
       });
 
       test('lvl 19', () => {
-        printInfo(bestGemChance({ level: 19 }));
+        getGems({ level: 19 });
       });
 
       test('lvl 19, boosts', () => {
-        printInfo(
-          bestGemChance({
-            level: 19,
-            clickBoostActive: true,
-            researchBoostActive: true,
-            merchantBoostActive: true,
-          }),
-        );
+        getGems({
+          level: 19,
+          clickBoostActive: true,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+        });
       });
 
       test('lvl 20', () => {
-        printInfo(bestGemChance({ level: 20, researchBoostActive: true, merchantBoostActive: true }));
+        getGems({ level: 20, researchBoostActive: true, merchantBoostActive: true });
       });
 
       test('lvl 21, boosts', () => {
-        printInfo(
-          bestGemChance({
-            level: 21,
-            clickBoostActive: false,
-            researchBoostActive: true,
-            merchantBoostActive: true,
-          }),
-        );
+        getGems({
+          level: 21,
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+        });
       });
 
       test('lvl 22', () => {
-        printInfo(bestGemChance({ level: 22, scientists: 520, researchBoostActive: true }));
+        getGems({ level: 22, scientists: 520, researchBoostActive: true });
       });
 
       test('lvl 24', () => {
-        printInfo(
-          bestGemChance({
-            level: 24,
-            scientists: 564,
-            researchBoostActive: true,
-            merchantBoostActive: true,
-            speedBoostActive: true,
-          }),
-        );
+        getGems({
+          level: 24,
+          scientists: 564,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+          speedBoostActive: true,
+        });
       });
 
       test('lvl 31', () => {
-        printInfo(bestGemChance({ level: 31, scientists: 700, researchBoostActive: true }));
+        getGems({ level: 31, scientists: 700, researchBoostActive: true });
       });
 
       test('lvl 32', () => {
-        printInfo(bestGemChance({ level: 32, scientists: 700, researchBoostActive: true }));
+        getGems({ level: 32, scientists: 700, researchBoostActive: true });
       });
 
       test('lvl 37', () => {
-        printInfo(
-          bestGemChance({
-            level: 37,
-            scientists: 792,
-            speedBoostActive: true,
-            merchantBoostActive: true,
-            researchBoostActive: true,
-          }),
-        );
+        getGems({
+          level: 37,
+          scientists: 792,
+          speedBoostActive: true,
+          merchantBoostActive: true,
+          researchBoostActive: true,
+        });
+      });
+
+      test('lvl 37', () => {
+        getGems({
+          level: 38,
+          scientists: 807,
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+          speedBoostActive: true,
+        });
       });
     });
 
@@ -523,6 +530,18 @@ describe.only('runProgram', () => {
       test('get as much fame as possible in semi-active 5 minutes at level 5', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 5);
         maximizeTypeInTime('fame', 5, 0, { level: 5, scientists: 173, researchBoostActive: true }, getTarget);
+      });
+
+      test('get as many scientists in event as possible from 169 in 60 minutes at level 10', () => {
+        const currentScientists = 169;
+        const getTarget = (scientists: number): number => getCostOfScientistsFromSome(currentScientists, scientists);
+        maximizeTypeInTime(
+          'scientists',
+          60,
+          currentScientists,
+          { level: 10, scientists: currentScientists, eventName: 'Hammer Time' },
+          getTarget,
+        );
       });
     });
 
