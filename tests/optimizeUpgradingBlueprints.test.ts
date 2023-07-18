@@ -7,7 +7,7 @@ import {
 } from '../src/optimizeUpgradingBlueprints';
 
 describe('optimizeUpgradingBlueprints', () => {
-  describe('upgradeMostImpactfulSet', () => {
+  describe('upgradeMostImpactfulIncomeSet', () => {
     it('next rank on one set', () => {
       const setUpgradeInfo = upgradeMostImpactfulIncomeSet();
       console.log(setUpgradeInfo?.upgradedBlueprints);
@@ -48,7 +48,7 @@ describe('optimizeUpgradingBlueprints', () => {
   });
 
   describe('upgradeAllBlueprintsToLoreLimit', () => {
-    it('next rank on as many sets as possible', () => {
+    it('next rank on as many income/merchant sets as possible', () => {
       const setUpgradeInfo = upgradeAllIncomeBlueprintsToLoreLimit(50000);
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);

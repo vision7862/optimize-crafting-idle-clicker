@@ -50,8 +50,12 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, 
       productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
     });
     if (secondsSoFar < secondsNeededToResearch) {
-      cycleNum += Math.ceil(
+      const cyclesWaitingOnResearch = Math.ceil(
         (secondsNeededToResearch - secondsSoFar) / (workshop.workshopStatus.speedBoostActive ? 5 : 10),
+      );
+      cycleNum += cyclesWaitingOnResearch;
+      console.log(
+        `waiting for ${inProgressWorkshop.productsInfo[i].details.name} to build, takes ${cyclesWaitingOnResearch} cycles`,
       );
     }
 

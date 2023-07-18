@@ -109,7 +109,8 @@ export function getSetClosestToBoundary(
         set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
     )
     .forEach((set: BlueprintSet) => {
-      const distanceInfo = getDistanceToNextRank(set, blueprintScores);
+      const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+      const distanceInfo = getDistanceToNextRank(set, setScore);
       if (distanceInfo.distance < closestDistance) {
         closestDistance = distanceInfo.distance;
         closestSetName = set.setName;
@@ -119,8 +120,7 @@ export function getSetClosestToBoundary(
 }
 
 export const getDistanceToNextRank = memoize(
-  (set: BlueprintSet, blueprintScores: Map<string, number>): { distance: number; improvement: number } => {
-    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+  (set: BlueprintSet, setScore: number): { distance: number; improvement: number } => {
     if (set.achievementRanks === undefined) {
       console.error(`Set ${set.setName} does not have score boundaries`);
       return { distance: Number.MAX_VALUE, improvement: 1 };
