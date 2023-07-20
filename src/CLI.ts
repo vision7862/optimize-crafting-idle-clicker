@@ -7,12 +7,14 @@ import {
   quickestNewLevel,
 } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
 import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
+import { isEvent } from './optimizeBuildingWorkshop/helpers/WorkshopHelpers';
 import { printFameTime, printInfo } from './optimizeBuildingWorkshop/helpers/printResults';
 import { computeTargetFromFame } from './optimizeBuildingWorkshop/helpers/targetHelpers';
 import { WorkshopStatus } from './types/Workshop';
 
 enum OptimizationGoal {
   LevelUp,
+  DoubleLore,
   Gems,
   Scientists,
   Fame,
@@ -21,31 +23,45 @@ enum OptimizationGoal {
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
 
-  const goal: OptimizationGoal = await select<OptimizationGoal>({
-    message: 'what is your goal?',
-    choices: [
-      { value: OptimizationGoal.LevelUp, name: 'level up', description: 'get to next level quickly' },
+  const choices = [{ value: OptimizationGoal.LevelUp, name: 'level up', description: 'get to next level quickly' }];
+  if (!isEvent(workshopStatus)) {
+    choices.push(
+      {
+        value: OptimizationGoal.DoubleLore,
+        name: 'double lore',
+        description: 'guaranteed double lore (12 fame)',
+      },
       {
         value: OptimizationGoal.Gems,
         name: 'gems',
         description: 'most efficient time per gem percentage of 14 vs 15 fame',
       },
-      { value: OptimizationGoal.Scientists, name: 'scientists', description: 'buy a specified number of scientists' },
-      { value: OptimizationGoal.Fame, name: 'fame', description: 'a specific fame number' },
-    ],
+    );
+  }
+
+  choices.push(
+    { value: OptimizationGoal.Scientists, name: 'scientists', description: 'buy a specified number of scientists' },
+    { value: OptimizationGoal.Fame, name: 'fame', description: 'a specific fame number' },
+  );
+  const goal: OptimizationGoal = await select<OptimizationGoal>({
+    message: 'what is your goal?',
+    choices,
   });
   switch (goal) {
     case OptimizationGoal.LevelUp:
       optimizeForLevelUp(workshopStatus);
       break;
-    case OptimizationGoal.Fame:
-      await optimizeForFame(workshopStatus);
-      break;
     case OptimizationGoal.Gems:
       optimizeForGems(workshopStatus);
       break;
+    case OptimizationGoal.DoubleLore:
+      optimizeForDoubleLore(workshopStatus);
+      break;
     case OptimizationGoal.Scientists:
       await optimizeForScientists(workshopStatus);
+      break;
+    case OptimizationGoal.Fame:
+      await optimizeForFame(workshopStatus);
       break;
   }
 
@@ -70,6 +86,10 @@ function optimizeForGems(workshopStatus: Partial<WorkshopStatus>): void {
     targetInfo.upgradeInfo,
     computeTargetFromFame(targetInfo.fame, targetInfo.upgradeInfo.workshop.workshopStatus.level),
   );
+}
+
+function optimizeForDoubleLore(workshopStatus: Partial<WorkshopStatus>): void {
+  printFameTime(Number(12), workshopStatus);
 }
 
 async function optimizeForScientists(workshopStatus: Partial<WorkshopStatus>): Promise<void> {
