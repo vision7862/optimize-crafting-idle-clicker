@@ -191,7 +191,8 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   }
   while (totalScoreIncreased < distanceToNextRank) {
     const relevantSetBlueprints = getOnlyTopBlueprints(blueprintsWithUpgradedReplacements).filter(
-      (blueprint: Blueprint) => set.blueprints.includes(blueprint.productName),
+      (blueprint: Blueprint) =>
+        set.blueprints.includes(blueprint.productName) && !BPS_WITHOUT_DUPES.includes(blueprint.productName),
     );
     if (relevantSetBlueprints.length === 0) {
       return null;

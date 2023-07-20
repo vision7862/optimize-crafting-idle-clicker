@@ -190,7 +190,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BOTTOM_STAGE_1, productName: 'Magnificent Sword' },
   { ...BOTTOM_STAGE_1, productName: 'Uncut Sapphire' },
   { ...BOTTOM_STAGE_1, productName: 'Magnificent Armor' },
-  { ...BOTTOM_STAGE_1, productName: 'Mechanical Parts', upgradeLevel: 41, score: 50 },
+  { ...BOTTOM_STAGE_2, productName: 'Mechanical Parts', upgradeLevel: 11, score: 240 },
   { ...BOTTOM_STAGE_1, productName: 'Magnificent Crossbow', upgradeLevel: 31, score: 40 },
   { ...BOTTOM_STAGE_1, productName: 'Sulfur', upgradeLevel: 31, score: 40 },
   { ...BOTTOM_STAGE_1, productName: 'Bongos', upgradeLevel: 41, score: 50 },
@@ -241,4 +241,4 @@ export const BUILD_COST_OF_BPS_WITHOUT_DETAILS = new Map<string, number>([
 ]);
 
 // TODO: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
-export const BPS_WITHOUT_DUPES = ['Chisel', 'Map'];
+export const BPS_WITHOUT_DUPES = ['Chisel', 'Map', 'Compass'];
