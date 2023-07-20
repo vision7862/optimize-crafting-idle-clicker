@@ -216,7 +216,7 @@ describe.only('runProgram', () => {
   });
 
   describe('main workshop', () => {
-    describe('shooting for half the required fame', () => {
+    describe('shooting for half required/specific fame', () => {
       test('6 fame lvl 2', () => {
         printFameTime(6, { level: 2 });
       });
@@ -287,6 +287,10 @@ describe.only('runProgram', () => {
 
       test('9 fame lvl 23', () => {
         printFameTime(9, { level: 23, scientists: 520, researchBoostActive: true });
+      });
+
+      test('12 fame lvl 43', () => {
+        printFameTime(12, { level: 43, scientists: 914, researchBoostActive: true, speedBoostActive: true });
       });
     });
 

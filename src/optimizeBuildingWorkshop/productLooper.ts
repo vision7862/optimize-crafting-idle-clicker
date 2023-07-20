@@ -35,8 +35,10 @@ export function topDownLeveler(
 
 export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpgradeInfo {
   const firstPassOptimizedWorkshop = getFirstPassOptimizedWorkshop(workshop, target);
+  console.info('computing time to build optimized workshop...');
   const firstPassBuildTime = computeBuildTimeForWorkshop(firstPassOptimizedWorkshop, target);
 
+  console.info('trimming unneeded products...');
   return trimWorkshop(target, workshop, firstPassOptimizedWorkshop, firstPassBuildTime);
 }
 
@@ -71,7 +73,7 @@ function trimWorkshop(
       if (buildTime <= bestBuildTime) {
         bestBuildTime = buildTime;
         bestWorkshop = workshopWithProductZeroed;
-        // console.log(`trim off ${product.details.name}`);
+        console.log(`trim off ${product.details.name}`);
       }
     }
   }
