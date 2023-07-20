@@ -3,6 +3,7 @@ import { Product, ProductStatus } from '../../types/Product';
 import { Workshop } from '../../types/Workshop';
 import { getCurrentIncome } from '../shouldUpgrade';
 import { computeResearchTimeForWorkshop } from './ResearchHelpers';
+import { toTime } from './printResults';
 
 export function computeTargetFromFame(fame: number, level: number): number {
   return 10 ** (fame + level - 1);
@@ -55,7 +56,9 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, 
       );
       cycleNum += cyclesWaitingOnResearch;
       console.log(
-        `waiting for ${inProgressWorkshop.productsInfo[i].details.name} to build, takes ${cyclesWaitingOnResearch} cycles`,
+        `waiting for ${inProgressWorkshop.productsInfo[i].details.name} to be researched, takes ${toTime(
+          secondsNeededToResearch - secondsSoFar,
+        )}`,
       );
     }
 

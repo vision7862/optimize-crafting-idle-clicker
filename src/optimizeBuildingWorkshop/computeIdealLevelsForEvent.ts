@@ -60,7 +60,7 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
   let bestTime = Number.MAX_VALUE;
   let bestFame = fameRequiredToLevelUp;
   let bestWorkshopUpgrade;
-  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 17); fame++) {
+  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 13); fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level);
     const targetInfo = bottomUpToMoney(target, workshopStatus);
@@ -82,10 +82,12 @@ export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): {
   upgradeInfo: WorkshopUpgradeInfo;
   fame: number;
 } {
+  console.info('computing time to reach 14 fame...');
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
   const targetInfo14 = bottomUpToMoney(computeTargetFromFame(14, workshopStatus.level), workshopStatus);
   const timePerGemChance14 = targetInfo14.cyclesToTarget / 8;
 
+  console.info('computing time to reach 15 fame...');
   const targetInfo15 = bottomUpToMoney(computeTargetFromFame(15, workshopStatus.level), workshopStatus);
   const timePerGemChance15 = targetInfo15.cyclesToTarget / 12;
 
