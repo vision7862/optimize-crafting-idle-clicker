@@ -5,6 +5,7 @@ import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
 import { SetMultiplierType } from './constants/BlueprintSets';
 import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from './helpers/blueprintScoreHelpers';
 import { InputProduct, ProductDetails } from './types/Product';
+import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './constants/Achievements';
 
 export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {
   const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
@@ -38,7 +39,8 @@ export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<st
           revenue: product.revenue * (blueprintScore / 10),
         };
         if (product.name.includes('Ore') || product.name === 'Coal') {
-          const oreMultiplier = getSpecifiedMultiplierFromSets(SetMultiplierType.Ore, blueprintMap);
+          const oreMultiplier =
+            getSpecifiedMultiplierFromSets(SetMultiplierType.Ore, blueprintMap) * DAILY_DYNASTY_FRIEND_BONUS_ORE; // temporary dynasty bonus
           product = {
             ...product,
             outputCount: product.outputCount * oreMultiplier,
