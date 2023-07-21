@@ -70,10 +70,10 @@ function getInputProduct(
   onlyReturnBuildable: boolean,
 ): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
-    const name = inputDescription.split('x ')[1];
+    const name = inputDescription.split(' x')[0];
     const inputProduct = {
       name,
-      count: +inputDescription.split('x ')[0],
+      count: +inputDescription.split(' x')[1],
     };
     if (products.get(name) !== undefined) {
       return inputProduct;
