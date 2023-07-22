@@ -64,7 +64,7 @@ export function getFile(fileName: string): string {
   return blueprintProducts;
 }
 
-function getInputProduct(
+export function getInputProduct(
   inputDescription: string,
   products: Map<string, ProductDetails>,
   onlyReturnBuildable: boolean,
