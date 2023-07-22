@@ -41,4 +41,9 @@ describe('importProducts', () => {
     const products: ProductDetails[] = Array.from(importProducts('Hammer Time').values());
     expect(products.length).toBe(23);
   });
+
+  test('The New World', () => {
+    const products: ProductDetails[] = Array.from(importProducts('The New World').values());
+    expect(products.length).toBe(25);
+  });
 });
