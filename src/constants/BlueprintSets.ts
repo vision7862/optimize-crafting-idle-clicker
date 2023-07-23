@@ -12,7 +12,7 @@ export type BlueprintSet = Readonly<{
   setName: string;
   multiplierType: SetMultiplierType;
   blueprints: string[];
-  achievementRanks: AchievementRank[]; // TODO: fill in score boundaries for other sets
+  achievementRanks: AchievementRank[]; // TODO: GH-5: fill in score boundaries for other sets
 }>;
 
 type AchievementRank = Readonly<{

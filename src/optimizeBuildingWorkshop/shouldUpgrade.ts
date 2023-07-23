@@ -50,7 +50,7 @@ export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number)
   for (const product of workshop.productsInfo) {
     totalIncome +=
       // applyClickBoost(product.details, topProduct, clickBoost) *
-      // TODO: only count items that merchants are selling, not items consumed
+      // TODO: GH-2: only count items that merchants are selling, not items consumed
       product.status.level * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   }
   return totalIncome;
