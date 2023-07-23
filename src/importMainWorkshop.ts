@@ -64,16 +64,16 @@ export function getFile(fileName: string): string {
   return blueprintProducts;
 }
 
-function getInputProduct(
+export function getInputProduct(
   inputDescription: string,
   products: Map<string, ProductDetails>,
   onlyReturnBuildable: boolean,
 ): InputProduct | null {
   if (inputDescription !== '-' && inputDescription !== '') {
-    const name = inputDescription.split('x ')[1];
+    const name = inputDescription.split(' x')[0];
     const inputProduct = {
       name,
-      count: +inputDescription.split('x ')[0],
+      count: +inputDescription.split(' x')[1],
     };
     if (products.get(name) !== undefined) {
       return inputProduct;

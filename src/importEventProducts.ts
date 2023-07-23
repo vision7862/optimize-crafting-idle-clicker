@@ -1,5 +1,5 @@
-import { getFile, getUpgradeCostMultiplier } from './importMainWorkshop';
-import { InputProduct, ProductDetails } from './types/Product';
+import { getFile, getInputProduct, getUpgradeCostMultiplier } from './importMainWorkshop';
+import { ProductDetails } from './types/Product';
 
 export function importProductsAtLevel(eventName: string, level: number): Map<string, ProductDetails> {
   const levelForMultiplier = Math.min(10, level);
@@ -17,8 +17,8 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
       buildCost: +details[2].replace(/[$, ]/g, ''),
       revenue: +details[3].replace(/[$, ]/g, '') / 2 ** (10 - levelForMultiplier),
       outputCount: +details[4].split('x')[1],
-      input1: getInputProduct(details[5]),
-      input2: getInputProduct(details[6]),
+      input1: getInputProduct(details[5], products, true),
+      input2: getInputProduct(details[6], products, true),
       upgradeCostMultiplier: getUpgradeCostMultiplier(details[7]),
     };
     products.set(product.name, product);
@@ -28,13 +28,4 @@ export function importProductsAtLevel(eventName: string, level: number): Map<str
 
 export function importProducts(eventName: string): Map<string, ProductDetails> {
   return importProductsAtLevel(eventName, 10);
-}
-
-function getInputProduct(inputDescription: string): InputProduct | null {
-  return inputDescription !== '-'
-    ? {
-        name: inputDescription.split(' x')[0],
-        count: +inputDescription.split(' x')[1],
-      }
-    : null;
 }
