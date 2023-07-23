@@ -5,6 +5,7 @@ import { SetMultiplierType } from '../../constants/BlueprintSets';
 import { convertBlueprintLibraryToScores, getSpecifiedMultiplierFromSets } from '../../helpers/blueprintScoreHelpers';
 import { Workshop, WorkshopStatus } from '../../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
+import { RESEARCH_ACHIEVEMENT_MULTIPLIER, TOTAL_BLUEPRINT_SCORE_MULTIPLIER } from '../../constants/Achievements';
 
 export function getCostOfScientists(numScientists: number): number {
   return getCostOfScientistsFromSome(0, numScientists);
@@ -52,8 +53,8 @@ export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): nu
 
 function getMainWorkshopResearchMultiplier(): number {
   return (
-    6.5 * // research achievement
+    RESEARCH_ACHIEVEMENT_MULTIPLIER * // research achievement
     getSpecifiedMultiplierFromSets(SetMultiplierType.Research, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)) *
-    1.8 // total blueprint score
+    TOTAL_BLUEPRINT_SCORE_MULTIPLIER // total blueprint score
   );
 }
