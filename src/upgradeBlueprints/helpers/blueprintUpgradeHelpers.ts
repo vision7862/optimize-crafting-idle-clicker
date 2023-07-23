@@ -2,10 +2,10 @@ import { importMainWorkshop } from '../../buildWorkshop/importMainWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import {
   BOTTOM_STAGE_1,
-  BOTTOM_STAGE_2,
-  BOTTOM_STAGE_3,
   BPS_WITHOUT_DUPES,
   BUILD_COST_OF_BPS_WITHOUT_DETAILS,
+  NON_51_PLUS_10_STRATEGY,
+  getBottomOfStageBP,
 } from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
@@ -39,19 +39,15 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
   return upgradeCost;
 }
 
-// Assume 51 + 10 strategy
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
-  const topUpgradeLevel = 51 + (blueprint.evolutionStage - 1) * 10;
+  const topUpgradeLevel =
+    NON_51_PLUS_10_STRATEGY.get(blueprint.productName) ?? 51 + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
     return !BPS_WITHOUT_DUPES.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
-  const scoreChange =
-    (blueprint.evolutionStage >= 2 ? 12 : 1) *
-    (blueprint.evolutionStage >= 3 ? 14 : 1) *
-    (blueprint.evolutionStage >= 4 ? 16 : 1) *
-    levels;
+  const scoreChange = blueprint.scoreChangePerLevel * levels;
   const newBlueprint: Blueprint = {
     ...blueprint,
     upgradeLevel: blueprint.upgradeLevel + levels,
@@ -66,6 +62,7 @@ export type SetUpgradeInfo = Readonly<{
   allBlueprintsWithUpgradedReplacements: Blueprint[];
 }>;
 
+// Assume 51 + 10 strategy and that there are sufficient base BPs to merge all the way up
 export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeInfo {
   // assume that the blueprint passed in is at top level
   // remove this blueprint from all blueprints
@@ -96,28 +93,54 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
 
   // get cost of getting a matching bp, assuming only the top one has any levels in it
   let costOfUpgrade = 0;
+  const strategyForThisBP = NON_51_PLUS_10_STRATEGY.get(blueprintToUpgrade.productName) ?? 51;
+  const baseNumLevelsToUpgrade = strategyForThisBP - 1;
   if (blueprintToUpgrade.evolutionStage === 1) {
-    const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
+    const topStage1 = upgradeBlueprint(
+      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade,
+    );
     // we have one at the top of 1, need to get one to the top of 1 from the bottom of 1
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage1!.costOfUpgrade;
   }
   if (blueprintToUpgrade.evolutionStage === 2) {
     // we have one at the top of 2, need to get 2 to the top of 1 from the bottom of 1
-    const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
+    const topStage1 = upgradeBlueprint(
+      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage1!.costOfUpgrade * 2;
     // then merge, then level to top of 2
-    const topStage2 = upgradeBlueprint({ ...BOTTOM_STAGE_2, productName: blueprintToUpgrade.productName }, 60);
+    const topStage2 = upgradeBlueprint(
+      { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade + 10,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage2!.costOfUpgrade;
   }
   if (blueprintToUpgrade.evolutionStage === 3) {
     // we have one at the top of 3. need to get 4 from bottom 1 to top 1
-    const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
+    const topStage1 = upgradeBlueprint(
+      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage1!.costOfUpgrade * 4;
     // need to get 2 to the top of 2 from the bottom of 2
-    const topStage2 = upgradeBlueprint({ ...BOTTOM_STAGE_2, productName: blueprintToUpgrade.productName }, 60);
+    const topStage2 = upgradeBlueprint(
+      { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade + 10,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage2!.costOfUpgrade * 2;
     // merge and level to top of 3
-    const topStage3 = upgradeBlueprint({ ...BOTTOM_STAGE_3, productName: blueprintToUpgrade.productName }, 70);
+    const topStage3 = upgradeBlueprint(
+      { ...getBottomOfStageBP(3, strategyForThisBP), productName: blueprintToUpgrade.productName },
+      baseNumLevelsToUpgrade + 20,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     costOfUpgrade += topStage3!.costOfUpgrade;
   }
   // if (blueprintToUpgrade.evolutionStage > 3) {
@@ -166,6 +189,7 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
     ...blueprintToUpgrade,
     evolutionStage: blueprintToUpgrade.evolutionStage + 1,
     score: blueprintToUpgrade.score * 2,
+    scoreChangePerLevel: (blueprintToUpgrade.score / 10) * 2,
     upgradeLevel: 1,
   };
 

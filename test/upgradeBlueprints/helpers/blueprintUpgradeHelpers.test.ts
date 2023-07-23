@@ -110,6 +110,45 @@ describe('blueprintUpgradeHelpers', () => {
       expect(upgradeInfo?.costOfUpgrade).toBe(10834); // cost of upgrading base copper ingot 50 times
       expect(upgradeInfo?.scoreChange).toBe(60);
     });
+
+    it('should get the cost and score correctly for a bp not using the 51+10 strategy', () => {
+      const blueprint: Blueprint = {
+        productName: 'Compass',
+        evolutionStage: 1,
+        upgradeLevel: 51,
+        score: 60,
+        scoreChangePerLevel: 1,
+      };
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(61);
+      expect(upgradeInfo?.blueprint.score).toBe(70);
+      expect(upgradeInfo?.costOfUpgrade).toBe(61476);
+    });
+
+    it('should get the cost and score correctly for merging a bp not using the 51+10 strategy', () => {
+      const blueprint: Blueprint = {
+        productName: 'Compass',
+        evolutionStage: 1,
+        upgradeLevel: 61,
+        score: 70,
+        scoreChangePerLevel: 1,
+      };
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.evolutionStage).toBe(2);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradeInfo?.blueprint.score).toBe(140);
+      expect(upgradeInfo?.blueprint.scoreChangePerLevel).toBe(14);
+      expect(upgradeInfo?.costOfUpgrade).toBe(113391);
+      expect(upgradeInfo?.scoreChange).toBe(70);
+    });
+
+    it('temp', () => {
+      const bp: Blueprint = {
+        ...BOTTOM_STAGE_1,
+        productName: 'Compass',
+      };
+      console.log(upgradeBlueprint(bp, 60));
+    });
   });
 
   describe('mergeBlueprint', () => {
