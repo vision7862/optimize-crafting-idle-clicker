@@ -4,6 +4,7 @@ import * as path from 'path';
 import {
   bestGemChance,
   bottomUpToMoney,
+  fastestFamePerSecond,
   quickestNewLevel,
 } from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
 import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
@@ -18,6 +19,7 @@ enum OptimizationGoal {
   Gems,
   Scientists,
   Fame,
+  FastestFame,
 }
 
 export async function runCLI(): Promise<void> {
@@ -42,6 +44,7 @@ export async function runCLI(): Promise<void> {
   choices.push(
     { value: OptimizationGoal.Scientists, name: 'scientists', description: 'buy a specified number of scientists' },
     { value: OptimizationGoal.Fame, name: 'fame', description: 'a specific fame number' },
+    { value: OptimizationGoal.FastestFame, name: 'fastest fame', description: 'most efficient fame over time' },
   );
   const goal: OptimizationGoal = await select<OptimizationGoal>({
     message: 'what is your goal?',
@@ -62,6 +65,9 @@ export async function runCLI(): Promise<void> {
       break;
     case OptimizationGoal.Fame:
       await optimizeForFame(workshopStatus);
+      break;
+    case OptimizationGoal.FastestFame:
+      optimizeForFastestFame(workshopStatus);
       break;
   }
 
@@ -98,6 +104,11 @@ async function optimizeForScientists(workshopStatus: Partial<WorkshopStatus>): P
   });
   const target = getCostOfScientistsFromSome(workshopStatus.scientists ?? 0, Number(desiredScientists));
   printInfo(bottomUpToMoney(target, workshopStatus), target);
+}
+
+function optimizeForFastestFame(workshopStatus: Partial<WorkshopStatus>): void {
+  const targetInfo = fastestFamePerSecond(workshopStatus);
+  printInfo(targetInfo);
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
