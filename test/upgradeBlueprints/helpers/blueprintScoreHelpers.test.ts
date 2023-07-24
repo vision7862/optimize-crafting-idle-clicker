@@ -1,13 +1,10 @@
-import {
-  BLUEPRINT_LIBRARY,
-  BOTTOM_STAGE_1,
-  BOTTOM_STAGE_2,
-} from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
   BlueprintSet,
   SetMultiplierType,
 } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+import { BOTTOM_STAGE_1, BOTTOM_STAGE_2 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
   getOnlyTopBlueprints,

@@ -1,15 +1,14 @@
 import { importMainWorkshop } from '../../buildWorkshop/importMainWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import {
-  BOTTOM_STAGE_1,
   BPS_WITHOUT_DUPES,
   BUILD_COST_OF_BPS_WITHOUT_DETAILS,
   NON_51_PLUS_10_STRATEGY,
-  getBottomOfStageBP,
 } from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
+import { BOTTOM_STAGE_1, getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
   getDistanceToNextRank,
