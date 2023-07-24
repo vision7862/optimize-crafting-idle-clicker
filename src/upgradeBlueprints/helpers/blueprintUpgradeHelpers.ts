@@ -184,11 +184,13 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
   //  merge if necessary which recursively goes back to this
 
   // make new blueprint with evolution increased, score * 2, and reset level to 1
+  const topOfOrigStage = getScoreAtTopOfStage(blueprintToUpgrade.evolutionStage, strategyForThisBP);
+  const newScore = topOfOrigStage + blueprintToUpgrade.score;
   const mergedBlueprint: Blueprint = {
     ...blueprintToUpgrade,
     evolutionStage: blueprintToUpgrade.evolutionStage + 1,
-    score: blueprintToUpgrade.score * 2,
-    scoreChangePerLevel: (blueprintToUpgrade.score / 10) * 2,
+    score: newScore,
+    scoreChangePerLevel: newScore / 10,
     upgradeLevel: 1,
   };
 

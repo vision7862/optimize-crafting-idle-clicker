@@ -1,11 +1,11 @@
+import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
-  BLUEPRINT_LIBRARY,
   BOTTOM_STAGE_1,
   BOTTOM_STAGE_2,
   TOP_STAGE_1,
   TOP_STAGE_2,
-} from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
-import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+} from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   getCostToUpgradeBlueprint,
   mergeBlueprint,
@@ -129,17 +129,17 @@ describe('blueprintUpgradeHelpers', () => {
       const blueprint: Blueprint = {
         productName: 'Compass',
         evolutionStage: 1,
-        upgradeLevel: 61,
-        score: 70,
+        upgradeLevel: 71,
+        score: 80,
         scoreChangePerLevel: 1,
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
       expect(upgradeInfo?.blueprint.evolutionStage).toBe(2);
       expect(upgradeInfo?.blueprint.upgradeLevel).toBe(1);
-      expect(upgradeInfo?.blueprint.score).toBe(140);
-      expect(upgradeInfo?.blueprint.scoreChangePerLevel).toBe(14);
-      expect(upgradeInfo?.costOfUpgrade).toBe(113391);
-      expect(upgradeInfo?.scoreChange).toBe(70);
+      expect(upgradeInfo?.blueprint.score).toBe(160);
+      expect(upgradeInfo?.blueprint.scoreChangePerLevel).toBe(16);
+      expect(upgradeInfo?.costOfUpgrade).toBe(246115);
+      expect(upgradeInfo?.scoreChange).toBe(80);
     });
 
     it('temp', () => {
