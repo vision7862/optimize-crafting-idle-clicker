@@ -8,6 +8,7 @@ import {
   WorkshopStatus,
 } from '../types/Workshop';
 import { isEvent } from './helpers/WorkshopHelpers';
+import { toTime } from './helpers/printResults';
 import { computeTargetFromFame } from './helpers/targetHelpers';
 import { bottomUpBuilder, topDownLeveler } from './productLooper';
 import { WorkshopUpgradeInfo } from './shouldUpgrade';
@@ -69,6 +70,34 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
     const finalTime = (idleBuildTime + 10) * Math.ceil(fameRequiredToLevelUp / fame);
     if (finalTime < bestTime) {
       bestTime = finalTime;
+      bestFame = fame;
+      bestWorkshopUpgrade = targetInfo;
+    }
+  }
+  console.log('best fame: ' + bestFame.toString());
+  console.log(`repeats ${Math.ceil(fameRequiredToLevelUp / bestFame)} times`);
+  return bestWorkshopUpgrade;
+}
+
+export function fastestFamePerSecond(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+  const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+  const fameRequiredToLevelUp = workshopStatus.level + 3;
+  let bestTime = Number.MAX_VALUE;
+  let bestFame = fameRequiredToLevelUp;
+  let bestWorkshopUpgrade;
+  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 20); fame++) {
+    console.log(`testing multiple resets at ${fame} fame each...`);
+    const target = computeTargetFromFame(fame, workshopStatus.level);
+    const targetInfo = bottomUpToMoney(target, workshopStatus);
+    const idleBuildTime = targetInfo.cyclesToTarget + 10 * Math.ceil(fameRequiredToLevelUp / fame);
+    console.log(`${fame} fame takes ${toTime(idleBuildTime)}`);
+    if (idleBuildTime > 60 * 45) {
+      console.log(`${fame} fame takes too long`);
+      break;
+    }
+    const timePerFame = idleBuildTime / fame;
+    if (timePerFame < bestTime) {
+      bestTime = timePerFame;
       bestFame = fame;
       bestWorkshopUpgrade = targetInfo;
     }
