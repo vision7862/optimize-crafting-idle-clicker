@@ -6,12 +6,12 @@ import {
   bottomUpToMoney,
   fastestFamePerSecond,
   quickestNewLevel,
-} from './optimizeBuildingWorkshop/computeIdealLevelsForEvent';
-import { getCostOfScientistsFromSome } from './optimizeBuildingWorkshop/helpers/ResearchHelpers';
-import { isEvent } from './optimizeBuildingWorkshop/helpers/WorkshopHelpers';
-import { printFameTime, printInfo } from './optimizeBuildingWorkshop/helpers/printResults';
-import { computeTargetFromFame } from './optimizeBuildingWorkshop/helpers/targetHelpers';
-import { WorkshopStatus } from './types/Workshop';
+} from './buildWorkshop/computeIdealLevelsForEvent';
+import { getCostOfScientistsFromSome } from './buildWorkshop/helpers/ResearchHelpers';
+import { isEvent } from './buildWorkshop/helpers/WorkshopHelpers';
+import { printFameTime, printInfo } from './buildWorkshop/helpers/printResults';
+import { computeTargetFromFame } from './buildWorkshop/helpers/targetHelpers';
+import { WorkshopStatus } from './buildWorkshop/types/Workshop';
 
 enum OptimizationGoal {
   LevelUp,
