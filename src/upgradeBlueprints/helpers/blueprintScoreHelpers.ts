@@ -1,9 +1,10 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
 import { Blueprint } from '../types/Blueprint';
 
 export const getSpecifiedMultiplierFromLibrary = memoize(
-  (multiplierType: SetMultiplierType, blueprints: Blueprint[]) => {
+  (multiplierType: SetMultiplierType, blueprints: Blueprint[] = BLUEPRINT_LIBRARY) => {
     const scores: Map<string, number> = convertBlueprintLibraryToScores(blueprints);
     return getSpecifiedMultiplierFromSets(multiplierType, scores);
   },

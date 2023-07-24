@@ -1,10 +1,6 @@
 import memoize from 'fast-memoize';
-import { BLUEPRINT_LIBRARY } from '../../upgradeBlueprints/config/BlueprintLibrary';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
-import {
-  convertBlueprintLibraryToScores,
-  getSpecifiedMultiplierFromSets,
-} from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
+import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import { MERCHANT_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
 import {
   DAILY_DYNASTY_FRIEND_BONUS_MERCHANT,
@@ -25,7 +21,7 @@ const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
     MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getMWSLevelAchievementMultiplier(level) *
-    getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)) *
+    getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
     MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
     DAILY_DYNASTY_FRIEND_BONUS_MERCHANT
   );
