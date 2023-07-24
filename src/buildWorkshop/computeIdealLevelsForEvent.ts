@@ -1,4 +1,5 @@
 import { isEvent } from './helpers/WorkshopHelpers';
+import { toTime } from './helpers/printResults';
 import { computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
