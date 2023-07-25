@@ -62,7 +62,7 @@ export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<st
 
 export function getFile(fileName: string): string {
   const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
-  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../products/${fileName}.txt`);
+  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../../products/${fileName}.txt`);
   const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
   return blueprintProducts;
 }

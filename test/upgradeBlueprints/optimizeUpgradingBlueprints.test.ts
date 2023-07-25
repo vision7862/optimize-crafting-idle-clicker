@@ -8,7 +8,7 @@ import {
 
 describe('optimizeUpgradingBlueprints', () => {
   describe('upgradeMostImpactfulIncomeSet', () => {
-    it('next rank on one set', () => {
+    it('next rank on one income/merchant set', () => {
       const setUpgradeInfo = upgradeMostImpactfulIncomeSet();
       console.log(setUpgradeInfo?.upgradedBlueprints);
       console.log(setUpgradeInfo?.cost);

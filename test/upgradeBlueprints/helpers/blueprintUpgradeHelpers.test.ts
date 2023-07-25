@@ -1,11 +1,11 @@
+import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
-  BLUEPRINT_LIBRARY,
-  BOTTOM_STAGE_1,
+  BASE_BP,
   BOTTOM_STAGE_2,
   TOP_STAGE_1,
   TOP_STAGE_2,
-} from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
-import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+} from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   getCostToUpgradeBlueprint,
   mergeBlueprint,
@@ -19,7 +19,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('getCostToUpgradeBlueprint', () => {
     it('should add up from the base correctly', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
       };
 
@@ -28,7 +28,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should add up from not the base correctly', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
         upgradeLevel: 11,
         score: 20,
@@ -39,7 +39,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with later blueprints', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Cut Sapphire',
       };
 
@@ -48,7 +48,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should work for any number of levels', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Cut Sapphire',
       };
 
@@ -57,7 +57,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with non-resource products', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Iron Armor',
       };
 
@@ -79,7 +79,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('upgradeBlueprint', () => {
     it('should get the cost and score correctly for a stage 1 bp', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
@@ -109,6 +109,45 @@ describe('blueprintUpgradeHelpers', () => {
       expect(upgradeInfo?.blueprint.score).toBe(120);
       expect(upgradeInfo?.costOfUpgrade).toBe(10834); // cost of upgrading base copper ingot 50 times
       expect(upgradeInfo?.scoreChange).toBe(60);
+    });
+
+    it('should get the cost and score correctly for a bp not using the 51+10 strategy', () => {
+      const blueprint: Blueprint = {
+        productName: 'Compass',
+        evolutionStage: 1,
+        upgradeLevel: 51,
+        score: 60,
+        scoreChangePerLevel: 1,
+      };
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(61);
+      expect(upgradeInfo?.blueprint.score).toBe(70);
+      expect(upgradeInfo?.costOfUpgrade).toBe(61476);
+    });
+
+    it('should get the cost and score correctly for merging a bp not using the 51+10 strategy', () => {
+      const blueprint: Blueprint = {
+        productName: 'Compass',
+        evolutionStage: 1,
+        upgradeLevel: 71,
+        score: 80,
+        scoreChangePerLevel: 1,
+      };
+      const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.evolutionStage).toBe(2);
+      expect(upgradeInfo?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradeInfo?.blueprint.score).toBe(160);
+      expect(upgradeInfo?.blueprint.scoreChangePerLevel).toBe(16);
+      expect(upgradeInfo?.costOfUpgrade).toBe(246115);
+      expect(upgradeInfo?.scoreChange).toBe(80);
+    });
+
+    it('temp', () => {
+      const bp: Blueprint = {
+        ...BASE_BP,
+        productName: 'Compass',
+      };
+      console.log(upgradeBlueprint(bp, 60));
     });
   });
 

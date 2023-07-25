@@ -1,13 +1,10 @@
-import {
-  BLUEPRINT_LIBRARY,
-  BOTTOM_STAGE_1,
-  BOTTOM_STAGE_2,
-} from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
   BlueprintSet,
   SetMultiplierType,
 } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+import { BASE_BP, BOTTOM_STAGE_2 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
   getOnlyTopBlueprints,
@@ -27,9 +24,10 @@ describe('blueprintScoreHelpers', () => {
           evolutionStage: 2,
           upgradeLevel: 1,
           score: 120,
+          scoreChangePerLevel: 12,
         },
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Wood' },
       ];
       const scores = convertBlueprintLibraryToScores(blueprints);
       expect(scores.get('Wood')).toBe(120);
@@ -42,9 +40,10 @@ describe('blueprintScoreHelpers', () => {
           evolutionStage: 2,
           upgradeLevel: 1,
           score: 120,
+          scoreChangePerLevel: 12,
         },
-        { ...BOTTOM_STAGE_1, productName: 'Wood', score: 60 },
-        { ...BOTTOM_STAGE_1, productName: 'Wood', evolutionStage: 2 },
+        { ...BASE_BP, productName: 'Wood', score: 60 },
+        { ...BASE_BP, productName: 'Wood', evolutionStage: 2 },
       ];
       const scores = convertBlueprintLibraryToScores(blueprints);
       expect(scores.get('Wood')).toBe(120);
@@ -60,29 +59,29 @@ describe('blueprintScoreHelpers', () => {
   describe('getOnlyTopBlueprints', () => {
     it('should filter to only one blueprint per product', () => {
       const blueprints: Blueprint[] = [
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Arrows' },
-        { ...BOTTOM_STAGE_1, productName: 'Arrows' },
+        { ...BASE_BP, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Arrows' },
+        { ...BASE_BP, productName: 'Arrows' },
       ];
       expect(getOnlyTopBlueprints(blueprints).length).toBe(3);
     });
 
     it('should filter to only the top scoring blueprint even if it is later in the list', () => {
       const blueprints: Blueprint[] = [
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
+        { ...BASE_BP, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Wood' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Club' },
         { ...BOTTOM_STAGE_2, productName: 'Wood' },
-        { ...BOTTOM_STAGE_1, productName: 'Club' },
-        { ...BOTTOM_STAGE_1, productName: 'Arrows' },
-        { ...BOTTOM_STAGE_1, productName: 'Arrows' },
+        { ...BASE_BP, productName: 'Club' },
+        { ...BASE_BP, productName: 'Arrows' },
+        { ...BASE_BP, productName: 'Arrows' },
       ];
       const topBlueprints = getOnlyTopBlueprints(blueprints);
       expect(topBlueprints.length).toBe(3);
