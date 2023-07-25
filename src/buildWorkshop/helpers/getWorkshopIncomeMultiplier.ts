@@ -3,6 +3,7 @@ import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSe
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import { MERCHANT_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
 import {
+  DAILY_DYNASTY_FRIEND_BONUS_INCOME,
   DAILY_DYNASTY_FRIEND_BONUS_MERCHANT,
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
@@ -13,16 +14,25 @@ import { isEvent } from './WorkshopHelpers';
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
   return (
     (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
-    (isEvent(workshopStatus) ? 1 : getMainWorkshopIncomeMultiplier(workshopStatus.level))
+    (isEvent(workshopStatus)
+      ? 1
+      : getMainWorkshopIncomeMultiplier(workshopStatus.level) * getMainWorkshopMerchantMultiplier())
   );
 }
 
 const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
-    MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getMWSLevelAchievementMultiplier(level) *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
     MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
+    DAILY_DYNASTY_FRIEND_BONUS_INCOME
+  );
+});
+
+const getMainWorkshopMerchantMultiplier = memoize(() => {
+  return (
+    MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
+    getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
     DAILY_DYNASTY_FRIEND_BONUS_MERCHANT
   );
 });
