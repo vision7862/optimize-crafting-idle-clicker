@@ -1,14 +1,14 @@
 import { importMainWorkshop } from '../../buildWorkshop/importMainWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import {
-  BPS_WITHOUT_DUPES,
+  BPS_TO_NOT_MERGE,
   BUILD_COST_OF_BPS_WITHOUT_DETAILS,
   NON_51_PLUS_10_STRATEGY,
 } from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
-import { BOTTOM_STAGE_1, getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
+import { BASE_BP, getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
   getDistanceToNextRank,
@@ -42,7 +42,7 @@ export function upgradeBlueprint(blueprint: Blueprint, levels: number): Blueprin
   const topUpgradeLevel =
     NON_51_PLUS_10_STRATEGY.get(blueprint.productName) ?? 51 + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
-    return !BPS_WITHOUT_DUPES.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
+    return !BPS_TO_NOT_MERGE.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
@@ -96,7 +96,7 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
   const baseNumLevelsToUpgrade = strategyForThisBP - 1;
   if (blueprintToUpgrade.evolutionStage === 1) {
     const topStage1 = upgradeBlueprint(
-      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      { ...BASE_BP, productName: blueprintToUpgrade.productName },
       baseNumLevelsToUpgrade,
     );
     // we have one at the top of 1, need to get one to the top of 1 from the bottom of 1
@@ -106,7 +106,7 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
   if (blueprintToUpgrade.evolutionStage === 2) {
     // we have one at the top of 2, need to get 2 to the top of 1 from the bottom of 1
     const topStage1 = upgradeBlueprint(
-      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      { ...BASE_BP, productName: blueprintToUpgrade.productName },
       baseNumLevelsToUpgrade,
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -122,7 +122,7 @@ export function mergeBlueprint(blueprintToUpgrade: Blueprint): BlueprintUpgradeI
   if (blueprintToUpgrade.evolutionStage === 3) {
     // we have one at the top of 3. need to get 4 from bottom 1 to top 1
     const topStage1 = upgradeBlueprint(
-      { ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName },
+      { ...BASE_BP, productName: blueprintToUpgrade.productName },
       baseNumLevelsToUpgrade,
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -217,7 +217,7 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   while (totalScoreIncreased < distanceToNextRank) {
     const relevantSetBlueprints = getOnlyTopBlueprints(blueprintsWithUpgradedReplacements).filter(
       (blueprint: Blueprint) =>
-        set.blueprints.includes(blueprint.productName) && !BPS_WITHOUT_DUPES.includes(blueprint.productName),
+        set.blueprints.includes(blueprint.productName) && !BPS_TO_NOT_MERGE.includes(blueprint.productName),
     );
     if (relevantSetBlueprints.length === 0) {
       return null;

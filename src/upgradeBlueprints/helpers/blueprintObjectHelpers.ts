@@ -1,7 +1,7 @@
 import { Blueprint } from '../types/Blueprint';
 
 // these defaults are for the 51+10 strategy
-export const BOTTOM_STAGE_1: Blueprint = {
+export const BASE_BP: Blueprint = {
   productName: 'productName',
   evolutionStage: 1,
   upgradeLevel: 1,
@@ -10,17 +10,16 @@ export const BOTTOM_STAGE_1: Blueprint = {
 };
 
 export const TOP_STAGE_1: Blueprint = {
-  ...BOTTOM_STAGE_1,
+  ...BASE_BP,
   upgradeLevel: 51,
-  score: BOTTOM_STAGE_1.score + (BOTTOM_STAGE_1.score / 10) * 50,
+  score: BASE_BP.score + (BASE_BP.score / 10) * 50,
 };
 
 export const BOTTOM_STAGE_2: Blueprint = {
-  ...BOTTOM_STAGE_1,
+  ...BASE_BP,
   evolutionStage: 2,
-  score: (BOTTOM_STAGE_1.score + (BOTTOM_STAGE_1.score / 10) * 50) * 2,
-  scoreChangePerLevel:
-    ((BOTTOM_STAGE_1.scoreChangePerLevel * (BOTTOM_STAGE_1.score + (BOTTOM_STAGE_1.score / 10) * 50)) / 10) * 2,
+  score: (BASE_BP.score + (BASE_BP.score / 10) * 50) * 2,
+  scoreChangePerLevel: ((BASE_BP.scoreChangePerLevel * (BASE_BP.score + (BASE_BP.score / 10) * 50)) / 10) * 2,
 };
 
 export const TOP_STAGE_2: Blueprint = {
@@ -29,30 +28,15 @@ export const TOP_STAGE_2: Blueprint = {
   score: BOTTOM_STAGE_2.score + (BOTTOM_STAGE_2.score / 10) * 60,
 };
 
-export const BOTTOM_STAGE_3: Blueprint = {
-  ...BOTTOM_STAGE_1,
-  evolutionStage: 3,
-  score: (BOTTOM_STAGE_2.score + (BOTTOM_STAGE_2.score / 10) * 60) * 2,
-  scoreChangePerLevel: BOTTOM_STAGE_2.scoreChangePerLevel * 14,
-};
-
-export const TOP_STAGE_3: Blueprint = {
-  ...BOTTOM_STAGE_3,
-  upgradeLevel: 71,
-  score: BOTTOM_STAGE_3.score + (BOTTOM_STAGE_3.score / 10) * 70,
-};
-
 export function getBottomOfStageBP(evolutionStage: number, strategy: number): Blueprint {
-  const topStageScore = getScoreAtTopOfStage(evolutionStage, strategy);
+  const topStageScore = getScoreAtTopOfStage(evolutionStage - 1, strategy);
   if (evolutionStage === 1) {
-    return BOTTOM_STAGE_1;
+    return BASE_BP;
   } else {
     return {
-      ...BOTTOM_STAGE_1,
+      ...BASE_BP,
       evolutionStage: evolutionStage + 1,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       score: topStageScore * 2,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       scoreChangePerLevel: (topStageScore / 10) * 2,
     };
   }
@@ -64,7 +48,7 @@ export function getScoreAtTopOfStage(evolutionStage: number, strategy: number): 
   }
 
   // const thePlus10Part = 10 * (evolutionStage - 1);
-  const topStage1Score = BOTTOM_STAGE_1.score + (BOTTOM_STAGE_1.score / 10) * (strategy - 1);
+  const topStage1Score = BASE_BP.score + (BASE_BP.score / 10) * (strategy - 1);
   const topStage2Score = topStage1Score * 2 + ((topStage1Score * 2) / 10) * (strategy - 1 + 10);
   const topStage3Score = topStage2Score * 2 + ((topStage2Score * 2) / 10) * (strategy - 1 + 20);
   const topStage4Score = topStage3Score * 2 + ((topStage3Score * 2) / 10) * (strategy - 1 + 30);

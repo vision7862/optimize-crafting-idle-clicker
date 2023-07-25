@@ -1,7 +1,7 @@
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
-  BOTTOM_STAGE_1,
+  BASE_BP,
   BOTTOM_STAGE_2,
   TOP_STAGE_1,
   TOP_STAGE_2,
@@ -19,7 +19,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('getCostToUpgradeBlueprint', () => {
     it('should add up from the base correctly', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
       };
 
@@ -28,7 +28,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should add up from not the base correctly', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
         upgradeLevel: 11,
         score: 20,
@@ -39,7 +39,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with later blueprints', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Cut Sapphire',
       };
 
@@ -48,7 +48,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should work for any number of levels', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Cut Sapphire',
       };
 
@@ -57,7 +57,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should still work with non-resource products', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Iron Armor',
       };
 
@@ -79,7 +79,7 @@ describe('blueprintUpgradeHelpers', () => {
   describe('upgradeBlueprint', () => {
     it('should get the cost and score correctly for a stage 1 bp', () => {
       const blueprint: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Wood',
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
@@ -144,7 +144,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('temp', () => {
       const bp: Blueprint = {
-        ...BOTTOM_STAGE_1,
+        ...BASE_BP,
         productName: 'Compass',
       };
       console.log(upgradeBlueprint(bp, 60));
