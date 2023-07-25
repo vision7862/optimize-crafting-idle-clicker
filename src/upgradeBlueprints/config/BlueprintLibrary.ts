@@ -16,32 +16,32 @@ const s51 = {
 };
 
 export const BLUEPRINT_LIBRARY: Blueprint[] = [
-  { ...s51.b4, productName: 'Wood', upgradeLevel: 21, score: 80640 },
+  { ...s51.b4, productName: 'Wood', upgradeLevel: 71, score: 215040 },
   { ...s21.b2, productName: 'Club' },
-  { ...s21.b3, productName: 'Arrows', score: 360, scoreChangePerLevel: 36 },
+  { ...s21.b3, productName: 'Arrows', upgradeLevel: 11, score: 720, scoreChangePerLevel: 36 },
   { ...s21.b2, productName: 'Bow' },
   { ...s51.b3, productName: 'Rawhide', upgradeLevel: 51, score: 10080 },
   { ...s51.b3, productName: 'Leather', upgradeLevel: 21, score: 5040 },
   { ...s21.b2, productName: 'Boots' },
   { ...BASE_BP, productName: 'Hilt', upgradeLevel: 21, score: 30 },
   { ...s21.b2, productName: 'Leather Armor' },
-  { ...s51.b3, productName: 'Copper Ore' },
+  { ...s51.b3, productName: 'Copper Ore', upgradeLevel: 51, score: 10080 },
   { ...s51.b2, productName: 'Copper Ingots', upgradeLevel: 51, score: 720 },
   { productName: 'Copper Axe', evolutionStage: 4, upgradeLevel: 51, score: 37800, scoreChangePerLevel: 630 },
-  { ...s21.b3, productName: 'Copper Blades' },
-  { ...s21.b3, productName: 'Copper Knife' },
-  { productName: 'Copper Dagger', evolutionStage: 3, upgradeLevel: 1, score: 520, scoreChangePerLevel: 52 },
-  { ...s51.b2, productName: 'Tin Ore', upgradeLevel: 51, score: 720 },
-  { productName: 'Bronze Ingots', evolutionStage: 3, upgradeLevel: 11, score: 1200, scoreChangePerLevel: 60 },
-  { productName: 'Bronze Spear', evolutionStage: 3, upgradeLevel: 11, score: 1200, scoreChangePerLevel: 60 },
+  { ...s21.b3, productName: 'Copper Blades', upgradeLevel: 21, score: 1440 },
+  { ...s21.b3, productName: 'Copper Knife', upgradeLevel: 21, score: 1440 },
+  { productName: 'Copper Dagger', evolutionStage: 3, upgradeLevel: 21, score: 1560, scoreChangePerLevel: 52 },
+  { ...s51.b3, productName: 'Tin Ore', upgradeLevel: 41, score: 8400 },
+  { productName: 'Bronze Ingots', evolutionStage: 3, upgradeLevel: 21, score: 1800, scoreChangePerLevel: 60 },
+  { productName: 'Bronze Spear', evolutionStage: 3, upgradeLevel: 21, score: 1800, scoreChangePerLevel: 60 },
   { ...s21.b2, productName: 'Bronze Shield' },
-  { ...s21.b3, productName: 'Bronze Blades', upgradeLevel: 11, score: 960 },
-  { ...s21.b3, productName: 'Bronze Dagger', upgradeLevel: 11, score: 960 },
+  { ...s21.b3, productName: 'Bronze Blades', upgradeLevel: 21, score: 1440 },
+  { ...s21.b3, productName: 'Bronze Dagger', upgradeLevel: 21, score: 1440 },
   { ...s21.b2, productName: 'Bronze Sword' },
   { ...s51.b2, productName: 'Coal', upgradeLevel: 41, score: 600 },
   { ...s51.b2, productName: 'Coal' },
   { ...s51.b2, productName: 'Iron Ore', upgradeLevel: 41, score: 600 },
-  { ...s21.b4, productName: 'Iron Ingots', upgradeLevel: 21, score: 16200, scoreChangePerLevel: 540 },
+  { ...s21.b4, productName: 'Iron Ingots', upgradeLevel: 31, score: 21600, scoreChangePerLevel: 540 },
   { ...BASE_BP, productName: 'Chisel', upgradeLevel: 41, score: 50 },
   { ...s21.b2, productName: 'Iron Mace' },
   { ...s21.b3, productName: 'Iron Rivets', score: 390, scoreChangePerLevel: 39 },
@@ -126,7 +126,9 @@ export const BUILD_COST_OF_BPS_WITHOUT_DETAILS = new Map<string, number>([
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 // TODO: set up the strategy to also allow marking a top tier at which to stop merging. for now put that here
-export const BPS_TO_NOT_MERGE = ['Chisel', 'Map', 'Bongos', 'Copper Axe'];
+const BPS_WITHOUT_DUPES = ['Chisel', 'Map', 'Bongos', 'Copper Dagger', 'Copper Blades', 'Copper Knife'];
+const BPS_AT_TOP = ['Copper Axe'];
+export const BPS_TO_NOT_MERGE = [...BPS_WITHOUT_DUPES, ...BPS_AT_TOP];
 
 // some blueprints should not use 51+10 strategy. they should use x+10 instead, map product name to x
 export const NON_51_PLUS_10_STRATEGY = new Map<string, number>([

@@ -85,7 +85,7 @@ export function fastestFamePerSecond(partialWorkshopStatus: Partial<WorkshopStat
   let bestTime = Number.MAX_VALUE;
   let bestFame = fameRequiredToLevelUp;
   let bestWorkshopUpgrade;
-  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 20); fame++) {
+  for (let fame = 2; fame < Math.min(fameRequiredToLevelUp, 30); fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level);
     const targetInfo = bottomUpToMoney(target, workshopStatus);
