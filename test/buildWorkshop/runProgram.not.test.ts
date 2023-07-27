@@ -2,6 +2,7 @@ import {
   bestGemChance,
   bottomUpToLastItem,
   bottomUpToMoney,
+  fastestFamePerSecond,
   productDownUpToMoney,
   quickestNewLevel,
 } from '../../src/buildWorkshop/computeIdealLevelsForEvent';
@@ -299,6 +300,10 @@ describe.only('runProgram', () => {
 
       test('20 fame lvl 43', () => {
         printFameTime(20, { level: 43, scientists: 1001, researchBoostActive: true });
+      });
+
+      test('19 fame lvl 54', () => {
+        printFameTime(19, { level: 54, scientists: 1144, researchBoostActive: true, speedBoostActive: true });
       });
     });
 
@@ -655,6 +660,27 @@ describe.only('runProgram', () => {
           speedBoostActive: true,
           merchantBoostActive: true,
           researchBoostActive: true,
+        });
+      });
+    });
+
+    describe('fastest fame', () => {
+      function fastestFame(partialWorkshopStatus: Partial<WorkshopStatus>): void {
+        const moreWorkshopStatus = {
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: false,
+          ...partialWorkshopStatus,
+        };
+        const targetInfo = fastestFamePerSecond(moreWorkshopStatus);
+        printInfo(targetInfo);
+      }
+
+      it('lvl 40', () => {
+        fastestFame({
+          level: 40,
+          scientists: 935,
+          speedBoostActive: true,
         });
       });
     });

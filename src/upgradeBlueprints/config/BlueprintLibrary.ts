@@ -15,6 +15,13 @@ const s51 = {
   b4: { ...BASE_BP, evolutionStage: 4, score: 26880, scoreChangePerLevel: 2688 },
 };
 
+// strategy 71+10
+const s71 = {
+  b2: { ...BASE_BP, evolutionStage: 2, score: 160, scoreChangePerLevel: 16 },
+  b3: { ...BASE_BP, evolutionStage: 3, score: 2880, scoreChangePerLevel: 288 },
+  b4: { ...BASE_BP, evolutionStage: 4, score: 57600, scoreChangePerLevel: 5760 },
+};
+
 export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.b4, productName: 'Wood', upgradeLevel: 71, score: 215040 },
   { ...s21.b2, productName: 'Club' },
@@ -71,17 +78,17 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BASE_BP, productName: 'Magnificent Sword' },
   { ...BASE_BP, productName: 'Uncut Sapphire', upgradeLevel: 21, score: 30 },
   { ...BASE_BP, productName: 'Magnificent Armor' },
-  { ...s51.b2, productName: 'Mechanical Parts', upgradeLevel: 31, score: 480 },
+  { ...s51.b2, productName: 'Mechanical Parts', upgradeLevel: 41, score: 600 },
   { ...BASE_BP, productName: 'Magnificent Crossbow', upgradeLevel: 31, score: 40 },
   { ...BASE_BP, productName: 'Sulfur', upgradeLevel: 31, score: 40 },
   { ...BASE_BP, productName: 'Bongos', upgradeLevel: 41, score: 50 },
   { ...BASE_BP, productName: 'Cut Sapphire' },
   { ...BASE_BP, productName: 'Microscope', upgradeLevel: 21, score: 30 },
-  { ...BASE_BP, productName: 'Compass', upgradeLevel: 61, score: 70 },
+  { ...s71.b2, productName: 'Compass', upgradeLevel: 41, score: 800 },
   { ...BASE_BP, productName: 'Clockwork', upgradeLevel: 21, score: 30 },
   { ...BASE_BP, productName: 'Saltpeter', upgradeLevel: 31, score: 40 },
   { ...BASE_BP, productName: 'Gunpowder', upgradeLevel: 41, score: 50 },
-  { ...BASE_BP, productName: 'Saxophone', upgradeLevel: 41, score: 50 },
+  { ...s51.b2, productName: 'Saxophone', upgradeLevel: 21, score: 360 },
   { ...BASE_BP, productName: 'Electro Magnet', upgradeLevel: 21, score: 30 },
   { ...BASE_BP, productName: 'Machine Parts', upgradeLevel: 21, score: 30 },
   { ...BASE_BP, productName: 'Camera', upgradeLevel: 21, score: 30 },
@@ -125,14 +132,30 @@ export const BUILD_COST_OF_BPS_WITHOUT_DETAILS = new Map<string, number>([
 ]);
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
+const BPS_WITHOUT_DUPES = [
+  'Chisel',
+  'Map',
+  'Bongos',
+  'Copper Dagger',
+  // 'Copper Blades',
+  'Copper Knife',
+  'Bronze Spear',
+  'Bronze Shield',
+  'Bronze Blades',
+  'Bronze Dagger',
+  'Wood',
+  // 'Club',
+  'Arrows',
+  'Bow',
+];
 // TODO: set up the strategy to also allow marking a top tier at which to stop merging. for now put that here
-const BPS_WITHOUT_DUPES = ['Chisel', 'Map', 'Bongos', 'Copper Dagger', 'Copper Blades', 'Copper Knife'];
 const BPS_AT_TOP = ['Copper Axe'];
 export const BPS_TO_NOT_MERGE = [...BPS_WITHOUT_DUPES, ...BPS_AT_TOP];
 
 // some blueprints should not use 51+10 strategy. they should use x+10 instead, map product name to x
 export const NON_51_PLUS_10_STRATEGY = new Map<string, number>([
   ['Compass', 71],
+  ['Light Bulb', 71],
   ['Club', 21],
   ['Arrows', 21],
   ['Bow', 21],
