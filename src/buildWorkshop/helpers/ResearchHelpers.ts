@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { RESEARCH_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
+import { PROMOTION_BONUS_RESEARCH, RESEARCH_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
 import { RESEARCH_ACHIEVEMENT_MULTIPLIER, TOTAL_BLUEPRINT_SCORE_MULTIPLIER } from '../constants/Achievements';
 import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
@@ -52,8 +52,9 @@ export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): nu
 
 function getMainWorkshopResearchMultiplier(): number {
   return (
-    RESEARCH_ACHIEVEMENT_MULTIPLIER * // research achievement
+    RESEARCH_ACHIEVEMENT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Research) *
-    TOTAL_BLUEPRINT_SCORE_MULTIPLIER // total blueprint score
+    TOTAL_BLUEPRINT_SCORE_MULTIPLIER *
+    PROMOTION_BONUS_RESEARCH
   );
 }

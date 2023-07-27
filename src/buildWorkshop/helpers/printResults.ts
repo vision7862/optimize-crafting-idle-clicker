@@ -19,14 +19,10 @@ export function printFameTime(fame: number, partialWorkshopStatus: Partial<Works
 
 export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): void {
   console.log(filterOutSkipped(getStatusMap(targetInfo.workshop)));
-  // const speedBoost = targetInfo.workshop.workshopStatus.speedBoostActive ? 2 : 1;
-  // console.log('fully idle: ' + toTime((targetInfo.cyclesToTarget * 10) / speedBoost));
-  // console.log('aggro: ' + toTime((targetInfo.cyclesToTarget * 3) / speedBoost));
-  // console.log('cycles: ', targetInfo.cyclesToTarget);
   const onlyBuiltWorkshop: Workshop = filterOutSkippedFullWorkshop(targetInfo.workshop);
-  console.log('more accurate time: ' + toTime(computeBuildTimeForWorkshop(onlyBuiltWorkshop, target ?? 0)));
+  console.log('research time: ' + toTime(computeResearchTimeForWorkshop(onlyBuiltWorkshop)));
+  console.log('build time: ' + toTime(computeBuildTimeForWorkshop(onlyBuiltWorkshop, target ?? 0)));
   // console.log('fully idle accurate cycles ' + toTime(computeBuildTimeForWorkshop(targetInfo.workshop) * 10));
-  console.log('research time minimum: ' + toTime(computeResearchTimeForWorkshop(onlyBuiltWorkshop)));
   if (target !== undefined) {
     const startingScientists = targetInfo.workshop.workshopStatus.scientists;
     const affordableScientists = getFinalNumScientistsCanAfford(startingScientists, target * 0.5);
