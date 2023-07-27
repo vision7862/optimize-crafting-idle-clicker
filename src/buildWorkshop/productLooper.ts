@@ -39,18 +39,6 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
   console.info('trimming unneeded products...');
   const trimmedWorkshop = trimWorkshop(target, firstPassOptimizedWorkshop, firstPassBuildTime);
 
-  for (
-    let finalProductBuilt = trimmedWorkshop.workshop.productsInfo.length - 1;
-    finalProductBuilt >= 0;
-    finalProductBuilt--
-  ) {
-    const finalProduct: Product | undefined = trimmedWorkshop.workshop.productsInfo[finalProductBuilt];
-    if (finalProduct.status.level > 0) {
-      const modifiedWorkshopInfo = topDownLeveler(target, finalProduct.details.name, trimmedWorkshop.workshop, 1);
-      return modifiedWorkshopInfo;
-    }
-  }
-
   return trimmedWorkshop;
 }
 
@@ -84,9 +72,17 @@ function trimWorkshop(target: number, untrimmedWorkshop: Workshop, bestBuildTime
       }
     }
   }
+
+  const lastProduct = [...bestWorkshop.productsInfo].findLast((product) => product.status.level > 0);
+  if (lastProduct === undefined) {
+    throw new Error('no products build in workshop');
+  }
+  bestWorkshop = topDownLeveler(target, lastProduct.details.name, bestWorkshop, 1);
+  const buildTime = computeBuildTimeForWorkshop(bestWorkshop, target);
+
   return {
     workshop: bestWorkshop,
-    cyclesToTarget: bestBuildTime,
+    buildTime,
   };
 }
 
