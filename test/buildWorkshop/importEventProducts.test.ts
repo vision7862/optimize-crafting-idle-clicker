@@ -46,4 +46,9 @@ describe('importProducts', () => {
     const products: ProductDetails[] = Array.from(importProducts('The New World').values());
     expect(products.length).toBe(25);
   });
+
+  test('Product Cycle', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Product Cycle').values());
+    expect(products.length).toBe(24);
+  });
 });

@@ -1,0 +1,24 @@
+Wood	1	10	512	x1	-	-																																						Green
+Rubber	10	80	2,560	x1	-	-																																			Green
+Tire	50	900	15,360	x1	Rubber x1	-																															Blue
+Coal	100	7,000	20,480	x1	-	-																																		Green
+Iron Ore	500	60,000	179,200	x1	-	-																															Green
+Iron Ingots	1,000	500,000	204,800	x5	Coal x3	Iron Ore x2																Yellow
+Iron Rivets	2,000	3.0 E6	256000	x10	Iron Ingots x1	-																Blue
+Steel	5,000	40.0 E6	10.2 E6	x1	Coal x4	Iron Ingots x2																Yellow
+Mech Parts	10,000	200.0 E6	5.1 E6	x4	Wood x2	Iron Rivets x8																Blue
+Small Wheel	20,000	1.0 E9	76.8 E6	x1	Tire x1	Mech Parts x4																Blue
+Large Wheel	50,000	5.0 E9	256.0 E6	x1	Tire x1	Mech Parts x8																Blue
+Penny-Farthing Wheels	100,000	20.0 E9	1.0 E9	x1	Small Wheel x1	Large Wheel x1																Blue
+Penny-Farthing Frame	150,000	100.0 E9	2.3 E9	x1	Iron Ingots x2	Mech Parts x4																Blue
+Penny-Farthing	200,000	600.0 E9	12.8 E9	x1	Penny-Farthing Wheels x1	Penny-Farthing Frame x1		Red
+Bicycle Wheel	250,000	3.0 E12	30.7 E9	x1	Tire x1	Mech Parts x6																Blue
+Bicycle Frame	300,000	25.0 E12	204.8 E9	x1	Steel x3	Mech Parts x6																Blue
+Bicycle	350,000	150.0 E12	1.0 E12	x1	Bicycle Wheel x2	Bicycle Frame x1													Violet
+Motorcycle Wheel	400,000	600.0 E12	2.3 E12	x1	Tire x1	Steel x2																Blue
+Cylinder	450,000	2.5 E15	7.6 E12	x1	Iron Ingots x1	Mech Parts x4																Blue
+Crankshaft	500,000	9.0 E15	25.6 E12	x1	Steel x1	-																							Blue
+Single-Cylinder Engine	550,000	45.0 E15	153.6 E12	x1	Cylinder x1	Crankshaft x1									Red
+Motorcycle Frame	600,000	200.0 E15	460.8 E12	x1	Mech Parts x10	Steel x4												Blue
+Motorcycle Chassis	650,000	1.0 E18	2.5 E15	x1	Single-Cylinder Engine x1	Motorcycle Frame x1			Blue
+Motorcycle	700,000	5.0 E18	10.2 E15	x1	Motorcycle Chassis x1	Motorcycle Wheel x2								Violet
