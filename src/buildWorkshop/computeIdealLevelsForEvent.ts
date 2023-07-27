@@ -3,7 +3,7 @@ import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
-import { WorkshopUpgradeInfo, bottomUpBuilder } from './productLooper';
+import { WorkshopUpgradeInfo, buildWorkshopToTarget } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
@@ -14,7 +14,7 @@ import {
 
 export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return bottomUpBuilder(workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost, workshop);
+  return buildWorkshopToTarget(workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost, workshop);
 }
 
 export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
@@ -95,7 +95,7 @@ export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): {
 
 export function bottomUpToMoney(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return bottomUpBuilder(target, workshop);
+  return buildWorkshopToTarget(target, workshop);
 }
 
 function setUpWorkshop(partialWorkshopStatus: Partial<WorkshopStatus>): Workshop {
