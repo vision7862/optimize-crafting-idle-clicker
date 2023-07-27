@@ -10,25 +10,14 @@ import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultipli
 import { Product, ProductDetails, ProductStatus } from './types/Product';
 import { Workshop, WorkshopStatus } from './types/Workshop';
 
-const scienceIsTight = true;
-
-export function getUpgradedWorkshopIfBetter(
-  target: number,
-  productName: string,
-  workshop: Workshop,
-  skipBuildIfUnderXCycles: number = 60,
-): Workshop | null {
+export function getUpgradedWorkshopIfBetter(target: number, productName: string, workshop: Workshop): Workshop | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
   const clickBoost = workshop.workshopStatus.clickBoostActive
     ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT
     : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
-  if (
-    product.status.level === 0 &&
-    // product.details.input1 !== null &&
-    (scienceIsTight ? cyclesToTarget < skipBuildIfUnderXCycles : cyclesToTarget < 5)
-  ) {
+  if (product.status.level === 0 && cyclesToTarget < 1) {
     return null;
   }
 

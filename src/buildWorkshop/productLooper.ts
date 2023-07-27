@@ -3,21 +3,11 @@ import { getProductsInfoWithNewStatusForProduct, getUpgradedWorkshopIfBetter } f
 import { Product, ProductStatus } from './types/Product';
 import { Workshop } from './types/Workshop';
 
-export function topDownLeveler(
-  target: number,
-  productName: string,
-  workshop: Workshop,
-  skipBuildIfUnderXCycles: number = 60,
-): Workshop {
+export function topDownLeveler(target: number, productName: string, workshop: Workshop): Workshop {
   let shouldUpgradeNext = true;
   let modifiedWorkshop: Workshop = workshop;
   while (shouldUpgradeNext) {
-    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(
-      target,
-      productName,
-      modifiedWorkshop,
-      skipBuildIfUnderXCycles,
-    );
+    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(target, productName, modifiedWorkshop);
     shouldUpgradeNext = upgradedWorkshop !== null;
     if (upgradedWorkshop != null) {
       modifiedWorkshop = upgradedWorkshop;
@@ -49,7 +39,7 @@ function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Work
     const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
-      modifiedWorkshop = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop, 1);
+      modifiedWorkshop = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop);
       if (nextProduct === undefined || target < nextProduct.details.buildCost) {
         break;
       }
@@ -77,7 +67,7 @@ function trimWorkshop(target: number, untrimmedWorkshop: Workshop, bestBuildTime
   if (lastProduct === undefined) {
     throw new Error('no products build in workshop');
   }
-  bestWorkshop = topDownLeveler(target, lastProduct.details.name, bestWorkshop, 1);
+  bestWorkshop = topDownLeveler(target, lastProduct.details.name, bestWorkshop);
   const buildTime = computeBuildTimeForWorkshop(bestWorkshop, target);
 
   return {
