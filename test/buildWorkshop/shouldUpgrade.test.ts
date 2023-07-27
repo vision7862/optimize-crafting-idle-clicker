@@ -13,7 +13,7 @@ describe('should Upgrade', () => {
       },
     };
     const workshop = getWorkshop(product.details, 5);
-    expect(getUpgradedWorkshopIfBetter(7e23, product.details.name, workshop, 1)).not.toBeNull();
+    expect(getUpgradedWorkshopIfBetter(7e23, product.details.name, workshop)).not.toBeNull();
   });
 
   test('should return false when it will take more cycles with upgrade', () => {
@@ -26,6 +26,6 @@ describe('should Upgrade', () => {
       },
     };
     const workshop = getWorkshop(product.details, 6);
-    expect(getUpgradedWorkshopIfBetter(7e23, product.details.name, workshop, 1)).toBeNull();
+    expect(getUpgradedWorkshopIfBetter(7e23, product.details.name, workshop)).toBeNull();
   });
 });
