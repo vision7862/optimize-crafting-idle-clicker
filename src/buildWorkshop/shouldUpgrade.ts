@@ -1,6 +1,10 @@
 import memoize from 'fast-memoize';
 import { CLICK_BOOST_MULTIPLIER } from './config/BoostMultipliers';
-import { MAIN_WORKSHOP_MERCHANT_CAPACITY } from './constants/Achievements';
+import {
+  MAIN_WORKSHOP_MERCHANT_CAPACITY,
+  PROMOTION_BONUS_CLICK_OUTPUT,
+  PROMOTION_BONUS_MERCHANT,
+} from './constants/Achievements';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
@@ -15,7 +19,9 @@ export function getUpgradedWorkshopIfBetter(
   skipBuildIfUnderXCycles: number = 60,
 ): WorkshopUpgradeInfo | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
-  const clickBoost = workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1;
+  const clickBoost = workshop.workshopStatus.clickBoostActive
+    ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT
+    : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
   if (
@@ -172,8 +178,8 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
     merchants: Math.ceil(
       ((product.status.level + 1) *
         product.details.outputCount *
-        (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1)) /
-        (isEvent(workshop.workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY),
+        (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
+        (isEvent(workshop.workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT),
     ),
   };
   return {

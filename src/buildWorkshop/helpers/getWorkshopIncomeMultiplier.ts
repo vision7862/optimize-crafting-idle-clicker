@@ -7,6 +7,8 @@ import {
   DAILY_DYNASTY_FRIEND_BONUS_MERCHANT,
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
+  PROMOTION_BONUS_INCOME,
+  PROMOTION_BONUS_MERCHANT,
 } from '../constants/Achievements';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
@@ -25,7 +27,8 @@ const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
     getMWSLevelAchievementMultiplier(level) *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
     MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
-    DAILY_DYNASTY_FRIEND_BONUS_INCOME
+    DAILY_DYNASTY_FRIEND_BONUS_INCOME *
+    PROMOTION_BONUS_INCOME
   );
 });
 
@@ -33,7 +36,8 @@ const getMainWorkshopMerchantMultiplier = memoize(() => {
   return (
     MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
-    DAILY_DYNASTY_FRIEND_BONUS_MERCHANT
+    DAILY_DYNASTY_FRIEND_BONUS_MERCHANT *
+    PROMOTION_BONUS_MERCHANT
   );
 });
 

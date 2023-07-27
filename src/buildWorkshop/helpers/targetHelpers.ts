@@ -1,4 +1,5 @@
 import memoize from 'fast-memoize';
+import { PROMOTION_BONUS_SPEED } from '../constants/Achievements';
 import { getCurrentIncome } from '../shouldUpgrade';
 import { Product, ProductStatus } from '../types/Product';
 import { Workshop } from '../types/Workshop';
@@ -44,23 +45,7 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, 
       productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, inProgressLevel),
     };
 
-    // make sure the product has been researched, wait for it if necessary
-    const secondsSoFar = cycleNum * (workshop.workshopStatus.speedBoostActive ? 5 : 10);
-    const secondsNeededToResearch = computeResearchTimeForWorkshop({
-      ...workshop,
-      productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
-    });
-    if (secondsSoFar < secondsNeededToResearch) {
-      const cyclesWaitingOnResearch = Math.ceil(
-        (secondsNeededToResearch - secondsSoFar) / (workshop.workshopStatus.speedBoostActive ? 5 : 10),
-      );
-      cycleNum += cyclesWaitingOnResearch;
-      console.log(
-        `waiting for ${inProgressWorkshop.productsInfo[i].details.name} to be researched, takes ${toTime(
-          secondsNeededToResearch - secondsSoFar,
-        )}`,
-      );
-    }
+    cycleNum = waitForProductToBeResearched(cycleNum, workshop, i);
 
     // until fully leveled, cycles ticking as necessary
     const productDetails = inProgressWorkshop.productsInfo[i].details;
@@ -83,7 +68,7 @@ export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, 
     }
   }
   cycleNum += Math.ceil((target - money) / getCurrentIncome(workshop, 1));
-  return cycleNum * (workshop.workshopStatus.speedBoostActive ? 5 : 10);
+  return cycleNum * getSecondsPerCycle(workshop.workshopStatus.speedBoostActive);
 }
 
 const getProductsCroppedAndWithProductLevelChanged = memoize(
@@ -101,3 +86,26 @@ const getProductsCroppedAndWithProductLevelChanged = memoize(
     return productsWithProductDownleveled;
   },
 );
+
+function waitForProductToBeResearched(cycleNum: number, workshop: Workshop, i: number): number {
+  const secondsPerCycle = getSecondsPerCycle(workshop.workshopStatus.speedBoostActive);
+  const secondsSoFar = cycleNum * secondsPerCycle;
+  const secondsNeededToResearch = computeResearchTimeForWorkshop({
+    ...workshop,
+    productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
+  });
+  if (secondsSoFar < secondsNeededToResearch) {
+    const cyclesWaitingOnResearch = Math.ceil((secondsNeededToResearch - secondsSoFar) / secondsPerCycle);
+    cycleNum += cyclesWaitingOnResearch;
+    console.log(
+      `waiting for ${workshop.productsInfo[i].details.name} to be researched, takes ${toTime(
+        secondsNeededToResearch - secondsSoFar,
+      )}`,
+    );
+  }
+  return cycleNum;
+}
+
+export function getSecondsPerCycle(speedBoostActive: boolean): number {
+  return 10 / (speedBoostActive ? 2 : 1) / PROMOTION_BONUS_SPEED;
+}
