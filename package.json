@@ -30,8 +30,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "lint": "eslint \"**/*.{js,jsx}\"",
-    "lintFix": "eslint \"**/*.{js,jsx}\" \"--fix\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lintFix": "eslint \"**/*.{ts,tsx}\" \"--fix\"",
     "compile": "npx tsc",
     "prettier": "prettier --write .",
     "build": "yarn prettier && yarn compile",
