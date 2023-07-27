@@ -7,7 +7,7 @@ import {
   convertBlueprintLibraryToScores,
   getSpecifiedMultiplierFromLibrary,
 } from '../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './constants/Achievements';
+import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './config/BoostMultipliers';
 import { InputProduct, ProductDetails } from './types/Product';
 
 export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {

@@ -1,5 +1,5 @@
 import memoize from 'fast-memoize';
-import { PROMOTION_BONUS_SPEED } from '../constants/Achievements';
+import { PROMOTION_BONUS_SPEED } from '../config/BoostMultipliers';
 import { getCurrentIncome } from '../shouldUpgrade';
 import { Product, ProductStatus } from '../types/Product';
 import { Workshop } from '../types/Workshop';

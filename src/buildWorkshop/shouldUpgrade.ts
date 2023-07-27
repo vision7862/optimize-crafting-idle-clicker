@@ -1,10 +1,10 @@
 import memoize from 'fast-memoize';
-import { CLICK_BOOST_MULTIPLIER } from './config/BoostMultipliers';
 import {
-  MAIN_WORKSHOP_MERCHANT_CAPACITY,
+  CLICK_BOOST_MULTIPLIER,
   PROMOTION_BONUS_CLICK_OUTPUT,
   PROMOTION_BONUS_MERCHANT,
-} from './constants/Achievements';
+} from './config/BoostMultipliers';
+import { MAIN_WORKSHOP_MERCHANT_CAPACITY } from './constants/Achievements';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
 import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
