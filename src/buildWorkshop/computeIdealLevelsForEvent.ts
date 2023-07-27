@@ -3,8 +3,7 @@ import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
 import { importProductsAtLevel } from './importEventProducts';
 import { importMainWorkshop } from './importMainWorkshop';
-import { bottomUpBuilder, topDownLeveler } from './productLooper';
-import { WorkshopUpgradeInfo } from './shouldUpgrade';
+import { WorkshopUpgradeInfo, bottomUpBuilder } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
@@ -12,43 +11,6 @@ import {
   Workshop,
   WorkshopStatus,
 } from './types/Workshop';
-
-export function topDownToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
-  const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return topDownLeveler(
-    workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost,
-    workshop.productsInfo[workshop.productsInfo.length - 2].details.name,
-    workshop,
-  );
-}
-
-export function productDownUpToMoney(
-  partialWorkshopStatus: Partial<WorkshopStatus>,
-  target: number,
-  productName: string,
-): WorkshopUpgradeInfo {
-  const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return topDownLeveler(target, productName, workshop);
-}
-
-// for when you have a full workshop and want to build the single next thing without optimizing the whole path up
-// currently looks at the exact previous item
-export function topDownToTargetProduct(
-  partialWorkshopStatus: Partial<WorkshopStatus>,
-  productName: string,
-): WorkshopUpgradeInfo {
-  const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  let productBeforeTarget: string = workshop.productsInfo[0].details.name;
-  for (const product of workshop.productsInfo) {
-    if (product.details.name === productName) {
-      return topDownLeveler(product.details.buildCost, productBeforeTarget, workshop);
-    } else {
-      productBeforeTarget = product.details.name;
-    }
-  }
-
-  throw new Error('cannot find product ' + productName + ' in workshop ' + JSON.stringify(workshop.productsInfo));
-}
 
 export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
@@ -119,11 +81,11 @@ export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): {
   console.info('computing time to reach 14 fame...');
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
   const targetInfo14 = bottomUpToMoney(computeTargetFromFame(14, workshopStatus.level), workshopStatus);
-  const timePerGemChance14 = targetInfo14.cyclesToTarget / 8;
+  const timePerGemChance14 = targetInfo14.buildTime / 8;
 
   console.info('computing time to reach 15 fame...');
   const targetInfo15 = bottomUpToMoney(computeTargetFromFame(15, workshopStatus.level), workshopStatus);
-  const timePerGemChance15 = targetInfo15.cyclesToTarget / 12;
+  const timePerGemChance15 = targetInfo15.buildTime / 12;
 
   console.log(`best gem chance per time at ${timePerGemChance14 < timePerGemChance15 ? 14 : 15}`);
   return timePerGemChance14 < timePerGemChance15

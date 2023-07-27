@@ -3,7 +3,6 @@ import {
   bottomUpToLastItem,
   bottomUpToMoney,
   fastestFamePerSecond,
-  productDownUpToMoney,
   quickestNewLevel,
 } from '../../src/buildWorkshop/computeIdealLevelsForEvent';
 import {
@@ -15,7 +14,7 @@ import {
 import { getStatusMap } from '../../src/buildWorkshop/helpers/WorkshopHelpers';
 import { printFameTime, printInfo, toTime } from '../../src/buildWorkshop/helpers/printResults';
 import { computeTargetFromFame, filterOutSkipped } from '../../src/buildWorkshop/helpers/targetHelpers';
-import { WorkshopUpgradeInfo } from '../../src/buildWorkshop/shouldUpgrade';
+import { WorkshopUpgradeInfo } from '../../src/buildWorkshop/productLooper';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
   DEFAULT_WORKSHOP_STATUS_MAIN,
@@ -154,17 +153,6 @@ describe.only('runProgram', () => {
 
         test('295 scientists', () => {
           testNumScientists(295);
-        });
-
-        test.skip('300 top down', () => {
-          const workshopStatus: WorkshopStatus = {
-            ...DEFAULT_WORKSHOP_STATUS_EVENT,
-            level: 10,
-            scientists: 293,
-            eventName: 'A Car is Born Click Last Three',
-          };
-          const target = getCostOfScientists(300);
-          printInfo(productDownUpToMoney(workshopStatus, target, 'Truck'), target);
         });
 
         test('300 scientists', () => {
@@ -450,8 +438,7 @@ describe.only('runProgram', () => {
         const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
         for (let amount = startingAmount; amount < 1000; amount++) {
           const targetInfo = bottomUpToMoney(getTarget(amount), workshopStatus);
-          const semiActiveTime = targetInfo.cyclesToTarget * 5;
-          if (semiActiveTime < targetTimeInSeconds) {
+          if (targetInfo.buildTime < targetTimeInSeconds) {
             withinTimeTargetInfo = targetInfo;
             withinTimeAmount = amount;
           } else break;
@@ -459,7 +446,7 @@ describe.only('runProgram', () => {
         if (withinTimeTargetInfo !== null) {
           console.log(filterOutSkipped(getStatusMap(withinTimeTargetInfo.workshop)));
           console.log('getting ' + withinTimeAmount.toString() + ' total ' + thingMaxing);
-          console.log('semi-active: ' + toTime(withinTimeTargetInfo.cyclesToTarget * 5));
+          console.log('idle: ' + toTime(withinTimeTargetInfo.buildTime));
           console.log(
             'research time minimum: ' + toTime(computeResearchTimeForWorkshop(withinTimeTargetInfo.workshop)),
           );
@@ -480,7 +467,7 @@ describe.only('runProgram', () => {
         }
       }
 
-      test('get as much fame as possible in semi-active 20 minutes at level 15', () => {
+      test('get as much fame as possible in idle 20 minutes at level 15', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 15);
         maximizeTypeInTime('fame', 10, 5, { level: 15 }, getTarget);
       });
@@ -497,7 +484,7 @@ describe.only('runProgram', () => {
         );
       });
 
-      test('get as much fame as possible in semi-active 30 minutes at level 16', () => {
+      test('get as much fame as possible in idle 30 minutes at level 16', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 16);
         maximizeTypeInTime('fame', 30, 5, { level: 16 }, getTarget);
       });
@@ -514,37 +501,37 @@ describe.only('runProgram', () => {
         );
       });
 
-      test('get as much fame as possible in semi-active 60 minutes at level 17', () => {
+      test('get as much fame as possible in idle 60 minutes at level 17', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
         maximizeTypeInTime('fame', 60, 12, { level: 17 }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 10 minutes at level 9', () => {
+      test('get as much fame as possible in idle 10 minutes at level 9', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 9);
         maximizeTypeInTime('fame', 10, 8, { level: 9 }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 10 minutes at level 2', () => {
+      test('get as much fame as possible in idle 10 minutes at level 2', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 2);
         maximizeTypeInTime('fame', 10, 0, { level: 2, scientists: 98 }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 10 minutes at level 3', () => {
+      test('get as much fame as possible in idle 10 minutes at level 3', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
         maximizeTypeInTime('fame', 10, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 5 minutes at level 3', () => {
+      test('get as much fame as possible in idle 5 minutes at level 3', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
         maximizeTypeInTime('fame', 5, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 5 minutes at level 4', () => {
+      test('get as much fame as possible in idle 5 minutes at level 4', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 4);
         maximizeTypeInTime('fame', 5, 0, { level: 4, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
-      test('get as much fame as possible in semi-active 5 minutes at level 5', () => {
+      test('get as much fame as possible in idle 5 minutes at level 5', () => {
         const getTarget = (fame: number): number => computeTargetFromFame(fame, 5);
         maximizeTypeInTime('fame', 5, 0, { level: 5, scientists: 173, researchBoostActive: true }, getTarget);
       });

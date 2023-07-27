@@ -1,9 +1,5 @@
 import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
-import {
-  WorkshopUpgradeInfo,
-  getProductsInfoWithNewStatusForProduct,
-  getUpgradedWorkshopIfBetter,
-} from './shouldUpgrade';
+import { getProductsInfoWithNewStatusForProduct, getUpgradedWorkshopIfBetter } from './shouldUpgrade';
 import { Product, ProductStatus } from './types/Product';
 import { Workshop } from './types/Workshop';
 
@@ -12,26 +8,28 @@ export function topDownLeveler(
   productName: string,
   workshop: Workshop,
   skipBuildIfUnderXCycles: number = 60,
-): WorkshopUpgradeInfo {
+): Workshop {
   let shouldUpgradeNext = true;
-  let modifiedWorkshopInfo: WorkshopUpgradeInfo = {
-    workshop,
-    cyclesToTarget: 0,
-  };
+  let modifiedWorkshop: Workshop = workshop;
   while (shouldUpgradeNext) {
-    const upgradedWorkshopInfo: WorkshopUpgradeInfo | null = getUpgradedWorkshopIfBetter(
+    const upgradedWorkshop: Workshop | null = getUpgradedWorkshopIfBetter(
       target,
       productName,
-      modifiedWorkshopInfo.workshop,
+      modifiedWorkshop,
       skipBuildIfUnderXCycles,
     );
-    shouldUpgradeNext = upgradedWorkshopInfo !== null;
-    if (upgradedWorkshopInfo != null) {
-      modifiedWorkshopInfo = upgradedWorkshopInfo;
+    shouldUpgradeNext = upgradedWorkshop !== null;
+    if (upgradedWorkshop != null) {
+      modifiedWorkshop = upgradedWorkshop;
     }
   }
-  return modifiedWorkshopInfo;
+  return modifiedWorkshop;
 }
+
+export type WorkshopUpgradeInfo = Readonly<{
+  workshop: Workshop;
+  buildTime: number;
+}>;
 
 export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpgradeInfo {
   const firstPassOptimizedWorkshop = getFirstPassOptimizedWorkshop(workshop, target);
@@ -63,8 +61,7 @@ function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Work
     const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
     if (thisProduct !== undefined) {
       const currentTarget = nextProduct !== undefined ? Math.min(target, nextProduct.details.buildCost) : target;
-      const modifiedWorkshopInfo = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop, 1);
-      modifiedWorkshop = modifiedWorkshopInfo.workshop;
+      modifiedWorkshop = topDownLeveler(currentTarget, thisProduct.details.name, modifiedWorkshop, 1);
       if (nextProduct === undefined || target < nextProduct.details.buildCost) {
         break;
       }
@@ -73,7 +70,8 @@ function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Work
   return modifiedWorkshop;
 }
 
-function trimWorkshop(target: number, bestWorkshop: Workshop, bestBuildTime: number): WorkshopUpgradeInfo {
+function trimWorkshop(target: number, untrimmedWorkshop: Workshop, bestBuildTime: number): WorkshopUpgradeInfo {
+  let bestWorkshop: Workshop = untrimmedWorkshop;
   for (let productIndex = bestWorkshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
     const product = bestWorkshop.productsInfo[productIndex];
     if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {

@@ -1,5 +1,5 @@
 import { bottomUpToMoney } from '../computeIdealLevelsForEvent';
-import { WorkshopUpgradeInfo } from '../shouldUpgrade';
+import { WorkshopUpgradeInfo } from '../productLooper';
 import { DEFAULT_WORKSHOP_STATUS_MAIN, Workshop, WorkshopStatus } from '../types/Workshop';
 import { computeResearchTimeForWorkshop, getFinalNumScientistsCanAfford } from './ResearchHelpers';
 import { getStatusMap } from './WorkshopHelpers';

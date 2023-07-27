@@ -17,7 +17,7 @@ export function getUpgradedWorkshopIfBetter(
   productName: string,
   workshop: Workshop,
   skipBuildIfUnderXCycles: number = 60,
-): WorkshopUpgradeInfo | null {
+): Workshop | null {
   const product: Product = getProductByName(productName, workshop.productsInfo);
   const clickBoost = workshop.workshopStatus.clickBoostActive
     ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT
@@ -37,18 +37,9 @@ export function getUpgradedWorkshopIfBetter(
   const additionalIncomePerCycle = clickBoost * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
   const upgradedCyclesToTarget = target / (incomePerCycle + additionalIncomePerCycle) + cyclesToRaiseUpgradeMoney;
   if (upgradedCyclesToTarget < cyclesToTarget) {
-    // console.log(`upgrading ${productName} from level ${product.status.level} in ${upgradedCyclesToTarget} cycles`);
-    return {
-      workshop: upgradeProductInfo.workshop,
-      cyclesToTarget: upgradedCyclesToTarget,
-    };
+    return upgradeProductInfo.workshop;
   } else return null;
 }
-
-export type WorkshopUpgradeInfo = Readonly<{
-  workshop: Workshop;
-  cyclesToTarget: number;
-}>;
 
 export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number): number => {
   let totalIncome = 0;
