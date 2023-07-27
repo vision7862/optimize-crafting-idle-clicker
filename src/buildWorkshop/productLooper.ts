@@ -39,7 +39,21 @@ export function bottomUpBuilder(target: number, workshop: Workshop): WorkshopUpg
   const firstPassBuildTime = computeBuildTimeForWorkshop(firstPassOptimizedWorkshop, target);
 
   console.info('trimming unneeded products...');
-  return trimWorkshop(target, workshop, firstPassOptimizedWorkshop, firstPassBuildTime);
+  const trimmedWorkshop = trimWorkshop(target, firstPassOptimizedWorkshop, firstPassBuildTime);
+
+  for (
+    let finalProductBuilt = trimmedWorkshop.workshop.productsInfo.length - 1;
+    finalProductBuilt >= 0;
+    finalProductBuilt--
+  ) {
+    const finalProduct: Product | undefined = trimmedWorkshop.workshop.productsInfo[finalProductBuilt];
+    if (finalProduct.status.level > 0) {
+      const modifiedWorkshopInfo = topDownLeveler(target, finalProduct.details.name, trimmedWorkshop.workshop, 1);
+      return modifiedWorkshopInfo;
+    }
+  }
+
+  return trimmedWorkshop;
 }
 
 function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Workshop {
@@ -59,13 +73,8 @@ function getFirstPassOptimizedWorkshop(workshop: Workshop, target: number): Work
   return modifiedWorkshop;
 }
 
-function trimWorkshop(
-  target: number,
-  workshop: Workshop,
-  bestWorkshop: Workshop,
-  bestBuildTime: number,
-): WorkshopUpgradeInfo {
-  for (let productIndex = workshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
+function trimWorkshop(target: number, bestWorkshop: Workshop, bestBuildTime: number): WorkshopUpgradeInfo {
+  for (let productIndex = bestWorkshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
     const product = bestWorkshop.productsInfo[productIndex];
     if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {
       const workshopWithProductZeroed = getWorkshopWithProductLevelAsZero(product, bestWorkshop);
