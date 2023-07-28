@@ -293,6 +293,10 @@ describe.only('runProgram', () => {
       test('19 fame lvl 54', () => {
         printFameTime(19, { level: 54, scientists: 1144, researchBoostActive: true, speedBoostActive: true });
       });
+
+      test('15 fame lvl 52', () => {
+        printFameTime(15, { level: 52, scientists: 1099, researchBoostActive: true });
+      });
     });
 
     describe('shooting for gems', () => {
