@@ -4,8 +4,8 @@ export const MERCHANT_BOOST_MULTIPLIER = 5;
 
 // TODO: GH-8: handle dynasty bonuses better
 export const DAILY_DYNASTY_FRIEND_BONUS_INCOME = 30;
-export const DAILY_DYNASTY_FRIEND_BONUS_MERCHANT = 30;
-export const DAILY_DYNASTY_FRIEND_BONUS_ORE = 10;
+export const DAILY_DYNASTY_FRIEND_BONUS_MERCHANT = 1;
+export const DAILY_DYNASTY_FRIEND_BONUS_ORE = 1;
 
 export const PROMOTION_BONUS_INCOME = 1;
 export const PROMOTION_BONUS_MERCHANT = 1;
