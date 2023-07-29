@@ -24,7 +24,7 @@ export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): num
   );
 }
 
-const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
+export const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   return (
     getMWSLevelAchievementMultiplier(level) *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
@@ -34,7 +34,7 @@ const getMainWorkshopIncomeMultiplier = memoize((level: number): number => {
   );
 });
 
-const getMainWorkshopMerchantMultiplier = memoize(() => {
+export const getMainWorkshopMerchantMultiplier = memoize(() => {
   return (
     MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *

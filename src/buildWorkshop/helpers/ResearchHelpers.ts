@@ -42,13 +42,14 @@ export const computeResearchTimeForWorkshop = memoize((workshop: Workshop): numb
 });
 
 export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): number => {
-  const researchMultiplierPercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
-  const researchPerSecond =
-    workshopStatus.scientists *
-    researchMultiplierPercentage *
-    (workshopStatus.researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1);
+  const researchPerSecond = workshopStatus.scientists * getResearchMultiplier(workshopStatus);
   return Math.round(researchPerSecond);
 });
+
+export function getResearchMultiplier(workshopStatus: WorkshopStatus): number {
+  const researchMultiplierBasePercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
+  return researchMultiplierBasePercentage * (workshopStatus.researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1);
+}
 
 function getMainWorkshopResearchMultiplier(): number {
   return (
