@@ -40,7 +40,7 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
 
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
   const topUpgradeLevel =
-    NON_51_PLUS_10_STRATEGY.get(blueprint.productName) ?? 51 + (blueprint.evolutionStage - 1) * 10;
+    (NON_51_PLUS_10_STRATEGY.get(blueprint.productName) ?? 51) + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
     return !BPS_TO_NOT_MERGE.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
   }
@@ -216,23 +216,23 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   }
   while (totalScoreIncreased < distanceToNextRank) {
     const relevantSetBlueprints = getOnlyTopBlueprints(blueprintsWithUpgradedReplacements).filter(
-      (blueprint: Blueprint) =>
-        set.blueprints.includes(blueprint.productName) && !BPS_TO_NOT_MERGE.includes(blueprint.productName),
+      (blueprint: Blueprint) => set.blueprints.includes(blueprint.productName),
     );
     if (relevantSetBlueprints.length === 0) {
       return null;
     }
     const bestUpgrade = upgradeMostImpactfulBlueprintInSet(relevantSetBlueprints);
-    if (bestUpgrade !== null) {
-      totalCost += bestUpgrade.costOfUpgrade;
-      replaceBlueprintInPlace(blueprintsWithUpgradedReplacements, bestUpgrade.blueprint);
-      replaceBlueprintInPlace(upgradedBlueprints, bestUpgrade.blueprint);
-      const newSetScore = getSetBlueprintScore(
-        set.blueprints,
-        convertBlueprintLibraryToScores(blueprintsWithUpgradedReplacements),
-      );
-      totalScoreIncreased = newSetScore - startingSetScore;
+    if (bestUpgrade === null) {
+      return null;
     }
+    totalCost += bestUpgrade.costOfUpgrade;
+    replaceBlueprintInPlace(blueprintsWithUpgradedReplacements, bestUpgrade.blueprint);
+    replaceBlueprintInPlace(upgradedBlueprints, bestUpgrade.blueprint);
+    const newSetScore = getSetBlueprintScore(
+      set.blueprints,
+      convertBlueprintLibraryToScores(blueprintsWithUpgradedReplacements),
+    );
+    totalScoreIncreased = newSetScore - startingSetScore;
   }
 
   return {

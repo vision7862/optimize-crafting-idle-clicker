@@ -57,7 +57,7 @@ describe('optimizeUpgradingBlueprints', () => {
 
   describe('printUpgradeInfoOfEachSet', () => {
     it('prints it', () => {
-      printUpgradeInfoOfEachSet();
+      console.log(printUpgradeInfoOfEachSet());
     });
   });
 });

@@ -167,6 +167,6 @@ function getMWSLevelAchievementMultiplier(level: number): number {
     case 60:
       return 2.05e19;
     default:
-      return 1.05e19;
+      return 2.05e19;
   }
 }
