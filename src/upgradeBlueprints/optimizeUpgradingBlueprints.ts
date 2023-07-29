@@ -65,8 +65,11 @@ export function upgradeMostImpactfulSetOfType(
   return bestUpgradeInfo;
 }
 
-export function printUpgradeInfoOfEachSet(blueprints: Blueprint[] = BLUEPRINT_LIBRARY): void {
+export function printUpgradeInfoOfEachSet(
+  blueprints: Blueprint[] = BLUEPRINT_LIBRARY,
+): Array<{ name: string; roi: number; cost: number; type: string }> {
   const blueprintScores = convertBlueprintLibraryToScores(blueprints);
+  const setUpgradeInfos: Array<{ name: string; roi: number; cost: number; type: string }> = [];
   BLUEPRINT_SETS.forEach((set: BlueprintSet) => {
     const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
     const distanceInfo = getDistanceToNextRank(set, setScore);
@@ -78,9 +81,16 @@ export function printUpgradeInfoOfEachSet(blueprints: Blueprint[] = BLUEPRINT_LI
       //     SetMultiplierType[set.multiplierType]
       //   }`,
       // );
-      console.log(`aaa${set.setName};${roi};${upgradeInfo.cost};${SetMultiplierType[set.multiplierType]}`);
+      // console.log(`aaa${set.setName};${roi};${upgradeInfo.cost};${SetMultiplierType[set.multiplierType]}`);
+      setUpgradeInfos.push({
+        name: set.setName,
+        roi,
+        cost: upgradeInfo.cost,
+        type: SetMultiplierType[set.multiplierType],
+      });
     }
   });
+  return setUpgradeInfos.sort((a, b) => b.roi - a.roi);
 }
 
 export function upgradeAllIncomeBlueprintsToLoreLimit(
