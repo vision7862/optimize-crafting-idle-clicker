@@ -31,10 +31,12 @@ const goals: Map<string, GoalType> = new Map<string, GoalType>([
 export async function runCLI(): Promise<void> {
   const workshopStatus = await getWorkshopStatus();
 
-  const choices: Array<{ value: string; description: string }> = [];
+  const choices: Array<{ value: string; name: string; description: string }> = [];
+  let index = 1;
   goals.forEach((goal: GoalType, goalName: string) => {
     if (goal.shouldShow(workshopStatus)) {
-      choices.push({ value: goalName, description: goal.description });
+      choices.push({ value: goalName, name: `(${index}) ${goalName}`, description: goal.description });
+      index++;
     }
   });
 
