@@ -66,7 +66,11 @@ function trimWorkshop(target: number, untrimmedWorkshop: Workshop, bestBuildTime
         ...bestWorkshop,
         productsInfo,
       };
-      const buildTime = computeBuildTimeForWorkshop(workshopWithProductRemoved, target, bestBuildTime);
+      const optimizedWorkshopWithProductRemoved = buildProductToNextProductOfWorkshop(
+        filterOutSkippedFullWorkshop(workshopWithProductRemoved),
+        target,
+      );
+      const buildTime = computeBuildTimeForWorkshop(optimizedWorkshopWithProductRemoved, target, bestBuildTime);
       if (buildTime <= bestBuildTime) {
         bestBuildTime = buildTime;
         bestWorkshop = workshopWithProductRemoved;
