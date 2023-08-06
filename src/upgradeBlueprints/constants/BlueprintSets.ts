@@ -157,7 +157,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       { scoreBoundary: 245000, totalMultiplier: 3.8 },
       { scoreBoundary: 507500, totalMultiplier: 4.0 },
       { scoreBoundary: 875000, totalMultiplier: 4.2 },
-      { scoreBoundary: 1.7e6, totalMultiplier: 4.4 },
+      { scoreBoundary: 1.715e6, totalMultiplier: 4.4 },
       { scoreBoundary: 2.5e6, totalMultiplier: 4.6 },
       { scoreBoundary: 5.1e6, totalMultiplier: 4.8 },
       { scoreBoundary: 8.8e6, totalMultiplier: 5.0 },
@@ -518,7 +518,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Botanic',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    blueprints: ['Hedge Trimmer', 'Tiki Torch', 'Lawn Mower'],
+    blueprints: ['Hedge Trimmer', 'Tiki Torch', 'Lawn Mower', 'Unfinished'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
 ];
