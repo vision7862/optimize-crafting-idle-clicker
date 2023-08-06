@@ -6,7 +6,7 @@ import {
   DAILY_DYNASTY_FRIEND_BONUS_MERCHANT,
   MERCHANT_BOOST_MULTIPLIER,
   PROMOTION_BONUS_INCOME,
-  PROMOTION_BONUS_MERCHANT,
+  PROMOTION_BONUS_MERCHANT_REVENUE,
 } from '../config/BoostMultipliers';
 import {
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
@@ -39,7 +39,7 @@ export const getMainWorkshopMerchantMultiplier = memoize(() => {
     MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
     DAILY_DYNASTY_FRIEND_BONUS_MERCHANT *
-    PROMOTION_BONUS_MERCHANT
+    PROMOTION_BONUS_MERCHANT_REVENUE
   );
 });
 

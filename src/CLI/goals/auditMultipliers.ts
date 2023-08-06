@@ -1,8 +1,9 @@
 import {
   DAILY_DYNASTY_FRIEND_BONUS_ORE,
+  MERCHANT_BOOST_MULTIPLIER,
   PROMOTION_BONUS_CLICK_OUTPUT,
   PROMOTION_BONUS_INCOME,
-  PROMOTION_BONUS_MERCHANT,
+  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
 } from '../../buildWorkshop/config/BoostMultipliers';
 import {
   MAIN_WORKSHOP_MERCHANT_CAPACITY,
@@ -57,10 +58,10 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
   );
   console.log(
     `Merchant Revenue: ${Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(
-      getMainWorkshopMerchantMultiplier() * 100,
+      (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) * getMainWorkshopMerchantMultiplier() * 100,
     )}%`,
   );
-  console.log(`Merchant Capacity: ${MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT}`);
+  console.log(`Merchant Capacity: ${MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY}`);
   console.log(`Speed: ${(10 / getSecondsPerCycle(workshopStatus.speedBoostActive)) * 100}%`);
 }
 

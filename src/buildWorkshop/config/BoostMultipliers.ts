@@ -8,7 +8,9 @@ export const DAILY_DYNASTY_FRIEND_BONUS_MERCHANT = 1;
 export const DAILY_DYNASTY_FRIEND_BONUS_ORE = 1;
 
 export const PROMOTION_BONUS_INCOME = 1;
-export const PROMOTION_BONUS_MERCHANT = 1;
+// during events, revenue is affected but capacity is not. rev&cap is the permanent, the other is only during 24hr events
+export const PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY = 1;
+export const PROMOTION_BONUS_MERCHANT_REVENUE = PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY + 0;
 export const PROMOTION_BONUS_RESEARCH = 1;
 export const PROMOTION_BONUS_CLICK_OUTPUT = 1;
 export const PROMOTION_BONUS_SPEED = 1;
