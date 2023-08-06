@@ -17,7 +17,7 @@ export function getUpgradedWorkshopIfBetter(target: number, productName: string,
     : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
-  if (product.status.level === 0 && cyclesToTarget < 1) {
+  if (cyclesToTarget < 1) {
     return null;
   }
 
