@@ -2,7 +2,7 @@ import memoize from 'fast-memoize';
 import {
   CLICK_BOOST_MULTIPLIER,
   PROMOTION_BONUS_CLICK_OUTPUT,
-  PROMOTION_BONUS_MERCHANT,
+  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
 } from './config/BoostMultipliers';
 import { MAIN_WORKSHOP_MERCHANT_CAPACITY } from './constants/Achievements';
 import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
@@ -159,7 +159,9 @@ function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo
       ((product.status.level + 1) *
         product.details.outputCount *
         (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
-        (isEvent(workshop.workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT),
+        (isEvent(workshop.workshopStatus)
+          ? 10
+          : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY),
     ),
   };
   return {
