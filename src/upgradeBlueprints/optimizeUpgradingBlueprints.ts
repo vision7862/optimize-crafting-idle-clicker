@@ -31,7 +31,10 @@ export function upgradeMostImpactfulIncomeSet(blueprints: Blueprint[] = BLUEPRIN
       const roi = distanceInfo.improvement / upgradeInfo.cost;
       if (roi > bestROI) {
         bestROI = roi;
-        bestUpgradeInfo = upgradeInfo;
+        bestUpgradeInfo = {
+          ...upgradeInfo,
+          upgradedBlueprints: upgradeInfo.upgradedBlueprints.sort((a, b) => a.score - b.score),
+        };
         setName = set.setName;
       }
     }
