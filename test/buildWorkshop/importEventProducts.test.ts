@@ -61,4 +61,9 @@ describe('importProducts', () => {
     const products: ProductDetails[] = Array.from(importProducts('Radio Activity').values());
     expect(products.length).toBe(20);
   });
+
+  test('Trained to Ship', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Trained to Ship').values());
+    expect(products.length).toBe(22);
+  });
 });
