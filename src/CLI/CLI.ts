@@ -7,6 +7,7 @@ import { doubleLoreGoal } from './goals/doubleLore';
 import { fastestFameGoal } from './goals/fastestFame';
 import { gemsGoal } from './goals/gems';
 import { levelUpGoal } from './goals/levelUp';
+import { merchantsGoal } from './goals/merchants';
 import { scientistsGoal } from './goals/scientists';
 import { fameGoal } from './goals/specificFame';
 
@@ -23,6 +24,7 @@ const goals: Map<string, GoalType> = new Map<string, GoalType>([
   [doubleLoreGoal.name, doubleLoreGoal],
   [gemsGoal.name, gemsGoal],
   [scientistsGoal.name, scientistsGoal],
+  [merchantsGoal.name, merchantsGoal],
   [fameGoal.name, fameGoal],
   [fastestFameGoal.name, fastestFameGoal],
   [auditMultipliersGoal.name, auditMultipliersGoal],
