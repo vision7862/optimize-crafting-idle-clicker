@@ -128,7 +128,7 @@ function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {
     productsInfo.push({
       status: {
         level: isFirstItem ? 1 : 0,
-        merchants: 0,
+        merchants: isFirstItem ? 1 : 0,
       },
       details,
     });
