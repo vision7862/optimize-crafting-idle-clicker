@@ -1,6 +1,5 @@
 import memoize from 'fast-memoize';
-import * as fs from 'fs';
-import * as path from 'path';
+import { MainWorkshopProducts } from '../../products/MainWorkshop';
 import { BLUEPRINT_LIBRARY } from '../upgradeBlueprints/config/BlueprintLibrary';
 import { SetMultiplierType } from '../upgradeBlueprints/constants/BlueprintSets';
 import {
@@ -10,104 +9,78 @@ import {
 import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './config/BoostMultipliers';
 import { InputProduct, ProductDetails } from './types/Product';
 
+export type ImportedProduct = Readonly<{
+  ProductType: string;
+  ProductAmount: number;
+  ConstructionPrice: number;
+  ProductPrice: number;
+  DiscoveryPrice: number;
+  Type: string;
+  Tags?: string[];
+  LeftResourceType?: string;
+  LeftResourceAmount?: number;
+  RightResourceType?: string;
+  RightResourceAmount?: number;
+  Optional?: boolean;
+}>;
+
+const typeUpgradeCostMultiplier = new Map<string, number>([
+  ['Ore', 1.07],
+  ['Ingot', 1.08],
+  ['SemiProduct', 1.09],
+  ['EarlyProduct', 1.1],
+  ['LateProduct', 1.11],
+]);
+
 export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {
   const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
+  const oreMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * DAILY_DYNASTY_FRIEND_BONUS_ORE;
 
-  const mainWorkshopProducts = getFile('MainWorkshop');
   const products = new Map<string, ProductDetails>();
-
-  for (const line of mainWorkshopProducts.split(/[\r\n]+/)) {
-    if (line.includes('//')) {
-      continue;
-    }
-    const details = line.split(/ {2,}/gm);
-    if (details.length !== 7 && details.length !== 8) {
-      throw new Error('import poorly formatted ' + line);
-    }
-    try {
-      let product: ProductDetails = {
-        outputCount: +details[0].split('x ')[0],
-        name: details[0].split('x ')[1],
-        researchCost: +details[1].replace(/[$, ]/g, ''),
-        buildCost: +details[2].replace(/[$, ]/g, ''),
-        revenue: +details[3].replace(/[$, ]/g, ''),
-        upgradeCostMultiplier: getUpgradeCostMultiplier(details[4]),
-        input1: getInputProduct(details[5], products, onlyReturnBuildable),
-        input2: getInputProduct(details[6], products, onlyReturnBuildable),
-      };
-      const blueprintScore = blueprintMap.get(product.name);
-      if (blueprintScore !== undefined) {
-        product = {
-          ...product,
-          revenue: product.revenue * (blueprintScore / 10),
-        };
-        if (product.name.includes('Ore') || product.name === 'Coal') {
-          const oreMultiplier =
-            getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * DAILY_DYNASTY_FRIEND_BONUS_ORE;
-          product = {
-            ...product,
-            outputCount: product.outputCount * oreMultiplier,
-          };
-        }
-        products.set(product.name, product);
+  MainWorkshopProducts.forEach((product: ImportedProduct) => {
+    const blueprintScore = blueprintMap.get(product.ProductType);
+    const canBuildProductToGetBlueprint = product.Optional !== true;
+    const haveBlueprint = blueprintScore !== undefined;
+    if (canBuildProductToGetBlueprint || haveBlueprint || !onlyReturnBuildable) {
+      try {
+        products.set(product.ProductType, {
+          name: product.ProductType,
+          outputCount: product.ProductAmount * (product.Tags?.includes('Ore') === true ? oreMultiplier : 1),
+          researchCost: product.DiscoveryPrice,
+          buildCost: product.ConstructionPrice,
+          revenue: product.ProductPrice * ((blueprintScore ?? 10) / 10),
+          upgradeCostMultiplier: typeUpgradeCostMultiplier.get(product.Type) ?? 1.09,
+          input1: getInputProduct(product.LeftResourceType, product.LeftResourceAmount, products, onlyReturnBuildable),
+          input2: getInputProduct(
+            product.RightResourceType,
+            product.RightResourceAmount,
+            products,
+            onlyReturnBuildable,
+          ),
+        });
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        // console.info(`Cannot import ${details[0].split('x ')[1]} because ${e.message}`);
       }
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      // console.info(`Cannot import ${details[0].split('x ')[1]} because ${e.message}`);
     }
-  }
+  });
 
   return products;
 });
 
-export function getFile(fileName: string): string {
-  const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
-  const blueprintPath = path.join(__dirname, extraStepUpForDist + `../../products/${fileName}.txt`);
-  const blueprintProducts = fs.readFileSync(blueprintPath, 'utf8');
-  return blueprintProducts;
-}
-
 export function getInputProduct(
-  inputDescription: string,
+  name: string | undefined,
+  count: number | undefined,
   products: Map<string, ProductDetails>,
   onlyReturnBuildable: boolean,
 ): InputProduct | null {
-  if (inputDescription !== '-' && inputDescription !== '') {
-    const name = inputDescription.split(' x')[0];
-    const inputProduct = {
-      name,
-      count: +inputDescription.split(' x')[1],
-    };
-    if (products.get(name) !== undefined) {
-      return inputProduct;
-    } else {
-      if (onlyReturnBuildable) {
-        throw new ReferenceError(`product ${name} does not exist`);
-      } else return inputProduct;
-    }
+  if (name === undefined || count === undefined) {
+    return null;
   }
-  return null;
-}
 
-export function getUpgradeCostMultiplier(color: string): number {
-  switch (color) {
-    case 'Green':
-      return 1.07;
-    case 'Yellow':
-      return 1.08;
-    case 'Blue':
-      return 1.09;
-    case 'Red':
-      return 1.1;
-    case 'Violet':
-      return 1.11;
-    default: {
-      if (color === undefined) {
-        console.debug('color not imported');
-      } else {
-        console.error('color does not exist ' + color);
-      }
-      return 1.09;
-    }
+  if (products.get(name) !== undefined || !onlyReturnBuildable) {
+    return { name, count };
+  } else {
+    throw new ReferenceError(`product ${name} does not exist`);
   }
 }

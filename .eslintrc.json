@@ -9,6 +9,7 @@
     "sourceType": "module",
     "project": ["tsconfig.json"]
   },
+  "ignorePatterns": ["products/*"],
   "rules": {
     "prettier/prettier": "error",
     "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "no-type-imports" }]
