@@ -55,9 +55,9 @@ export async function runCLI(): Promise<void> {
     if (selectOptionAndGetInput !== undefined) {
       await selectOptionAndGetInput(workshopStatus);
     }
-
-    console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
   }
+
+  console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
