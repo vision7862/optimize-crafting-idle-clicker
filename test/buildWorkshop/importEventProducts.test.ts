@@ -51,4 +51,19 @@ describe('importProducts', () => {
     const products: ProductDetails[] = Array.from(importProducts('Product Cycle').values());
     expect(products.length).toBe(24);
   });
+
+  test('Lock N Load', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Lock N Load').values());
+    expect(products.length).toBe(20);
+  });
+
+  test('Radio Activity', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Radio Activity').values());
+    expect(products.length).toBe(20);
+  });
+
+  test('Trained to Ship', () => {
+    const products: ProductDetails[] = Array.from(importProducts('Trained to Ship').values());
+    expect(products.length).toBe(22);
+  });
 });
