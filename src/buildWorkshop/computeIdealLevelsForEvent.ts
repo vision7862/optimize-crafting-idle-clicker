@@ -28,12 +28,11 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
     const target = computeTargetFromFame(fame, workshopStatus.level);
     const targetInfo = bottomUpToMoney(target, workshopStatus);
     const idleBuildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
-    // const researchTime = computeResearchTimeForWorkshop(targetInfo.workshop);
-    const finalTime = (idleBuildTime + 10) * Math.ceil(fameRequiredToLevelUp / fame);
-    if (finalTime > 60 * 45) {
+    if (idleBuildTime > 20 * 45) {
       console.log(`${fame} fame takes too long`);
       break;
     }
+    const finalTime = (idleBuildTime + 10) * Math.ceil(fameRequiredToLevelUp / fame);
     if (finalTime < bestTime) {
       bestTime = finalTime;
       bestFame = fame;
@@ -128,7 +127,7 @@ function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {
     productsInfo.push({
       status: {
         level: isFirstItem ? 1 : 0,
-        merchants: 0,
+        merchants: isFirstItem ? 1 : 0,
       },
       details,
     });

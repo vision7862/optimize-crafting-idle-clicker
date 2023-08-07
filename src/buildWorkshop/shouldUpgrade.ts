@@ -17,7 +17,7 @@ export function getUpgradedWorkshopIfBetter(target: number, productName: string,
     : 1;
   const incomePerCycle = getCurrentIncome(workshop, clickBoost);
   const cyclesToTarget = target / incomePerCycle;
-  if (product.status.level === 0 && cyclesToTarget < 1) {
+  if (cyclesToTarget < 1) {
     return null;
   }
 
@@ -66,7 +66,7 @@ function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeI
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
 
-  const parentUpgradeInfo: UpgradeInfo = upgradeSingleProduct(product, workshop);
+  const parentUpgradeInfo: UpgradeInfo = upgradeSingleProduct(product, workshop, true);
   costToUpgradeProduct += parentUpgradeInfo.costOfUpgrade;
   modifiedWorkshop = parentUpgradeInfo.workshop;
 
@@ -130,6 +130,7 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
     const inputUpgradeInfo = upgradeSingleProduct(
       getProductByName(inputProductName, modifiedWorkshop.productsInfo),
       modifiedWorkshop,
+      false,
     );
     costToUpgradeInput += inputUpgradeInfo.costOfUpgrade;
     inputItems = ++inputLevel * inputProduct.details.outputCount;
@@ -151,18 +152,20 @@ type UpgradeInfo = Readonly<{
   costOfUpgrade: number;
 }>;
 
-function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
+function upgradeSingleProduct(product: Product, workshop: Workshop, shouldUpdateMerchants: boolean): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
     level: product.status.level + 1,
-    merchants: Math.ceil(
-      ((product.status.level + 1) *
-        product.details.outputCount *
-        (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
-        (isEvent(workshop.workshopStatus)
-          ? 10
-          : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY),
-    ),
+    merchants: shouldUpdateMerchants
+      ? Math.ceil(
+          ((product.status.level + 1) *
+            product.details.outputCount *
+            (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
+            (isEvent(workshop.workshopStatus)
+              ? 10
+              : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY),
+        )
+      : product.status.merchants,
   };
   return {
     costOfUpgrade: product.details.buildCost * product.details.upgradeCostMultiplier ** product.status.level,
