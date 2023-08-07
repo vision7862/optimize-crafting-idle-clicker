@@ -1,4 +1,4 @@
-import { ImportedProduct } from '../src/buildWorkshop/importMainWorkshop';
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
 
 export const MainWorkshopProducts: ImportedProduct[] = [		
 	{ "ProductType" : "Wood", "ProductAmount" : 1, "ConstructionPrice" : 10.0, "ProductPrice": 1.0, "DiscoveryPrice" : 1, "Type": "Ore", "Tags": ["Organic", "Wood"] },

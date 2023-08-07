@@ -7,22 +7,8 @@ import {
   getSpecifiedMultiplierFromLibrary,
 } from '../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './config/BoostMultipliers';
+import { ImportedProduct } from './types/ImportedProduct';
 import { InputProduct, ProductDetails } from './types/Product';
-
-export type ImportedProduct = Readonly<{
-  ProductType: string;
-  ProductAmount: number;
-  ConstructionPrice: number;
-  ProductPrice: number;
-  DiscoveryPrice: number;
-  Type: string;
-  Tags?: string[];
-  LeftResourceType?: string;
-  LeftResourceAmount?: number;
-  RightResourceType?: string;
-  RightResourceAmount?: number;
-  Optional?: boolean;
-}>;
 
 const typeUpgradeCostMultiplier = new Map<string, number>([
   ['Ore', 1.07],
