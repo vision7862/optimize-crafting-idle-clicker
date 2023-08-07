@@ -1,6 +1,6 @@
 import { computeBuildTimeForWorkshop, filterOutSkippedFullWorkshop } from './helpers/targetHelpers';
-import { getProductsInfoWithNewStatusForProduct, getUpgradedWorkshopIfBetter } from './shouldUpgrade';
-import { Product, ProductStatus } from './types/Product';
+import { getUpgradedWorkshopIfBetter } from './shouldUpgrade';
+import { Product } from './types/Product';
 import { Workshop } from './types/Workshop';
 
 export function levelProductToTarget(target: number, productName: string, workshop: Workshop): Workshop {
@@ -33,7 +33,10 @@ export function buildWorkshopToTarget(target: number, workshop: Workshop): Works
 }
 
 function buildProductToNextProductOfWorkshop(workshop: Workshop, target: number): Workshop {
-  let modifiedWorkshop: Workshop = workshop;
+  let modifiedWorkshop: Workshop = {
+    ...workshop,
+    productsInfo: zeroAllLevels(workshop.productsInfo),
+  };
   for (let productIndex = 0; productIndex < workshop.productsInfo.length; productIndex++) {
     const thisProduct: Product | undefined = workshop.productsInfo[productIndex];
     const nextProduct: Product | undefined = workshop.productsInfo[productIndex + 1];
@@ -57,21 +60,22 @@ function trimWorkshop(target: number, untrimmedWorkshop: Workshop, bestBuildTime
   for (let productIndex = bestWorkshop.productsInfo.length - 1; productIndex > 0; productIndex--) {
     const product = bestWorkshop.productsInfo[productIndex];
     if (product.status.level > 0 && isProductLeaf(product.details.name, bestWorkshop)) {
-      const workshopWithProductZeroed = getWorkshopWithProductLevelAsZero(product, bestWorkshop);
-      const buildTime = computeBuildTimeForWorkshop(workshopWithProductZeroed, target, bestBuildTime);
+      const productsInfo = new Array<Product>(...bestWorkshop.productsInfo);
+      productsInfo.splice(productIndex, 1);
+      const workshopWithProductRemoved = {
+        ...bestWorkshop,
+        productsInfo,
+      };
+      const buildTime = computeBuildTimeForWorkshop(workshopWithProductRemoved, target, bestBuildTime);
       if (buildTime <= bestBuildTime) {
         bestBuildTime = buildTime;
-        bestWorkshop = workshopWithProductZeroed;
+        bestWorkshop = workshopWithProductRemoved;
         console.log(`trim off ${product.details.name}`);
       }
     }
   }
 
-  const lastProduct = [...bestWorkshop.productsInfo].findLast((product) => product.status.level > 0);
-  if (lastProduct === undefined) {
-    throw new Error('no products build in workshop');
-  }
-  bestWorkshop = levelProductToTarget(target, lastProduct.details.name, bestWorkshop);
+  bestWorkshop = buildProductToNextProductOfWorkshop(filterOutSkippedFullWorkshop(bestWorkshop), target);
   const buildTime = computeBuildTimeForWorkshop(bestWorkshop, target);
 
   return {
@@ -90,13 +94,14 @@ function isProductLeaf(productName: string, workshop: Workshop): boolean {
   return true;
 }
 
-function getWorkshopWithProductLevelAsZero(product: Product, workshop: Workshop): Workshop {
-  const newStatus: ProductStatus = {
-    ...product.status,
-    level: 0,
-  };
-  return {
-    ...workshop,
-    productsInfo: getProductsInfoWithNewStatusForProduct(product, newStatus, workshop),
-  };
+function zeroAllLevels(productsInfo: Readonly<Product[]>): Product[] {
+  return [...productsInfo].map((product) => {
+    return {
+      ...product,
+      status: {
+        ...product.status,
+        level: product.details.name === 'Wood' ? 1 : 0,
+      },
+    };
+  });
 }
