@@ -1,20 +1,15 @@
 import {
   DAILY_DYNASTY_FRIEND_BONUS_ORE,
-  MERCHANT_BOOST_MULTIPLIER,
   PROMOTION_BONUS_CLICK_OUTPUT,
   PROMOTION_BONUS_INCOME,
-  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
 } from '../../buildWorkshop/config/BoostMultipliers';
-import {
-  MAIN_WORKSHOP_MERCHANT_CAPACITY,
-  MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER,
-} from '../../buildWorkshop/constants/Achievements';
+import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../../buildWorkshop/constants/Achievements';
 import { getResearchMultiplier } from '../../buildWorkshop/helpers/ResearchHelpers';
 import { isEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
 import {
-  getMainWorkshopIncomeMultiplier,
-  getMainWorkshopMerchantMultiplier,
+  getIncomeMultiplier,
   getMerchantCapacity,
+  getMerchantMultiplier,
 } from '../../buildWorkshop/helpers/getWorkshopIncomeMultiplier';
 import { getSecondsPerCycle } from '../../buildWorkshop/helpers/targetHelpers';
 import {
@@ -33,7 +28,7 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
   };
   console.log(
     `Income: x${Intl.NumberFormat('en-US', { notation: 'engineering', maximumFractionDigits: 1 }).format(
-      getMainWorkshopIncomeMultiplier(workshopStatus.level),
+      getIncomeMultiplier(workshopStatus.level, isEvent(workshopStatus)),
     )}`,
   );
   console.log(
@@ -59,7 +54,7 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
   );
   console.log(
     `Merchant Revenue: ${Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(
-      (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) * getMainWorkshopMerchantMultiplier() * 100,
+      getMerchantMultiplier(workshopStatus.merchantBoostActive, isEvent(workshopStatus)) * 100,
     )}%`,
   );
   console.log(`Merchant Capacity: ${getMerchantCapacity(workshopStatus)}`);

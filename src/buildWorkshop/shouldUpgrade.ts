@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize';
 import { CLICK_BOOST_MULTIPLIER, PROMOTION_BONUS_CLICK_OUTPUT } from './config/BoostMultipliers';
 import { getProductByName } from './helpers/WorkshopHelpers';
-import { getMerchantCapacity, getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
+import { getMerchantCapacity, getWorkshopTotalIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
 import { Workshop, WorkshopStatus } from './types/Workshop';
 
@@ -39,7 +39,7 @@ export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number)
     totalIncome +=
       // applyClickBoost(product.details, topProduct, clickBoost) *
       // TODO: GH-2: only count items that merchants are selling, not items consumed
-      numProductsSold * product.details.revenue * getWorkshopIncomeMultiplier(workshop.workshopStatus);
+      numProductsSold * product.details.revenue * getWorkshopTotalIncomeMultiplier(workshop.workshopStatus);
   }
   return totalIncome;
 });
@@ -51,7 +51,7 @@ function applyClickBoost(product: ProductDetails, topProduct: ProductDetails, cl
 }
 
 function getIncomeForOneLevelOfItem(product: ProductDetails, workshopStatus: WorkshopStatus): number {
-  return product.outputCount * product.revenue * getWorkshopIncomeMultiplier(workshopStatus);
+  return product.outputCount * product.revenue * getWorkshopTotalIncomeMultiplier(workshopStatus);
 }
 
 function getTopProduct(workshop: Workshop): ProductDetails {
