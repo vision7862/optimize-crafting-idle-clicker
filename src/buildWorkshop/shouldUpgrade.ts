@@ -1,12 +1,7 @@
 import memoize from 'fast-memoize';
-import {
-  CLICK_BOOST_MULTIPLIER,
-  PROMOTION_BONUS_CLICK_OUTPUT,
-  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
-} from './config/BoostMultipliers';
-import { MAIN_WORKSHOP_MERCHANT_CAPACITY } from './constants/Achievements';
-import { getProductByName, isEvent } from './helpers/WorkshopHelpers';
-import { getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
+import { CLICK_BOOST_MULTIPLIER, PROMOTION_BONUS_CLICK_OUTPUT } from './config/BoostMultipliers';
+import { getProductByName } from './helpers/WorkshopHelpers';
+import { getMerchantCapacity, getWorkshopIncomeMultiplier } from './helpers/getWorkshopIncomeMultiplier';
 import { Product, ProductDetails, ProductStatus } from './types/Product';
 import { Workshop, WorkshopStatus } from './types/Workshop';
 
@@ -34,10 +29,14 @@ export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number)
   let totalIncome = 0;
   // const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
+    const numProductsMade = product.status.level * product.details.outputCount;
+    const maxProductsSold = Math.min(numProductsMade, product.status.merchants * getMerchantCapacity(workshop));
+    const numProductsConsumed = getInputItemsNeeded(product.details.name, workshop);
+    const numProductsSold = Math.max(maxProductsSold - numProductsConsumed, 0);
     totalIncome +=
       // applyClickBoost(product.details, topProduct, clickBoost) *
       // TODO: GH-2: only count items that merchants are selling, not items consumed
-      product.status.level * getIncomeForOneLevelOfItem(product.details, workshop.workshopStatus);
+      numProductsSold * product.details.revenue * getWorkshopIncomeMultiplier(workshop.workshopStatus);
   }
   return totalIncome;
 });
@@ -161,9 +160,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop, shouldUpdate
           ((product.status.level + 1) *
             product.details.outputCount *
             (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
-            (isEvent(workshop.workshopStatus)
-              ? 10
-              : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY),
+            getMerchantCapacity(workshop),
         )
       : product.status.merchants,
   };

@@ -7,12 +7,14 @@ import {
   MERCHANT_BOOST_MULTIPLIER,
   PROMOTION_BONUS_INCOME,
   PROMOTION_BONUS_MERCHANT_REVENUE,
+  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
 } from '../config/BoostMultipliers';
 import {
+  MAIN_WORKSHOP_MERCHANT_CAPACITY,
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
 } from '../constants/Achievements';
-import { WorkshopStatus } from '../types/Workshop';
+import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
@@ -169,4 +171,10 @@ function getMWSLevelAchievementMultiplier(level: number): number {
     default:
       return 2.05e19;
   }
+}
+
+export function getMerchantCapacity(workshop: Workshop): number {
+  return isEvent(workshop.workshopStatus)
+    ? 10
+    : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY;
 }
