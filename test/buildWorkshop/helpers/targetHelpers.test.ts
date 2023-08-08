@@ -12,11 +12,11 @@ import {
 describe('targetHelpers', () => {
   describe('computeTargetFromFame', () => {
     it.skip('should return 1e18 for lvl 10, 8 fame', () => {
-      expect(computeTargetFromFame(8, 10)).toBe(1e18);
+      expect(computeTargetFromFame(8, 10, false)).toBe(1e18);
     });
 
     it('should return correctly', () => {
-      expect(computeTargetFromFame(1, 4)).toBe(10000);
+      expect(computeTargetFromFame(1, 4, false)).toBe(10000);
     });
   });
 
