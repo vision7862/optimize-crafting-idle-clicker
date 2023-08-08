@@ -1,7 +1,7 @@
 import { isEvent } from './helpers/WorkshopHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
-import { importProductsAtLevel } from './importEventProducts';
+import { importEventWorkshop } from './importEventProducts copy';
 import { importMainWorkshop } from './importMainWorkshop';
 import { WorkshopUpgradeInfo, buildWorkshopToTarget } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
@@ -123,7 +123,7 @@ function getWorkshopStatus(partialWorkshopStatus: Partial<WorkshopStatus>): Work
 
 function getProductDetails(workshopStatus: WorkshopStatus): ProductDetails[] {
   return isEvent(workshopStatus)
-    ? Array.from(importProductsAtLevel(workshopStatus.eventName, workshopStatus.level).values())
+    ? Array.from(importEventWorkshop(workshopStatus.eventName).values())
     : Array.from(importMainWorkshop(true).values());
 }
 

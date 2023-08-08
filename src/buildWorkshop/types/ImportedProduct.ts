@@ -11,4 +11,6 @@ export type ImportedProduct = Readonly<{
   RightResourceType?: string;
   RightResourceAmount?: number;
   Optional?: boolean;
+  Icon?: string;
+  Duration?: number;
 }>;
