@@ -8,7 +8,7 @@ import {
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
-import { BASE_BP, getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
+import { getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
   getDistanceToNextRank,
@@ -90,7 +90,6 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   //   const BlueprintUpgradeInfo = upgradeBlueprint(blueprintToUpgradeToMatch, numLevelsToUpgrade);
   // }
 
-  // get cost of getting a matching bp, assuming only the top one has any levels in it
   let costOfUpgrade = 0;
   const strategyForThisBP = NON_51_PLUS_10_STRATEGY.get(blueprintToMerge.productName) ?? 51;
   const topUpgradeLevel = strategyForThisBP + (blueprintToMerge.evolutionStage - 1) * 10;
@@ -98,129 +97,15 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
     costOfUpgrade += getCostToUpgradeBlueprint(blueprintToMerge, topUpgradeLevel - blueprintToMerge.upgradeLevel);
   }
   const baseNumLevelsToUpgrade = strategyForThisBP - 1;
-  if (blueprintToMerge.evolutionStage === 1) {
-    // we have one at the top of 1, need to get one to the top of 1 from the bottom of 1
-    costOfUpgrade += getCostToUpgradeBlueprint(
-      { ...BASE_BP, productName: blueprintToMerge.productName },
+  // get cost of getting a matching bp, assuming only the top one has any levels in it
+  for (let stage = 1; stage <= blueprintToMerge.evolutionStage; stage++) {
+    costOfUpgrade += getCostToGetExponentialNumOfBPAtStage(
+      stage,
+      strategyForThisBP,
+      blueprintToMerge,
       baseNumLevelsToUpgrade,
     );
   }
-  if (blueprintToMerge.evolutionStage === 2) {
-    // we have one at the top of 2, need to get 2 to the top of 1 from the bottom of 1
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint({ ...BASE_BP, productName: blueprintToMerge.productName }, baseNumLevelsToUpgrade) * 2;
-    // then merge, then level to top of 2
-    costOfUpgrade += getCostToUpgradeBlueprint(
-      { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToMerge.productName },
-      baseNumLevelsToUpgrade + 10,
-    );
-  }
-  if (blueprintToMerge.evolutionStage === 3) {
-    // we have one at the top of 3. need to get 4 from bottom 1 to top 1
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint({ ...BASE_BP, productName: blueprintToMerge.productName }, baseNumLevelsToUpgrade) * 4;
-    // need to get 2 to the top of 2 from the bottom of 2
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 10,
-      ) * 2;
-    // merge and level to top of 3
-    costOfUpgrade += getCostToUpgradeBlueprint(
-      { ...getBottomOfStageBP(3, strategyForThisBP), productName: blueprintToMerge.productName },
-      baseNumLevelsToUpgrade + 20,
-    );
-  }
-  if (blueprintToMerge.evolutionStage === 4) {
-    // we have one at the top of 4. need to get 8 from bottom 1 to top 1
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint({ ...BASE_BP, productName: blueprintToMerge.productName }, baseNumLevelsToUpgrade) * 8;
-    // need to get 4 to the top of 2 from the bottom of 2
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 10,
-      ) * 4;
-    // need to get 2 to the top of 3 from the bottom of 3
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(3, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 20,
-      ) * 2;
-    // merge and level to top of 4
-    costOfUpgrade += getCostToUpgradeBlueprint(
-      { ...getBottomOfStageBP(4, strategyForThisBP), productName: blueprintToMerge.productName },
-      baseNumLevelsToUpgrade + 30,
-    );
-  }
-  if (blueprintToMerge.evolutionStage === 5) {
-    // we have one at the top of 5. need to get 16 from bottom 1 to top 1
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint({ ...BASE_BP, productName: blueprintToMerge.productName }, baseNumLevelsToUpgrade) * 16;
-    // need to get 8 to the top of 2 from the bottom of 2
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(2, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 10,
-      ) * 8;
-    // need to get 4 to the top of 3 from the bottom of 3
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(3, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 20,
-      ) * 4;
-    // need to get 2 to the top of 4 from the bottom of 4
-    costOfUpgrade +=
-      getCostToUpgradeBlueprint(
-        { ...getBottomOfStageBP(4, strategyForThisBP), productName: blueprintToMerge.productName },
-        baseNumLevelsToUpgrade + 30,
-      ) * 2;
-    // merge and level to top of 4
-    costOfUpgrade += getCostToUpgradeBlueprint(
-      { ...getBottomOfStageBP(5, strategyForThisBP), productName: blueprintToMerge.productName },
-      baseNumLevelsToUpgrade + 40,
-    );
-  }
-  // if (blueprintToUpgrade.evolutionStage > 3) {
-  //   // we have one at the top of 3. need to get 4 from bottom 1 to top 1
-  //   const topStage1 = upgradeBlueprint({ ...BOTTOM_STAGE_1, productName: blueprintToUpgrade.productName }, 50);
-  //   costOfUpgrade += topStage1.costOfUpgrade * 2 ** (blueprintToUpgrade.evolutionStage - 1);
-  //   // need to get 2 to the top of 2 from the bottom of 2
-  //   const topStage2 = upgradeBlueprint({ ...BOTTOM_STAGE_2, productName: blueprintToUpgrade.productName }, 60);
-  //   costOfUpgrade += topStage2.costOfUpgrade * 2 ** (blueprintToUpgrade.evolutionStage - 2);
-  //   // merge and level to top of 3
-  //   const topStage3 = upgradeBlueprint(topStage2.blueprint, 70);
-  //   costOfUpgrade += topStage3.costOfUpgrade;
-  // }
-
-  // assume we have a bp of the stage
-  // const assumedBaseBlueprintOfStage: Blueprint = {
-  //   ...blueprintToUpgrade,
-  //   upgradeLevel: 1,
-  //   score:
-  //     blueprintToUpgrade.evolutionStage === 1
-  //       ? 10
-  //       : blueprintToUpgrade.evolutionStage === 2
-  //       ? 10 * 12
-  //       : blueprintToUpgrade.evolutionStage === 3
-  //       ? 10 * 12 * 14
-  //       : blueprintToUpgrade.evolutionStage === 4
-  //       ? 10 * 12 * 14 * 16
-  //       : 0,
-  // };
-
-  // if the next highest bp is of one stage down. ex toUpgrade is top_stage_2, all others are bottom_stage_1
-  // get 2 bottom_stage_1 to top_stage_1
-  // then merge to make a bottom_stage_2
-  // then upgrade That to top_stage_2
-  // then merge those to bottom_stage_3
-
-  //  upgrade it to top of its tier
-  // const topUpgradeLevel = 51 + (blueprintToUpgrade.evolutionStage - 1) * 10;
-  // const numLevelsToUpgrade = topUpgradeLevel - assumedBaseBlueprintOfStage.upgradeLevel;
-  // const upgradedSecondBlueprint = upgradeBlueprint(assumedBaseBlueprintOfStage, numLevelsToUpgrade);
-
-  //  merge if necessary which recursively goes back to this
 
   // make new blueprint with evolution increased, score * 2, and reset level to 1
   const topOfOrigStage = getScoreAtTopOfStage(blueprintToMerge.evolutionStage, strategyForThisBP);
@@ -233,13 +118,26 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
     upgradeLevel: 1,
   };
 
-  // remove both old blueprints and add in the new one (unneeded? dont return all? need to return all?)
-
   return {
     blueprint: mergedBlueprint,
     costOfUpgrade,
     scoreChange: blueprintToMerge.score,
   };
+}
+
+function getCostToGetExponentialNumOfBPAtStage(
+  stage: number,
+  strategyForThisBP: number,
+  blueprintToMerge: Blueprint,
+  baseNumLevelsToUpgrade: number,
+): number {
+  return (
+    getCostToUpgradeBlueprint(
+      { ...getBottomOfStageBP(stage, strategyForThisBP), productName: blueprintToMerge.productName },
+      baseNumLevelsToUpgrade + 10 * (stage - 1),
+    ) *
+    (2 ^ (blueprintToMerge.evolutionStage - stage - 1))
+  );
 }
 
 export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[]): SetUpgradeInfo | null {
