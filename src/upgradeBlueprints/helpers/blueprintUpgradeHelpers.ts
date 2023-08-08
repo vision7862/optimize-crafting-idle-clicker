@@ -1,10 +1,6 @@
 import { importMainWorkshop } from '../../buildWorkshop/importMainWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
-import {
-  BPS_TO_NOT_MERGE,
-  BUILD_COST_OF_BPS_WITHOUT_DETAILS,
-  NON_51_PLUS_10_STRATEGY,
-} from '../config/BlueprintLibrary';
+import { BPS_TO_NOT_MERGE, NON_51_PLUS_10_STRATEGY } from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
@@ -19,18 +15,12 @@ import {
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
   const products: Map<string, ProductDetails> = importMainWorkshop(false);
   const product: ProductDetails | undefined = products.get(blueprint.productName);
-  const filledInBuildCost = BUILD_COST_OF_BPS_WITHOUT_DETAILS.get(blueprint.productName);
-  if (product === undefined && filledInBuildCost === undefined) {
+  if (product === undefined) {
     console.error(`Did not find ${blueprint.productName} in products`);
     return Number.MAX_VALUE;
   }
 
-  const actualBaseCost =
-    product != null
-      ? Math.log10(product.buildCost) + 9
-      : filledInBuildCost !== undefined
-      ? filledInBuildCost / 1.08
-      : Number.MAX_VALUE;
+  const actualBaseCost = Math.log10(product.buildCost) + 9;
   let upgradeCost: number = 0;
   for (let i = 0; i < levels; i++) {
     upgradeCost += Math.round(actualBaseCost * 1.08 ** (blueprint.upgradeLevel + i));
