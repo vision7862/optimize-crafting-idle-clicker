@@ -2,7 +2,7 @@ import { bottomUpToMoney } from '../computeIdealLevelsForEvent';
 import { WorkshopUpgradeInfo } from '../productLooper';
 import { DEFAULT_WORKSHOP_STATUS_MAIN, Workshop, WorkshopStatus } from '../types/Workshop';
 import { computeResearchTimeForWorkshop, getFinalNumScientistsCanAfford } from './ResearchHelpers';
-import { getStatusMap } from './WorkshopHelpers';
+import { getStatusMap, isEvent } from './WorkshopHelpers';
 import {
   computeBuildTimeForWorkshop,
   computeTargetFromFame,
@@ -12,7 +12,7 @@ import {
 
 export function printFameTime(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
-  const target = computeTargetFromFame(fame, workshopStatus.level);
+  const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
   const targetInfo = bottomUpToMoney(target, workshopStatus);
   printInfo(targetInfo, target);
 }

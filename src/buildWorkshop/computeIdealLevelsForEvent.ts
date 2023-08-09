@@ -1,8 +1,7 @@
 import { isEvent } from './helpers/WorkshopHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
-import { importProductsAtLevel } from './importEventProducts';
-import { importMainWorkshop } from './importMainWorkshop';
+import { importWorkshop } from './importWorkshop';
 import { WorkshopUpgradeInfo, buildWorkshopToTarget } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
 import {
@@ -19,13 +18,14 @@ export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus
 
 export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
-  const fameRequiredToLevelUp = workshopStatus.level + 3;
+  const fameRequiredToLevelUp =
+    (isEvent(workshopStatus) ? Math.min(10, workshopStatus.level) : workshopStatus.level) + 3;
   let bestTime = Number.MAX_VALUE;
   let bestFame = fameRequiredToLevelUp;
   let bestWorkshopUpgrade;
   for (let fame = isEvent(workshopStatus) ? 1 : 12; fame < Math.min(fameRequiredToLevelUp, 30); fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
-    const target = computeTargetFromFame(fame, workshopStatus.level);
+    const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
     const targetInfo = bottomUpToMoney(target, workshopStatus);
     const idleBuildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
     if (idleBuildTime > 20 * 45) {
@@ -52,7 +52,7 @@ export function fastestFamePerSecond(partialWorkshopStatus: Partial<WorkshopStat
   let bestWorkshopUpgrade;
   for (let fame = 12; fame < Math.min(fameRequiredToLevelUp, 30); fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
-    const target = computeTargetFromFame(fame, workshopStatus.level);
+    const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
     const targetInfo = bottomUpToMoney(target, workshopStatus);
     const buildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
     const resetTime = buildTime + 10 * Math.ceil(fameRequiredToLevelUp / fame);
@@ -79,11 +79,17 @@ export function bestGemChance(partialWorkshopStatus: Partial<WorkshopStatus>): {
 } {
   console.info('computing time to reach 14 fame...');
   const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
-  const targetInfo14 = bottomUpToMoney(computeTargetFromFame(14, workshopStatus.level), workshopStatus);
+  const targetInfo14 = bottomUpToMoney(
+    computeTargetFromFame(14, workshopStatus.level, isEvent(workshopStatus)),
+    workshopStatus,
+  );
   const timePerGemChance14 = targetInfo14.buildTime / 8;
 
   console.info('computing time to reach 15 fame...');
-  const targetInfo15 = bottomUpToMoney(computeTargetFromFame(15, workshopStatus.level), workshopStatus);
+  const targetInfo15 = bottomUpToMoney(
+    computeTargetFromFame(15, workshopStatus.level, isEvent(workshopStatus)),
+    workshopStatus,
+  );
   const timePerGemChance15 = targetInfo15.buildTime / 12;
 
   console.log(`best gem chance per time at ${timePerGemChance14 < timePerGemChance15 ? 14 : 15}`);
@@ -115,9 +121,8 @@ function getWorkshopStatus(partialWorkshopStatus: Partial<WorkshopStatus>): Work
 }
 
 function getProductDetails(workshopStatus: WorkshopStatus): ProductDetails[] {
-  return isEvent(workshopStatus)
-    ? Array.from(importProductsAtLevel(workshopStatus.eventName, workshopStatus.level).values())
-    : Array.from(importMainWorkshop(true).values());
+  const productMap = isEvent(workshopStatus) ? importWorkshop(true, workshopStatus.eventName) : importWorkshop(true);
+  return Array.from(productMap.values());
 }
 
 function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {

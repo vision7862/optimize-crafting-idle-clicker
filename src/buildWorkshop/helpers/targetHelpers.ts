@@ -6,8 +6,8 @@ import { Workshop } from '../types/Workshop';
 import { computeResearchTimeForWorkshop } from './ResearchHelpers';
 import { toTime } from './printResults';
 
-export function computeTargetFromFame(fame: number, level: number): number {
-  return 10 ** (fame + level - 1);
+export function computeTargetFromFame(fame: number, level: number, isEvent: boolean): number {
+  return 10 ** (fame + (isEvent ? Math.min(level, 10) : level) - 1);
 }
 
 export function filterOutSkipped(statuses: Map<string, ProductStatus>): Map<string, ProductStatus> {

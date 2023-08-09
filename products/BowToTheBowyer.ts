@@ -1,0 +1,28 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const BowToTheBowyer: ImportedProduct[] = [
+  { ProductType: 'Feathers', ProductAmount: 3, ConstructionPrice: 20, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Sticks', ProductAmount: 1, ConstructionPrice: 100, ProductPrice: 10, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Arrows', ProductAmount: 3, LeftResourceType: 'Feathers', LeftResourceAmount: 9, RightResourceType: 'Sticks', RightResourceAmount: 3, ConstructionPrice: 800, ProductPrice: 30, DiscoveryPrice: 50, Type: 'Ingot' },
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 7000, ProductPrice: 200, DiscoveryPrice: 100, Type: 'Ore' },
+  { ProductType: 'Composite Bow', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 1, RightResourceType: 'Arrows', RightResourceAmount: 6, ConstructionPrice: 60000, ProductPrice: 1000, DiscoveryPrice: 200, Type: 'EarlyProduct' },
+  { ProductType: 'Coal', ProductAmount: 3, ConstructionPrice: 500000, ProductPrice: 800, DiscoveryPrice: 500, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 2, ConstructionPrice: 3000000, ProductPrice: 4000, DiscoveryPrice: 1000, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Iron Ore', LeftResourceAmount: 2, RightResourceType: 'Coal', RightResourceAmount: 3, ConstructionPrice: 40000000, ProductPrice: 10000, DiscoveryPrice: 2000, Type: 'Ingot' },
+  { ProductType: 'Iron Rivets', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 300000000, ProductPrice: 50000, DiscoveryPrice: 5000, Type: 'SemiProduct' },
+  { ProductType: 'Iron Arrows', ProductAmount: 3, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Arrows', RightResourceAmount: 3, ConstructionPrice: 3000000000, ProductPrice: 200000, DiscoveryPrice: 10000, Type: 'SemiProduct' },
+  { ProductType: 'Longbow', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Arrows', RightResourceAmount: 6, ConstructionPrice: 20000000000, ProductPrice: 4000000, DiscoveryPrice: 20000, Type: 'EarlyProduct' },
+  { ProductType: 'Gold Ore', ProductAmount: 1, ConstructionPrice: 90000000000, ProductPrice: 7000000, DiscoveryPrice: 50000, Type: 'Ore' },
+  { ProductType: 'Gold Ingots', ProductAmount: 3, LeftResourceType: 'Gold Ore', LeftResourceAmount: 1, ConstructionPrice: 600000000000, ProductPrice: 10000000, DiscoveryPrice: 100000, Type: 'Ingot' },
+  { ProductType: 'Steel', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Coal', RightResourceAmount: 2, ConstructionPrice: 2000000000000, ProductPrice: 60000000, DiscoveryPrice: 150000, Type: 'Ingot' },
+  { ProductType: 'Piercing Head', ProductAmount: 3, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 10000000000000, ProductPrice: 100000000, DiscoveryPrice: 200000, Type: 'SemiProduct' },
+  { ProductType: 'Piercing Arrows', ProductAmount: 3, LeftResourceType: 'Piercing Head', LeftResourceAmount: 3, RightResourceType: 'Arrows', RightResourceAmount: 3, ConstructionPrice: 60000000000000, ProductPrice: 300000000, DiscoveryPrice: 250000, Type: 'SemiProduct' },
+  { ProductType: 'Piercing Bow', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 5, RightResourceType: 'Piercing Arrows', RightResourceAmount: 5, ConstructionPrice: 300000000000000, ProductPrice: 4000000000, DiscoveryPrice: 300000, Type: 'LateProduct' },
+  { ProductType: 'Magnificent Bow', ProductAmount: 1, LeftResourceType: 'Piercing Bow', LeftResourceAmount: 1, RightResourceType: 'Gold Ingots', RightResourceAmount: 4, ConstructionPrice: 900000000000000, ProductPrice: 9000000000, DiscoveryPrice: 350000, Type: 'LateProduct' },
+  { ProductType: 'Mechanical Parts', ProductAmount: 2, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 5000000000000000, ProductPrice: 10000000000, DiscoveryPrice: 400000, Type: 'SemiProduct' },
+  { ProductType: 'Piercing Bolts', ProductAmount: 4, LeftResourceType: 'Piercing Head', LeftResourceAmount: 4, RightResourceType: 'Steel', RightResourceAmount: 1, ConstructionPrice: 20000000000000000, ProductPrice: 20000000000, DiscoveryPrice: 450000, Type: 'SemiProduct' },
+  { ProductType: 'Crossbow', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 4, RightResourceType: 'Piercing Bolts', RightResourceAmount: 5, ConstructionPrice: 90000000000000000, ProductPrice: 500000000000, DiscoveryPrice: 500000, Type: 'LateProduct' },
+  { ProductType: 'Magnificent Crossbow', ProductAmount: 1, LeftResourceType: 'Crossbow', LeftResourceAmount: 1, RightResourceType: 'Gold Ingots', RightResourceAmount: 4, ConstructionPrice: 400000000000000000, ProductPrice: 1000000000000, DiscoveryPrice: 600000, Type: 'LateProduct' },
+  { ProductType: 'Ballista Bolt', ProductAmount: 2, LeftResourceType: 'Piercing Bolts', LeftResourceAmount: 2, RightResourceType: 'Steel', RightResourceAmount: 2, ConstructionPrice: 1000000000000000000, ProductPrice: 2000000000000, DiscoveryPrice: 700000, Type: 'SemiProduct' },
+  { ProductType: 'Ballista', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 8, RightResourceType: 'Ballista Bolt', RightResourceAmount: 4, ConstructionPrice: 10000000000000000000, ProductPrice: 30000000000000, DiscoveryPrice: 800000, Type: 'LateProduct' },
+];

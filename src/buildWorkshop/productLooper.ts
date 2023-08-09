@@ -95,13 +95,21 @@ function isProductLeaf(productName: string, workshop: Workshop): boolean {
 }
 
 function zeroAllLevels(productsInfo: Readonly<Product[]>): Product[] {
-  return [...productsInfo].map((product) => {
+  const allLevelsZeroed = [...productsInfo].map((product) => {
     return {
       ...product,
       status: {
         ...product.status,
-        level: product.details.name === 'Wood' ? 1 : 0,
+        level: 0,
       },
     };
   });
+  allLevelsZeroed[0] = {
+    ...allLevelsZeroed[0],
+    status: {
+      ...allLevelsZeroed[0].status,
+      level: 1,
+    },
+  };
+  return allLevelsZeroed;
 }

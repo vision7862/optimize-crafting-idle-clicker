@@ -1,0 +1,26 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const VitalScience: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Copper Ore', ProductAmount: 1, ConstructionPrice: 80, ProductPrice: 4, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Copper Ingots', ProductAmount: 3, LeftResourceType: 'Copper Ore', LeftResourceAmount: 1, ConstructionPrice: 700, ProductPrice: 8, DiscoveryPrice: 50, Type: 'Ingot' },
+  { ProductType: 'Coal', ProductAmount: 1, ConstructionPrice: 6000, ProductPrice: 100, DiscoveryPrice: 100, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 50000, ProductPrice: 400, DiscoveryPrice: 500, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Coal', LeftResourceAmount: 3, RightResourceType: 'Iron Ore', RightResourceAmount: 2, ConstructionPrice: 600000, ProductPrice: 600, DiscoveryPrice: 1000, Type: 'Ingot' },
+  { ProductType: 'Rubber', ProductAmount: 1, ConstructionPrice: 5000000, ProductPrice: 5000, DiscoveryPrice: 2000, Type: 'Ore' },
+  { ProductType: 'Stethoscope', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Rubber', RightResourceAmount: 1, ConstructionPrice: 60000000, ProductPrice: 40000, DiscoveryPrice: 5000, Type: 'EarlyProduct' },
+  { ProductType: 'Iron Rivets', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 400000000, ProductPrice: 50000, DiscoveryPrice: 10000, Type: 'SemiProduct' },
+  { ProductType: 'Mechanical Parts', ProductAmount: 2, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 5000000000, ProductPrice: 600000, DiscoveryPrice: 25000, Type: 'SemiProduct' },
+  { ProductType: 'Tungsten', ProductAmount: 1, ConstructionPrice: 30000000000, ProductPrice: 4000000, DiscoveryPrice: 50000, Type: 'Ore' },
+  { ProductType: 'X-ray Generator', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 4, RightResourceType: 'Tungsten', RightResourceAmount: 3, ConstructionPrice: 200000000000, ProductPrice: 30000000, DiscoveryPrice: 75000, Type: 'SemiProduct' },
+  { ProductType: 'Caesium', ProductAmount: 1, ConstructionPrice: 1000000000000, ProductPrice: 60000000, DiscoveryPrice: 100000, Type: 'Ore' },
+  { ProductType: 'Iodine', ProductAmount: 1, ConstructionPrice: 7000000000000, ProductPrice: 400000000, DiscoveryPrice: 150000, Type: 'Ore' },
+  { ProductType: 'Scintillator', ProductAmount: 1, LeftResourceType: 'Caesium', LeftResourceAmount: 2, RightResourceType: 'Iodine', RightResourceAmount: 2, ConstructionPrice: 90000000000000, ProductPrice: 3000000000, DiscoveryPrice: 200000, Type: 'SemiProduct' },
+  { ProductType: 'Silicon', ProductAmount: 1, ConstructionPrice: 700000000000000, ProductPrice: 9000000000, DiscoveryPrice: 250000, Type: 'Ore' },
+  { ProductType: 'X-ray Detector', ProductAmount: 1, LeftResourceType: 'Scintillator', LeftResourceAmount: 1, RightResourceType: 'Silicon', RightResourceAmount: 2, ConstructionPrice: 5000000000000000, ProductPrice: 50000000000, DiscoveryPrice: 300000, Type: 'SemiProduct' },
+  { ProductType: 'X-ray Machine', ProductAmount: 1, LeftResourceType: 'X-ray Generator', LeftResourceAmount: 1, RightResourceType: 'X-ray Detector', RightResourceAmount: 1, ConstructionPrice: 20000000000000000, ProductPrice: 100000000000, DiscoveryPrice: 350000, Type: 'LateProduct' },
+  { ProductType: 'Electrical Parts', ProductAmount: 2, LeftResourceType: 'Copper Ingots', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 150000000000000000, ProductPrice: 150000000000, DiscoveryPrice: 400000, Type: 'SemiProduct' },
+  { ProductType: 'Electrode', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Electrical Parts', RightResourceAmount: 2, ConstructionPrice: 500000000000000000, ProductPrice: 1000000000000, DiscoveryPrice: 500000, Type: 'SemiProduct' },
+  { ProductType: 'Control Unit', ProductAmount: 1, LeftResourceType: 'Silicon', LeftResourceAmount: 4, RightResourceType: 'Electrical Parts', RightResourceAmount: 4, ConstructionPrice: 2000000000000000000, ProductPrice: 5000000000000, DiscoveryPrice: 600000, Type: 'SemiProduct' },
+  { ProductType: 'Defibrillator', ProductAmount: 1, LeftResourceType: 'Electrode', LeftResourceAmount: 2, RightResourceType: 'Control Unit', RightResourceAmount: 1, ConstructionPrice: 10000000000000000000, ProductPrice: 20000000000000, DiscoveryPrice: 700000, Type: 'LateProduct' },
+];

@@ -11,7 +11,7 @@ import {
   getCostOfScientistsFromSome,
   getFinalNumScientistsCanAfford,
 } from '../../src/buildWorkshop/helpers/ResearchHelpers';
-import { getStatusMap } from '../../src/buildWorkshop/helpers/WorkshopHelpers';
+import { getStatusMap, isEvent } from '../../src/buildWorkshop/helpers/WorkshopHelpers';
 import { printFameTime, printInfo, toTime } from '../../src/buildWorkshop/helpers/printResults';
 import { computeTargetFromFame, filterOutSkipped } from '../../src/buildWorkshop/helpers/targetHelpers';
 import { WorkshopUpgradeInfo } from '../../src/buildWorkshop/productLooper';
@@ -25,7 +25,7 @@ describe.only('runProgram', () => {
   describe('events', () => {
     const eventName = 'Hammer Time';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
-      printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
+      printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, ...partialWorkshopStatus });
     }
     describe('leveling', () => {
       test('2 fame level 1', () => {
@@ -203,7 +203,15 @@ describe.only('runProgram', () => {
       });
 
       test('3 fame level 10+', () => {
-        printFameTimeEvent(6, { level: 10 });
+        printFameTimeEvent(3, {
+          level: 25,
+          scientists: 270,
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+          speedBoostActive: true,
+          eventName: 'Craft For Freedom',
+        });
       });
     });
   });
@@ -302,7 +310,11 @@ describe.only('runProgram', () => {
     describe('shooting for gems', () => {
       function getGems(partialWorkshopStatus: Partial<WorkshopStatus>): void {
         const ret = bestGemChance(partialWorkshopStatus);
-        const target = computeTargetFromFame(ret.fame, ret.upgradeInfo.workshop.workshopStatus.level);
+        const target = computeTargetFromFame(
+          ret.fame,
+          ret.upgradeInfo.workshop.workshopStatus.level,
+          isEvent(partialWorkshopStatus),
+        );
         printInfo(ret.upgradeInfo, target);
       }
 
@@ -472,7 +484,7 @@ describe.only('runProgram', () => {
       }
 
       test('get as much fame as possible in idle 20 minutes at level 15', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 15);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 15, false);
         maximizeTypeInTime('fame', 10, 5, { level: 15 }, getTarget);
       });
 
@@ -489,7 +501,7 @@ describe.only('runProgram', () => {
       });
 
       test('get as much fame as possible in idle 30 minutes at level 16', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 16);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 16, false);
         maximizeTypeInTime('fame', 30, 5, { level: 16 }, getTarget);
       });
 
@@ -506,37 +518,37 @@ describe.only('runProgram', () => {
       });
 
       test('get as much fame as possible in idle 60 minutes at level 17', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 17);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 17, false);
         maximizeTypeInTime('fame', 60, 12, { level: 17 }, getTarget);
       });
 
       test('get as much fame as possible in idle 10 minutes at level 9', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 9);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 9, false);
         maximizeTypeInTime('fame', 10, 8, { level: 9 }, getTarget);
       });
 
       test('get as much fame as possible in idle 10 minutes at level 2', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 2);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 2, false);
         maximizeTypeInTime('fame', 10, 0, { level: 2, scientists: 98 }, getTarget);
       });
 
       test('get as much fame as possible in idle 10 minutes at level 3', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3, false);
         maximizeTypeInTime('fame', 10, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
       test('get as much fame as possible in idle 5 minutes at level 3', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 3, false);
         maximizeTypeInTime('fame', 5, 0, { level: 3, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
       test('get as much fame as possible in idle 5 minutes at level 4', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 4);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 4, false);
         maximizeTypeInTime('fame', 5, 0, { level: 4, scientists: 150, researchBoostActive: true }, getTarget);
       });
 
       test('get as much fame as possible in idle 5 minutes at level 5', () => {
-        const getTarget = (fame: number): number => computeTargetFromFame(fame, 5);
+        const getTarget = (fame: number): number => computeTargetFromFame(fame, 5, false);
         maximizeTypeInTime('fame', 5, 0, { level: 5, scientists: 173, researchBoostActive: true }, getTarget);
       });
 

@@ -9,7 +9,11 @@ function optimizeForGems(workshopStatus: Partial<WorkshopStatus>): void {
   const targetInfo = bestGemChance(workshopStatus);
   printInfo(
     targetInfo.upgradeInfo,
-    computeTargetFromFame(targetInfo.fame, targetInfo.upgradeInfo.workshop.workshopStatus.level),
+    computeTargetFromFame(
+      targetInfo.fame,
+      targetInfo.upgradeInfo.workshop.workshopStatus.level,
+      isEvent(targetInfo.upgradeInfo.workshop.workshopStatus),
+    ),
   );
 }
 
