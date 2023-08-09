@@ -1,7 +1,6 @@
 import { toTime } from '../../../src/buildWorkshop/helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from '../../../src/buildWorkshop/helpers/targetHelpers';
-import { importProductsAtLevel } from '../../../src/buildWorkshop/importEventProducts';
-import { importMainWorkshop } from '../../../src/buildWorkshop/importMainWorkshop';
+import { importWorkshop } from '../../../src/buildWorkshop/importWorkshop';
 import { Product, ProductDetails, ProductStatus } from '../../../src/buildWorkshop/types/Product';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
@@ -140,15 +139,14 @@ describe('targetHelpers', () => {
       eventName?: string,
     ): Product[] {
       const productsInfo = new Array<Product>();
-      const mainWorkshopProducts: Map<string, ProductDetails> =
-        eventName !== undefined ? importProductsAtLevel(eventName, 10) : importMainWorkshop(true);
+      const allWorkshopProducts: Map<string, ProductDetails> = importWorkshop(true, eventName);
       products.forEach((product: { name: string; level: number }) => {
         const status: ProductStatus = {
           level: product.level,
           merchants: 1,
         };
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const details: ProductDetails = mainWorkshopProducts.get(product.name)!;
+        const details: ProductDetails = allWorkshopProducts.get(product.name)!;
         productsInfo.push({ status, details });
       });
       return productsInfo;

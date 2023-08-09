@@ -1,4 +1,4 @@
-import { importMainWorkshop } from '../../buildWorkshop/importMainWorkshop';
+import { importWorkshop } from '../../buildWorkshop/importWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import { BPS_TO_NOT_MERGE, NON_51_PLUS_10_STRATEGY } from '../config/BlueprintLibrary';
 import { BlueprintSet } from '../constants/BlueprintSets';
@@ -13,7 +13,7 @@ import {
 } from './blueprintScoreHelpers';
 
 export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number): number {
-  const products: Map<string, ProductDetails> = importMainWorkshop(false);
+  const products: Map<string, ProductDetails> = importWorkshop(false);
   const product: ProductDetails | undefined = products.get(blueprint.productName);
   if (product === undefined) {
     console.error(`Did not find ${blueprint.productName} in products`);

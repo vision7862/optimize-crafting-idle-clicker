@@ -1,8 +1,7 @@
 import { isEvent } from './helpers/WorkshopHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
-import { importEventWorkshop } from './importEventProducts copy';
-import { importMainWorkshop } from './importMainWorkshop';
+import { importWorkshop } from './importWorkshop';
 import { WorkshopUpgradeInfo, buildWorkshopToTarget } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
 import {
@@ -122,9 +121,8 @@ function getWorkshopStatus(partialWorkshopStatus: Partial<WorkshopStatus>): Work
 }
 
 function getProductDetails(workshopStatus: WorkshopStatus): ProductDetails[] {
-  return isEvent(workshopStatus)
-    ? Array.from(importEventWorkshop(workshopStatus.eventName).values())
-    : Array.from(importMainWorkshop(true).values());
+  const productMap = isEvent(workshopStatus) ? importWorkshop(true, workshopStatus.eventName) : importWorkshop(true);
+  return Array.from(productMap.values());
 }
 
 function setUpProductsInfo(productDetails: ProductDetails[]): Product[] {
