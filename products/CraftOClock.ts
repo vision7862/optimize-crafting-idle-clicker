@@ -1,0 +1,25 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const CraftOClock: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Coal', ProductAmount: 1, ConstructionPrice: 65, ProductPrice: 4, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 500, ProductPrice: 15, DiscoveryPrice: 50, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Coal', LeftResourceAmount: 3, RightResourceType: 'Iron Ore', RightResourceAmount: 2, ConstructionPrice: 4000, ProductPrice: 20, DiscoveryPrice: 100, Type: 'Ingot' },
+  { ProductType: 'Rawhide', ProductAmount: 1, ConstructionPrice: 30000, ProductPrice: 300, DiscoveryPrice: 500, Type: 'Ore' },
+  { ProductType: 'Leather', ProductAmount: 3, LeftResourceType: 'Rawhide', LeftResourceAmount: 1, ConstructionPrice: 400000, ProductPrice: 500, DiscoveryPrice: 1000, Type: 'Ingot' },
+  { ProductType: 'Iron Rivets', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 3000000, ProductPrice: 1000, DiscoveryPrice: 2000, Type: 'SemiProduct' },
+  { ProductType: 'Mechanical Parts', ProductAmount: 2, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 20000000, ProductPrice: 15000, DiscoveryPrice: 5000, Type: 'SemiProduct' },
+  { ProductType: 'Clockwork', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 3, ConstructionPrice: 100000000, ProductPrice: 100000, DiscoveryPrice: 10000, Type: 'SemiProduct' },
+  { ProductType: 'Steel', ProductAmount: 1, LeftResourceType: 'Coal', LeftResourceAmount: 4, RightResourceType: 'Iron Ingots', RightResourceAmount: 2, ConstructionPrice: 900000000, ProductPrice: 500000, DiscoveryPrice: 20000, Type: 'Ingot' },
+  { ProductType: 'Pendulum', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 8000000000, ProductPrice: 3500000, DiscoveryPrice: 50000, Type: 'SemiProduct' },
+  { ProductType: 'Pendulum Clock', ProductAmount: 1, LeftResourceType: 'Clockwork', LeftResourceAmount: 1, RightResourceType: 'Pendulum', RightResourceAmount: 1, ConstructionPrice: 60000000000, ProductPrice: 10000000, DiscoveryPrice: 100000, Type: 'EarlyProduct' },
+  { ProductType: 'Grandfather Clock', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 4, RightResourceType: 'Pendulum Clock', RightResourceAmount: 1, ConstructionPrice: 500000000000, ProductPrice: 50000000, DiscoveryPrice: 150000, Type: 'EarlyProduct' },
+  { ProductType: 'Musical Clock', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 4, RightResourceType: 'Clockwork', RightResourceAmount: 1, ConstructionPrice: 4000000000000, ProductPrice: 200000000, DiscoveryPrice: 200000, Type: 'LateProduct' },
+  { ProductType: 'Chain', ProductAmount: 3, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 35000000000000, ProductPrice: 200000000, DiscoveryPrice: 250000, Type: 'SemiProduct' },
+  { ProductType: 'Pocket Watch', ProductAmount: 1, LeftResourceType: 'Clockwork', LeftResourceAmount: 1, RightResourceType: 'Chain', RightResourceAmount: 1, ConstructionPrice: 250000000000000, ProductPrice: 4000000000, DiscoveryPrice: 300000, Type: 'EarlyProduct' },
+  { ProductType: 'Wrist Band', ProductAmount: 5, LeftResourceType: 'Leather', LeftResourceAmount: 1, ConstructionPrice: 2000000000000000, ProductPrice: 3000000000, DiscoveryPrice: 350000, Type: 'EarlyProduct' },
+  { ProductType: 'Wrist Watch', ProductAmount: 1, LeftResourceType: 'Clockwork', LeftResourceAmount: 1, RightResourceType: 'Wrist Band', RightResourceAmount: 1, ConstructionPrice: 10000000000000000, ProductPrice: 70000000000, DiscoveryPrice: 400000, Type: 'LateProduct' },
+  { ProductType: 'Gold Ore', ProductAmount: 1, ConstructionPrice: 70000000000000000, ProductPrice: 400000000000, DiscoveryPrice: 500000, Type: 'Ore' },
+  { ProductType: 'Gold Ingots', ProductAmount: 3, LeftResourceType: 'Gold Ore', LeftResourceAmount: 1, ConstructionPrice: 1000000000000000000, ProductPrice: 900000000000, DiscoveryPrice: 600000, Type: 'Ingot' },
+  { ProductType: 'Luxury Watch', ProductAmount: 1, LeftResourceType: 'Wrist Watch', LeftResourceAmount: 1, RightResourceType: 'Gold Ingots', RightResourceAmount: 1, ConstructionPrice: 6000000000000000000, ProductPrice: 10000000000000, DiscoveryPrice: 700000, Type: 'LateProduct' },
+];

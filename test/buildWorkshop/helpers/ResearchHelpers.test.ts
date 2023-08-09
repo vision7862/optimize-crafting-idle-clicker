@@ -29,7 +29,7 @@ describe('Research Helpers', () => {
   describe('computeResearchTimeForWorkshop', () => {
     it.skip('should calculate research time in seconds', () => {
       // crop main workshop after coal because manually timed about 2.5 minutes
-      const workshop = bottomUpToMoney(computeTargetFromFame(12, 21), { scientists: 520, level: 21 }).workshop;
+      const workshop = bottomUpToMoney(computeTargetFromFame(12, 21, false), { scientists: 520, level: 21 }).workshop;
       const researchTime = computeResearchTimeForWorkshop(workshop);
       expect(researchTime).toBeGreaterThan(150);
       expect(researchTime).toBeLessThan(180);

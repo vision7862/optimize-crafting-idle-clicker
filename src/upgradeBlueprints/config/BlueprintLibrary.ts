@@ -137,15 +137,6 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BASE_BP, productName: 'PC' },
 ];
 
-// for BPs without all details in MainWorkshop.txt, maps name to upgrade cost of when at lvl 1
-export const BUILD_COST_OF_BPS_WITHOUT_DETAILS = new Map<string, number>([
-  ['Hedge Trimmer', 117],
-  ['Tiki Torch', 122],
-  ['Lawn Mower', 127],
-  ['Stethoscope', 113],
-  ['X-Ray Machine', 125],
-]);
-
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 const BPS_WITHOUT_DUPES = [
   'Chisel',

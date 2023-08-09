@@ -114,7 +114,7 @@ async function booleanChoice(message: string): Promise<boolean> {
 }
 
 export function getEventFileNames(): Array<{ value: string }> {
-  const extraStepUpForDist = __dirname.includes('dist') ? '../' : '';
+  const extraStepUpForDist = __dirname.includes('dist') ? '../../' : '';
   const blueprintPath = path.join(__dirname, extraStepUpForDist + `../products`);
   const names = fs
     .readdirSync(blueprintPath)
@@ -125,6 +125,7 @@ export function getEventFileNames(): Array<{ value: string }> {
         value: file
           .replace(/([A-Z])/g, ' $1')
           .replace(/(\.txt)/g, '')
+          .replace(/(\.ts)/g, '')
           .trimStart(),
       };
     });

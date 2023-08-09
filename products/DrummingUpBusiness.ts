@@ -1,0 +1,25 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const DrummingUpBusiness: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Rawhide', ProductAmount: 1, ConstructionPrice: 80, ProductPrice: 5, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Drumhead', ProductAmount: 2, LeftResourceType: 'Rawhide', LeftResourceAmount: 1, ConstructionPrice: 900, ProductPrice: 15, DiscoveryPrice: 50, Type: 'SemiProduct' },
+  { ProductType: 'Bongo Frame', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 2, ConstructionPrice: 8000, ProductPrice: 70, DiscoveryPrice: 100, Type: 'SemiProduct' },
+  { ProductType: 'Bongos', ProductAmount: 1, LeftResourceType: 'Bongo Frame', LeftResourceAmount: 1, RightResourceType: 'Drumhead', RightResourceAmount: 2, ConstructionPrice: 50000, ProductPrice: 400, DiscoveryPrice: 500, Type: 'EarlyProduct' },
+  { ProductType: 'Copper Ore', ProductAmount: 1, ConstructionPrice: 450000, ProductPrice: 600, DiscoveryPrice: 1000, Type: 'Ore' },
+  { ProductType: 'Tin Ore', ProductAmount: 1, ConstructionPrice: 2500000, ProductPrice: 3000, DiscoveryPrice: 2000, Type: 'Ore' },
+  { ProductType: 'Bronze Ingots', ProductAmount: 5, LeftResourceType: 'Copper Ore', LeftResourceAmount: 3, RightResourceType: 'Tin Ore', RightResourceAmount: 1, ConstructionPrice: 30000000, ProductPrice: 4000, DiscoveryPrice: 5000, Type: 'Ingot' },
+  { ProductType: 'Gong Frame', ProductAmount: 1, LeftResourceType: 'Rawhide', LeftResourceAmount: 1, RightResourceType: 'Wood', RightResourceAmount: 4, ConstructionPrice: 200000000, ProductPrice: 45000, DiscoveryPrice: 10000, Type: 'SemiProduct' },
+  { ProductType: 'Gong', ProductAmount: 1, LeftResourceType: 'Bronze Ingots', LeftResourceAmount: 4, RightResourceType: 'Gong Frame', RightResourceAmount: 1, ConstructionPrice: 1000000000, ProductPrice: 250000, DiscoveryPrice: 20000, Type: 'LateProduct' },
+  { ProductType: 'Coal', ProductAmount: 1, ConstructionPrice: 6500000000, ProductPrice: 600000, DiscoveryPrice: 50000, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 40000000000, ProductPrice: 4000000, DiscoveryPrice: 100000, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Coal', LeftResourceAmount: 3, RightResourceType: 'Iron Ore', RightResourceAmount: 2, ConstructionPrice: 500000000000, ProductPrice: 7000000, DiscoveryPrice: 150000, Type: 'Ingot' },
+  { ProductType: 'Jingle', ProductAmount: 8, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 3000000000000, ProductPrice: 10000000, DiscoveryPrice: 200000, Type: 'SemiProduct' },
+  { ProductType: 'Tambourine Frame', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 1, RightResourceType: 'Jingle', RightResourceAmount: 6, ConstructionPrice: 25000000000000, ProductPrice: 550000000, DiscoveryPrice: 250000, Type: 'SemiProduct' },
+  { ProductType: 'Tambourine', ProductAmount: 1, LeftResourceType: 'Tambourine Frame', LeftResourceAmount: 1, RightResourceType: 'Drumhead', RightResourceAmount: 1, ConstructionPrice: 150000000000000, ProductPrice: 4000000000, DiscoveryPrice: 300000, Type: 'EarlyProduct' },
+  { ProductType: 'Snare Drum Frame', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Wood', RightResourceAmount: 3, ConstructionPrice: 950000000000000, ProductPrice: 6000000000, DiscoveryPrice: 350000, Type: 'SemiProduct' },
+  { ProductType: 'Snare Drum', ProductAmount: 1, LeftResourceType: 'Snare Drum Frame', LeftResourceAmount: 1, RightResourceType: 'Drumhead', RightResourceAmount: 1, ConstructionPrice: 7000000000000000, ProductPrice: 50000000000, DiscoveryPrice: 400000, Type: 'LateProduct' },
+  { ProductType: 'Resonator', ProductAmount: 3, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 40000000000000000, ProductPrice: 80000000000, DiscoveryPrice: 500000, Type: 'SemiProduct' },
+  { ProductType: 'Marimba Bar', ProductAmount: 8, LeftResourceType: 'Wood', LeftResourceAmount: 1, ConstructionPrice: 200000000000000000, ProductPrice: 100000000000, DiscoveryPrice: 600000, Type: 'SemiProduct' },
+  { ProductType: 'Marimba', ProductAmount: 1, LeftResourceType: 'Resonator', LeftResourceAmount: 12, RightResourceType: 'Marimba Bar', RightResourceAmount: 12, ConstructionPrice: 1500000000000000000, ProductPrice: 7000000000000, DiscoveryPrice: 700000, Type: 'LateProduct' },
+];

@@ -1,0 +1,27 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const HammerTime: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Simple Handle', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 1, ConstructionPrice: 100, ProductPrice: 10, DiscoveryPrice: 5, Type: 'SemiProduct' },
+  { ProductType: 'Wooden Mallet', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 1, RightResourceType: 'Simple Handle', RightResourceAmount: 1, ConstructionPrice: 1500, ProductPrice: 80, DiscoveryPrice: 50, Type: 'EarlyProduct' },
+  { ProductType: 'Wooden Maul', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Simple Handle', RightResourceAmount: 2, ConstructionPrice: 20000, ProductPrice: 400, DiscoveryPrice: 400, Type: 'LateProduct' },
+  { ProductType: 'Coal', ProductAmount: 1, ConstructionPrice: 80000, ProductPrice: 1000, DiscoveryPrice: 1000, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 700000, ProductPrice: 5000, DiscoveryPrice: 2000, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Iron Ore', LeftResourceAmount: 2, RightResourceType: 'Coal', RightResourceAmount: 1, ConstructionPrice: 7000000, ProductPrice: 10000, DiscoveryPrice: 3000, Type: 'Ingot' },
+  { ProductType: 'Anvil', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 10, ConstructionPrice: 200000000, ProductPrice: 300000, DiscoveryPrice: 5000, Type: 'EarlyProduct' },
+  { ProductType: 'Forging Hammer', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 2, RightResourceType: 'Simple Handle', RightResourceAmount: 1, ConstructionPrice: 2500000000, ProductPrice: 600000, DiscoveryPrice: 7000, Type: 'EarlyProduct' },
+  { ProductType: 'Nails', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 30000000000, ProductPrice: 750000, DiscoveryPrice: 10000, Type: 'EarlyProduct' },
+  { ProductType: 'Lump Hammer', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 2, RightResourceType: 'Simple Handle', RightResourceAmount: 1, ConstructionPrice: 150000000000, ProductPrice: 8000000, DiscoveryPrice: 15000, Type: 'EarlyProduct' },
+  { ProductType: "Horseman's Pick", ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 3, RightResourceType: 'Simple Handle', RightResourceAmount: 2, ConstructionPrice: 750000000000, ProductPrice: 25000000, DiscoveryPrice: 30000, Type: 'LateProduct' },
+  { ProductType: 'Sledgehammer', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 4, RightResourceType: 'Simple Handle', RightResourceAmount: 2, ConstructionPrice: 3000000000000, ProductPrice: 80000000, DiscoveryPrice: 50000, Type: 'LateProduct' },
+  { ProductType: 'Pincers', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 2, ConstructionPrice: 20000000000000, ProductPrice: 200000000, DiscoveryPrice: 70000, Type: 'LateProduct' },
+  { ProductType: 'War Maul', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 6, RightResourceType: 'Simple Handle', RightResourceAmount: 2, ConstructionPrice: 80000000000000, ProductPrice: 500000000, DiscoveryPrice: 100000, Type: 'LateProduct' },
+  { ProductType: 'Gold Ore', ProductAmount: 1, ConstructionPrice: 100000000000000, ProductPrice: 2500000000, DiscoveryPrice: 150000, Type: 'Ore' },
+  { ProductType: 'Gold Ingots', ProductAmount: 3, LeftResourceType: 'Gold Ore', LeftResourceAmount: 1, ConstructionPrice: 1000000000000000, ProductPrice: 5000000000, DiscoveryPrice: 200000, Type: 'Ingot' },
+  { ProductType: 'Steel', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, RightResourceType: 'Coal', RightResourceAmount: 1, ConstructionPrice: 10000000000000000, ProductPrice: 40000000000, DiscoveryPrice: 300000, Type: 'Ingot' },
+  { ProductType: 'Steel Nails', ProductAmount: 5, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 40000000000000000, ProductPrice: 60000000000, DiscoveryPrice: 400000, Type: 'EarlyProduct' },
+  { ProductType: 'War Hammer', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 2, RightResourceType: 'Simple Handle', RightResourceAmount: 2, ConstructionPrice: 400000000000000000, ProductPrice: 1000000000000, DiscoveryPrice: 500000, Type: 'EarlyProduct' },
+  { ProductType: 'Magnificent Handle', ProductAmount: 1, LeftResourceType: 'Gold Ingots', LeftResourceAmount: 2, RightResourceType: 'Simple Handle', RightResourceAmount: 1, ConstructionPrice: 1500000000000000000, ProductPrice: 4000000000000, DiscoveryPrice: 600000, Type: 'SemiProduct' },
+  { ProductType: 'Magnificent Hammer', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 3, RightResourceType: 'Magnificent Handle', RightResourceAmount: 2, ConstructionPrice: 10000000000000000000, ProductPrice: 30000000000000, DiscoveryPrice: 800000, Type: 'LateProduct' },
+  { ProductType: "Thor's Hammer", ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 5, RightResourceType: 'Magnificent Handle', RightResourceAmount: 2, ConstructionPrice: 1e20, ProductPrice: 50000000000000, DiscoveryPrice: 1000000, Type: 'LateProduct' },
+];

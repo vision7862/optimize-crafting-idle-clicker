@@ -1,0 +1,26 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const SantasWorkshop: ImportedProduct[] = [
+  { ProductType: 'Snowball', ProductAmount: 1, ConstructionPrice: 8, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ingot' },
+  { ProductType: 'Baking Ingredients', ProductAmount: 2, ConstructionPrice: 100, ProductPrice: 5, DiscoveryPrice: 10, Type: 'Ingot' },
+  { ProductType: 'Gingerbread Man', ProductAmount: 1, LeftResourceType: 'Baking Ingredients', LeftResourceAmount: 2, ConstructionPrice: 2500, ProductPrice: 50, DiscoveryPrice: 100, Type: 'EarlyProduct' },
+  { ProductType: 'Christmas Cookies', ProductAmount: 5, LeftResourceType: 'Baking Ingredients', LeftResourceAmount: 3, ConstructionPrice: 20000, ProductPrice: 60, DiscoveryPrice: 500, Type: 'SemiProduct' },
+  { ProductType: 'Wrapping Paper', ProductAmount: 1, ConstructionPrice: 250000, ProductPrice: 1000, DiscoveryPrice: 1000, Type: 'Ingot' },
+  { ProductType: 'Small Present', ProductAmount: 1, LeftResourceType: 'Christmas Cookies', LeftResourceAmount: 3, RightResourceType: 'Wrapping Paper', RightResourceAmount: 1, ConstructionPrice: 4000000, ProductPrice: 8000, DiscoveryPrice: 2000, Type: 'LateProduct' },
+  { ProductType: 'Candy Cane', ProductAmount: 3, LeftResourceType: 'Baking Ingredients', LeftResourceAmount: 2, ConstructionPrice: 30000000, ProductPrice: 10000, DiscoveryPrice: 3000, Type: 'LateProduct' },
+  { ProductType: 'Fabric', ProductAmount: 1, ConstructionPrice: 200000000, ProductPrice: 100000, DiscoveryPrice: 5000, Type: 'Ingot' },
+  { ProductType: 'Snowman', ProductAmount: 1, LeftResourceType: 'Snowball', LeftResourceAmount: 10, RightResourceType: 'Fabric', RightResourceAmount: 1, ConstructionPrice: 1500000000, ProductPrice: 600000, DiscoveryPrice: 10000, Type: 'EarlyProduct' },
+  { ProductType: 'Christmas Hat', ProductAmount: 1, LeftResourceType: 'Fabric', LeftResourceAmount: 2, ConstructionPrice: 20000000000, ProductPrice: 4000000, DiscoveryPrice: 20000, Type: 'EarlyProduct' },
+  { ProductType: 'Winter Cloak', ProductAmount: 1, LeftResourceType: 'Fabric', LeftResourceAmount: 5, ConstructionPrice: 150000000000, ProductPrice: 20000000, DiscoveryPrice: 30000, Type: 'SemiProduct' },
+  { ProductType: 'Big Present', ProductAmount: 1, LeftResourceType: 'Winter Cloak', LeftResourceAmount: 1, RightResourceType: 'Wrapping Paper', RightResourceAmount: 3, ConstructionPrice: 2000000000000, ProductPrice: 100000000, DiscoveryPrice: 50000, Type: 'LateProduct' },
+  { ProductType: 'Fir Tree', ProductAmount: 1, ConstructionPrice: 10000000000000, ProductPrice: 400000000, DiscoveryPrice: 75000, Type: 'Ingot' },
+  { ProductType: 'Gold Ore', ProductAmount: 1, ConstructionPrice: 60000000000000, ProductPrice: 1000000000, DiscoveryPrice: 100000, Type: 'Ore' },
+  { ProductType: 'Gold Ingots', ProductAmount: 3, LeftResourceType: 'Gold Ore', LeftResourceAmount: 1, ConstructionPrice: 300000000000000, ProductPrice: 2000000000, DiscoveryPrice: 150000, Type: 'Ingot' },
+  { ProductType: 'Uncut Emerald', ProductAmount: 1, ConstructionPrice: 2000000000000000, ProductPrice: 30000000000, DiscoveryPrice: 200000, Type: 'Ore' },
+  { ProductType: 'Gold Ring', ProductAmount: 1, LeftResourceType: 'Gold Ingots', LeftResourceAmount: 1, ConstructionPrice: 15000000000000000, ProductPrice: 100000000000, DiscoveryPrice: 300000, Type: 'EarlyProduct' },
+  { ProductType: 'Cut Emerald', ProductAmount: 1, LeftResourceType: 'Uncut Emerald', LeftResourceAmount: 1, ConstructionPrice: 60000000000000000, ProductPrice: 400000000000, DiscoveryPrice: 400000, Type: 'Ingot' },
+  { ProductType: 'Gold Necklace', ProductAmount: 1, LeftResourceType: 'Gold Ingots', LeftResourceAmount: 3, ConstructionPrice: 500000000000000000, ProductPrice: 2000000000000, DiscoveryPrice: 500000, Type: 'LateProduct' },
+  { ProductType: 'Emerald Ring', ProductAmount: 1, LeftResourceType: 'Gold Ingots', LeftResourceAmount: 2, RightResourceType: 'Cut Emerald', RightResourceAmount: 2, ConstructionPrice: 3000000000000000000, ProductPrice: 5000000000000, DiscoveryPrice: 600000, Type: 'LateProduct' },
+  { ProductType: 'Christmas Decorations', ProductAmount: 1, LeftResourceType: 'Gold Ingots', LeftResourceAmount: 4, RightResourceType: 'Wrapping Paper', RightResourceAmount: 2, ConstructionPrice: 10000000000000000000, ProductPrice: 10000000000000, DiscoveryPrice: 700000, Type: 'SemiProduct' },
+  { ProductType: 'Christmas Tree', ProductAmount: 1, LeftResourceType: 'Fir Tree', LeftResourceAmount: 1, RightResourceType: 'Christmas Decorations', RightResourceAmount: 1, ConstructionPrice: 50000000000000000000, ProductPrice: 50000000000000, DiscoveryPrice: 800000, Type: 'LateProduct' },
+];
