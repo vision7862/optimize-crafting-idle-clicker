@@ -55,9 +55,9 @@ export async function runCLI(): Promise<void> {
     if (selectOptionAndGetInput !== undefined) {
       await selectOptionAndGetInput(workshopStatus);
     }
-
-    console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
   }
+
+  console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
@@ -87,6 +87,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
   const level = Number(await input({ message: 'what level is your workshop?' }));
   const scientists = Number(await input({ message: 'how many scientists do you have?' }));
 
+  const speedBoostActive: boolean = await booleanChoice('is the speed boost active?');
   const clickBoostActive: boolean = await booleanChoice('is the click boost active?');
   const researchBoostActive: boolean = await booleanChoice('is the research boost active?');
   const merchantBoostActive: boolean = await booleanChoice('is the merchant boost active?');
@@ -94,6 +95,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
   return {
     level,
     scientists,
+    speedBoostActive,
     clickBoostActive,
     researchBoostActive,
     merchantBoostActive,
