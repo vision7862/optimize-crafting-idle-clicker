@@ -25,7 +25,7 @@ describe.only('runProgram', () => {
   describe('events', () => {
     const eventName = 'Hammer Time';
     function printFameTimeEvent(fame: number, partialWorkshopStatus: Partial<WorkshopStatus>): void {
-      printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, ...partialWorkshopStatus, eventName });
+      printFameTime(fame, { ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, ...partialWorkshopStatus });
     }
     describe('leveling', () => {
       test('2 fame level 1', () => {
@@ -203,7 +203,15 @@ describe.only('runProgram', () => {
       });
 
       test('3 fame level 10+', () => {
-        printFameTimeEvent(6, { level: 10 });
+        printFameTimeEvent(3, {
+          level: 25,
+          scientists: 270,
+          clickBoostActive: false,
+          researchBoostActive: true,
+          merchantBoostActive: true,
+          speedBoostActive: true,
+          eventName: 'Craft For Freedom',
+        });
       });
     });
   });
