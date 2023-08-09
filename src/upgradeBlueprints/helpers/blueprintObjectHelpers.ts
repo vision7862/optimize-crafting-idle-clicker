@@ -29,10 +29,10 @@ export const TOP_STAGE_2: Blueprint = {
 };
 
 export function getBottomOfStageBP(evolutionStage: number, strategy: number): Blueprint {
-  const topStageScore = getScoreAtTopOfStage(evolutionStage - 1, strategy);
   if (evolutionStage === 1) {
     return BASE_BP;
   } else {
+    const topStageScore = getScoreAtTopOfStage(evolutionStage - 1, strategy);
     return {
       ...BASE_BP,
       evolutionStage: evolutionStage + 1,
