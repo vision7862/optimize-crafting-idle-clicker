@@ -121,7 +121,7 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   return {
     blueprint: mergedBlueprint,
     costOfUpgrade,
-    scoreChange: blueprintToMerge.score,
+    scoreChange: topOfOrigStage,
   };
 }
 
