@@ -18,16 +18,13 @@ import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 export function getWorkshopTotalIncomeMultiplier(workshopStatus: WorkshopStatus): number {
-  return (
-    getIncomeMultiplier(workshopStatus.level, isEvent(workshopStatus)) *
-    getMerchantMultiplier(workshopStatus.merchantBoostActive, isEvent(workshopStatus))
-  );
+  return getIncomeMultiplier(workshopStatus) * getMerchantMultiplier(workshopStatus);
 }
 
-export const getIncomeMultiplier = memoize((level: number, event: boolean): number => {
+export const getIncomeMultiplier = memoize((workshopStatus: WorkshopStatus): number => {
   return (
-    getLevelAchievementMultiplier(level, event) *
-    (event
+    getLevelAchievementMultiplier(workshopStatus.level, isEvent(workshopStatus)) *
+    (isEvent(workshopStatus)
       ? 1
       : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
         MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
@@ -36,10 +33,10 @@ export const getIncomeMultiplier = memoize((level: number, event: boolean): numb
   );
 });
 
-export const getMerchantMultiplier = memoize((merchantBoostActive: boolean, event: boolean) => {
+export const getMerchantMultiplier = memoize((workshopStatus: WorkshopStatus) => {
   return (
-    (merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
-    (event
+    (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
+    (isEvent(workshopStatus)
       ? 1
       : MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *

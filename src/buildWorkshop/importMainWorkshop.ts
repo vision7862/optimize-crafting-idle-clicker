@@ -1,12 +1,8 @@
 import memoize from 'fast-memoize';
 import { MainWorkshopProducts } from '../../products/MainWorkshop';
 import { BLUEPRINT_LIBRARY } from '../upgradeBlueprints/config/BlueprintLibrary';
-import { SetMultiplierType } from '../upgradeBlueprints/constants/BlueprintSets';
-import {
-  convertBlueprintLibraryToScores,
-  getSpecifiedMultiplierFromLibrary,
-} from '../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { DAILY_DYNASTY_FRIEND_BONUS_ORE } from './config/BoostMultipliers';
+import { convertBlueprintLibraryToScores } from '../upgradeBlueprints/helpers/blueprintScoreHelpers';
+import { getOreOutputMultiplier } from './helpers/otherMultiplierHelpers';
 import { ImportedProduct } from './types/ImportedProduct';
 import { InputProduct, ProductDetails } from './types/Product';
 
@@ -20,7 +16,7 @@ const typeUpgradeCostMultiplier = new Map<string, number>([
 
 export const importMainWorkshop = memoize((onlyReturnBuildable: boolean): Map<string, ProductDetails> => {
   const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
-  const oreMultiplier = getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * DAILY_DYNASTY_FRIEND_BONUS_ORE;
+  const oreMultiplier = getOreOutputMultiplier(false);
 
   const products = new Map<string, ProductDetails>();
   MainWorkshopProducts.forEach((product: ImportedProduct) => {
