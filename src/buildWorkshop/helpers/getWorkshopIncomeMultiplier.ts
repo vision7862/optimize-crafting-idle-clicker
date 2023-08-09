@@ -14,7 +14,7 @@ import {
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
 } from '../constants/Achievements';
-import { Workshop, WorkshopStatus } from '../types/Workshop';
+import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
 export function getWorkshopIncomeMultiplier(workshopStatus: WorkshopStatus): number {
@@ -173,8 +173,6 @@ function getMWSLevelAchievementMultiplier(level: number): number {
   }
 }
 
-export function getMerchantCapacity(workshop: Workshop): number {
-  return isEvent(workshop.workshopStatus)
-    ? 10
-    : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY;
+export function getMerchantCapacity(workshopStatus: WorkshopStatus): number {
+  return isEvent(workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY;
 }

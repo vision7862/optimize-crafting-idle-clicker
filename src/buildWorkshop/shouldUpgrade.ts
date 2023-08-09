@@ -30,7 +30,10 @@ export const getCurrentIncome = memoize((workshop: Workshop, clickBoost: number)
   // const topProduct: ProductDetails = getTopProduct(workshop);
   for (const product of workshop.productsInfo) {
     const numProductsMade = product.status.level * product.details.outputCount;
-    const maxProductsSold = Math.min(numProductsMade, product.status.merchants * getMerchantCapacity(workshop));
+    const maxProductsSold = Math.min(
+      numProductsMade,
+      product.status.merchants * getMerchantCapacity(workshop.workshopStatus),
+    );
     const numProductsConsumed = getInputItemsNeeded(product.details.name, workshop);
     const numProductsSold = Math.max(maxProductsSold - numProductsConsumed, 0);
     totalIncome +=
@@ -160,7 +163,7 @@ function upgradeSingleProduct(product: Product, workshop: Workshop, shouldUpdate
           ((product.status.level + 1) *
             product.details.outputCount *
             (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
-            getMerchantCapacity(workshop),
+            getMerchantCapacity(workshop.workshopStatus),
         )
       : product.status.merchants,
   };
