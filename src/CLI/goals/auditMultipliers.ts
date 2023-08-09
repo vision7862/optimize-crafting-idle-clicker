@@ -14,6 +14,7 @@ import { isEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
 import {
   getMainWorkshopIncomeMultiplier,
   getMainWorkshopMerchantMultiplier,
+  getMerchantCapacity,
 } from '../../buildWorkshop/helpers/getWorkshopIncomeMultiplier';
 import { getSecondsPerCycle } from '../../buildWorkshop/helpers/targetHelpers';
 import {
@@ -61,7 +62,7 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
       (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) * getMainWorkshopMerchantMultiplier() * 100,
     )}%`,
   );
-  console.log(`Merchant Capacity: ${MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY}`);
+  console.log(`Merchant Capacity: ${getMerchantCapacity(workshopStatus)}`);
   console.log(`Speed: ${(10 / getSecondsPerCycle(workshopStatus.speedBoostActive)) * 100}%`);
 }
 
