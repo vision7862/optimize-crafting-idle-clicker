@@ -1,10 +1,14 @@
+import { BLUEPRINT_LIBRARY } from '../../src/upgradeBlueprints/config/BlueprintLibrary';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
+import { mergeBlueprint } from '../../src/upgradeBlueprints/helpers/blueprintUpgradeHelpers';
 import {
+  BlueprintUpgradeInfo,
   printUpgradeInfoOfEachSet,
   upgradeAllIncomeBlueprintsToLoreLimit,
   upgradeMostImpactfulIncomeSet,
   upgradeMostImpactfulSetOfType,
 } from '../../src/upgradeBlueprints/optimizeUpgradingBlueprints';
+import { Blueprint } from '../../src/upgradeBlueprints/types/Blueprint';
 
 describe('optimizeUpgradingBlueprints', () => {
   describe('upgradeMostImpactfulIncomeSet', () => {
@@ -59,5 +63,15 @@ describe('optimizeUpgradingBlueprints', () => {
     it('prints it', () => {
       console.log(printUpgradeInfoOfEachSet());
     });
+  });
+
+  test('cheapest bp to merge', () => {
+    const costs: BlueprintUpgradeInfo[] = [];
+    BLUEPRINT_LIBRARY.forEach((bp: Blueprint) => {
+      const mergedInfo = mergeBlueprint(bp);
+      if (mergedInfo !== null) costs.push(mergedInfo);
+    });
+    costs.sort((a, b) => a.costOfUpgrade - b.costOfUpgrade);
+    console.log(costs.slice(0, 20));
   });
 });

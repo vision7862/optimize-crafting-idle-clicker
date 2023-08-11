@@ -157,11 +157,11 @@ describe('blueprintUpgradeHelpers', () => {
         ...TOP_STAGE_1,
         productName: 'mergingBP',
       };
-      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
-      expect(upgradedBlueprint.blueprint.score).toBe(120);
-      expect(upgradedBlueprint.blueprint.evolutionStage).toBe(2);
-      expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);
-      expect(upgradedBlueprint.scoreChange).toBe(60);
+      const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
+      expect(upgradedBlueprint?.blueprint.score).toBe(120);
+      expect(upgradedBlueprint?.blueprint.evolutionStage).toBe(2);
+      expect(upgradedBlueprint?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradedBlueprint?.scoreChange).toBe(60);
     });
 
     it('should combine two stage II blueprints', () => {
@@ -169,11 +169,11 @@ describe('blueprintUpgradeHelpers', () => {
         ...TOP_STAGE_2,
         productName: 'mergingBP',
       };
-      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
-      expect(upgradedBlueprint.blueprint.score).toBe(1680);
-      expect(upgradedBlueprint.blueprint.evolutionStage).toBe(3);
-      expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);
-      expect(upgradedBlueprint.scoreChange).toBe(840);
+      const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
+      expect(upgradedBlueprint?.blueprint.score).toBe(1680);
+      expect(upgradedBlueprint?.blueprint.evolutionStage).toBe(3);
+      expect(upgradedBlueprint?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradedBlueprint?.scoreChange).toBe(840);
     });
 
     it('should merge the given blueprint with a fresh one of its stage if it is at max level already', () => {
@@ -181,17 +181,43 @@ describe('blueprintUpgradeHelpers', () => {
         ...TOP_STAGE_2,
         productName: 'mergingBP',
       };
-      const upgradedBlueprint: BlueprintUpgradeInfo = mergeBlueprint(blueprintToUpgrade);
-      expect(upgradedBlueprint.blueprint.score).toBe(1680);
-      expect(upgradedBlueprint.blueprint.evolutionStage).toBe(3);
-      expect(upgradedBlueprint.blueprint.upgradeLevel).toBe(1);
-      expect(upgradedBlueprint.scoreChange).toBe(840);
+      const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
+      expect(upgradedBlueprint?.blueprint.score).toBe(1680);
+      expect(upgradedBlueprint?.blueprint.evolutionStage).toBe(3);
+      expect(upgradedBlueprint?.blueprint.upgradeLevel).toBe(1);
+      expect(upgradedBlueprint?.scoreChange).toBe(840);
+    });
+
+    it('should merge the given blueprint not test', () => {
+      const blueprintToUpgrade: Blueprint = {
+        ...BASE_BP,
+        evolutionStage: 2,
+        scoreChangePerLevel: 12,
+        productName: 'Saltpeter',
+        upgradeLevel: 61,
+        score: 840,
+      };
+      const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
+      console.log(upgradedBlueprint);
+      // expect(upgradedBlueprint?.blueprint.score).toBe(1680);
+      expect(upgradedBlueprint?.blueprint.evolutionStage).toBe(blueprintToUpgrade.evolutionStage + 1);
+      expect(upgradedBlueprint?.blueprint.upgradeLevel).toBe(1);
+      // expect(upgradedBlueprint?.scoreChange).toBe(840);
     });
   });
 
   describe('upgradeSetToNextRank', () => {
     it('should do things', () => {
       const upgradeSetInfo = upgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY);
+      console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
+      console.log(upgradeSetInfo?.upgradedBlueprints);
+    });
+
+    it('should upgrade the specified set', () => {
+      const upgradeSetInfo = upgradeSetToNextRank(
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Renaissance')[0],
+        BLUEPRINT_LIBRARY,
+      );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
       console.log(upgradeSetInfo?.upgradedBlueprints);
     });

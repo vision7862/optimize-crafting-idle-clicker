@@ -22,7 +22,8 @@ export function upgradeMostImpactfulIncomeSet(blueprints: Blueprint[] = BLUEPRIN
   const blueprintScores = convertBlueprintLibraryToScores(blueprints);
   BLUEPRINT_SETS.filter(
     (set: BlueprintSet) =>
-      set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
+      (set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue) &&
+      !set.blueprints.includes('Unfinished'),
   ).forEach((set: BlueprintSet) => {
     const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
     const distanceInfo = getDistanceToNextRank(set, setScore);

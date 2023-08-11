@@ -35,7 +35,7 @@ export function getBottomOfStageBP(evolutionStage: number, strategy: number): Bl
     const topStageScore = getScoreAtTopOfStage(evolutionStage - 1, strategy);
     return {
       ...BASE_BP,
-      evolutionStage: evolutionStage + 1,
+      evolutionStage,
       score: topStageScore * 2,
       scoreChangePerLevel: (topStageScore / 10) * 2,
     };
