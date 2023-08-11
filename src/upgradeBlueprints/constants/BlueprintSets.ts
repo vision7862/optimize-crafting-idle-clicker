@@ -395,7 +395,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       'Lamp',
       'Refrigerator',
       'Stove',
-      'X-Ray Machine',
+      'X-ray Machine',
       'Flashlight',
       'Defibrillator',
     ],
