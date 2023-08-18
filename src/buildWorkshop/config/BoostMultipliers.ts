@@ -15,3 +15,5 @@ export const PROMOTION_BONUS_RESEARCH = 1;
 export const PROMOTION_BONUS_CLICK_OUTPUT = 1;
 export const PROMOTION_BONUS_SPEED = 1;
 export const PROMOTION_BONUS_LPP = 0;
+
+export const LPP = 64;

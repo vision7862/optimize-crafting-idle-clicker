@@ -7,6 +7,7 @@ import { doubleLoreGoal } from './goals/doubleLore';
 import { fastestFameGoal } from './goals/fastestFame';
 import { gemsGoal } from './goals/gems';
 import { levelUpGoal } from './goals/levelUp';
+import { mostLoreGoal } from './goals/lore';
 import { merchantsGoal } from './goals/merchants';
 import { scientistsGoal } from './goals/scientists';
 import { fameGoal } from './goals/specificFame';
@@ -27,6 +28,7 @@ const goals: Map<string, GoalType> = new Map<string, GoalType>([
   [merchantsGoal.name, merchantsGoal],
   [fameGoal.name, fameGoal],
   [fastestFameGoal.name, fastestFameGoal],
+  [mostLoreGoal.name, mostLoreGoal],
   [auditMultipliersGoal.name, auditMultipliersGoal],
 ]);
 
@@ -103,7 +105,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
   };
 }
 
-async function booleanChoice(message: string): Promise<boolean> {
+export async function booleanChoice(message: string): Promise<boolean> {
   return Boolean(
     await select({
       message,
