@@ -1,5 +1,9 @@
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
-import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+import {
+  BLUEPRINT_SETS,
+  BlueprintSet,
+  SetMultiplierType,
+} from '../../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
   BASE_BP,
   BOTTOM_STAGE_2,
@@ -7,6 +11,7 @@ import {
   TOP_STAGE_2,
 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
+  getBpStrategy,
   getCostToUpgradeBlueprint,
   mergeBlueprint,
   upgradeBlueprint,
@@ -14,6 +19,7 @@ import {
 } from '../../../src/upgradeBlueprints/helpers/blueprintUpgradeHelpers';
 import { BlueprintUpgradeInfo } from '../../../src/upgradeBlueprints/optimizeUpgradingBlueprints';
 import { Blueprint } from '../../../src/upgradeBlueprints/types/Blueprint';
+import { MergingStrategy, SetMergingStrategy } from '../../../src/upgradeBlueprints/types/MergingStrategy';
 
 describe('blueprintUpgradeHelpers', () => {
   describe('getCostToUpgradeBlueprint', () => {
@@ -203,6 +209,44 @@ describe('blueprintUpgradeHelpers', () => {
       expect(upgradedBlueprint?.blueprint.evolutionStage).toBe(blueprintToUpgrade.evolutionStage + 1);
       expect(upgradedBlueprint?.blueprint.upgradeLevel).toBe(1);
       // expect(upgradedBlueprint?.scoreChange).toBe(840);
+    });
+  });
+
+  describe('getBpStrategy', () => {
+    it('should return the higher strategy if the bp is in more than one set', () => {
+      const blueprintSets: BlueprintSet[] = [
+        {
+          setName: 'set1',
+          multiplierType: SetMultiplierType.ClickOutput,
+          blueprints: ['Copper Axe', 'Copper Ore', 'Copper Ingot'],
+          achievementRanks: [],
+        },
+        {
+          setName: 'set2',
+          multiplierType: SetMultiplierType.ClickOutput,
+          blueprints: ['Copper Axe', 'Wood', 'Arrows'],
+          achievementRanks: [],
+        },
+      ];
+
+      const strategies: SetMergingStrategy[] = [
+        {
+          setName: 'set1',
+          mainBps: ['Copper Axe'],
+          mainStrategy: { topStage: 4, xPlusTen: 21 },
+          otherBpsStrategy: { topStage: 1, xPlusTen: 1 },
+        },
+        {
+          setName: 'set2',
+          mainBps: ['Wood'],
+          mainStrategy: { topStage: 6, xPlusTen: 51 },
+          otherBpsStrategy: { topStage: 5, xPlusTen: 51 },
+        },
+      ];
+
+      const strategy: MergingStrategy = getBpStrategy('Copper Axe', blueprintSets, strategies);
+      expect(strategy.topStage).toBe(5);
+      expect(strategy.xPlusTen).toBe(51);
     });
   });
 

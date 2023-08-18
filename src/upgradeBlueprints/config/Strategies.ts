@@ -1,4 +1,5 @@
 import { ProductName } from '../types/Blueprint';
+import { SetMergingStrategy } from '../types/MergingStrategy';
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 const BPS_WITHOUT_DUPES: ProductName[] = [
@@ -111,3 +112,42 @@ export const NON_51_PLUS_10_STRATEGY = new Map<ProductName, number>([
   ['Iron Armor', 21],
   ['Iron Claymore', 21],
 ]);
+
+export const STRATEGIES: SetMergingStrategy[] = [
+  {
+    setName: 'Wood',
+    mainBps: ['Wood'],
+    mainStrategy: { topStage: 6, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 4, xPlusTen: 21 },
+  },
+  {
+    setName: 'Leather',
+    mainBps: ['Rawhide', 'Leather'],
+    mainStrategy: { topStage: 5, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 4, xPlusTen: 21 },
+  },
+  {
+    setName: 'Copper',
+    mainBps: ['Copper Ore'],
+    mainStrategy: { topStage: 6, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 4, xPlusTen: 21 },
+  },
+  {
+    setName: 'Bronze',
+    mainBps: ['Tin Ore'],
+    mainStrategy: { topStage: 6, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 4, xPlusTen: 21 },
+  },
+  {
+    setName: 'Iron',
+    mainBps: ['Coal'],
+    mainStrategy: { topStage: 6, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 4, xPlusTen: 21 },
+  },
+  {
+    setName: 'Precious',
+    mainBps: ['Gold Ore'],
+    mainStrategy: { topStage: 6, xPlusTen: 51 },
+    otherBpsStrategy: { topStage: 5, xPlusTen: 51 },
+  },
+];
