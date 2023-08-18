@@ -1,6 +1,6 @@
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
-import { BPS_TO_NOT_MERGE, NON_51_PLUS_10_STRATEGY } from '../config/BlueprintLibrary';
+import { BPS_TO_NOT_MERGE, NON_51_PLUS_10_STRATEGY } from '../config/Strategies';
 import { BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint } from '../types/Blueprint';
