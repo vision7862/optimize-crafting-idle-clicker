@@ -1,3 +1,4 @@
+import { LPP } from './config/BoostMultipliers';
 import { isEvent } from './helpers/WorkshopHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
@@ -69,6 +70,78 @@ export function fastestFamePerSecond(partialWorkshopStatus: Partial<WorkshopStat
     }
   }
   console.log('best fame: ' + bestFame.toString());
+  console.log(`repeats ${Math.ceil(fameRequiredToLevelUp / bestFame)} times`);
+  return bestWorkshopUpgrade;
+}
+
+export function lorePerSecond(
+  partialWorkshopStatus: Partial<WorkshopStatus>,
+  barHasToken: boolean,
+): WorkshopUpgradeInfo {
+  const workshopStatus: WorkshopStatus = { ...DEFAULT_WORKSHOP_STATUS_MAIN, ...partialWorkshopStatus };
+  const fameRequiredToLevelUp = workshopStatus.level + 3;
+  let bestLorePerTime = 0;
+  let bestFame = 1;
+  let bestWorkshopUpgrade;
+  let bestLikelyLore: number = 0;
+  for (let fame = 1; fame < 35; fame++) {
+    console.log(`testing multiple resets at ${fame} fame each...`);
+    const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
+    const targetInfo = bottomUpToMoney(target, workshopStatus);
+    const buildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
+    console.log(`${fame} fame takes ${toTime(buildTime)}`);
+    if (buildTime > 60 * 20) {
+      console.log(`${fame} fame takes too long`);
+      break;
+    }
+    let lorePerTime: number;
+    let likelyLore: number;
+    const x1Lore = Math.round(fame ** (1 + workshopStatus.level / 100) * LPP);
+    if (!barHasToken) {
+      const chanceOf1x = Math.max(92 - fame * 8, 0);
+      const chanceOf2x = Math.min(8 + fame * 8, 100);
+      const averageLore = x1Lore * chanceOf1x + x1Lore * 2 * chanceOf2x;
+      likelyLore = averageLore / 100;
+      lorePerTime = averageLore / buildTime;
+      // 0: 92/8
+      // 1: 84/16
+      // 2: 76/24
+      // 3: 68/32
+      // 4: 60/40
+      // 5: 52/48
+      // 6: 44/56
+      // 7: 36/64
+      // 8: 28/72
+      // 9: 20/80
+      // 10: 12/88
+      // 11: 4/96
+      // 12: 0/100
+      // 13: 0/100
+      // 14: 0/92/8
+      // 15: 0/84/12/4
+    } else {
+      // 0: 92/8
+      // 1: 84/16
+      // 2: 76/24
+      // 3: 68/32
+      // 4: 60/32/8
+      // 5: 52/32/16
+      // 6: 44/32/24
+      const chanceOf1x = Math.max(92 - fame * 8, 0);
+      const chanceOf2x = Math.min(8 + fame * 8, 32);
+      const averageLore = x1Lore * chanceOf1x + x1Lore * 2 * chanceOf2x;
+      likelyLore = averageLore / 100;
+      lorePerTime = averageLore / buildTime;
+    }
+    if (lorePerTime > bestLorePerTime) {
+      bestLorePerTime = lorePerTime;
+      bestFame = fame;
+      bestWorkshopUpgrade = targetInfo;
+      bestLikelyLore = likelyLore;
+    }
+  }
+  console.log('best fame: ' + bestFame.toString());
+  console.log(`likely lore: ${bestLikelyLore}`);
   console.log(`repeats ${Math.ceil(fameRequiredToLevelUp / bestFame)} times`);
   return bestWorkshopUpgrade;
 }
