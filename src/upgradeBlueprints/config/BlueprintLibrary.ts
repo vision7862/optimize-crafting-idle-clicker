@@ -1,5 +1,5 @@
 import { BASE_BP } from '../helpers/blueprintObjectHelpers';
-import { Blueprint } from '../types/Blueprint';
+import { Blueprint, ProductName } from '../types/Blueprint';
 
 // strategy 21+10, bottom blueprint for stage 2, 3, 4, etc, and top of stage 4
 const s21 = {
@@ -168,7 +168,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
 ];
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
-const BPS_WITHOUT_DUPES = [
+const BPS_WITHOUT_DUPES: ProductName[] = [
   'Chisel',
   'Shovel',
   'Lump Hammer',
@@ -196,7 +196,7 @@ const BPS_WITHOUT_DUPES = [
   'Sickle',
 ];
 // TODO: set up the strategy to also allow marking a top tier at which to stop merging. for now put that here
-const BPS_AT_TOP = [
+const BPS_AT_TOP: ProductName[] = [
   'Wood',
   'Club',
   'Arrows',
@@ -230,7 +230,7 @@ const BPS_AT_TOP = [
 export const BPS_TO_NOT_MERGE = [...BPS_WITHOUT_DUPES, ...BPS_AT_TOP];
 
 // some blueprints should not use 51+10 strategy. they should use x+10 instead, map product name to x
-export const NON_51_PLUS_10_STRATEGY = new Map<string, number>([
+export const NON_51_PLUS_10_STRATEGY = new Map<ProductName, number>([
   ['Compass', 71],
   ['Light Bulb', 71],
   ['Gunpowder', 71],

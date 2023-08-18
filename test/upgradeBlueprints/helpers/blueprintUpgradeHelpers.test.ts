@@ -155,7 +155,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should combine the same blueprint twice correctly', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_1,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(120);
@@ -167,7 +167,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should combine two stage II blueprints', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_2,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(1680);
@@ -179,7 +179,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should merge the given blueprint with a fresh one of its stage if it is at max level already', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_2,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(1680);

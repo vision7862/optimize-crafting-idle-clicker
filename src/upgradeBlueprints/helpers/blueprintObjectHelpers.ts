@@ -2,7 +2,7 @@ import { Blueprint } from '../types/Blueprint';
 
 // these defaults are for the 51+10 strategy
 export const BASE_BP: Blueprint = {
-  productName: 'productName',
+  productName: 'Wood',
   evolutionStage: 1,
   upgradeLevel: 1,
   score: 10,
