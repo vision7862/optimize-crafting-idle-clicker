@@ -1,5 +1,6 @@
 import { LPP } from './config/BoostMultipliers';
 import { isEvent } from './helpers/WorkshopHelpers';
+import { getClickOutputMultiplier } from './helpers/otherMultiplierHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
 import { importWorkshop } from './importWorkshop';
@@ -72,6 +73,72 @@ export function fastestFamePerSecond(partialWorkshopStatus: Partial<WorkshopStat
   console.log('best fame: ' + bestFame.toString());
   console.log(`repeats ${Math.ceil(fameRequiredToLevelUp / bestFame)} times`);
   return bestWorkshopUpgrade;
+}
+
+export function clickTopAndInputs(target: number, partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+  const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
+  const copiedProducts = new Array<Product>(...workshop.productsInfo);
+
+  const topProduct = workshop.productsInfo[workshop.productsInfo.length - 1];
+  const newTopProduct: Product = {
+    ...topProduct,
+    ...multiplyProductCounts(topProduct, workshop.workshopStatus),
+  };
+  copiedProducts.splice(workshop.productsInfo.length - 1, 1, newTopProduct);
+
+  const input1 = newTopProduct.details.input1;
+  if (input1 !== null) {
+    const indexOfInput1: number = workshop.productsInfo.findIndex(
+      (testProduct: Product) => testProduct.details.name === input1.name,
+    );
+    const newInput1: Product = {
+      ...workshop.productsInfo[indexOfInput1],
+      ...multiplyProductCounts(workshop.productsInfo[indexOfInput1], workshop.workshopStatus),
+    };
+    copiedProducts.splice(indexOfInput1, 1, newInput1);
+  }
+
+  const input2 = newTopProduct.details.input2;
+  if (input2 !== null) {
+    const indexOfInput2: number = workshop.productsInfo.findIndex(
+      (testProduct: Product) => testProduct.details.name === input2.name,
+    );
+    const newInput2: Product = {
+      ...workshop.productsInfo[indexOfInput2],
+      ...multiplyProductCounts(workshop.productsInfo[indexOfInput2], workshop.workshopStatus),
+    };
+    copiedProducts.splice(indexOfInput2, 1, newInput2);
+  }
+
+  return buildWorkshopToTarget(target, { ...workshop, productsInfo: copiedProducts });
+}
+
+const CYCLES_PER_NORMAL_CYCLE = 3.5; // 6.5;
+function multiplyProductCounts(product: Product, workshopStatus: WorkshopStatus): Product {
+  return {
+    ...product,
+    details: {
+      ...product.details,
+      outputCount:
+        product.details.outputCount *
+        CYCLES_PER_NORMAL_CYCLE *
+        getClickOutputMultiplier({ ...workshopStatus, clickBoostActive: true }),
+      input1:
+        product.details.input1 !== null
+          ? {
+              ...product.details.input1,
+              count: product.details.input1.count * CYCLES_PER_NORMAL_CYCLE,
+            }
+          : null,
+      input2:
+        product.details.input2 !== null
+          ? {
+              ...product.details.input2,
+              count: product.details.input2.count * CYCLES_PER_NORMAL_CYCLE,
+            }
+          : null,
+    },
+  };
 }
 
 export function lorePerSecond(

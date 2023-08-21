@@ -11,6 +11,7 @@ import { mostLoreGoal } from './goals/lore';
 import { merchantsGoal } from './goals/merchants';
 import { scientistsGoal } from './goals/scientists';
 import { fameGoal } from './goals/specificFame';
+import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 
 export type GoalType = Readonly<{
   name: string;
@@ -28,6 +29,7 @@ const goals: Map<string, GoalType> = new Map<string, GoalType>([
   [merchantsGoal.name, merchantsGoal],
   [fameGoal.name, fameGoal],
   [fastestFameGoal.name, fastestFameGoal],
+  [clickTopInputsGoal.name, clickTopInputsGoal],
   [mostLoreGoal.name, mostLoreGoal],
   [auditMultipliersGoal.name, auditMultipliersGoal],
 ]);
