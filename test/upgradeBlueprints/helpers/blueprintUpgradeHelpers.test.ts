@@ -126,6 +126,7 @@ describe('blueprintUpgradeHelpers', () => {
         scoreChangePerLevel: 1,
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.evolutionStage).toBe(1);
       expect(upgradeInfo?.blueprint.upgradeLevel).toBe(61);
       expect(upgradeInfo?.blueprint.score).toBe(70);
       expect(upgradeInfo?.costOfUpgrade).toBe(61476);
