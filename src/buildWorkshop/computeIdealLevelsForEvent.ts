@@ -166,7 +166,7 @@ export function lorePerSecond(
     const x1Lore = Math.round(fame ** (1 + workshopStatus.level / 100) * LPP);
     if (!barHasToken) {
       const chanceOf1x = Math.max(92 - fame * 8, 0);
-      const chanceOf2x = Math.min(8 + fame * 8, 100);
+      const chanceOf2x = fame < 12 ? Math.min(8 + fame * 8, 100) : 100;
       const averageLore = x1Lore * chanceOf1x + x1Lore * 2 * chanceOf2x;
       likelyLore = averageLore / 100;
       lorePerTime = averageLore / buildTime;
@@ -194,8 +194,11 @@ export function lorePerSecond(
       // 4: 60/32/8
       // 5: 52/32/16
       // 6: 44/32/24
-      const chanceOf1x = Math.max(92 - fame * 8, 0);
+      let chanceOf1x = Math.max(92 - fame * 8, 0);
       const chanceOf2x = Math.min(8 + fame * 8, 32);
+      if (chanceOf2x >= 32) {
+        chanceOf1x = 68;
+      }
       const averageLore = x1Lore * chanceOf1x + x1Lore * 2 * chanceOf2x;
       likelyLore = averageLore / 100;
       lorePerTime = averageLore / buildTime;
