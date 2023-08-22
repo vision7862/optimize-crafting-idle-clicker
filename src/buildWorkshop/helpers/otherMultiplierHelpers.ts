@@ -4,7 +4,7 @@ import {
   CLICK_BOOST_MULTIPLIER,
   DAILY_DYNASTY_FRIEND_BONUS_ORE,
   PROMOTION_BONUS_CLICK_OUTPUT,
-  PROMOTION_BONUS_INCOME,
+  PROMOTION_BONUS_INCOME_AND_OFFLINE,
 } from '../config/BoostMultipliers';
 import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
 import { WorkshopStatus } from '../types/Workshop';
@@ -29,5 +29,5 @@ export function getOfflineMultiplier(isEvent: boolean): number {
     : 40 *
         MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *
-        PROMOTION_BONUS_INCOME;
+        PROMOTION_BONUS_INCOME_AND_OFFLINE;
 }
