@@ -102,7 +102,9 @@ export const importWorkshop = memoize(
 
     const products = new Map<string, ProductDetails>();
     const isEvent = eventName !== undefined;
-    const importedProducts: ImportedProduct[] | undefined = isEvent ? events.get(eventName) : MainWorkshopProducts;
+    const importedProducts: ImportedProduct[] | Readonly<ImportedProduct[]> | undefined = isEvent
+      ? events.get(eventName)
+      : MainWorkshopProducts;
     if (importedProducts === undefined) {
       throw new Error(`event ${eventName ?? ''} does not exist.`);
     }

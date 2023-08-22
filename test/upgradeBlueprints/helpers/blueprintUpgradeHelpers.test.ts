@@ -1,5 +1,9 @@
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
-import { BLUEPRINT_SETS } from '../../../src/upgradeBlueprints/constants/BlueprintSets';
+import {
+  BLUEPRINT_SETS,
+  BlueprintSet,
+  SetMultiplierType,
+} from '../../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
   BASE_BP,
   BOTTOM_STAGE_2,
@@ -7,6 +11,7 @@ import {
   TOP_STAGE_2,
 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
+  getBpStrategy,
   getCostToUpgradeBlueprint,
   mergeBlueprint,
   upgradeBlueprint,
@@ -14,6 +19,7 @@ import {
 } from '../../../src/upgradeBlueprints/helpers/blueprintUpgradeHelpers';
 import { BlueprintUpgradeInfo } from '../../../src/upgradeBlueprints/optimizeUpgradingBlueprints';
 import { Blueprint } from '../../../src/upgradeBlueprints/types/Blueprint';
+import { MergingStrategy, SetMergingStrategy } from '../../../src/upgradeBlueprints/types/MergingStrategy';
 
 describe('blueprintUpgradeHelpers', () => {
   describe('getCostToUpgradeBlueprint', () => {
@@ -120,6 +126,7 @@ describe('blueprintUpgradeHelpers', () => {
         scoreChangePerLevel: 1,
       };
       const upgradeInfo = upgradeBlueprint(blueprint, 10);
+      expect(upgradeInfo?.blueprint.evolutionStage).toBe(1);
       expect(upgradeInfo?.blueprint.upgradeLevel).toBe(61);
       expect(upgradeInfo?.blueprint.score).toBe(70);
       expect(upgradeInfo?.costOfUpgrade).toBe(61476);
@@ -155,7 +162,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should combine the same blueprint twice correctly', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_1,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(120);
@@ -167,7 +174,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should combine two stage II blueprints', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_2,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(1680);
@@ -179,7 +186,7 @@ describe('blueprintUpgradeHelpers', () => {
     it('should merge the given blueprint with a fresh one of its stage if it is at max level already', () => {
       const blueprintToUpgrade: Blueprint = {
         ...TOP_STAGE_2,
-        productName: 'mergingBP',
+        productName: 'Wood',
       };
       const upgradedBlueprint: BlueprintUpgradeInfo | null = mergeBlueprint(blueprintToUpgrade);
       expect(upgradedBlueprint?.blueprint.score).toBe(1680);
@@ -206,6 +213,48 @@ describe('blueprintUpgradeHelpers', () => {
     });
   });
 
+  describe('getBpStrategy', () => {
+    it('should return the higher strategy if the bp is in more than one set', () => {
+      const blueprintSets: BlueprintSet[] = [
+        {
+          setName: 'set1',
+          multiplierType: SetMultiplierType.ClickOutput,
+          blueprints: ['Copper Axe', 'Copper Ore', 'Copper Ingot'],
+          achievementRanks: [],
+        },
+        {
+          setName: 'set2',
+          multiplierType: SetMultiplierType.ClickOutput,
+          blueprints: ['Copper Axe', 'Wood', 'Arrows'],
+          achievementRanks: [],
+        },
+      ];
+
+      const strategies: SetMergingStrategy[] = [
+        {
+          setName: 'set1',
+          mainBps: ['Copper Axe'],
+          mainStrategy: { topStage: 4, xPlusTen: 21 },
+          otherBpsStrategy: { topStage: 1, xPlusTen: 1 },
+        },
+        {
+          setName: 'set2',
+          mainBps: ['Wood'],
+          mainStrategy: { topStage: 6, xPlusTen: 51 },
+          otherBpsStrategy: { topStage: 5, xPlusTen: 51 },
+        },
+      ];
+
+      const strategy: MergingStrategy = getBpStrategy('Copper Axe', blueprintSets, strategies);
+      expect(strategy.topStage).toBe(5);
+      expect(strategy.xPlusTen).toBe(51);
+    });
+
+    test('specific bp', () => {
+      console.log(getBpStrategy('Uncut Emerald'));
+    });
+  });
+
   describe('upgradeSetToNextRank', () => {
     it('should do things', () => {
       const upgradeSetInfo = upgradeSetToNextRank(BLUEPRINT_SETS[0], BLUEPRINT_LIBRARY);
@@ -215,11 +264,14 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should upgrade the specified set', () => {
       const upgradeSetInfo = upgradeSetToNextRank(
-        BLUEPRINT_SETS.filter((set) => set.setName === 'Renaissance')[0],
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Emerald')[0],
         BLUEPRINT_LIBRARY,
       );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
-      console.log(upgradeSetInfo?.upgradedBlueprints);
+      upgradeSetInfo?.upgradedBlueprints.forEach((bp) => {
+        console.log(bp);
+        console.log(getBpStrategy(bp.productName));
+      });
     });
   });
 });

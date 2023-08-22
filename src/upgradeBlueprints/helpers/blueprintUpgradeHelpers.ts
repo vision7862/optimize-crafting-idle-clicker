@@ -1,9 +1,10 @@
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
-import { BPS_TO_NOT_MERGE, NON_51_PLUS_10_STRATEGY } from '../config/BlueprintLibrary';
-import { BlueprintSet } from '../constants/BlueprintSets';
+import { BPS_WITHOUT_DUPES, STRATEGIES } from '../config/Strategies';
+import { BLUEPRINT_SETS, BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
-import { Blueprint } from '../types/Blueprint';
+import { Blueprint, ProductName } from '../types/Blueprint';
+import { MergingStrategy, SetMergingStrategy } from '../types/MergingStrategy';
 import { getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
@@ -29,10 +30,9 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
 }
 
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
-  const topUpgradeLevel =
-    (NON_51_PLUS_10_STRATEGY.get(blueprint.productName) ?? 51) + (blueprint.evolutionStage - 1) * 10;
+  const topUpgradeLevel = getBpStrategy(blueprint.productName).xPlusTen + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
-    return !BPS_TO_NOT_MERGE.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
+    return mergeBlueprint(blueprint);
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
@@ -53,7 +53,11 @@ export type SetUpgradeInfo = Readonly<{
 
 // Assume that there are sufficient base BPs to merge all the way up
 export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInfo | null {
-  if (BPS_TO_NOT_MERGE.includes(blueprintToMerge.productName)) {
+  const mergeStrategy = getBpStrategy(blueprintToMerge.productName);
+  if (
+    BPS_WITHOUT_DUPES.includes(blueprintToMerge.productName) ||
+    blueprintToMerge.evolutionStage >= mergeStrategy.topStage
+  ) {
     return null;
   }
   // assume that the blueprint passed in is at top level
@@ -84,7 +88,7 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   // }
 
   let costOfUpgrade = 0;
-  const strategyForThisBP = NON_51_PLUS_10_STRATEGY.get(blueprintToMerge.productName) ?? 51;
+  const strategyForThisBP = mergeStrategy.xPlusTen;
   const baseNumLevelsToUpgrade = strategyForThisBP - 1;
   // get cost of getting a matching bp, assuming only the top one has any levels in it
   for (let stage = 1; stage <= blueprintToMerge.evolutionStage; stage++) {
@@ -125,6 +129,30 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
     costOfUpgrade,
     scoreChange: topOfOrigStage,
   };
+}
+
+export function getBpStrategy(
+  productName: ProductName,
+  blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
+  strategies: SetMergingStrategy[] = STRATEGIES,
+): MergingStrategy {
+  let highestStrategy: MergingStrategy = {
+    topStage: 1,
+    xPlusTen: 51,
+  };
+  const setThisBpIsIn: string[] = blueprintSets
+    .filter((set: BlueprintSet) => set.blueprints.includes(productName))
+    .map((set) => set.setName);
+  strategies
+    .filter((strategy) => setThisBpIsIn.includes(strategy.setName))
+    .forEach((strategy) => {
+      if (strategy.mainBps.includes(productName) && strategy.mainStrategy.topStage > highestStrategy.topStage) {
+        highestStrategy = strategy.mainStrategy;
+      } else if (strategy.otherBpsStrategy.topStage > highestStrategy.topStage) {
+        highestStrategy = strategy.otherBpsStrategy;
+      }
+    });
+  return highestStrategy;
 }
 
 function getCostToGetExponentialNumOfBPAtStage(

@@ -1,6 +1,5 @@
-import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
 
-export const MainWorkshopProducts: ImportedProduct[] = [
+export const MainWorkshopProducts = [
   { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10.0, ProductPrice: 1.0, DiscoveryPrice: 1, Type: 'Ore', Tags: ['Organic', 'Wood'] },
   { ProductType: 'Club', LeftResourceType: 'Wood', LeftResourceAmount: 4, ProductAmount: 1, ConstructionPrice: 40.0, ProductPrice: 10.0, DiscoveryPrice: 30, Type: 'EarlyProduct', Tags: ['Organic', 'Wood'] },
   { ProductType: 'Arrows', LeftResourceType: 'Wood', LeftResourceAmount: 1, ProductAmount: 3, ConstructionPrice: 200.0, ProductPrice: 7.0, DiscoveryPrice: 90, Type: 'SemiProduct', Tags: ['SemiProduct', 'Organic', 'Wood'] },
@@ -197,4 +196,4 @@ export const MainWorkshopProducts: ImportedProduct[] = [
   { ProductType: 'Drone', ProductAmount: 1, LeftResourceType: 'Plastic', LeftResourceAmount: 4, RightResourceType: 'Robot Parts', RightResourceAmount: 4, ConstructionPrice: 3e135, ProductPrice: 4e77, DiscoveryPrice: 2700000000, Type: 'LateProduct', Tags: ['Robotics', 'NewCat5'], Optional: true },
   { ProductType: 'VR Headset', ProductAmount: 1, LeftResourceType: 'Electrical Parts', LeftResourceAmount: 4, RightResourceType: 'Plastic', RightResourceAmount: 3, ConstructionPrice: 8e137, ProductPrice: 8e78, DiscoveryPrice: 2800000000, Type: 'LateProduct', Tags: ['DigitalRevolution', 'NewCat5'], Optional: true },
   { ProductType: 'Surgical Robot', ProductAmount: 1, LeftResourceType: 'Titanium', LeftResourceAmount: 4, RightResourceType: 'Robot Parts', RightResourceAmount: 6, ConstructionPrice: 1e140, ProductPrice: 1e80, DiscoveryPrice: 2800000000, Type: 'LateProduct', Tags: ['Robotics', 'NewCat5'], Optional: true },
-];
+] as const;

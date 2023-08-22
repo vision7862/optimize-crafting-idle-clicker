@@ -5,7 +5,7 @@ export type ImportedProduct = Readonly<{
   ProductPrice: number;
   DiscoveryPrice: number;
   Type: string;
-  Tags?: string[];
+  Tags?: readonly string[];
   LeftResourceType?: string;
   LeftResourceAmount?: number;
   RightResourceType?: string;
