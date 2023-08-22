@@ -1,6 +1,6 @@
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
-import { BPS_TO_NOT_MERGE, STRATEGIES } from '../config/Strategies';
+import { BPS_WITHOUT_DUPES, STRATEGIES } from '../config/Strategies';
 import { BLUEPRINT_SETS, BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint, ProductName } from '../types/Blueprint';
@@ -32,7 +32,7 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
   const topUpgradeLevel = getBpStrategy(blueprint.productName).xPlusTen + (blueprint.evolutionStage - 1) * 10;
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
-    return !BPS_TO_NOT_MERGE.includes(blueprint.productName) ? mergeBlueprint(blueprint) : null;
+    return mergeBlueprint(blueprint);
   }
 
   const costOfUpgrade = getCostToUpgradeBlueprint(blueprint, levels);
@@ -53,7 +53,11 @@ export type SetUpgradeInfo = Readonly<{
 
 // Assume that there are sufficient base BPs to merge all the way up
 export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInfo | null {
-  if (BPS_TO_NOT_MERGE.includes(blueprintToMerge.productName)) {
+  const mergeStrategy = getBpStrategy(blueprintToMerge.productName);
+  if (
+    BPS_WITHOUT_DUPES.includes(blueprintToMerge.productName) ||
+    blueprintToMerge.evolutionStage >= mergeStrategy.topStage
+  ) {
     return null;
   }
   // assume that the blueprint passed in is at top level
@@ -84,7 +88,7 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   // }
 
   let costOfUpgrade = 0;
-  const strategyForThisBP = getBpStrategy(blueprintToMerge.productName).xPlusTen;
+  const strategyForThisBP = mergeStrategy.xPlusTen;
   const baseNumLevelsToUpgrade = strategyForThisBP - 1;
   // get cost of getting a matching bp, assuming only the top one has any levels in it
   for (let stage = 1; stage <= blueprintToMerge.evolutionStage; stage++) {

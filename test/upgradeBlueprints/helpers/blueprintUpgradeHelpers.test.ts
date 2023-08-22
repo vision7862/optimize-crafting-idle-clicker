@@ -249,6 +249,10 @@ describe('blueprintUpgradeHelpers', () => {
       expect(strategy.topStage).toBe(5);
       expect(strategy.xPlusTen).toBe(51);
     });
+
+    test('specific bp', () => {
+      console.log(getBpStrategy('Uncut Emerald'));
+    });
   });
 
   describe('upgradeSetToNextRank', () => {
@@ -260,11 +264,14 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should upgrade the specified set', () => {
       const upgradeSetInfo = upgradeSetToNextRank(
-        BLUEPRINT_SETS.filter((set) => set.setName === 'Renaissance')[0],
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Emerald')[0],
         BLUEPRINT_LIBRARY,
       );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
-      console.log(upgradeSetInfo?.upgradedBlueprints);
+      upgradeSetInfo?.upgradedBlueprints.forEach((bp) => {
+        console.log(bp);
+        console.log(getBpStrategy(bp.productName));
+      });
     });
   });
 });
