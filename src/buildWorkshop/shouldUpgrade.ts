@@ -68,7 +68,7 @@ function getCostToUpgradeProduct(product: Product, workshop: Workshop): UpgradeI
   let costToUpgradeProduct = 0;
   let modifiedWorkshop = workshop;
 
-  const parentUpgradeInfo: UpgradeInfo = upgradeSingleProduct(product, workshop, true);
+  const parentUpgradeInfo: UpgradeInfo = upgradeSingleProduct(product, workshop);
   costToUpgradeProduct += parentUpgradeInfo.costOfUpgrade;
   modifiedWorkshop = parentUpgradeInfo.workshop;
 
@@ -132,7 +132,6 @@ function upgradeInput(inputItemsNeeded: number, inputProductName: string, worksh
     const inputUpgradeInfo = upgradeSingleProduct(
       getProductByName(inputProductName, modifiedWorkshop.productsInfo),
       modifiedWorkshop,
-      false,
     );
     costToUpgradeInput += inputUpgradeInfo.costOfUpgrade;
     inputItems = ++inputLevel * inputProduct.details.outputCount;
@@ -154,18 +153,16 @@ type UpgradeInfo = Readonly<{
   costOfUpgrade: number;
 }>;
 
-function upgradeSingleProduct(product: Product, workshop: Workshop, shouldUpdateMerchants: boolean): UpgradeInfo {
+function upgradeSingleProduct(product: Product, workshop: Workshop): UpgradeInfo {
   const newStatus: ProductStatus = {
     ...product.status,
     level: product.status.level + 1,
-    merchants: shouldUpdateMerchants
-      ? Math.ceil(
-          ((product.status.level + 1) *
-            product.details.outputCount *
-            (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
-            getMerchantCapacity(workshop.workshopStatus),
-        )
-      : product.status.merchants,
+    merchants: Math.ceil(
+      ((product.status.level + 1) *
+        product.details.outputCount *
+        (workshop.workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER * PROMOTION_BONUS_CLICK_OUTPUT : 1)) /
+        getMerchantCapacity(workshop.workshopStatus),
+    ),
   };
   return {
     costOfUpgrade: product.details.buildCost * product.details.upgradeCostMultiplier ** product.status.level,
