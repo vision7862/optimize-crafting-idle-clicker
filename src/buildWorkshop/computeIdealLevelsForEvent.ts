@@ -113,7 +113,7 @@ export function clickTopAndInputs(target: number, partialWorkshopStatus: Partial
   return buildWorkshopToTarget(target, { ...workshop, productsInfo: copiedProducts });
 }
 
-const CYCLES_PER_NORMAL_CYCLE = 3.5; // 6.5;
+const CYCLES_PER_NORMAL_CYCLE = 4; // 6.5;
 function multiplyProductCounts(product: Product, workshopStatus: WorkshopStatus): Product {
   return {
     ...product,
