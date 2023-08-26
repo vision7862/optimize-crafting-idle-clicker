@@ -51,7 +51,10 @@ describe('blueprintScoreHelpers', () => {
 
     it('temp test', () => {
       console.log(
-        getSpecifiedMultiplierFromSets(SetMultiplierType.Income, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)),
+        getSpecifiedMultiplierFromSets(
+          SetMultiplierType.MerchantRevenue,
+          convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY),
+        ),
       );
     });
   });

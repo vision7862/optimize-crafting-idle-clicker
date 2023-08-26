@@ -1,4 +1,5 @@
 import { BLUEPRINT_LIBRARY } from '../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { STRATEGIES } from '../../src/upgradeBlueprints/config/Strategies';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
 import {
   SetUpgradeInfo,
@@ -12,7 +13,7 @@ import {
   upgradeMostImpactfulIncomeSet,
   upgradeMostImpactfulSetOfType,
 } from '../../src/upgradeBlueprints/optimizeUpgradingBlueprints';
-import { Blueprint } from '../../src/upgradeBlueprints/types/Blueprint';
+import { Blueprint, ProductName } from '../../src/upgradeBlueprints/types/Blueprint';
 
 describe('optimizeUpgradingBlueprints', () => {
   function printUpgradeInfo(setUpgradeInfo: SetUpgradeInfo | null): void {
@@ -74,5 +75,23 @@ describe('optimizeUpgradingBlueprints', () => {
       console.log(bp);
       console.log(getBpStrategy(bp.blueprint.productName));
     });
+  });
+
+  test('merge specified blueprints', () => {
+    // const bps: ProductName[] = ['Electrical Parts', ]
+    const bps: ProductName[] = [];
+    STRATEGIES.forEach((strat) => bps.push(...strat.mainBps));
+    const merged: Array<BlueprintUpgradeInfo | null> = [];
+    BLUEPRINT_LIBRARY.filter((bp) => bps.includes(bp.productName)).forEach((bp) => {
+      merged.push(mergeBlueprint(bp));
+    });
+    merged
+      .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
+      .forEach((mergedBp) => {
+        console.log(mergedBp);
+        if (mergedBp !== null) {
+          console.log(getBpStrategy(mergedBp.blueprint.productName));
+        }
+      });
   });
 });

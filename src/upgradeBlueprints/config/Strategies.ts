@@ -26,6 +26,13 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'Cut Emerald',
   'Cut Ruby',
   'Cut Sapphire',
+
+  // Renaissance set
+  'Saltpeter',
+
+  // Industrial set
+  'Microscope',
+  'Clockwork', // have enough for stage 2 but not stage 3 which is what it wants
 ];
 
 export const STRATEGIES: SetMergingStrategy[] = [

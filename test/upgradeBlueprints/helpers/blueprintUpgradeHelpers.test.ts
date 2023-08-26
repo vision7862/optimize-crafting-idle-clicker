@@ -251,7 +251,7 @@ describe('blueprintUpgradeHelpers', () => {
     });
 
     test('specific bp', () => {
-      console.log(getBpStrategy('Uncut Emerald'));
+      console.log(getBpStrategy('Ruby Ring'));
     });
   });
 
@@ -264,7 +264,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should upgrade the specified set', () => {
       const upgradeSetInfo = upgradeSetToNextRank(
-        BLUEPRINT_SETS.filter((set) => set.setName === 'Emerald')[0],
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Entertainment')[0],
         BLUEPRINT_LIBRARY,
       );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);

@@ -9,7 +9,7 @@ export const DAILY_DYNASTY_FRIEND_BONUS_MERCHANT = 30;
 
 // during events, regular income is affected but offline is not. income&offline is the permanent, the other is only during 24hr events
 export const PROMOTION_BONUS_INCOME_AND_OFFLINE = 1;
-export const PROMOTION_BONUS_INCOME = 1;
+export const PROMOTION_BONUS_INCOME = PROMOTION_BONUS_INCOME_AND_OFFLINE + 0;
 // during events, revenue is affected but capacity is not. rev&cap is the permanent, the other is only during 24hr events
 export const PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY = 1;
 export const PROMOTION_BONUS_MERCHANT_REVENUE = PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY + 0;
