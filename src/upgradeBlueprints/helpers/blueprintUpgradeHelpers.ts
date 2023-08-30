@@ -1,4 +1,6 @@
+import { MainWorkshopProducts } from '../../../products/MainWorkshop';
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
+import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import { BPS_WITHOUT_DUPES, STRATEGIES } from '../config/Strategies';
 import { BLUEPRINT_SETS, BlueprintSet } from '../constants/BlueprintSets';
@@ -139,6 +141,7 @@ export function getBpStrategy(
   productName: ProductName,
   blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
   strategies: SetMergingStrategy[] = STRATEGIES,
+  products: readonly ImportedProduct[] = MainWorkshopProducts,
 ): MergingStrategy {
   let highestStrategy: MergingStrategy = {
     topStage: 1,
@@ -147,7 +150,7 @@ export function getBpStrategy(
   };
   const setThisBpIsIn: string[] = blueprintSets
     .filter((set: BlueprintSet) => {
-      return getBlueprintsInSet(set.setName).includes(productName);
+      return getBlueprintsInSet(set.setName, products).includes(productName);
     })
     .map((set) => set.setName);
   strategies

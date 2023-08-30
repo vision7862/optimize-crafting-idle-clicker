@@ -55,11 +55,13 @@ export function getMultiplierForSet(set: BlueprintSet, blueprintScores: Map<stri
   return getSetAchievementMultiplier(set, setScore);
 }
 
-export const getBlueprintsInSet = memoize((setName: string): ProductName[] => {
-  return MainWorkshopProducts.filter((product: ImportedProduct) => product.Tags?.includes(setName)).map(
-    (product: ImportedProduct) => product.ProductType as ProductName,
-  );
-});
+export const getBlueprintsInSet = memoize(
+  (setName: string, products: readonly ImportedProduct[] = MainWorkshopProducts): ProductName[] => {
+    return products
+      .filter((product: ImportedProduct) => product.Tags?.includes(setName))
+      .map((product: ImportedProduct) => product.ProductType as ProductName);
+  },
+);
 
 export function getSetBlueprintScore(blueprints: string[], blueprintScores: Map<string, number>): number {
   let summedScores = 0;
@@ -110,6 +112,7 @@ export function getSetAchievementMultiplier(set: BlueprintSet, score: number): n
 export function getSetClosestToBoundary(
   blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
   blueprintScores: Map<string, number>,
+  products: readonly ImportedProduct[] = MainWorkshopProducts,
 ): string {
   let closestDistance = Number.MAX_VALUE;
   let closestSetName = 'no close set';
@@ -119,7 +122,7 @@ export function getSetClosestToBoundary(
         set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
     )
     .forEach((set: BlueprintSet) => {
-      const blueprints = getBlueprintsInSet(set.setName);
+      const blueprints = getBlueprintsInSet(set.setName, products);
       const setScore = getSetBlueprintScore(blueprints, blueprintScores);
       const distanceInfo = getDistanceToNextRank(set, setScore);
       if (distanceInfo.distance < closestDistance) {
