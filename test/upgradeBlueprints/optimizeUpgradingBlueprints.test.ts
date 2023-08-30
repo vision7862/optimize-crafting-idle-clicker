@@ -1,9 +1,11 @@
 import { BLUEPRINT_LIBRARY } from '../../src/upgradeBlueprints/config/BlueprintLibrary';
 import { STRATEGIES } from '../../src/upgradeBlueprints/config/Strategies';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
+import { BASE_BP } from '../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   SetUpgradeInfo,
   getBpStrategy,
+  getTopLevel,
   mergeBlueprint,
 } from '../../src/upgradeBlueprints/helpers/blueprintUpgradeHelpers';
 import {
@@ -77,19 +79,84 @@ describe('optimizeUpgradingBlueprints', () => {
     });
   });
 
-  test('merge specified blueprints', () => {
+  test('merge main blueprints to next stage', () => {
     // const bps: ProductName[] = ['Electrical Parts', ]
     const bps: ProductName[] = [];
     STRATEGIES.forEach((strat) => bps.push(...strat.mainBps));
-    const merged: Array<BlueprintUpgradeInfo | null> = [];
+    const merged: BlueprintUpgradeInfo[] = [];
     BLUEPRINT_LIBRARY.filter((bp) => bps.includes(bp.productName)).forEach((bp) => {
-      merged.push(mergeBlueprint(bp));
+      const mergedBp = mergeBlueprint(bp);
+      if (mergedBp === null) {
+        console.log(`${bp.productName} cannot be merged`);
+      } else {
+        merged.push(mergedBp);
+      }
     });
     merged
       .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
       .forEach((mergedBp) => {
         console.log(mergedBp);
+        const strategy = getBpStrategy(mergedBp.blueprint.productName);
+        console.log(
+          `bring ${mergedBp.blueprint.productName} to level ${getTopLevel(
+            strategy,
+            mergedBp.blueprint.evolutionStage,
+          )}`,
+        );
+        console.log(getBpStrategy(mergedBp.blueprint.productName));
+      });
+  });
+
+  // merging bps of a stage above 1 does not currently calculate like this wants
+  test('making space: merge specified blueprints from stage 1', () => {
+    const bps: ProductName[] = [
+      // 'Sickle',
+      // 'Lump Hammer',
+      'Magnificent Hilt',
+      'Magnificent Armor',
+      'Mechanical Parts',
+      // 'Magnificent Crossbow',
+      // 'Sulfur',
+      // 'Compass',
+      'Saltpeter',
+      'Ilmenite',
+      'Gunpowder',
+      // 'Machine Parts',
+      // 'Musket',
+      // 'Motor Unit',
+      'Light Bulb',
+      'Steam Engine',
+      // 'Telephone',
+      // 'Steam Boat',
+      // 'Locomotive',
+      'Combustion Engine',
+      'Antenna',
+      'Movie Projector',
+      'Electric Motor',
+      'Walkie Talkie',
+      'TV Set',
+      'Rocket',
+      'Microchip',
+    ];
+    const merged: Array<BlueprintUpgradeInfo | null> = bps.map((productName) => {
+      const mergedBp = mergeBlueprint({ ...BASE_BP, productName });
+      if (mergedBp === null) {
+        console.log(`${productName} cannot be merged`);
+      }
+      return mergedBp;
+    });
+    merged
+      .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
+      .forEach((mergedBp) => {
         if (mergedBp !== null) {
+          const strategy = getBpStrategy(mergedBp.blueprint.productName);
+          console.log(
+            `bring ${mergedBp.blueprint.productName} to level ${getTopLevel(
+              strategy,
+              mergedBp.blueprint.evolutionStage - 1,
+            )}`,
+          );
+          console.log(mergedBp);
           console.log(getBpStrategy(mergedBp.blueprint.productName));
         }
       });
