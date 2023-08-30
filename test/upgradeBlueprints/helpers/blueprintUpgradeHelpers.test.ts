@@ -234,20 +234,20 @@ describe('blueprintUpgradeHelpers', () => {
         {
           setName: 'set1',
           mainBps: ['Copper Axe'],
-          mainStrategy: { topStage: 4, xPlusTen: 21 },
-          otherBpsStrategy: { topStage: 1, xPlusTen: 1 },
+          mainStrategy: { topStage: 4, baseLevel: 21, plusLevelsPerStage: 10 },
+          otherBpsStrategy: { topStage: 1, baseLevel: 1, plusLevelsPerStage: 0 },
         },
         {
           setName: 'set2',
           mainBps: ['Wood'],
-          mainStrategy: { topStage: 6, xPlusTen: 51 },
-          otherBpsStrategy: { topStage: 5, xPlusTen: 51 },
+          mainStrategy: { topStage: 6, baseLevel: 51, plusLevelsPerStage: 10 },
+          otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
         },
       ];
 
       const strategy: MergingStrategy = getBpStrategy('Copper Axe', blueprintSets, strategies);
       expect(strategy.topStage).toBe(5);
-      expect(strategy.xPlusTen).toBe(51);
+      expect(strategy.baseLevel).toBe(51);
     });
 
     test('specific bp', () => {
@@ -264,7 +264,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should upgrade the specified set', () => {
       const upgradeSetInfo = upgradeSetToNextRank(
-        BLUEPRINT_SETS.filter((set) => set.setName === 'Entertainment')[0],
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Leather')[0],
         BLUEPRINT_LIBRARY,
       );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);

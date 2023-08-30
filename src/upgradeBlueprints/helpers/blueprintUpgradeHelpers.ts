@@ -30,7 +30,8 @@ export function getCostToUpgradeBlueprint(blueprint: Blueprint, levels: number):
 }
 
 export function upgradeBlueprint(blueprint: Blueprint, levels: number): BlueprintUpgradeInfo | null {
-  const topUpgradeLevel = getBpStrategy(blueprint.productName).xPlusTen + (blueprint.evolutionStage - 1) * 10;
+  const strategy = getBpStrategy(blueprint.productName);
+  const topUpgradeLevel = getTopLevel(strategy, blueprint.evolutionStage);
   if (blueprint.upgradeLevel >= topUpgradeLevel) {
     return mergeBlueprint(blueprint);
   }
@@ -51,6 +52,10 @@ export type SetUpgradeInfo = Readonly<{
   allBlueprintsWithUpgradedReplacements: Blueprint[];
 }>;
 
+export function getTopLevel(strategy: MergingStrategy, evolutionStage: number): number {
+  return strategy.baseLevel + (evolutionStage - 1) * strategy.plusLevelsPerStage;
+}
+
 // Assume that there are sufficient base BPs to merge all the way up
 export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInfo | null {
   const mergeStrategy = getBpStrategy(blueprintToMerge.productName);
@@ -60,7 +65,6 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   ) {
     return null;
   }
-  // assume that the blueprint passed in is at top level
   // remove this blueprint from all blueprints
   // const blueprintsWithoutTarget = Array.from(allBlueprints);
   // const targetBlueprintIndex = blueprintsWithoutTarget.findIndex(
@@ -88,13 +92,12 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
   // }
 
   let costOfUpgrade = 0;
-  const strategyForThisBP = mergeStrategy.xPlusTen;
-  const baseNumLevelsToUpgrade = strategyForThisBP - 1;
+  const baseNumLevelsToUpgrade = mergeStrategy.baseLevel - 1;
   // get cost of getting a matching bp, assuming only the top one has any levels in it
   for (let stage = 1; stage <= blueprintToMerge.evolutionStage; stage++) {
     costOfUpgrade += getCostToGetExponentialNumOfBPAtStage(
       stage,
-      strategyForThisBP,
+      mergeStrategy,
       blueprintToMerge,
       baseNumLevelsToUpgrade,
     );
@@ -102,7 +105,7 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
 
   // make new blueprint with evolution increased, score * 2, and reset level to 1
   let blueprintReadyToMerge = blueprintToMerge;
-  const topUpgradeLevel = strategyForThisBP + (blueprintToMerge.evolutionStage - 1) * 10;
+  const topUpgradeLevel = getTopLevel(mergeStrategy, blueprintToMerge.evolutionStage);
   if (blueprintToMerge.upgradeLevel < topUpgradeLevel) {
     const upgradeBlueprintToMergeToTopOfStage = upgradeBlueprint(
       blueprintToMerge,
@@ -111,10 +114,10 @@ export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInf
     if (upgradeBlueprintToMergeToTopOfStage === null) {
       throw new Error(`something has gone wrong merging ${blueprintToMerge.productName}`);
     }
-    costOfUpgrade += upgradeBlueprintToMergeToTopOfStage?.costOfUpgrade ?? 0;
+    costOfUpgrade += upgradeBlueprintToMergeToTopOfStage.costOfUpgrade;
     blueprintReadyToMerge = upgradeBlueprintToMergeToTopOfStage.blueprint;
   }
-  const topOfOrigStage = getScoreAtTopOfStage(blueprintToMerge.evolutionStage, strategyForThisBP);
+  const topOfOrigStage = getScoreAtTopOfStage(blueprintToMerge.evolutionStage, mergeStrategy);
   const newScore = topOfOrigStage + blueprintReadyToMerge.score;
   const mergedBlueprint: Blueprint = {
     ...blueprintToMerge,
@@ -138,7 +141,8 @@ export function getBpStrategy(
 ): MergingStrategy {
   let highestStrategy: MergingStrategy = {
     topStage: 1,
-    xPlusTen: 51,
+    baseLevel: 1,
+    plusLevelsPerStage: 0,
   };
   const setThisBpIsIn: string[] = blueprintSets
     .filter((set: BlueprintSet) => set.blueprints.includes(productName))
@@ -157,7 +161,7 @@ export function getBpStrategy(
 
 function getCostToGetExponentialNumOfBPAtStage(
   stage: number,
-  strategyForThisBP: number,
+  strategyForThisBP: MergingStrategy,
   blueprintToMerge: Blueprint,
   baseNumLevelsToUpgrade: number,
 ): number {
