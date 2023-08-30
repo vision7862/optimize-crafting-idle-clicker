@@ -7,6 +7,7 @@ import {
 import { BASE_BP, BOTTOM_STAGE_2 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
+  getBlueprintsInSet,
   getOnlyTopBlueprints,
   getSetAchievementMultiplier,
   getSetBlueprintScore,
@@ -118,13 +119,14 @@ describe('blueprintScoreHelpers', () => {
         ['Sickle', 64],
         ['Magnificent Dagger', 50],
       ]);
-      const blueprints = getBlueprintSet('Knife').blueprints;
+
+      const blueprints = getBlueprintsInSet('Knife');
       expect(getSetBlueprintScore(blueprints, blueprintScores)).toBe(194);
     });
 
     it('should count missing blueprints as 10 for the log part and 0 for the summing part', () => {
       const blueprintScores = new Map<string, number>([['Sickle', 64]]);
-      const blueprints = getBlueprintSet('Knife').blueprints;
+      const blueprints = getBlueprintsInSet('Knife');
       expect(getSetBlueprintScore(blueprints, blueprintScores)).toBe(64);
     });
   });
