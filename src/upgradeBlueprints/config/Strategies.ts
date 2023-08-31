@@ -73,6 +73,48 @@ export const STRATEGIES: SetMergingStrategy[] = [
     otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 0 },
   },
   {
+    setName: 'Modern Resources',
+    mainBps: ['Petroleum', 'Ilmenite'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 4, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Refined Modern Resources',
+    mainBps: ['Gasoline', 'Diesel', 'Titanium'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Synthetic Materials',
+    mainBps: ['Nylon'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Military Gear',
+    mainBps: ['Parachute'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Gaming',
+    mainBps: ['Headset'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Digital Revolution',
+    mainBps: ['Tablet Computer'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Robotics',
+    mainBps: ['Robot Parts'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
     setName: 'Renaissance',
     mainBps: ['Compass', 'Gunpowder'],
     mainStrategy: { topStage: 9, baseLevel: 71, plusLevelsPerStage: 10 },

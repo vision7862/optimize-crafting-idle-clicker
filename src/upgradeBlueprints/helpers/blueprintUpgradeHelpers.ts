@@ -1,4 +1,6 @@
+import { MainWorkshopProducts } from '../../../products/MainWorkshop';
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
+import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
 import { BPS_WITHOUT_DUPES, STRATEGIES } from '../config/Strategies';
 import { BLUEPRINT_SETS, BlueprintSet } from '../constants/BlueprintSets';
@@ -8,6 +10,7 @@ import { MergingStrategy, SetMergingStrategy } from '../types/MergingStrategy';
 import { getBottomOfStageBP, getScoreAtTopOfStage } from './blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
+  getBlueprintsInSet,
   getDistanceToNextRank,
   getOnlyTopBlueprints,
   getSetBlueprintScore,
@@ -138,6 +141,7 @@ export function getBpStrategy(
   productName: ProductName,
   blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
   strategies: SetMergingStrategy[] = STRATEGIES,
+  products: readonly ImportedProduct[] = MainWorkshopProducts,
 ): MergingStrategy {
   let highestStrategy: MergingStrategy = {
     topStage: 1,
@@ -145,7 +149,9 @@ export function getBpStrategy(
     plusLevelsPerStage: 0,
   };
   const setThisBpIsIn: string[] = blueprintSets
-    .filter((set: BlueprintSet) => set.blueprints.includes(productName))
+    .filter((set: BlueprintSet) => {
+      return getBlueprintsInSet(set.setName, products).includes(productName);
+    })
     .map((set) => set.setName);
   strategies
     .filter((strategy) => setThisBpIsIn.includes(strategy.setName))
@@ -180,14 +186,15 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
   const blueprintsWithUpgradedReplacements = Array.from(blueprints);
   const upgradedBlueprints: Blueprint[] = [];
   const blueprintScores = convertBlueprintLibraryToScores(blueprints);
-  const startingSetScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+  const setBlueprints = getBlueprintsInSet(set.setName);
+  const startingSetScore = getSetBlueprintScore(setBlueprints, blueprintScores);
   const distanceToNextRank = getDistanceToNextRank(set, startingSetScore).distance;
   if (distanceToNextRank === Number.MAX_VALUE) {
     return null;
   }
   while (totalScoreIncreased < distanceToNextRank) {
     const relevantSetBlueprints = getOnlyTopBlueprints(blueprintsWithUpgradedReplacements).filter(
-      (blueprint: Blueprint) => set.blueprints.includes(blueprint.productName),
+      (blueprint: Blueprint) => setBlueprints.includes(blueprint.productName),
     );
     if (relevantSetBlueprints.length === 0) {
       return null;
@@ -200,7 +207,7 @@ export function upgradeSetToNextRank(set: BlueprintSet, blueprints: Blueprint[])
     replaceBlueprintInPlace(blueprintsWithUpgradedReplacements, bestUpgrade.blueprint);
     replaceBlueprintInPlace(upgradedBlueprints, bestUpgrade.blueprint);
     const newSetScore = getSetBlueprintScore(
-      set.blueprints,
+      setBlueprints,
       convertBlueprintLibraryToScores(blueprintsWithUpgradedReplacements),
     );
     totalScoreIncreased = newSetScore - startingSetScore;

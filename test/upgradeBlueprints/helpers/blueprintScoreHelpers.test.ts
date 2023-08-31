@@ -1,3 +1,4 @@
+import { ImportedProduct } from '../../../src/buildWorkshop/types/ImportedProduct';
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
@@ -7,6 +8,7 @@ import {
 import { BASE_BP, BOTTOM_STAGE_2 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
+  getBlueprintsInSet,
   getOnlyTopBlueprints,
   getSetAchievementMultiplier,
   getSetBlueprintScore,
@@ -118,13 +120,14 @@ describe('blueprintScoreHelpers', () => {
         ['Sickle', 64],
         ['Magnificent Dagger', 50],
       ]);
-      const blueprints = getBlueprintSet('Knife').blueprints;
+
+      const blueprints = getBlueprintsInSet('Knife');
       expect(getSetBlueprintScore(blueprints, blueprintScores)).toBe(194);
     });
 
     it('should count missing blueprints as 10 for the log part and 0 for the summing part', () => {
       const blueprintScores = new Map<string, number>([['Sickle', 64]]);
-      const blueprints = getBlueprintSet('Knife').blueprints;
+      const blueprints = getBlueprintsInSet('Knife');
       expect(getSetBlueprintScore(blueprints, blueprintScores)).toBe(64);
     });
   });
@@ -148,7 +151,6 @@ describe('blueprintScoreHelpers', () => {
       const blueprintSets: BlueprintSet[] = [
         {
           setName: 'Set A',
-          blueprints: ['a apple', 'a apricot'],
           achievementRanks: [
             { scoreBoundary: 0, totalMultiplier: 1 },
             { scoreBoundary: 100, totalMultiplier: 2 },
@@ -158,7 +160,6 @@ describe('blueprintScoreHelpers', () => {
         },
         {
           setName: 'Set B',
-          blueprints: ['b baseball', 'b bat'],
           achievementRanks: [
             { scoreBoundary: 0, totalMultiplier: 1 },
             { scoreBoundary: 100, totalMultiplier: 2 },
@@ -167,13 +168,22 @@ describe('blueprintScoreHelpers', () => {
           multiplierType: SetMultiplierType.Income,
         },
       ];
+
+      const products: ImportedProduct[] = [
+        { ProductType: 'a apple', Tags: ['Set A'] } as unknown as ImportedProduct,
+        { ProductType: 'a apricot', Tags: ['Set A'] } as unknown as ImportedProduct,
+        { ProductType: 'b baseball', Tags: ['Set B'] } as unknown as ImportedProduct,
+        { ProductType: 'b bat', Tags: ['Set B'] } as unknown as ImportedProduct,
+      ];
+
       const blueprintScores = new Map<string, number>([
         ['a apple', 60],
         ['a apricot', 10],
         ['b baseball', 50],
         ['b bat', 40],
       ]);
-      const closestSet = getSetClosestToBoundary(blueprintSets, blueprintScores);
+
+      const closestSet = getSetClosestToBoundary(blueprintSets, blueprintScores, products);
       expect(closestSet).toBe('Set A');
     });
   });

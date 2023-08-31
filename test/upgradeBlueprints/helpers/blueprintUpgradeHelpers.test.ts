@@ -1,3 +1,4 @@
+import { ImportedProduct } from '../../../src/buildWorkshop/types/ImportedProduct';
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
@@ -219,15 +220,19 @@ describe('blueprintUpgradeHelpers', () => {
         {
           setName: 'set1',
           multiplierType: SetMultiplierType.ClickOutput,
-          blueprints: ['Copper Axe', 'Copper Ore', 'Copper Ingot'],
           achievementRanks: [],
         },
         {
           setName: 'set2',
           multiplierType: SetMultiplierType.ClickOutput,
-          blueprints: ['Copper Axe', 'Wood', 'Arrows'],
           achievementRanks: [],
         },
+      ];
+
+      const products: ImportedProduct[] = [
+        { ProductType: 'Copper Axe', Tags: ['set1', 'set2'] } as unknown as ImportedProduct,
+        { ProductType: 'Copper Ore', Tags: ['set1'] } as unknown as ImportedProduct,
+        { ProductType: 'Wood', Tags: ['set2'] } as unknown as ImportedProduct,
       ];
 
       const strategies: SetMergingStrategy[] = [
@@ -245,7 +250,7 @@ describe('blueprintUpgradeHelpers', () => {
         },
       ];
 
-      const strategy: MergingStrategy = getBpStrategy('Copper Axe', blueprintSets, strategies);
+      const strategy: MergingStrategy = getBpStrategy('Copper Axe', blueprintSets, strategies, products);
       expect(strategy.topStage).toBe(5);
       expect(strategy.baseLevel).toBe(51);
     });

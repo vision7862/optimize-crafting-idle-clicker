@@ -2,6 +2,7 @@ import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from './constants/BlueprintSets';
 import {
   convertBlueprintLibraryToScores,
+  getBlueprintsInSet,
   getDistanceToNextRank,
   getOnlyTopBlueprints,
   getSetBlueprintScore,
@@ -23,9 +24,10 @@ export function upgradeMostImpactfulIncomeSet(blueprints: Blueprint[] = BLUEPRIN
   BLUEPRINT_SETS.filter(
     (set: BlueprintSet) =>
       (set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue) &&
-      !set.blueprints.includes('Unfinished'),
+      !(set.isUnfinished === false),
   ).forEach((set: BlueprintSet) => {
-    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    const setBlueprints = getBlueprintsInSet(set.setName);
+    const setScore = getSetBlueprintScore(setBlueprints, blueprintScores);
     const distanceInfo = getDistanceToNextRank(set, setScore);
     const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
     if (upgradeInfo !== null) {
@@ -52,19 +54,22 @@ export function upgradeMostImpactfulSetOfType(
   let bestUpgradeInfo: SetUpgradeInfo | null = null;
   let setName = '';
   const blueprintScores = convertBlueprintLibraryToScores(blueprints);
-  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === type).forEach((set: BlueprintSet) => {
-    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
-    const distanceInfo = getDistanceToNextRank(set, setScore);
-    const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
-    if (upgradeInfo !== null) {
-      const roi = distanceInfo.improvement / upgradeInfo.cost;
-      if (roi > bestROI) {
-        bestROI = roi;
-        bestUpgradeInfo = upgradeInfo;
-        setName = set.setName;
+  BLUEPRINT_SETS.filter((set: BlueprintSet) => set.multiplierType === type && !(set.isUnfinished === false)).forEach(
+    (set: BlueprintSet) => {
+      const setBlueprints = getBlueprintsInSet(set.setName);
+      const setScore = getSetBlueprintScore(setBlueprints, blueprintScores);
+      const distanceInfo = getDistanceToNextRank(set, setScore);
+      const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
+      if (upgradeInfo !== null) {
+        const roi = distanceInfo.improvement / upgradeInfo.cost;
+        if (roi > bestROI) {
+          bestROI = roi;
+          bestUpgradeInfo = upgradeInfo;
+          setName = set.setName;
+        }
       }
-    }
-  });
+    },
+  );
   console.log(`to get to next rank of ${setName}`);
   return bestUpgradeInfo;
 }
@@ -75,7 +80,8 @@ export function printUpgradeInfoOfEachSet(
   const blueprintScores = convertBlueprintLibraryToScores(blueprints);
   const setUpgradeInfos: Array<{ name: string; roi: number; cost: number; type: string }> = [];
   BLUEPRINT_SETS.forEach((set: BlueprintSet) => {
-    const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+    const setBlueprints = getBlueprintsInSet(set.setName);
+    const setScore = getSetBlueprintScore(setBlueprints, blueprintScores);
     const distanceInfo = getDistanceToNextRank(set, setScore);
     const upgradeInfo: SetUpgradeInfo | null = upgradeSetToNextRank(set, blueprints);
     if (upgradeInfo !== null) {

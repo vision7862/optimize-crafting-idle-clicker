@@ -6,13 +6,15 @@ export enum SetMultiplierType {
   OfflineProduction,
   ClickOutput,
   MerchantRevenue,
+  LPP,
+  BlueprintCap,
 }
 
 export type BlueprintSet = Readonly<{
   setName: string;
   multiplierType: SetMultiplierType;
-  blueprints: string[];
   achievementRanks: AchievementRank[]; // TODO: GH-5: fill in score boundaries for other sets
+  isUnfinished?: boolean;
 }>;
 
 type AchievementRank = Readonly<{
@@ -48,7 +50,7 @@ const BEGINNER_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 4.27e7, totalMultiplier: 6.0 },
 ];
 
-const GEM_SET_ACHIEVEMENT_RANKS = [
+const MID_GAME_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 48, totalMultiplier: 1.02 },
   { scoreBoundary: 90, totalMultiplier: 1.04 },
   { scoreBoundary: 218, totalMultiplier: 1.06 },
@@ -74,6 +76,11 @@ const GEM_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 1.39e7, totalMultiplier: 1.46 },
   { scoreBoundary: 1.76e7, totalMultiplier: 1.48 },
   { scoreBoundary: 2.14e7, totalMultiplier: 1.5 },
+  { scoreBoundary: 200e6, totalMultiplier: 1.6 },
+  { scoreBoundary: 4.0e9, totalMultiplier: 1.7 },
+  { scoreBoundary: 80e9, totalMultiplier: 1.8 },
+  { scoreBoundary: 2.0e12, totalMultiplier: 1.9 },
+  { scoreBoundary: 100.0e12, totalMultiplier: 2 },
 ];
 
 const LATE_GAME_SET_ACHIEVEMENTS = [
@@ -109,37 +116,53 @@ const LATE_GAME_SET_ACHIEVEMENTS = [
   { scoreBoundary: 1.0e14, totalMultiplier: 19.0 },
 ];
 
+const MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
+  { scoreBoundary: 64, totalMultiplier: 1.2 },
+  { scoreBoundary: 120, totalMultiplier: 1.4 },
+  { scoreBoundary: 290, totalMultiplier: 1.6 },
+  { scoreBoundary: 500, totalMultiplier: 1.8 },
+  { scoreBoundary: 980, totalMultiplier: 2.0 },
+  { scoreBoundary: 1400, totalMultiplier: 2.2 },
+  { scoreBoundary: 2900, totalMultiplier: 2.4 },
+  { scoreBoundary: 5000, totalMultiplier: 2.6 },
+  { scoreBoundary: 9800, totalMultiplier: 2.8 },
+  { scoreBoundary: 14000, totalMultiplier: 3.0 },
+  { scoreBoundary: 29000, totalMultiplier: 3.2 },
+  { scoreBoundary: 50000, totalMultiplier: 3.4 },
+  { scoreBoundary: 98000, totalMultiplier: 3.6 },
+  { scoreBoundary: 140000, totalMultiplier: 3.8 },
+  { scoreBoundary: 290000, totalMultiplier: 4.0 },
+  { scoreBoundary: 500000, totalMultiplier: 4.2 },
+  { scoreBoundary: 980000, totalMultiplier: 4.4 },
+  { scoreBoundary: 1.4e6, totalMultiplier: 4.6 },
+  { scoreBoundary: 2.9e6, totalMultiplier: 4.8 },
+  { scoreBoundary: 5.0e6, totalMultiplier: 5.0 },
+  { scoreBoundary: 8.5e6, totalMultiplier: 5.2 },
+  { scoreBoundary: 13.5e6, totalMultiplier: 5.4 },
+  { scoreBoundary: 18.5e6, totalMultiplier: 5.6 },
+  { scoreBoundary: 23.5e6, totalMultiplier: 5.8 },
+  { scoreBoundary: 28.5e6, totalMultiplier: 6.0 },
+];
+
 export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Wood',
     multiplierType: SetMultiplierType.Income,
-    blueprints: ['Wood', 'Club', 'Arrows', 'Bow', 'Copper Axe', 'Bronze Spear'],
     achievementRanks: BEGINNER_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Leather',
     multiplierType: SetMultiplierType.Income,
-    blueprints: ['Rawhide', 'Leather', 'Boots', 'Hilt', 'Leather Armor', 'Imp. Leather Armor'],
     achievementRanks: BEGINNER_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Copper',
     multiplierType: SetMultiplierType.Income,
-    blueprints: ['Copper Ore', 'Copper Ingots', 'Copper Axe', 'Copper Blades', 'Copper Knife', 'Copper Dagger'],
     achievementRanks: BEGINNER_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Bronze',
     multiplierType: SetMultiplierType.Income,
-    blueprints: [
-      'Tin Ore',
-      'Bronze Ingots',
-      'Bronze Spear',
-      'Bronze Shield',
-      'Bronze Blades',
-      'Bronze Dagger',
-      'Bronze Sword',
-    ],
     achievementRanks: [
       { scoreBoundary: 112, totalMultiplier: 1.2 },
       { scoreBoundary: 210, totalMultiplier: 1.4 },
@@ -171,20 +194,6 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Iron',
     multiplierType: SetMultiplierType.Income,
-    blueprints: [
-      'Coal',
-      'Iron Ore',
-      'Iron Ingots',
-      'Iron Mace',
-      'Iron Rivets',
-      'Iron Helmet',
-      'Iron Plates',
-      'Imp. Leather Armor',
-      'Iron Blades',
-      'Iron Sword',
-      'Iron Armor',
-      'Iron Claymore',
-    ],
     achievementRanks: [
       { scoreBoundary: 192, totalMultiplier: 1.2 },
       { scoreBoundary: 360, totalMultiplier: 1.4 },
@@ -216,18 +225,6 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Precious',
     multiplierType: SetMultiplierType.Income,
-    blueprints: [
-      'Gold Ore',
-      'Gold Ingots',
-      'Gold Ring',
-      'Gold Necklace',
-      'Steel',
-      'Steel Blades',
-      'Katana',
-      'Magnificent Hilt',
-      'Magnificent Sword',
-      'Magnificent Armor',
-    ],
     achievementRanks: [
       { scoreBoundary: 160, totalMultiplier: 1.2 },
       { scoreBoundary: 300, totalMultiplier: 1.4 },
@@ -256,155 +253,104 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       { scoreBoundary: 7.12e7, totalMultiplier: 6.0 },
     ],
   },
-  // modern resources
-  // refined modern resources
-  // synthetic materials
-  // military gear
-  // gaming
-  // digital revolution
-  // robotics
+  {
+    setName: 'Modern Resources',
+    multiplierType: SetMultiplierType.OfflineProduction,
+    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
+  },
+  {
+    setName: 'Refined Modern Resources',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Synthetic Materials',
+    multiplierType: SetMultiplierType.MerchantRevenue,
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25),
+  },
+  {
+    setName: 'Military Gear',
+    multiplierType: SetMultiplierType.BlueprintCap, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 10,
+      };
+    }),
+  },
+  {
+    setName: 'Gaming',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Digital Revolution',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Robotics',
+    multiplierType: SetMultiplierType.BlueprintCap, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 10,
+      };
+    }),
+  },
   {
     setName: 'Renaissance',
     multiplierType: SetMultiplierType.Income,
-    blueprints: [
-      'Mechanical Parts',
-      'Magnificent Crossbow',
-      'Sulfur',
-      'Halberd',
-      'Compass',
-      'Saltpeter',
-      'Gunpowder',
-      'Weapon Parts',
-      'Pistol',
-      'Musket',
-    ],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Industrial',
     multiplierType: SetMultiplierType.Income,
-    blueprints: [
-      'Microscope',
-      'Clockwork',
-      'Clock',
-      'Electro Magnet',
-      'Machine Parts',
-      'Camera',
-      'Electrical Parts',
-      'Motor Unit',
-      'Steam Engine',
-      'Telephone',
-      'Steam Boat',
-      'Locomotive',
-    ],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Mining Tools',
     multiplierType: SetMultiplierType.Ore,
-    blueprints: ['Shovel', 'Lump Hammer', 'Pickaxe', 'Gunpowder'],
-    achievementRanks: [
-      { scoreBoundary: 64, totalMultiplier: 1.2 },
-      { scoreBoundary: 120, totalMultiplier: 1.4 },
-      { scoreBoundary: 290, totalMultiplier: 1.6 },
-      { scoreBoundary: 500, totalMultiplier: 1.8 },
-      { scoreBoundary: 980, totalMultiplier: 2.0 },
-      { scoreBoundary: 1400, totalMultiplier: 2.2 },
-      { scoreBoundary: 2900, totalMultiplier: 2.4 },
-      { scoreBoundary: 5000, totalMultiplier: 2.6 },
-      { scoreBoundary: 9800, totalMultiplier: 2.8 },
-      { scoreBoundary: 14000, totalMultiplier: 3.0 },
-      { scoreBoundary: 29000, totalMultiplier: 3.2 },
-      { scoreBoundary: 50000, totalMultiplier: 3.4 },
-      { scoreBoundary: 98000, totalMultiplier: 3.6 },
-      { scoreBoundary: 140000, totalMultiplier: 3.8 },
-      { scoreBoundary: 290000, totalMultiplier: 4.0 },
-      { scoreBoundary: 500000, totalMultiplier: 4.2 },
-      { scoreBoundary: 9.8e5, totalMultiplier: 4.4 },
-      { scoreBoundary: 1.4e6, totalMultiplier: 4.6 },
-      { scoreBoundary: 2.9e6, totalMultiplier: 4.8 },
-      { scoreBoundary: 5.0e6, totalMultiplier: 5.0 },
-      { scoreBoundary: 8.5e6, totalMultiplier: 5.2 },
-      { scoreBoundary: 1.35e7, totalMultiplier: 5.4 },
-      { scoreBoundary: 1.85e7, totalMultiplier: 5.6 },
-      { scoreBoundary: 2.35e7, totalMultiplier: 5.8 },
-      { scoreBoundary: 2.85e7, totalMultiplier: 6.0 },
-    ],
+    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Science Tools',
     multiplierType: SetMultiplierType.Research,
-    blueprints: ['Sickle', 'Chisel', 'Mechanical Parts', 'Compass'],
-    achievementRanks: [
-      { scoreBoundary: 64, totalMultiplier: 1.25 },
-      { scoreBoundary: 120, totalMultiplier: 1.5 },
-      { scoreBoundary: 290, totalMultiplier: 1.75 },
-      { scoreBoundary: 500, totalMultiplier: 2.0 },
-      { scoreBoundary: 980, totalMultiplier: 2.25 },
-      { scoreBoundary: 1400, totalMultiplier: 2.5 },
-      { scoreBoundary: 2900, totalMultiplier: 2.75 },
-      { scoreBoundary: 5000, totalMultiplier: 3.0 },
-      { scoreBoundary: 9800, totalMultiplier: 3.25 },
-      { scoreBoundary: 14000, totalMultiplier: 3.5 },
-      { scoreBoundary: 29000, totalMultiplier: 3.75 },
-      { scoreBoundary: 50000, totalMultiplier: 4.0 },
-      { scoreBoundary: 98000, totalMultiplier: 4.25 },
-      { scoreBoundary: 140000, totalMultiplier: 4.5 },
-      { scoreBoundary: 290000, totalMultiplier: 4.75 },
-      { scoreBoundary: 500000, totalMultiplier: 5.0 },
-      { scoreBoundary: 9.8e5, totalMultiplier: 5.25 },
-      { scoreBoundary: 1.4e6, totalMultiplier: 5.5 },
-      { scoreBoundary: 2.9e6, totalMultiplier: 5.75 },
-      { scoreBoundary: 5.0e6, totalMultiplier: 6.0 },
-      { scoreBoundary: 8.5e6, totalMultiplier: 6.25 },
-      { scoreBoundary: 1.35e7, totalMultiplier: 6.5 },
-      { scoreBoundary: 1.85e7, totalMultiplier: 6.75 },
-      { scoreBoundary: 2.35e7, totalMultiplier: 7.0 },
-      { scoreBoundary: 2.85e7, totalMultiplier: 7.25 },
-    ],
+    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Exploration',
     multiplierType: SetMultiplierType.Research,
-    blueprints: ['Paper', 'Paper Sheets', 'Map', 'Book', 'Rowboat', 'Spyglass', 'Compass'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Modern Exploration',
     multiplierType: SetMultiplierType.Research,
-    blueprints: [
-      'Entrenching Tool',
-      'Tent',
-      'Backpack',
-      'Diving Gear',
-      'Antenna',
-      'Electric Motor',
-      'Submarine',
-      'Space Probe',
-      'Rocket',
-    ],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Modern Technology',
     multiplierType: SetMultiplierType.Research,
-    blueprints: [
-      'Kettle Grill',
-      'Stethoscope',
-      'Light Bulb',
-      'Lamp',
-      'Refrigerator',
-      'Stove',
-      'X-ray Machine',
-      'Flashlight',
-      'Defibrillator',
-    ],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Cut Gems',
-    multiplierType: SetMultiplierType.FreeGems,
-    blueprints: ['Cut Emerald', 'Cut Ruby', 'Cut Sapphire', 'Cut Onyx'],
+    multiplierType: SetMultiplierType.FreeGems, // not actually a multiplier
     achievementRanks: [
       { scoreBoundary: 75, totalMultiplier: 1 },
       { scoreBoundary: 300, totalMultiplier: 2 },
@@ -421,104 +367,57 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Emerald',
     multiplierType: SetMultiplierType.OfflineProduction,
-    blueprints: ['Uncut Emerald', 'Cut Emerald', 'Emerald Ring'],
-    achievementRanks: GEM_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Ruby',
     multiplierType: SetMultiplierType.OfflineProduction,
-    blueprints: ['Uncut Ruby', 'Cut Ruby', 'Ruby Ring'],
-    achievementRanks: GEM_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Sapphire',
     multiplierType: SetMultiplierType.OfflineProduction,
-    blueprints: ['Uncut Sapphire', 'Cut Sapphire', 'Sapphire Ring'],
-    achievementRanks: GEM_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Onyx',
     multiplierType: SetMultiplierType.OfflineProduction,
-    blueprints: ['Uncut Onyx', 'Cut Onyx', 'Onyx Ring'],
-    achievementRanks: GEM_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Hammer',
     multiplierType: SetMultiplierType.ClickOutput,
-    blueprints: ['Lump Hammer', 'War Hammer', 'Magnificent Hammer'],
-    achievementRanks: GEM_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Knife',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    blueprints: ['Sickle', 'Magnificent Dagger'],
-    achievementRanks: [
-      // need 26-30
-      { scoreBoundary: 48, totalMultiplier: 1.25 },
-      { scoreBoundary: 90, totalMultiplier: 1.5 },
-      { scoreBoundary: 218, totalMultiplier: 1.75 },
-      { scoreBoundary: 375, totalMultiplier: 2.0 },
-      { scoreBoundary: 735, totalMultiplier: 2.25 },
-      { scoreBoundary: 1050, totalMultiplier: 2.5 },
-      { scoreBoundary: 2175, totalMultiplier: 2.75 },
-      { scoreBoundary: 3750, totalMultiplier: 3.0 },
-      { scoreBoundary: 7350, totalMultiplier: 3.25 },
-      { scoreBoundary: 10500, totalMultiplier: 3.5 },
-      { scoreBoundary: 21750, totalMultiplier: 3.75 },
-      { scoreBoundary: 37500, totalMultiplier: 4.0 },
-      { scoreBoundary: 73500, totalMultiplier: 4.25 },
-      { scoreBoundary: 105000, totalMultiplier: 4.5 },
-      { scoreBoundary: 217500, totalMultiplier: 4.75 },
-      { scoreBoundary: 375000, totalMultiplier: 5.0 },
-      { scoreBoundary: 7.35e5, totalMultiplier: 5.25 },
-      { scoreBoundary: 1.1e6, totalMultiplier: 5.5 },
-      { scoreBoundary: 2.2e6, totalMultiplier: 5.75 },
-      { scoreBoundary: 3.8e6, totalMultiplier: 6.0 },
-      { scoreBoundary: 6.4e6, totalMultiplier: 6.25 },
-      { scoreBoundary: 1.01e7, totalMultiplier: 6.5 },
-      { scoreBoundary: 1.39e7, totalMultiplier: 6.75 },
-      { scoreBoundary: 1.76e7, totalMultiplier: 7.0 },
-      { scoreBoundary: 2.14e7, totalMultiplier: 7.25 },
-    ],
+    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Modern Weapons',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    blueprints: [
-      'Magnificent Bow',
-      'Mortar',
-      'Caplock Pistol',
-      'Derringer',
-      'Rocket Launcher',
-      'Lever Action Rifle',
-      'Cannon',
-      'Revolver',
-      'Bolt Action Rifle',
-    ],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Music Instruments',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    blueprints: ['Flute', 'Bongos', 'Harp', 'Tambourine', 'Trumpet', 'Viola', 'Harpsichord', 'Snare Drum', 'Saxophone'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Vehicles',
     multiplierType: SetMultiplierType.Income,
-    blueprints: ['Bicycle', 'Glider', 'Combustion Engine', 'Motorcycle', 'Car', 'Truck', 'Airplane'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Entertainment',
     multiplierType: SetMultiplierType.Income,
-    blueprints: ['Antenna', 'Radio', 'Movie Projector', 'Monitor', 'Walkie Talkie', 'TV Set', 'Microchip', 'PC'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Botanic',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    blueprints: ['Hedge Trimmer', 'Tiki Torch', 'Lawn Mower', 'Unfinished'],
     achievementRanks: LATE_GAME_SET_ACHIEVEMENTS,
+    isUnfinished: true,
   },
 ];

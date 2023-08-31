@@ -1,7 +1,9 @@
 import memoize from 'fast-memoize';
+import { MainWorkshopProducts } from '../../../products/MainWorkshop';
+import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
 import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
-import { Blueprint } from '../types/Blueprint';
+import { Blueprint, ProductName } from '../types/Blueprint';
 
 export const getSpecifiedMultiplierFromLibrary = memoize(
   (multiplierType: SetMultiplierType, blueprints: Blueprint[] = BLUEPRINT_LIBRARY) => {
@@ -48,9 +50,26 @@ export const getSpecifiedMultiplierFromSets = memoize(
 );
 
 export function getMultiplierForSet(set: BlueprintSet, blueprintScores: Map<string, number>): number {
-  const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+  const blueprints = getBlueprintsInSet(set.setName);
+  const setScore = getSetBlueprintScore(blueprints, blueprintScores);
   return getSetAchievementMultiplier(set, setScore);
 }
+
+const setNameMapping = new Map<string, string>([
+  ['Precious', 'Luxury'],
+  ['Mining Tools', 'Mining'],
+  ['Science Tools', 'Research'],
+  ['Cut Gems', 'Gems'],
+  ['Music Instruments', 'Music'],
+]);
+export const getBlueprintsInSet = memoize(
+  (setName: string, products: readonly ImportedProduct[] = MainWorkshopProducts): ProductName[] => {
+    const mappedSetName = setNameMapping.get(setName) ?? setName;
+    return products
+      .filter((product: ImportedProduct) => product.Tags?.includes(mappedSetName.replace(/\s/g, '')))
+      .map((product: ImportedProduct) => product.ProductType as ProductName);
+  },
+);
 
 export function getSetBlueprintScore(blueprints: string[], blueprintScores: Map<string, number>): number {
   let summedScores = 0;
@@ -101,6 +120,7 @@ export function getSetAchievementMultiplier(set: BlueprintSet, score: number): n
 export function getSetClosestToBoundary(
   blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
   blueprintScores: Map<string, number>,
+  products: readonly ImportedProduct[] = MainWorkshopProducts,
 ): string {
   let closestDistance = Number.MAX_VALUE;
   let closestSetName = 'no close set';
@@ -110,7 +130,8 @@ export function getSetClosestToBoundary(
         set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
     )
     .forEach((set: BlueprintSet) => {
-      const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
+      const blueprints = getBlueprintsInSet(set.setName, products);
+      const setScore = getSetBlueprintScore(blueprints, blueprintScores);
       const distanceInfo = getDistanceToNextRank(set, setScore);
       if (distanceInfo.distance < closestDistance) {
         closestDistance = distanceInfo.distance;
