@@ -52,6 +52,14 @@ describe('optimizeUpgradingBlueprints', () => {
     it('click', () => {
       printUpgradeInfo(upgradeMostImpactfulSetOfType(SetMultiplierType.ClickOutput));
     });
+
+    it('blueprint space', () => {
+      printUpgradeInfo(upgradeMostImpactfulSetOfType(SetMultiplierType.BlueprintCap));
+    });
+
+    it('LPP', () => {
+      printUpgradeInfo(upgradeMostImpactfulSetOfType(SetMultiplierType.LPP));
+    });
   });
 
   describe('upgradeAllBlueprintsToLoreLimit', () => {

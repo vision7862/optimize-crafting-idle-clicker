@@ -55,10 +55,18 @@ export function getMultiplierForSet(set: BlueprintSet, blueprintScores: Map<stri
   return getSetAchievementMultiplier(set, setScore);
 }
 
+const setNameMapping = new Map<string, string>([
+  ['Precious', 'Luxury'],
+  ['Mining Tools', 'Mining'],
+  ['Science Tools', 'Research'],
+  ['Cut Gems', 'Gems'],
+  ['Music Instruments', 'Music'],
+]);
 export const getBlueprintsInSet = memoize(
   (setName: string, products: readonly ImportedProduct[] = MainWorkshopProducts): ProductName[] => {
+    const mappedSetName = setNameMapping.get(setName) ?? setName;
     return products
-      .filter((product: ImportedProduct) => product.Tags?.includes(setName))
+      .filter((product: ImportedProduct) => product.Tags?.includes(mappedSetName.replace(/\s/g, '')))
       .map((product: ImportedProduct) => product.ProductType as ProductName);
   },
 );

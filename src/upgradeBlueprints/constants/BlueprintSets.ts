@@ -6,6 +6,8 @@ export enum SetMultiplierType {
   OfflineProduction,
   ClickOutput,
   MerchantRevenue,
+  LPP,
+  BlueprintCap,
 }
 
 export type BlueprintSet = Readonly<{
@@ -131,15 +133,15 @@ const MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
   { scoreBoundary: 140000, totalMultiplier: 3.8 },
   { scoreBoundary: 290000, totalMultiplier: 4.0 },
   { scoreBoundary: 500000, totalMultiplier: 4.2 },
-  { scoreBoundary: 9.8e5, totalMultiplier: 4.4 },
+  { scoreBoundary: 980000, totalMultiplier: 4.4 },
   { scoreBoundary: 1.4e6, totalMultiplier: 4.6 },
   { scoreBoundary: 2.9e6, totalMultiplier: 4.8 },
   { scoreBoundary: 5.0e6, totalMultiplier: 5.0 },
   { scoreBoundary: 8.5e6, totalMultiplier: 5.2 },
-  { scoreBoundary: 1.35e7, totalMultiplier: 5.4 },
-  { scoreBoundary: 1.85e7, totalMultiplier: 5.6 },
-  { scoreBoundary: 2.35e7, totalMultiplier: 5.8 },
-  { scoreBoundary: 2.85e7, totalMultiplier: 6.0 },
+  { scoreBoundary: 13.5e6, totalMultiplier: 5.4 },
+  { scoreBoundary: 18.5e6, totalMultiplier: 5.6 },
+  { scoreBoundary: 23.5e6, totalMultiplier: 5.8 },
+  { scoreBoundary: 28.5e6, totalMultiplier: 6.0 },
 ];
 
 export const BLUEPRINT_SETS: BlueprintSet[] = [
@@ -251,13 +253,66 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
       { scoreBoundary: 7.12e7, totalMultiplier: 6.0 },
     ],
   },
-  // modern resources
-  // refined modern resources
-  // synthetic materials
-  // military gear
-  // gaming
-  // digital revolution
-  // robotics
+  {
+    setName: 'Modern Resources',
+    multiplierType: SetMultiplierType.OfflineProduction,
+    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
+  },
+  {
+    setName: 'Refined Modern Resources',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Synthetic Materials',
+    multiplierType: SetMultiplierType.MerchantRevenue,
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25),
+  },
+  {
+    setName: 'Military Gear',
+    multiplierType: SetMultiplierType.BlueprintCap, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 10,
+      };
+    }),
+  },
+  {
+    setName: 'Gaming',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Digital Revolution',
+    multiplierType: SetMultiplierType.LPP, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 2,
+      };
+    }),
+  },
+  {
+    setName: 'Robotics',
+    multiplierType: SetMultiplierType.BlueprintCap, // not actually a multiplier
+    achievementRanks: LATE_GAME_SET_ACHIEVEMENTS.slice(0, 25).map((val, index) => {
+      return {
+        scoreBoundary: val.scoreBoundary,
+        totalMultiplier: (index + 1) * 10,
+      };
+    }),
+  },
   {
     setName: 'Renaissance',
     multiplierType: SetMultiplierType.Income,
