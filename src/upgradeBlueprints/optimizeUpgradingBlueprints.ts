@@ -98,6 +98,8 @@ export function printUpgradeInfoOfEachSet(
         cost: upgradeInfo.cost,
         type: SetMultiplierType[set.multiplierType],
       });
+    } else {
+      console.log(`${set.setName} cannot be upgraded.`);
     }
   });
   return setUpgradeInfos.sort((a, b) => b.roi - a.roi);

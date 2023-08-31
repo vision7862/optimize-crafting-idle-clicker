@@ -88,7 +88,6 @@ describe('optimizeUpgradingBlueprints', () => {
   });
 
   test('merge main blueprints to next stage', () => {
-    // const bps: ProductName[] = ['Electrical Parts', ]
     const bps: ProductName[] = [];
     STRATEGIES.forEach((strat) => bps.push(...strat.mainBps));
     const merged: BlueprintUpgradeInfo[] = [];
@@ -100,46 +99,27 @@ describe('optimizeUpgradingBlueprints', () => {
         merged.push(mergedBp);
       }
     });
-    merged
-      .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
-      .forEach((mergedBp) => {
-        console.log(mergedBp);
-        const strategy = getBpStrategy(mergedBp.blueprint.productName);
-        console.log(
-          `bring ${mergedBp.blueprint.productName} to level ${getTopLevel(
-            strategy,
-            mergedBp.blueprint.evolutionStage,
-          )}`,
-        );
-        console.log(getBpStrategy(mergedBp.blueprint.productName));
-      });
+    printMergedBps(merged);
   });
 
   // merging bps of a stage above 1 does not currently calculate like this wants
-  test('making space: merge specified blueprints from stage 1', () => {
+  test('making space: merge specified stage 1 blueprints', () => {
     const bps: ProductName[] = [
       // 'Sickle',
       // 'Lump Hammer',
-      'Magnificent Hilt',
-      'Magnificent Armor',
-      'Mechanical Parts',
-      // 'Magnificent Crossbow',
-      // 'Sulfur',
+      'Magnificent Bow',
       // 'Compass',
-      'Saltpeter',
       'Ilmenite',
       'Gunpowder',
       // 'Machine Parts',
       // 'Musket',
       // 'Motor Unit',
       'Light Bulb',
-      'Steam Engine',
       // 'Telephone',
       // 'Steam Boat',
       // 'Locomotive',
       'Combustion Engine',
       'Antenna',
-      'Movie Projector',
       'Electric Motor',
       'Walkie Talkie',
       'TV Set',
@@ -153,20 +133,30 @@ describe('optimizeUpgradingBlueprints', () => {
       }
       return mergedBp;
     });
-    merged
-      .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
-      .forEach((mergedBp) => {
-        if (mergedBp !== null) {
-          const strategy = getBpStrategy(mergedBp.blueprint.productName);
-          console.log(
-            `bring ${mergedBp.blueprint.productName} to level ${getTopLevel(
-              strategy,
-              mergedBp.blueprint.evolutionStage - 1,
-            )}`,
-          );
-          console.log(mergedBp);
-          console.log(getBpStrategy(mergedBp.blueprint.productName));
-        }
-      });
+    printMergedBps(merged);
   });
 });
+
+function printMergedBps(
+  merged: Array<Readonly<{
+    blueprint: Blueprint;
+    costOfUpgrade: number;
+    scoreChange: number;
+  }> | null>,
+): void {
+  merged
+    .sort((a, b) => (a?.costOfUpgrade ?? 0) - (b?.costOfUpgrade ?? 0))
+    .forEach((mergedBp) => {
+      if (mergedBp !== null) {
+        const strategy = getBpStrategy(mergedBp.blueprint.productName);
+        console.log(
+          `bring ${mergedBp.blueprint.productName} to level ${getTopLevel(
+            strategy,
+            mergedBp.blueprint.evolutionStage - 1,
+          )}`,
+        );
+        console.log(mergedBp);
+        console.log(getBpStrategy(mergedBp.blueprint.productName));
+      }
+    });
+}
