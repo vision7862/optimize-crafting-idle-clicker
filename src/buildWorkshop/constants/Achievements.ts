@@ -1,6 +1,6 @@
 // TODO: GH-3: include rank information for achievements that do not come from blueprint sets (login, top income reached, etc)
 
-export const MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER = 9;
+export const MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER = 10;
 
 export const MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER = 4.5;
 
