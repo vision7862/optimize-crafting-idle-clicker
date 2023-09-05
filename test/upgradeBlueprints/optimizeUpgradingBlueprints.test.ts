@@ -20,8 +20,14 @@ import { Blueprint, ProductName } from '../../src/upgradeBlueprints/types/Bluepr
 describe('optimizeUpgradingBlueprints', () => {
   function printUpgradeInfo(setUpgradeInfo: SetUpgradeInfo | null): void {
     setUpgradeInfo?.upgradedBlueprints.forEach((bp) => {
+      const originalBpStage = BLUEPRINT_LIBRARY.filter((libraryBp) => libraryBp.productName === bp.productName)[0]
+        .evolutionStage;
+      if (bp.evolutionStage !== originalBpStage) {
+        console.log(`***${bp.productName} is merged from stage ${originalBpStage} to ${bp.evolutionStage}***`);
+      }
       console.log(bp);
       console.log(getBpStrategy(bp.productName));
+      console.log();
     });
     console.log(setUpgradeInfo?.cost);
   }
@@ -105,26 +111,15 @@ describe('optimizeUpgradingBlueprints', () => {
   // merging bps of a stage above 1 does not currently calculate like this wants
   test('making space: merge specified stage 1 blueprints', () => {
     const bps: ProductName[] = [
-      // 'Sickle',
-      // 'Lump Hammer',
-      'Magnificent Bow',
-      // 'Compass',
       'Ilmenite',
       'Gunpowder',
-      // 'Machine Parts',
-      // 'Musket',
-      // 'Motor Unit',
-      'Light Bulb',
-      // 'Telephone',
-      // 'Steam Boat',
-      // 'Locomotive',
-      'Combustion Engine',
-      'Antenna',
-      'Electric Motor',
-      'Walkie Talkie',
-      'TV Set',
-      'Rocket',
-      'Microchip',
+      'Shovel',
+      'Magnificent Bow',
+      'Magnificent Hammer',
+      'Magnificent Dagger',
+      'Magnificent Crossbow',
+      'Canvas',
+      'Tiki Torch',
     ];
     const merged: Array<BlueprintUpgradeInfo | null> = bps.map((productName) => {
       const mergedBp = mergeBlueprint({ ...BASE_BP, productName });

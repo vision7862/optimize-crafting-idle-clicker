@@ -132,18 +132,90 @@ describe('targetHelpers', () => {
         console.log(`building whatsit in ${toTime(seconds)}`);
         expect(seconds).toBeGreaterThan(200);
       });
+
+      it('air craft idle 6 fame - community', () => {
+        const workshop: Workshop = {
+          productsInfo: getProductsInfoFromProductAndLevel(
+            [
+              { name: 'Wood', level: 110, merchants: 1 },
+              { name: 'Coal', level: 116, merchants: 3 },
+              { name: 'Iron Ore', level: 24, merchants: 1 },
+              { name: 'Iron Ingots', level: 12, merchants: 2 },
+              { name: 'Iron Rivets', level: 20, merchants: 5 },
+              { name: 'Mechanical Parts', level: 12, merchants: 3 },
+              { name: 'Rubber', level: 20, merchants: 2 },
+              { name: 'Tire', level: 20, merchants: 2 },
+              { name: 'Airplane Wheel', level: 20, merchants: 2 },
+              { name: 'Steel', level: 20, merchants: 2 },
+              { name: 'Fuselage', level: 5, merchants: 1 },
+              { name: 'Airplane Wing', level: 10, merchants: 1 },
+              { name: 'Airplane Parts', level: 5, merchants: 1 },
+              { name: 'Airplane Body', level: 5, merchants: 1 },
+              { name: 'Propeller', level: 3, merchants: 1 },
+            ],
+            'Air Craft',
+          ),
+          workshopStatus: {
+            level: 10,
+            scientists: 308,
+            speedBoostActive: true,
+            clickBoostActive: false,
+            researchBoostActive: true,
+            merchantBoostActive: true,
+            eventName: 'Air Craft',
+          },
+        };
+        const seconds = computeBuildTimeForWorkshop(workshop, 1e15);
+        console.log(`${expect.getState().currentTestName as string} in ${toTime(seconds)}`);
+      });
+
+      it('air craft idle 6 fame - mine', () => {
+        const workshop: Workshop = {
+          productsInfo: getProductsInfoFromProductAndLevel(
+            [
+              { name: 'Wood', level: 82, merchants: 9 },
+              { name: 'Coal', level: 62, merchants: 7 },
+              { name: 'Iron Ore', level: 20, merchants: 2 },
+              { name: 'Iron Ingots', level: 10, merchants: 5 },
+              { name: 'Iron Rivets', level: 32, merchants: 16 },
+              { name: 'Mechanical Parts', level: 20, merchants: 4 },
+              { name: 'Rubber', level: 8, merchants: 1 },
+              { name: 'Tire', level: 8, merchants: 1 },
+              { name: 'Airplane Wheel', level: 8, merchants: 1 },
+              { name: 'Steel', level: 8, merchants: 1 },
+              { name: 'Fuselage', level: 2, merchants: 1 },
+              { name: 'Airplane Wing', level: 4, merchants: 1 },
+              { name: 'Airplane Parts', level: 2, merchants: 1 },
+              { name: 'Airplane Body', level: 2, merchants: 1 },
+              { name: 'Propeller', level: 5, merchants: 1 },
+            ],
+            'Air Craft',
+          ),
+          workshopStatus: {
+            level: 10,
+            scientists: 308,
+            speedBoostActive: true,
+            clickBoostActive: false,
+            researchBoostActive: true,
+            merchantBoostActive: true,
+            eventName: 'Air Craft',
+          },
+        };
+        const seconds = computeBuildTimeForWorkshop(workshop, 1e15);
+        console.log(`${expect.getState().currentTestName as string} in ${toTime(seconds)}`);
+      });
     });
 
     function getProductsInfoFromProductAndLevel(
-      products: Array<{ name: string; level: number }>,
+      products: Array<{ name: string; level: number; merchants?: number }>,
       eventName?: string,
     ): Product[] {
       const productsInfo = new Array<Product>();
       const allWorkshopProducts: Map<string, ProductDetails> = importWorkshop(true, eventName);
-      products.forEach((product: { name: string; level: number }) => {
+      products.forEach((product: { name: string; level: number; merchants?: number }) => {
         const status: ProductStatus = {
           level: product.level,
-          merchants: 1,
+          merchants: product.merchants ?? 100,
         };
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const details: ProductDetails = allWorkshopProducts.get(product.name)!;

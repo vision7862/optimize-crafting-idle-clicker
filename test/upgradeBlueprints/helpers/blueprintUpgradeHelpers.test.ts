@@ -269,7 +269,7 @@ describe('blueprintUpgradeHelpers', () => {
 
     it('should upgrade the specified set', () => {
       const upgradeSetInfo = upgradeSetToNextRank(
-        BLUEPRINT_SETS.filter((set) => set.setName === 'Copper')[0],
+        BLUEPRINT_SETS.filter((set) => set.setName === 'Vehicles')[0],
         BLUEPRINT_LIBRARY,
       );
       console.log(`cost is ${upgradeSetInfo?.cost ?? 0}`);
