@@ -1,10 +1,11 @@
 import memoize from 'fast-memoize';
 import { PROMOTION_BONUS_SPEED } from '../config/BoostMultipliers';
-import { getCurrentIncome } from '../shouldUpgrade';
+import { zeroAllLevels } from '../productLooper';
+import { getCurrentIncome, getProductsInfoWithNewStatusForProduct } from '../shouldUpgrade';
 import { Product, ProductStatus } from '../types/Product';
-import { Workshop } from '../types/Workshop';
+import { Workshop, WorkshopStatus } from '../types/Workshop';
 import { computeResearchTimeForWorkshop } from './ResearchHelpers';
-import { toTime } from './printResults';
+import { isEvent } from './WorkshopHelpers';
 
 export function computeTargetFromFame(fame: number, level: number, isEvent: boolean): number {
   return 10 ** (fame + (isEvent ? Math.min(level, 10) : level) - 1);
@@ -27,48 +28,154 @@ export function filterOutSkippedFullWorkshop(workshop: Workshop): Workshop {
   };
 }
 
-export function computeBuildTimeForWorkshop(workshop: Workshop, target: number, abandonIfOver: number = 10000): number {
-  // assume there are no half-cycles. it takes a full cycle to build something, and everything ticks together.
-  let money = 10;
-  // build wood
-  money -= 10;
-  let cycleNum = 1;
+export function computeBuildTimeForWorkshop(
+  workshop: Workshop,
+  target: number,
+  abandonIfOver: number = 10000,
+  shouldPrintDebugInfo: boolean = false,
+): number {
+  let inProgressProducts: Product[] = zeroAllLevels(workshop.productsInfo);
+  const secondsPerCycle = getSecondsPerCycle(workshop.workshopStatus);
+  let money = 0;
+  let cycleNum: number;
+  for (cycleNum = 1; cycleNum < abandonIfOver; cycleNum++) {
+    const cheapestProduct: CycleUpgradeResult = getCheapestProductToUpgrade(
+      cycleNum,
+      secondsPerCycle,
+      workshop,
+      inProgressProducts,
+    );
 
+    if (cheapestProduct.productToUpgrade === undefined) {
+      if (cheapestProduct.status === CycleStatus.AllProductsBuilt) {
+        const additionalCyclesWaiting = Math.ceil((target - money) / getCurrentIncome(workshop, 1));
+        if (shouldPrintDebugInfo) {
+          if (additionalCyclesWaiting > 0) {
+            console.info(`waiting after building for ${additionalCyclesWaiting} cycle(s) to get to target`);
+          } else {
+            console.info(`no waiting after building to get to target`);
+          }
+        }
+        cycleNum += additionalCyclesWaiting;
+        return cycleNum * secondsPerCycle;
+      } else if (cheapestProduct.status === CycleStatus.WaitingForResearch) {
+        if (shouldPrintDebugInfo) console.info(`waiting for research`);
+        continue;
+      }
+    } else {
+      // get current income, check money, have a tick of income
+      const currentIncome = getCurrentIncome({ ...workshop, productsInfo: inProgressProducts }, 1);
+      money += currentIncome;
+      // if there is enough money:
+      const productToUpgrade = inProgressProducts[cheapestProduct.productToUpgrade.productIndex];
+      let currentLevel = productToUpgrade.status.level;
+      let costToUpgrade = cheapestProduct.productToUpgrade.costToUpgrade;
+      if (money < costToUpgrade) {
+        const cyclesToRaiseMoney = Math.ceil((costToUpgrade - money) / currentIncome);
+        // skip forward (nextCost - money)/income cycles to when we can build it
+        if (shouldPrintDebugInfo) {
+          console.info(
+            `waiting ${cyclesToRaiseMoney} cycle(s) to raise money to buy next (${productToUpgrade.details.name})`,
+          );
+        }
+        cycleNum += cyclesToRaiseMoney;
+        money += cyclesToRaiseMoney * currentIncome;
+      }
+
+      //    build as much as possible of cheapest product, income has not changed yet
+      const details = productToUpgrade.details;
+      const targetLevel = workshop.productsInfo[cheapestProduct.productToUpgrade.productIndex].status.level;
+      if (currentLevel === 0 && details.input1 !== null) {
+        cycleNum++; // conservatively add one cycle for inputs to produce enough materials
+      }
+      while (currentLevel < targetLevel && money >= costToUpgrade) {
+        money -= costToUpgrade;
+        currentLevel++;
+        costToUpgrade = Math.round(details.buildCost * details.upgradeCostMultiplier ** currentLevel);
+      }
+      if (shouldPrintDebugInfo) {
+        if (money < costToUpgrade) {
+          console.info(`${details.name} leveled to ${currentLevel}, insufficient money`);
+        } else {
+          console.info(`${details.name} leveled to ${currentLevel}, done leveling`);
+        }
+      }
+
+      inProgressProducts = getProductsInfoWithNewStatusForProduct(
+        productToUpgrade,
+        { ...productToUpgrade.status, level: currentLevel },
+        {
+          ...workshop,
+          productsInfo: inProgressProducts,
+        },
+      );
+
+      // levels have been bought, products have been built. income has changed, toBeBuilt has changed. recalculate from making TBB
+      // if all products have been built to the required level, break
+      if (shouldPrintDebugInfo) console.info(`tick ${cycleNum}`);
+    }
+  }
+  if (cycleNum >= abandonIfOver) {
+    return Number.MAX_VALUE;
+  }
+  throw new Error('simulating workshop build did not finish as expected');
+}
+
+enum CycleStatus {
+  BuildingProducts,
+  WaitingForResearch,
+  AllProductsBuilt,
+}
+
+type CycleUpgradeResult = Readonly<{
+  status: CycleStatus;
+  productToUpgrade?: Readonly<{
+    productIndex: number;
+    costToUpgrade: number;
+  }>;
+}>;
+
+function getCheapestProductToUpgrade(
+  cycleNum: number,
+  secondsPerCycle: number,
+  workshop: Workshop,
+  inProgressProducts: Product[],
+): CycleUpgradeResult {
+  const secondsSoFar = cycleNum * secondsPerCycle;
+  const toBeBuilt: Array<{ productIndex: number; costToUpgrade: number }> = [];
+  let allProductsResearched = true;
   for (let i = 0; i < workshop.productsInfo.length; i++) {
     const targetLevel = workshop.productsInfo[i].status.level;
     if (targetLevel === 0) {
       continue;
     }
-    let inProgressLevel = i === 0 ? 1 : 0; // start wood at level 1
-    let inProgressWorkshop = {
+    const secondsNeededToResearch = computeResearchTimeForWorkshop({
       ...workshop,
-      productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, inProgressLevel),
-    };
-
-    cycleNum = waitForProductToBeResearched(cycleNum, workshop, i);
-
-    // until fully leveled, cycles ticking as necessary
-    const productDetails = inProgressWorkshop.productsInfo[i].details;
-    while (inProgressLevel < targetLevel && cycleNum < Math.min(abandonIfOver, 10000)) {
-      let costToUpgrade = Math.round(
-        productDetails.buildCost * productDetails.upgradeCostMultiplier ** inProgressLevel,
-      );
-      inProgressWorkshop = {
-        ...workshop,
-        productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, inProgressLevel),
-      };
-      money += getCurrentIncome(inProgressWorkshop, 1);
-      // one cycle: start with money, get as far as you can up to where we want to be
-      while (money >= costToUpgrade && inProgressLevel < targetLevel) {
-        money -= costToUpgrade;
-        inProgressLevel++;
-        costToUpgrade = Math.round(productDetails.buildCost * productDetails.upgradeCostMultiplier ** inProgressLevel);
+      productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
+    });
+    const currentLevel = inProgressProducts[i].status.level;
+    if (currentLevel < targetLevel) {
+      if (secondsNeededToResearch < secondsSoFar) {
+        // add object to toBeBuilt list, with price the price of the single next upgrade
+        const productDetails = inProgressProducts[i].details;
+        toBeBuilt.push({
+          productIndex: i,
+          costToUpgrade: Math.round(productDetails.buildCost * productDetails.upgradeCostMultiplier ** currentLevel),
+        });
+      } else {
+        allProductsResearched = false;
       }
-      cycleNum++;
     }
   }
-  cycleNum += Math.ceil((target - money) / getCurrentIncome(workshop, 1));
-  return cycleNum * getSecondsPerCycle(workshop.workshopStatus.speedBoostActive);
+  // sort list to get cheapest cost
+  toBeBuilt.sort((a, b) => a.costToUpgrade - b.costToUpgrade);
+  if (toBeBuilt.length > 0) {
+    return { status: CycleStatus.BuildingProducts, productToUpgrade: toBeBuilt[0] };
+  }
+  if (!allProductsResearched) {
+    return { status: CycleStatus.WaitingForResearch };
+  }
+  return { status: CycleStatus.AllProductsBuilt };
 }
 
 const getProductsCroppedAndWithProductLevelChanged = memoize(
@@ -86,25 +193,6 @@ const getProductsCroppedAndWithProductLevelChanged = memoize(
     return productsWithProductDownleveled;
   },
 );
-
-function waitForProductToBeResearched(cycleNum: number, workshop: Workshop, i: number): number {
-  const secondsPerCycle = getSecondsPerCycle(workshop.workshopStatus.speedBoostActive);
-  const secondsSoFar = cycleNum * secondsPerCycle;
-  const secondsNeededToResearch = computeResearchTimeForWorkshop({
-    ...workshop,
-    productsInfo: getProductsCroppedAndWithProductLevelChanged(workshop, i, 1),
-  });
-  if (secondsSoFar < secondsNeededToResearch) {
-    const cyclesWaitingOnResearch = Math.ceil((secondsNeededToResearch - secondsSoFar) / secondsPerCycle);
-    cycleNum += cyclesWaitingOnResearch;
-    console.log(
-      `waiting for ${workshop.productsInfo[i].details.name} to be researched, takes ${toTime(
-        secondsNeededToResearch - secondsSoFar,
-      )}`,
-    );
-  }
-  return cycleNum;
-}
 
 export function getSecondsPerCycle(workshopStatus: WorkshopStatus): number {
   const speedWithoutPromo = 10 / (workshopStatus.speedBoostActive ? 2 : 1);

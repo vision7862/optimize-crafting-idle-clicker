@@ -103,7 +103,7 @@ function upgradeInputsToProduct(parentProduct: ProductDetails, workshop: Worksho
   };
 }
 
-function getInputItemsNeeded(inputProductName: string, workshop: Workshop): number {
+export function getInputItemsNeeded(inputProductName: string, workshop: Workshop): number {
   let itemsNeeded = 0;
   for (const product of workshop.productsInfo) {
     if (product.details.input1 !== null && product.details.input1.name === inputProductName) {

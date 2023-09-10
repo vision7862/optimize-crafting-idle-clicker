@@ -94,7 +94,7 @@ function isProductLeaf(productName: string, workshop: Workshop): boolean {
   return true;
 }
 
-function zeroAllLevels(productsInfo: Readonly<Product[]>): Product[] {
+export function zeroAllLevels(productsInfo: Readonly<Product[]>): Product[] {
   const allLevelsZeroed = [...productsInfo].map((product) => {
     return {
       ...product,
