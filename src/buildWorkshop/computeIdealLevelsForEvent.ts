@@ -113,7 +113,7 @@ export function clickTopAndInputs(target: number, partialWorkshopStatus: Partial
   return buildWorkshopToTarget(target, { ...workshop, productsInfo: copiedProducts });
 }
 
-const CYCLES_PER_NORMAL_CYCLE = 4.5; // 6.5;
+const CYCLES_PER_NORMAL_CYCLE = 4.55; // 6.5;
 function multiplyProductCounts(product: Product, workshopStatus: WorkshopStatus): Product {
   return {
     ...product,
@@ -151,13 +151,13 @@ export function lorePerSecond(
   let bestFame = 1;
   let bestWorkshopUpgrade;
   let bestLikelyLore: number = 0;
-  for (let fame = 1; fame < 35; fame++) {
+  for (let fame = 25; fame < 50; fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
     const targetInfo = bottomUpToMoney(target, workshopStatus);
     const buildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
     console.log(`${fame} fame takes ${toTime(buildTime)}`);
-    if (buildTime > 60 * 20) {
+    if (buildTime > 60 * 5) {
       console.log(`${fame} fame takes too long`);
       break;
     }

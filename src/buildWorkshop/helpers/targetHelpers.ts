@@ -106,6 +106,7 @@ function waitForProductToBeResearched(cycleNum: number, workshop: Workshop, i: n
   return cycleNum;
 }
 
-export function getSecondsPerCycle(speedBoostActive: boolean): number {
-  return 10 / (speedBoostActive ? 2 : 1) / PROMOTION_BONUS_SPEED;
+export function getSecondsPerCycle(workshopStatus: WorkshopStatus): number {
+  const speedWithoutPromo = 10 / (workshopStatus.speedBoostActive ? 2 : 1);
+  return isEvent(workshopStatus) ? speedWithoutPromo : speedWithoutPromo / PROMOTION_BONUS_SPEED;
 }

@@ -45,7 +45,7 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
     )}%`,
   );
   console.log(`Merchant Capacity: ${getMerchantCapacity(workshopStatus)}`);
-  console.log(`Speed: ${(10 / getSecondsPerCycle(workshopStatus.speedBoostActive)) * 100}%`);
+  console.log(`Speed: ${(10 / getSecondsPerCycle(workshopStatus)) * 100}%`);
 }
 
 export const auditMultipliersGoal: GoalType = {
