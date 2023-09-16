@@ -1,8 +1,10 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
+import { EventPassName } from '../buildWorkshop/types/EventPass';
 import { WorkshopStatus } from '../buildWorkshop/types/Workshop';
 import { auditMultipliersGoal } from './goals/auditMultipliers';
+import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 import { doubleLoreGoal } from './goals/doubleLore';
 import { fastestFameGoal } from './goals/fastestFame';
 import { gemsGoal } from './goals/gems';
@@ -11,7 +13,6 @@ import { mostLoreGoal } from './goals/lore';
 import { merchantsGoal } from './goals/merchants';
 import { scientistsGoal } from './goals/scientists';
 import { fameGoal } from './goals/specificFame';
-import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 
 export type GoalType = Readonly<{
   name: string;
@@ -82,10 +83,19 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     }),
   );
   let eventName: string | undefined;
+  let eventPass: EventPassName | undefined;
   if (isEvent) {
     eventName = await select({
       message: 'which event do you want to optimize?',
       choices: getEventFileNames(),
+    });
+    eventPass = await select({
+      message: 'which event pass did you choose?',
+      choices: [
+        { value: EventPassName.free, name: 'free' },
+        { value: EventPassName.supporter, name: 'supporter' },
+        { value: EventPassName.minmaxer, name: 'minmaxer' },
+      ],
     });
   }
   const level = Number(await input({ message: 'what level is your workshop?' }));
@@ -104,6 +114,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     researchBoostActive,
     merchantBoostActive,
     eventName,
+    eventPass,
   };
 }
 

@@ -7,9 +7,9 @@ import {
   PROMOTION_BONUS_INCOME_AND_OFFLINE,
 } from '../config/BoostMultipliers';
 import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
-import { CURRENT_EVENT_PASS } from '../constants/EventPass';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
+import { getCurrentEventPassMultipliers } from './eventPassHelpers';
 
 export function getOreOutputMultiplier(isEvent: boolean): number {
   return isEvent ? 1 : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * DAILY_DYNASTY_FRIEND_BONUS_ORE;
@@ -24,9 +24,9 @@ export function getClickOutputMultiplier(workshopStatus: WorkshopStatus): number
   );
 }
 
-export function getOfflineMultiplier(isEvent: boolean): number {
-  return isEvent
-    ? 100 * CURRENT_EVENT_PASS.offlineMultiplier
+export function getOfflineMultiplier(workshopStatus: WorkshopStatus): number {
+  return isEvent(workshopStatus)
+    ? 100 * getCurrentEventPassMultipliers(workshopStatus.eventPass).offlineMultiplier
     : 40 *
         MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *

@@ -1,12 +1,6 @@
-type EventPass = Readonly<{
-  speedMultiplier: number;
-  merchantMultiplier: number;
-  offlineMultiplier: number;
-  maximumLevel: number;
-  eventTokensEachXLevel: number;
-}>;
+import { EventPass } from '../types/EventPass';
 
-const FREE_PASS: EventPass = {
+export const FREE_PASS: EventPass = {
   speedMultiplier: 1,
   merchantMultiplier: 1,
   offlineMultiplier: 1,
@@ -14,7 +8,7 @@ const FREE_PASS: EventPass = {
   eventTokensEachXLevel: 4,
 };
 
-const SUPPORTER_PASS: EventPass = {
+export const SUPPORTER_PASS: EventPass = {
   speedMultiplier: 1.3333,
   merchantMultiplier: 1.25,
   offlineMultiplier: 3,
@@ -22,12 +16,10 @@ const SUPPORTER_PASS: EventPass = {
   eventTokensEachXLevel: 3,
 };
 
-const MINMAXER_PASS: EventPass = {
+export const MINMAXER_PASS: EventPass = {
   speedMultiplier: 2,
   merchantMultiplier: 1.5,
   offlineMultiplier: 4,
   maximumLevel: 130,
   eventTokensEachXLevel: 2,
 };
-
-export const CURRENT_EVENT_PASS = SUPPORTER_PASS;

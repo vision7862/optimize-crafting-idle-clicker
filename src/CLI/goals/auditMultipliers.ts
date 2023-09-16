@@ -32,7 +32,7 @@ function printMultipliers(partialWorkshopStatus: Partial<WorkshopStatus>): void 
   console.log(`Click Output: ${Math.round(100 * getClickOutputMultiplier(workshopStatus))}%`);
   console.log(
     `Offline Production: ${Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(
-      getOfflineMultiplier(eventBool),
+      getOfflineMultiplier(workshopStatus),
     )}%`,
   );
   console.log(`Ore Output: ${Math.round(getOreOutputMultiplier(eventBool) * 100)}%`);
