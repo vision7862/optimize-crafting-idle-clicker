@@ -1,5 +1,6 @@
 import memoize from 'fast-memoize';
 import { PROMOTION_BONUS_SPEED } from '../config/BoostMultipliers';
+import { CURRENT_EVENT_PASS } from '../constants/EventPass';
 import { zeroAllLevels } from '../productLooper';
 import { getCurrentIncome, getProductsInfoWithNewStatusForProduct } from '../shouldUpgrade';
 import { Product, ProductStatus } from '../types/Product';
@@ -196,5 +197,7 @@ const getProductsCroppedAndWithProductLevelChanged = memoize(
 
 export function getSecondsPerCycle(workshopStatus: WorkshopStatus): number {
   const speedWithoutPromo = 10 / (workshopStatus.speedBoostActive ? 2 : 1);
-  return isEvent(workshopStatus) ? speedWithoutPromo : speedWithoutPromo / PROMOTION_BONUS_SPEED;
+  return isEvent(workshopStatus)
+    ? speedWithoutPromo / CURRENT_EVENT_PASS.speedMultiplier
+    : speedWithoutPromo / PROMOTION_BONUS_SPEED;
 }

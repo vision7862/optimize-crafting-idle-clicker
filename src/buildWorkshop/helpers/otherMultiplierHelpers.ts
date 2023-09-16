@@ -7,6 +7,7 @@ import {
   PROMOTION_BONUS_INCOME_AND_OFFLINE,
 } from '../config/BoostMultipliers';
 import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
+import { CURRENT_EVENT_PASS } from '../constants/EventPass';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
@@ -25,7 +26,7 @@ export function getClickOutputMultiplier(workshopStatus: WorkshopStatus): number
 
 export function getOfflineMultiplier(isEvent: boolean): number {
   return isEvent
-    ? 100
+    ? 100 * CURRENT_EVENT_PASS.offlineMultiplier
     : 40 *
         MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *

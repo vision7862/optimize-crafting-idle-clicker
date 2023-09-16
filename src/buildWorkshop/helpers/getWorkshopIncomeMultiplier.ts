@@ -14,6 +14,7 @@ import {
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
 } from '../constants/Achievements';
+import { CURRENT_EVENT_PASS } from '../constants/EventPass';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 
@@ -37,7 +38,7 @@ export const getMerchantMultiplier = memoize((workshopStatus: WorkshopStatus) =>
   return (
     (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
     (isEvent(workshopStatus)
-      ? 1
+      ? CURRENT_EVENT_PASS.merchantMultiplier
       : MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
         DAILY_DYNASTY_FRIEND_BONUS_MERCHANT *
