@@ -40,7 +40,14 @@ export function printInfo(targetInfo: WorkshopUpgradeInfo, target?: number): voi
 }
 
 export function toTime(seconds: number): string {
+  if (seconds > 60 * 60 * 24 * 365) {
+    return 'over a year - probably not correct';
+  }
   const date = new Date(+0);
-  date.setSeconds(seconds);
-  return date.toISOString().substr(11, 8);
+  let dateString = '';
+  if (seconds > 60 * 60 * 24) {
+    dateString = `${Math.floor(seconds / (60 * 60 * 24))} days, `;
+  }
+  date.setSeconds(seconds % (60 * 60 * 24));
+  return dateString + date.toISOString().substr(11, 8);
 }
