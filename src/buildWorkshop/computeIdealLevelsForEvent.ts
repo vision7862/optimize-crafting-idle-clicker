@@ -4,7 +4,7 @@ import { getClickOutputMultiplier } from './helpers/otherMultiplierHelpers';
 import { toTime } from './helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from './helpers/targetHelpers';
 import { importWorkshop } from './importWorkshop';
-import { WorkshopUpgradeInfo, buildWorkshopToTarget } from './productLooper';
+import { WorkshopUpgradeInfo, buildWorkshopToTarget, levelProductToTarget } from './productLooper';
 import { Product, ProductDetails } from './types/Product';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
@@ -30,7 +30,7 @@ export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>)
     const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
     const targetInfo = bottomUpToMoney(target, workshopStatus);
     const idleBuildTime = computeBuildTimeForWorkshop(targetInfo.workshop, target);
-    if (idleBuildTime > 20 * 45) {
+    if (idleBuildTime > 60 * 10) {
       console.log(`${fame} fame takes too long`);
       break;
     }
@@ -110,7 +110,13 @@ export function clickTopAndInputs(target: number, partialWorkshopStatus: Partial
     copiedProducts.splice(indexOfInput2, 1, newInput2);
   }
 
-  return buildWorkshopToTarget(target, { ...workshop, productsInfo: copiedProducts });
+  const modifiedWorkshop = levelProductToTarget(
+    target,
+    workshop.productsInfo[workshop.productsInfo.length - 1].details.name,
+    { ...workshop, productsInfo: copiedProducts },
+  );
+  const buildTime = computeBuildTimeForWorkshop(modifiedWorkshop, target);
+  return { workshop: modifiedWorkshop, buildTime };
 }
 
 const CYCLES_PER_NORMAL_CYCLE = 4.55; // 6.5;
@@ -151,7 +157,7 @@ export function lorePerSecond(
   let bestFame = 1;
   let bestWorkshopUpgrade;
   let bestLikelyLore: number = 0;
-  for (let fame = 25; fame < 50; fame++) {
+  for (let fame = 6; fame < 50; fame++) {
     console.log(`testing multiple resets at ${fame} fame each...`);
     const target = computeTargetFromFame(fame, workshopStatus.level, isEvent(workshopStatus));
     const targetInfo = bottomUpToMoney(target, workshopStatus);

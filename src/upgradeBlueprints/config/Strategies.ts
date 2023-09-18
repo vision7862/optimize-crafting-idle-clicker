@@ -3,11 +3,7 @@ import { SetMergingStrategy } from '../types/MergingStrategy';
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 export const BPS_WITHOUT_DUPES: ProductName[] = [
-  // // income wants
-  // // 'Sickle',
-  // 'Mortar',
-  // 'Rocket Launcher',
-  // 'Lever Action Rifle',
+  // income wants
   'Harpsichord',
   'Saxophone',
   'Bongos',
@@ -24,7 +20,7 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'Clockwork',
   'Steam Engine',
   'Camera',
-  'Clock',
+  // 'Clock',
   'Electrical Parts', // not event only. technically.
   'Combustion Engine',
   'Glider',
@@ -42,10 +38,29 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'Monitor',
   'PC',
 
-  // // gems
-  // 'Cut Emerald',
-  // 'Cut Ruby',
-  // 'Cut Sapphire',
+  // research
+  'Stethoscope',
+  'Lamp',
+  'Refrigerator',
+  'X-ray Machine',
+  'Flashlight',
+  'Kettle Grill',
+  'Sickle',
+  'Chisel',
+  'Stove',
+  'Defibrillator',
+  'Paper',
+  'Light Bulb',
+  'Diving Gear',
+
+  // gems
+  'Cut Emerald',
+  'Cut Ruby',
+  'Cut Sapphire',
+  'Cut Onyx',
+
+  'Lump Hammer',
+  'War Hammer',
 ];
 
 export const STRATEGIES: SetMergingStrategy[] = [

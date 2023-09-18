@@ -83,6 +83,40 @@ const MID_GAME_SET_ACHIEVEMENT_RANKS = [
   { scoreBoundary: 100.0e12, totalMultiplier: 2 },
 ];
 
+// same boundaries as above but different multiplier
+const KNIFE_SET_ACHIEVEMENT_RANKS = [
+  { scoreBoundary: 48, totalMultiplier: 1.25 },
+  { scoreBoundary: 90, totalMultiplier: 1.5 },
+  { scoreBoundary: 218, totalMultiplier: 1.75 },
+  { scoreBoundary: 375, totalMultiplier: 2.0 },
+  { scoreBoundary: 735, totalMultiplier: 2.25 },
+  { scoreBoundary: 1050, totalMultiplier: 2.5 },
+  { scoreBoundary: 2175, totalMultiplier: 2.75 },
+  { scoreBoundary: 3750, totalMultiplier: 3 },
+  { scoreBoundary: 7350, totalMultiplier: 3.25 },
+  { scoreBoundary: 10500, totalMultiplier: 3.5 },
+  { scoreBoundary: 21750, totalMultiplier: 3.75 },
+  { scoreBoundary: 37500, totalMultiplier: 4.0 },
+  { scoreBoundary: 73500, totalMultiplier: 4.25 },
+  { scoreBoundary: 105000, totalMultiplier: 4.5 },
+  { scoreBoundary: 217500, totalMultiplier: 4.75 },
+  { scoreBoundary: 375000, totalMultiplier: 5.0 },
+  { scoreBoundary: 7.35e5, totalMultiplier: 5.25 },
+  { scoreBoundary: 1.1e6, totalMultiplier: 5.5 },
+  { scoreBoundary: 2.2e6, totalMultiplier: 5.75 },
+  { scoreBoundary: 3.8e6, totalMultiplier: 6.0 },
+  { scoreBoundary: 6.4e6, totalMultiplier: 6.25 },
+  { scoreBoundary: 1.01e7, totalMultiplier: 6.5 },
+  { scoreBoundary: 1.39e7, totalMultiplier: 6.75 },
+  { scoreBoundary: 1.76e7, totalMultiplier: 7.0 },
+  { scoreBoundary: 2.14e7, totalMultiplier: 7.25 },
+  { scoreBoundary: 200e6, totalMultiplier: 8.0 },
+  { scoreBoundary: 4.0e9, totalMultiplier: 9.0 },
+  { scoreBoundary: 80e9, totalMultiplier: 10.0 },
+  { scoreBoundary: 2.0e12, totalMultiplier: 11.0 },
+  { scoreBoundary: 100.0e12, totalMultiplier: 12.0 },
+];
+
 const LATE_GAME_SET_ACHIEVEMENTS = [
   { scoreBoundary: 100, totalMultiplier: 1.5 },
   { scoreBoundary: 300, totalMultiplier: 2.0 },
@@ -116,7 +150,7 @@ const LATE_GAME_SET_ACHIEVEMENTS = [
   { scoreBoundary: 1.0e14, totalMultiplier: 19.0 },
 ];
 
-const MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
+const MINING_TOOLS_SET_ACHIEVEMENTS = [
   { scoreBoundary: 64, totalMultiplier: 1.2 },
   { scoreBoundary: 120, totalMultiplier: 1.4 },
   { scoreBoundary: 290, totalMultiplier: 1.6 },
@@ -142,6 +176,39 @@ const MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
   { scoreBoundary: 18.5e6, totalMultiplier: 5.6 },
   { scoreBoundary: 23.5e6, totalMultiplier: 5.8 },
   { scoreBoundary: 28.5e6, totalMultiplier: 6.0 },
+];
+
+const SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
+  { scoreBoundary: 64, totalMultiplier: 1.25 },
+  { scoreBoundary: 120, totalMultiplier: 1.5 },
+  { scoreBoundary: 290, totalMultiplier: 1.75 },
+  { scoreBoundary: 500, totalMultiplier: 2.0 },
+  { scoreBoundary: 980, totalMultiplier: 2.25 },
+  { scoreBoundary: 1400, totalMultiplier: 2.5 },
+  { scoreBoundary: 2900, totalMultiplier: 2.75 },
+  { scoreBoundary: 5000, totalMultiplier: 3.0 },
+  { scoreBoundary: 9800, totalMultiplier: 3.25 },
+  { scoreBoundary: 14000, totalMultiplier: 3.5 },
+  { scoreBoundary: 29000, totalMultiplier: 3.75 },
+  { scoreBoundary: 50000, totalMultiplier: 4.0 },
+  { scoreBoundary: 98000, totalMultiplier: 4.25 },
+  { scoreBoundary: 140000, totalMultiplier: 4.5 },
+  { scoreBoundary: 290000, totalMultiplier: 4.75 },
+  { scoreBoundary: 500000, totalMultiplier: 5.0 },
+  { scoreBoundary: 980000, totalMultiplier: 5.25 },
+  { scoreBoundary: 1.4e6, totalMultiplier: 5.5 },
+  { scoreBoundary: 2.9e6, totalMultiplier: 5.75 },
+  { scoreBoundary: 5.0e6, totalMultiplier: 6.0 },
+  { scoreBoundary: 8.5e6, totalMultiplier: 6.25 },
+  { scoreBoundary: 13.5e6, totalMultiplier: 6.5 },
+  { scoreBoundary: 18.5e6, totalMultiplier: 6.75 },
+  { scoreBoundary: 23.5e6, totalMultiplier: 7.0 },
+  { scoreBoundary: 28.5e6, totalMultiplier: 7.25 },
+  { scoreBoundary: 200e6, totalMultiplier: 8.0 },
+  { scoreBoundary: 4.0e9, totalMultiplier: 9.0 },
+  { scoreBoundary: 80e9, totalMultiplier: 10.0 },
+  { scoreBoundary: 2.0e12, totalMultiplier: 11.0 },
+  { scoreBoundary: 100.0e12, totalMultiplier: 12.0 },
 ];
 
 export const BLUEPRINT_SETS: BlueprintSet[] = [
@@ -256,7 +323,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Modern Resources',
     multiplierType: SetMultiplierType.OfflineProduction,
-    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
+    achievementRanks: MINING_TOOLS_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Refined Modern Resources',
@@ -326,12 +393,12 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Mining Tools',
     multiplierType: SetMultiplierType.Ore,
-    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
+    achievementRanks: MINING_TOOLS_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Science Tools',
     multiplierType: SetMultiplierType.Research,
-    achievementRanks: MINING_AND_SCIENCE_TOOLS_SET_ACHIEVEMENTS,
+    achievementRanks: SCIENCE_TOOLS_SET_ACHIEVEMENTS,
   },
   {
     setName: 'Exploration',
@@ -392,7 +459,7 @@ export const BLUEPRINT_SETS: BlueprintSet[] = [
   {
     setName: 'Knife',
     multiplierType: SetMultiplierType.MerchantRevenue,
-    achievementRanks: MID_GAME_SET_ACHIEVEMENT_RANKS,
+    achievementRanks: KNIFE_SET_ACHIEVEMENT_RANKS,
   },
   {
     setName: 'Modern Weapons',
