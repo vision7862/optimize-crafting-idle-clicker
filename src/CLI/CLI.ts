@@ -1,6 +1,7 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
+import { isEvent } from '../buildWorkshop/helpers/WorkshopHelpers';
 import { EventPassName } from '../buildWorkshop/types/EventPass';
 import { WorkshopStatus } from '../buildWorkshop/types/Workshop';
 import { auditMultipliersGoal } from './goals/auditMultipliers';
@@ -62,14 +63,32 @@ export async function runCLI(): Promise<void> {
     }
   }
 
-  console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
+  printWorkshopStatus(workshopStatus);
+}
+
+function printWorkshopStatus(workshopStatus: Partial<WorkshopStatus>): void {
+  let eventPass: string | undefined;
+  if (isEvent(workshopStatus) && workshopStatus.eventPass !== undefined) {
+    eventPass = EventPassName[workshopStatus.eventPass];
+  }
+  console.log('your workshop status is: ' + JSON.stringify({ ...workshopStatus, eventPass }));
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
   const configOptions = await input({
     message: 'if you have a workshop status object, enter it here. otherwise, just hit enter.',
   });
-  return configOptions !== '' ? JSON.parse(configOptions) : await getWorkshopStatusFromUser();
+
+  if (configOptions !== '') {
+    const parsed = JSON.parse(configOptions);
+    let eventPass: EventPassName | undefined;
+    if (parsed.eventPass !== undefined) {
+      eventPass = EventPassName[parsed.eventPass as keyof typeof EventPassName];
+    }
+    return { ...parsed, eventPass };
+  } else {
+    return await getWorkshopStatusFromUser();
+  }
 }
 
 async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
