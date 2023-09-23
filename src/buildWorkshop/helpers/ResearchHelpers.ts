@@ -62,8 +62,11 @@ function getMainWorkshopResearchMultiplier(workshopStatus: MainWorkshopStatus): 
     RESEARCH_ACHIEVEMENT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Research) *
     TOTAL_BLUEPRINT_SCORE_MULTIPLIER *
-    (workshopStatus.currentPromo === PromoEvent.Research
-      ? getGameStatus().premiumBonuses.research + 1
-      : getGameStatus().premiumBonuses.research)
+    Math.min(
+      20,
+      workshopStatus.currentPromo === PromoEvent.Research
+        ? getGameStatus().premiumBonuses.research + 1
+        : getGameStatus().premiumBonuses.research,
+    )
   );
 }

@@ -21,9 +21,12 @@ export function getClickOutputMultiplier(workshopStatus: WorkshopStatus): number
     (isEvent(workshopStatus)
       ? 1
       : getSpecifiedMultiplierFromLibrary(SetMultiplierType.ClickOutput) *
-        (workshopStatus.currentPromo === PromoEvent.Click
-          ? getGameStatus().premiumBonuses.click + 1
-          : getGameStatus().premiumBonuses.click))
+        Math.min(
+          20,
+          workshopStatus.currentPromo === PromoEvent.Click
+            ? getGameStatus().premiumBonuses.click + 1
+            : getGameStatus().premiumBonuses.click,
+        ))
   );
 }
 
@@ -41,18 +44,24 @@ export function getSpeedMultiplier(workshopStatus: WorkshopStatus): number {
     (workshopStatus.speedBoostActive ? 2 : 1) *
     (isEvent(workshopStatus)
       ? getCurrentEventPassMultipliers(workshopStatus.eventPass).speedMultiplier
-      : workshopStatus.currentPromo === PromoEvent.Speed
-      ? getGameStatus().premiumBonuses.speed + 1
-      : getGameStatus().premiumBonuses.speed)
+      : Math.min(
+          5,
+          workshopStatus.currentPromo === PromoEvent.Speed
+            ? getGameStatus().premiumBonuses.speed + 1
+            : getGameStatus().premiumBonuses.speed,
+        ))
   );
 }
 
 export function getLPP(workshopStatus: MainWorkshopStatus): number {
   return (
     getGameStatus().lpp +
-    (workshopStatus.currentPromo === PromoEvent.LPP
-      ? getGameStatus().premiumBonuses.LPP + 10
-      : getGameStatus().premiumBonuses.LPP)
+    Math.min(
+      190,
+      workshopStatus.currentPromo === PromoEvent.LPP
+        ? getGameStatus().premiumBonuses.LPP + 10
+        : getGameStatus().premiumBonuses.LPP,
+    )
   );
 }
 

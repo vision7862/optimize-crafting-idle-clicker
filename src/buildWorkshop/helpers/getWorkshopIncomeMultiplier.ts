@@ -24,9 +24,12 @@ export const getIncomeMultiplier = memoize((workshopStatus: WorkshopStatus): num
       : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
         MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
         getGameStatus().dynastyMultipliers.income *
-        (workshopStatus.currentPromo === PromoEvent.Income
-          ? getGameStatus().premiumBonuses.income + 1
-          : getGameStatus().premiumBonuses.income))
+        Math.min(
+          20,
+          workshopStatus.currentPromo === PromoEvent.Income
+            ? getGameStatus().premiumBonuses.income + 1
+            : getGameStatus().premiumBonuses.income,
+        ))
   );
 });
 
@@ -38,9 +41,12 @@ export const getMerchantMultiplier = memoize((workshopStatus: WorkshopStatus) =>
       : MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
         getGameStatus().dynastyMultipliers.merchant *
-        (workshopStatus.currentPromo === PromoEvent.Merchant
-          ? getGameStatus().premiumBonuses.merchant + 1
-          : getGameStatus().premiumBonuses.merchant))
+        Math.min(
+          20,
+          workshopStatus.currentPromo === PromoEvent.Merchant
+            ? getGameStatus().premiumBonuses.merchant + 1
+            : getGameStatus().premiumBonuses.merchant,
+        ))
   );
 });
 
