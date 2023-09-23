@@ -3,25 +3,25 @@ import { SetMergingStrategy } from '../types/MergingStrategy';
 
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 export const BPS_WITHOUT_DUPES: ProductName[] = [
-  // income wants
+  // // income wants
   'Harpsichord',
   'Saxophone',
   'Bongos',
   'Harp',
   'Viola',
-  'Microscope',
-  'Machine Parts',
-  'Motor Unit',
-  'Telephone',
-  'Steam Boat',
-  'Locomotive',
-  'Mechanical Parts', // not event only
-  'Electro Magnet',
-  'Clockwork',
-  'Steam Engine',
-  'Camera',
+  // 'Microscope',
+  // 'Machine Parts',
+  // 'Motor Unit',
+  // 'Telephone',
+  // 'Steam Boat',
+  // 'Locomotive',
+  // 'Mechanical Parts', // not event only
+  // 'Electro Magnet',
+  // 'Clockwork',
+  // 'Steam Engine',
+  // 'Camera',
   // 'Clock',
-  'Electrical Parts', // not event only. technically.
+  // 'Electrical Parts', // not event only. technically.
   'Combustion Engine',
   'Glider',
   'Bicycle',
@@ -39,28 +39,43 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'PC',
 
   // research
+  // modern technology
   'Stethoscope',
   'Lamp',
   'Refrigerator',
   'X-ray Machine',
   'Flashlight',
   'Kettle Grill',
-  'Sickle',
-  'Chisel',
   'Stove',
   'Defibrillator',
-  'Paper',
   'Light Bulb',
+
+  // science tools
+  // 'Mechanical Parts',
+  // 'Compass',
+  // 'Sickle',
+  // 'Chisel',
+
+  // modern exploration
+  'Antenna',
   'Diving Gear',
+  'Rocket',
+  'Tent',
+  'Submarine',
+  'Space Probe',
 
-  // gems
-  'Cut Emerald',
-  'Cut Ruby',
-  'Cut Sapphire',
-  'Cut Onyx',
+  // exploration
+  // 'Paper',
+  // 'Paper Sheets',
 
-  'Lump Hammer',
-  'War Hammer',
+  // // gems
+  // 'Cut Emerald',
+  // 'Cut Ruby',
+  // 'Cut Sapphire',
+  // 'Cut Onyx',
+
+  // 'Lump Hammer',
+  // 'War Hammer',
 ];
 
 export const STRATEGIES: SetMergingStrategy[] = [
@@ -100,48 +115,48 @@ export const STRATEGIES: SetMergingStrategy[] = [
     mainStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 0 },
     otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 0 },
   },
-  // {
-  //   setName: 'Modern Resources',
-  //   mainBps: ['Petroleum', 'Ilmenite'],
-  //   mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 4, baseLevel: 61, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Refined Modern Resources',
-  //   mainBps: ['Gasoline', 'Diesel', 'Titanium'],
-  //   mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Synthetic Materials',
-  //   mainBps: ['Nylon'],
-  //   mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Military Gear',
-  //   mainBps: ['Parachute'],
-  //   mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Gaming',
-  //   mainBps: ['Headset'],
-  //   mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Digital Revolution',
-  //   mainBps: ['Tablet Computer'],
-  //   mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
-  // },
-  // {
-  //   setName: 'Robotics',
-  //   mainBps: ['Robot Parts'],
-  //   mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
-  //   otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
-  // },
+  {
+    setName: 'Modern Resources',
+    mainBps: ['Petroleum', 'Ilmenite'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 4, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Refined Modern Resources',
+    mainBps: ['Gasoline', 'Diesel', 'Titanium'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 81, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Synthetic Materials',
+    mainBps: ['Nylon'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Military Gear',
+    mainBps: ['Parachute'],
+    mainStrategy: { topStage: 10, baseLevel: 101, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 51, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Gaming',
+    mainBps: ['Headset'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Digital Revolution',
+    mainBps: ['Tablet Computer'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
+  {
+    setName: 'Robotics',
+    mainBps: ['Robot Parts'],
+    mainStrategy: { topStage: 6, baseLevel: 61, plusLevelsPerStage: 10 },
+    otherBpsStrategy: { topStage: 5, baseLevel: 61, plusLevelsPerStage: 10 },
+  },
   {
     setName: 'Renaissance',
     mainBps: ['Compass', 'Gunpowder'],
