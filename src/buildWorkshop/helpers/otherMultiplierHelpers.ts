@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize';
+import GAME_STATUS from '../../../EDIT_ME/GameStatus.json';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import GAME_STATUS from '../config/GameStatus.json';
 import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
 import { GameStatus } from '../types/GameStatus';
 import { PromoEvent } from '../types/PromoEvent';
