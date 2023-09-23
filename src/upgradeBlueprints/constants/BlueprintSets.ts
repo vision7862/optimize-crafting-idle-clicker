@@ -176,6 +176,11 @@ const MINING_TOOLS_SET_ACHIEVEMENTS = [
   { scoreBoundary: 18.5e6, totalMultiplier: 5.6 },
   { scoreBoundary: 23.5e6, totalMultiplier: 5.8 },
   { scoreBoundary: 28.5e6, totalMultiplier: 6.0 },
+  { scoreBoundary: 200.0e6, totalMultiplier: 6.5 },
+  { scoreBoundary: 4.0e9, totalMultiplier: 7.0 },
+  { scoreBoundary: 80.0e9, totalMultiplier: 7.5 },
+  { scoreBoundary: 2.0e12, totalMultiplier: 8.0 },
+  { scoreBoundary: 100.0e12, totalMultiplier: 8.5 },
 ];
 
 const SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
@@ -204,9 +209,9 @@ const SCIENCE_TOOLS_SET_ACHIEVEMENTS = [
   { scoreBoundary: 18.5e6, totalMultiplier: 6.75 },
   { scoreBoundary: 23.5e6, totalMultiplier: 7.0 },
   { scoreBoundary: 28.5e6, totalMultiplier: 7.25 },
-  { scoreBoundary: 200e6, totalMultiplier: 8.0 },
+  { scoreBoundary: 200.0e6, totalMultiplier: 8.0 },
   { scoreBoundary: 4.0e9, totalMultiplier: 9.0 },
-  { scoreBoundary: 80e9, totalMultiplier: 10.0 },
+  { scoreBoundary: 80.0e9, totalMultiplier: 10.0 },
   { scoreBoundary: 2.0e12, totalMultiplier: 11.0 },
   { scoreBoundary: 100.0e12, totalMultiplier: 12.0 },
 ];
