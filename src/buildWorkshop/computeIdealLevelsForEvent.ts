@@ -1,4 +1,4 @@
-import { LPP } from './config/BoostMultipliers';
+import { getLPP } from '../../src/buildWorkshop/helpers/otherMultiplierHelpers';
 import { isEvent } from './helpers/WorkshopHelpers';
 import { getClickOutputMultiplier } from './helpers/otherMultiplierHelpers';
 import { toTime } from './helpers/printResults';
@@ -169,7 +169,7 @@ export function lorePerSecond(
     }
     let lorePerTime: number;
     let likelyLore: number;
-    const x1Lore = Math.round(fame ** (1 + workshopStatus.level / 100) * LPP);
+    const x1Lore = Math.round(fame ** (1 + workshopStatus.level / 100) * getLPP(workshopStatus));
     if (!barHasToken) {
       const chanceOf1x = Math.max(92 - fame * 8, 0);
       const chanceOf2x = fame < 12 ? Math.min(8 + fame * 8, 100) : 100;

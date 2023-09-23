@@ -1,3 +1,5 @@
+import { PromoEvent } from '../types/PromoEvent';
+
 export const CLICK_BOOST_MULTIPLIER: 2 | 3 | 5 | 10 = 5;
 export const RESEARCH_BOOST_MULTIPLIER: 4 | 6 | 10 | 20 = 20;
 export const MERCHANT_BOOST_MULTIPLIER: 2 | 3 | 5 | 10 = 10;
@@ -7,15 +9,6 @@ export const DAILY_DYNASTY_FRIEND_BONUS_INCOME: 2 | 4 | 6 | 10 | 12 | 30 = 30;
 export const DAILY_DYNASTY_FRIEND_BONUS_ORE: 2 | 4 | 6 | 10 | 12 | 30 = 30;
 export const DAILY_DYNASTY_FRIEND_BONUS_MERCHANT: 2 | 4 | 6 | 10 | 12 | 30 = 30;
 
-enum PromoEvent {
-  None,
-  Income,
-  Merchant,
-  Research,
-  Click,
-  Speed,
-  LPP,
-}
 const CURRENT_PROMO: PromoEvent = PromoEvent.None;
 
 // during events, regular income is affected but offline is not. income&offline is the permanent, the other is only during 24hr events

@@ -1,0 +1,21 @@
+{
+  "boostMultipliers": {
+    "click": 5,
+    "research": 20,
+    "merchant": 10
+  },
+  "dynastyMultipliers": {
+    "income": 30,
+    "ore": 30,
+    "merchant": 30
+  },
+  "premiumBonuses": {
+    "income": 1,
+    "merchant": 2,
+    "research": 2,
+    "click": 1,
+    "speed": 5,
+    "LPP": 30
+  },
+  "lpp": 86
+}

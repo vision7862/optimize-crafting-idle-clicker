@@ -1,10 +1,11 @@
 import memoize from 'fast-memoize';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { PROMOTION_BONUS_RESEARCH, RESEARCH_BOOST_MULTIPLIER } from '../config/BoostMultipliers';
 import { RESEARCH_ACHIEVEMENT_MULTIPLIER, TOTAL_BLUEPRINT_SCORE_MULTIPLIER } from '../constants/Achievements';
-import { Workshop, WorkshopStatus } from '../types/Workshop';
+import { PromoEvent } from '../types/PromoEvent';
+import { MainWorkshopStatus, Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
+import { getGameStatus } from './otherMultiplierHelpers';
 
 export function getCostOfScientists(numScientists: number): number {
   return getCostOfScientistsFromSome(0, numScientists);
@@ -47,15 +48,22 @@ export const getResearchPerSecond = memoize((workshopStatus: WorkshopStatus): nu
 });
 
 export function getResearchMultiplier(workshopStatus: WorkshopStatus): number {
-  const researchMultiplierBasePercentage = isEvent(workshopStatus) ? 1 : getMainWorkshopResearchMultiplier();
-  return researchMultiplierBasePercentage * (workshopStatus.researchBoostActive ? RESEARCH_BOOST_MULTIPLIER : 1);
+  const researchMultiplierBasePercentage = isEvent(workshopStatus)
+    ? 1
+    : getMainWorkshopResearchMultiplier(workshopStatus);
+  return (
+    researchMultiplierBasePercentage *
+    (workshopStatus.researchBoostActive ? getGameStatus().boostMultipliers.research : 1)
+  );
 }
 
-function getMainWorkshopResearchMultiplier(): number {
+function getMainWorkshopResearchMultiplier(workshopStatus: MainWorkshopStatus): number {
   return (
     RESEARCH_ACHIEVEMENT_MULTIPLIER *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Research) *
     TOTAL_BLUEPRINT_SCORE_MULTIPLIER *
-    PROMOTION_BONUS_RESEARCH
+    (workshopStatus.currentPromo === PromoEvent.Research
+      ? getGameStatus().premiumBonuses.research + 1
+      : getGameStatus().premiumBonuses.research)
   );
 }

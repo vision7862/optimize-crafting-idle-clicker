@@ -1,27 +1,29 @@
+import memoize from 'fast-memoize';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import {
-  CLICK_BOOST_MULTIPLIER,
-  DAILY_DYNASTY_FRIEND_BONUS_ORE,
-  PROMOTION_BONUS_CLICK_OUTPUT,
-  PROMOTION_BONUS_INCOME_AND_OFFLINE,
-  PROMOTION_BONUS_SPEED,
-} from '../config/BoostMultipliers';
+import GAME_STATUS from '../config/GameStatus.json';
 import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
-import { WorkshopStatus } from '../types/Workshop';
+import { GameStatus } from '../types/GameStatus';
+import { PromoEvent } from '../types/PromoEvent';
+import { MainWorkshopStatus, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 import { getCurrentEventPassMultipliers } from './eventPassHelpers';
 
 export function getOreOutputMultiplier(isEvent: boolean): number {
-  return isEvent ? 1 : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * DAILY_DYNASTY_FRIEND_BONUS_ORE;
+  return isEvent
+    ? 1
+    : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Ore) * getGameStatus().dynastyMultipliers.ore;
 }
 
 export function getClickOutputMultiplier(workshopStatus: WorkshopStatus): number {
   return (
-    (workshopStatus.clickBoostActive ? CLICK_BOOST_MULTIPLIER : 1) *
+    (workshopStatus.clickBoostActive ? getGameStatus().boostMultipliers.click : 1) *
     (isEvent(workshopStatus)
       ? 1
-      : getSpecifiedMultiplierFromLibrary(SetMultiplierType.ClickOutput) * PROMOTION_BONUS_CLICK_OUTPUT)
+      : getSpecifiedMultiplierFromLibrary(SetMultiplierType.ClickOutput) *
+        (workshopStatus.currentPromo === PromoEvent.Click
+          ? getGameStatus().premiumBonuses.click + 1
+          : getGameStatus().premiumBonuses.click))
   );
 }
 
@@ -31,7 +33,7 @@ export function getOfflineMultiplier(workshopStatus: WorkshopStatus): number {
     : 40 *
         MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *
-        PROMOTION_BONUS_INCOME_AND_OFFLINE;
+        getGameStatus().premiumBonuses.income;
 }
 
 export function getSpeedMultiplier(workshopStatus: WorkshopStatus): number {
@@ -39,6 +41,21 @@ export function getSpeedMultiplier(workshopStatus: WorkshopStatus): number {
     (workshopStatus.speedBoostActive ? 2 : 1) *
     (isEvent(workshopStatus)
       ? getCurrentEventPassMultipliers(workshopStatus.eventPass).speedMultiplier
-      : PROMOTION_BONUS_SPEED)
+      : workshopStatus.currentPromo === PromoEvent.Speed
+      ? getGameStatus().premiumBonuses.speed + 1
+      : getGameStatus().premiumBonuses.speed)
   );
 }
+
+export function getLPP(workshopStatus: MainWorkshopStatus): number {
+  return (
+    getGameStatus().lpp +
+    (workshopStatus.currentPromo === PromoEvent.LPP
+      ? getGameStatus().premiumBonuses.LPP + 10
+      : getGameStatus().premiumBonuses.LPP)
+  );
+}
+
+export const getGameStatus = memoize((): GameStatus => {
+  return GAME_STATUS as GameStatus;
+});

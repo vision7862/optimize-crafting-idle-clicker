@@ -2,21 +2,15 @@ import memoize from 'fast-memoize';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import {
-  DAILY_DYNASTY_FRIEND_BONUS_INCOME,
-  DAILY_DYNASTY_FRIEND_BONUS_MERCHANT,
-  MERCHANT_BOOST_MULTIPLIER,
-  PROMOTION_BONUS_INCOME,
-  PROMOTION_BONUS_MERCHANT_REVENUE,
-  PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY,
-} from '../config/BoostMultipliers';
-import {
-  MAIN_WORKSHOP_MERCHANT_CAPACITY,
+  MAIN_WORKSHOP_MERCHANT_CAPACITY_ACHIEVEMENT_MULTIPLIER,
   MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
   MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
 } from '../constants/Achievements';
+import { PromoEvent } from '../types/PromoEvent';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
 import { getCurrentEventPassMultipliers } from './eventPassHelpers';
+import { getGameStatus } from './otherMultiplierHelpers';
 
 export function getWorkshopTotalIncomeMultiplier(workshopStatus: WorkshopStatus): number {
   return getIncomeMultiplier(workshopStatus) * getMerchantMultiplier(workshopStatus);
@@ -29,20 +23,24 @@ export const getIncomeMultiplier = memoize((workshopStatus: WorkshopStatus): num
       ? 1
       : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
         MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
-        DAILY_DYNASTY_FRIEND_BONUS_INCOME *
-        PROMOTION_BONUS_INCOME)
+        getGameStatus().dynastyMultipliers.income *
+        (workshopStatus.currentPromo === PromoEvent.Income
+          ? getGameStatus().premiumBonuses.income + 1
+          : getGameStatus().premiumBonuses.income))
   );
 });
 
 export const getMerchantMultiplier = memoize((workshopStatus: WorkshopStatus) => {
   return (
-    (workshopStatus.merchantBoostActive ? MERCHANT_BOOST_MULTIPLIER : 1) *
+    (workshopStatus.merchantBoostActive ? getGameStatus().boostMultipliers.merchant : 1) *
     (isEvent(workshopStatus)
       ? getCurrentEventPassMultipliers(workshopStatus.eventPass).merchantMultiplier
       : MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
-        DAILY_DYNASTY_FRIEND_BONUS_MERCHANT *
-        PROMOTION_BONUS_MERCHANT_REVENUE)
+        getGameStatus().dynastyMultipliers.merchant *
+        (workshopStatus.currentPromo === PromoEvent.Merchant
+          ? getGameStatus().premiumBonuses.merchant + 1
+          : getGameStatus().premiumBonuses.merchant))
   );
 });
 
@@ -116,5 +114,7 @@ function getLevelAchievementMultiplier(level: number, isEvent: boolean): number 
 }
 
 export function getMerchantCapacity(workshopStatus: WorkshopStatus): number {
-  return isEvent(workshopStatus) ? 10 : MAIN_WORKSHOP_MERCHANT_CAPACITY * PROMOTION_BONUS_MERCHANT_REVENUE_AND_CAPACITY;
+  return isEvent(workshopStatus)
+    ? 10
+    : 4 * MAIN_WORKSHOP_MERCHANT_CAPACITY_ACHIEVEMENT_MULTIPLIER * getGameStatus().premiumBonuses.merchant;
 }
