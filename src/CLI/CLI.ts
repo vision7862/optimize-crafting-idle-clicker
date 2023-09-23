@@ -1,8 +1,11 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
+import { isEvent } from '../buildWorkshop/helpers/WorkshopHelpers';
+import { EventPassName } from '../buildWorkshop/types/EventPass';
 import { WorkshopStatus } from '../buildWorkshop/types/Workshop';
 import { auditMultipliersGoal } from './goals/auditMultipliers';
+import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 import { doubleLoreGoal } from './goals/doubleLore';
 import { fastestFameGoal } from './goals/fastestFame';
 import { gemsGoal } from './goals/gems';
@@ -11,7 +14,6 @@ import { mostLoreGoal } from './goals/lore';
 import { merchantsGoal } from './goals/merchants';
 import { scientistsGoal } from './goals/scientists';
 import { fameGoal } from './goals/specificFame';
-import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 
 export type GoalType = Readonly<{
   name: string;
@@ -61,14 +63,32 @@ export async function runCLI(): Promise<void> {
     }
   }
 
-  console.log('your workshop status is: ' + JSON.stringify(workshopStatus));
+  printWorkshopStatus(workshopStatus);
+}
+
+function printWorkshopStatus(workshopStatus: Partial<WorkshopStatus>): void {
+  let eventPass: string | undefined;
+  if (isEvent(workshopStatus) && workshopStatus.eventPass !== undefined) {
+    eventPass = EventPassName[workshopStatus.eventPass];
+  }
+  console.log('your workshop status is: ' + JSON.stringify({ ...workshopStatus, eventPass }));
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
   const configOptions = await input({
     message: 'if you have a workshop status object, enter it here. otherwise, just hit enter.',
   });
-  return configOptions !== '' ? JSON.parse(configOptions) : await getWorkshopStatusFromUser();
+
+  if (configOptions !== '') {
+    const parsed = JSON.parse(configOptions);
+    let eventPass: EventPassName | undefined;
+    if (parsed.eventPass !== undefined) {
+      eventPass = EventPassName[parsed.eventPass as keyof typeof EventPassName];
+    }
+    return { ...parsed, eventPass };
+  } else {
+    return await getWorkshopStatusFromUser();
+  }
 }
 
 async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
@@ -82,10 +102,19 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     }),
   );
   let eventName: string | undefined;
+  let eventPass: EventPassName | undefined;
   if (isEvent) {
     eventName = await select({
       message: 'which event do you want to optimize?',
       choices: getEventFileNames(),
+    });
+    eventPass = await select({
+      message: 'which event pass did you choose?',
+      choices: [
+        { value: EventPassName.free, name: 'free' },
+        { value: EventPassName.supporter, name: 'supporter' },
+        { value: EventPassName.minmaxer, name: 'minmaxer' },
+      ],
     });
   }
   const level = Number(await input({ message: 'what level is your workshop?' }));
@@ -104,6 +133,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     researchBoostActive,
     merchantBoostActive,
     eventName,
+    eventPass,
   };
 }
 
