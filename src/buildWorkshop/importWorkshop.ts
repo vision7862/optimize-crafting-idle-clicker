@@ -98,7 +98,7 @@ const events = new Map<string, ImportedProduct[]>([
 export const importWorkshop = memoize(
   (onlyReturnBuildable: boolean, eventName?: string): Map<string, ProductDetails> => {
     const blueprintMap = convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY);
-    const oreMultiplier = getOreOutputMultiplier(false);
+    const oreMultiplier = getOreOutputMultiplier(eventName !== undefined);
 
     const products = new Map<string, ProductDetails>();
     const isEvent = eventName !== undefined;

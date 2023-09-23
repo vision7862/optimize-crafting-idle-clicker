@@ -1,5 +1,5 @@
 import { lorePerSecond } from '../../buildWorkshop/computeIdealLevelsForEvent';
-import { isEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
+import { isNotEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
 import { printInfo } from '../../buildWorkshop/helpers/printResults';
 import { WorkshopStatus } from '../../buildWorkshop/types/Workshop';
 import { GoalType, booleanChoice } from '../CLI';
@@ -13,7 +13,7 @@ async function optimizeForLorePerTime(workshopStatus: Partial<WorkshopStatus>): 
 export const mostLoreGoal: GoalType = {
   name: 'most lore',
   description: 'most efficient lore over time',
-  shouldShow: (workshopStatus: WorkshopStatus) => !isEvent(workshopStatus),
+  shouldShow: (workshopStatus: WorkshopStatus) => isNotEvent(workshopStatus),
   selectOptionAndGetInput: async (workshopStatus: WorkshopStatus) => {
     await optimizeForLorePerTime(workshopStatus);
   },

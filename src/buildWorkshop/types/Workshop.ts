@@ -1,5 +1,6 @@
 import { EventPassName } from './EventPass';
 import { Product } from './Product';
+import { PromoEvent } from './PromoEvent';
 
 export type Workshop = Readonly<{
   productsInfo: readonly Product[];
@@ -8,7 +9,7 @@ export type Workshop = Readonly<{
 
 export type WorkshopStatus = MainWorkshopStatus | EventWorkshopStatus;
 
-export type MainWorkshopStatus = Readonly<{
+type BaseWorkshopStatus = Readonly<{
   level: number;
   scientists: number;
   clickBoostActive: boolean;
@@ -17,7 +18,12 @@ export type MainWorkshopStatus = Readonly<{
   speedBoostActive: boolean;
 }>;
 
-export type EventWorkshopStatus = MainWorkshopStatus &
+export type MainWorkshopStatus = BaseWorkshopStatus &
+  Readonly<{
+    currentPromo: PromoEvent;
+  }>;
+
+export type EventWorkshopStatus = BaseWorkshopStatus &
   Readonly<{
     eventName: string;
     eventPass: EventPassName;
@@ -30,6 +36,7 @@ export const DEFAULT_WORKSHOP_STATUS_MAIN: MainWorkshopStatus = {
   merchantBoostActive: false,
   researchBoostActive: false,
   speedBoostActive: false,
+  currentPromo: PromoEvent.None,
 };
 
 export const DEFAULT_WORKSHOP_STATUS_EVENT: EventWorkshopStatus = {

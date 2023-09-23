@@ -1,5 +1,5 @@
 import { Product, ProductStatus } from '../types/Product';
-import { EventWorkshopStatus, Workshop, WorkshopStatus } from '../types/Workshop';
+import { EventWorkshopStatus, MainWorkshopStatus, Workshop, WorkshopStatus } from '../types/Workshop';
 
 export function getStatusMap(workshop: Workshop): Map<string, ProductStatus> {
   const statuses = new Map<string, ProductStatus>();
@@ -20,4 +20,8 @@ export function getProductByName(productName: string, productsInfo: readonly Pro
 
 export function isEvent(workshopStatus: Partial<WorkshopStatus>): workshopStatus is EventWorkshopStatus {
   return (workshopStatus as EventWorkshopStatus).eventName !== undefined;
+}
+
+export function isNotEvent(workshopStatus: Partial<WorkshopStatus>): workshopStatus is MainWorkshopStatus {
+  return (workshopStatus as EventWorkshopStatus).eventName === undefined;
 }

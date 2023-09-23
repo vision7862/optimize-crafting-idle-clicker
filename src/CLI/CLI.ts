@@ -1,8 +1,9 @@
 import { input, select } from '@inquirer/prompts';
 import * as fs from 'fs';
 import * as path from 'path';
-import { isEvent } from '../buildWorkshop/helpers/WorkshopHelpers';
+import { isEvent, isNotEvent } from '../buildWorkshop/helpers/WorkshopHelpers';
 import { EventPassName } from '../buildWorkshop/types/EventPass';
+import { PromoEvent } from '../buildWorkshop/types/PromoEvent';
 import { WorkshopStatus } from '../buildWorkshop/types/Workshop';
 import { auditMultipliersGoal } from './goals/auditMultipliers';
 import { clickTopInputsGoal } from './goals/clickTopAndInputs';
@@ -71,7 +72,11 @@ function printWorkshopStatus(workshopStatus: Partial<WorkshopStatus>): void {
   if (isEvent(workshopStatus) && workshopStatus.eventPass !== undefined) {
     eventPass = EventPassName[workshopStatus.eventPass];
   }
-  console.log('your workshop status is: ' + JSON.stringify({ ...workshopStatus, eventPass }));
+  let currentPromo: string | undefined;
+  if (isNotEvent(workshopStatus) && workshopStatus.currentPromo !== undefined) {
+    currentPromo = PromoEvent[workshopStatus.currentPromo];
+  }
+  console.log('your workshop status is: ' + JSON.stringify({ ...workshopStatus, eventPass, currentPromo }));
 }
 
 async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
@@ -85,7 +90,11 @@ async function getWorkshopStatus(): Promise<Partial<WorkshopStatus>> {
     if (parsed.eventPass !== undefined) {
       eventPass = EventPassName[parsed.eventPass as keyof typeof EventPassName];
     }
-    return { ...parsed, eventPass };
+    let currentPromo: PromoEvent | undefined;
+    if (parsed.currentPromo !== undefined) {
+      currentPromo = PromoEvent[parsed.currentPromo as keyof typeof PromoEvent];
+    }
+    return { ...parsed, eventPass, currentPromo };
   } else {
     return await getWorkshopStatusFromUser();
   }
@@ -103,6 +112,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
   );
   let eventName: string | undefined;
   let eventPass: EventPassName | undefined;
+  let currentPromo: PromoEvent | undefined;
   if (isEvent) {
     eventName = await select({
       message: 'which event do you want to optimize?',
@@ -114,6 +124,19 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
         { value: EventPassName.free, name: 'free' },
         { value: EventPassName.supporter, name: 'supporter' },
         { value: EventPassName.minmaxer, name: 'minmaxer' },
+      ],
+    });
+  } else {
+    currentPromo = await select({
+      message: 'is a premium boost event active?',
+      choices: [
+        { value: PromoEvent.None, name: 'no' },
+        { value: PromoEvent.Income, name: 'Income' },
+        { value: PromoEvent.Merchant, name: 'Merchant' },
+        { value: PromoEvent.Research, name: 'Research' },
+        { value: PromoEvent.Click, name: 'Click' },
+        { value: PromoEvent.Speed, name: 'Speed' },
+        { value: PromoEvent.LPP, name: 'LPP' },
       ],
     });
   }
@@ -132,6 +155,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     clickBoostActive,
     researchBoostActive,
     merchantBoostActive,
+    currentPromo,
     eventName,
     eventPass,
   };

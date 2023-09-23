@@ -1,6 +1,7 @@
 import { toTime } from '../../../src/buildWorkshop/helpers/printResults';
 import { computeBuildTimeForWorkshop, computeTargetFromFame } from '../../../src/buildWorkshop/helpers/targetHelpers';
 import { importWorkshop } from '../../../src/buildWorkshop/importWorkshop';
+import { EventPassName } from '../../../src/buildWorkshop/types/EventPass';
 import { Product, ProductDetails, ProductStatus } from '../../../src/buildWorkshop/types/Product';
 import {
   DEFAULT_WORKSHOP_STATUS_EVENT,
@@ -163,6 +164,7 @@ describe('targetHelpers', () => {
             researchBoostActive: true,
             merchantBoostActive: true,
             eventName: 'Air Craft',
+            eventPass: EventPassName.free,
           },
         };
         const seconds = computeBuildTimeForWorkshop(workshop, 1e15);
@@ -199,6 +201,7 @@ describe('targetHelpers', () => {
             researchBoostActive: true,
             merchantBoostActive: true,
             eventName: 'Air Craft',
+            eventPass: EventPassName.free,
           },
         };
         const seconds = computeBuildTimeForWorkshop(workshop, 1e15);

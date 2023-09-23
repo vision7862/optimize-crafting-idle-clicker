@@ -1,4 +1,4 @@
-import { isEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
+import { isNotEvent } from '../../buildWorkshop/helpers/WorkshopHelpers';
 import { printFameTime } from '../../buildWorkshop/helpers/printResults';
 import { WorkshopStatus } from '../../buildWorkshop/types/Workshop';
 import { GoalType } from '../CLI';
@@ -10,7 +10,7 @@ function optimizeForDoubleLore(workshopStatus: Partial<WorkshopStatus>): void {
 export const doubleLoreGoal: GoalType = {
   name: 'double lore',
   description: 'guaranteed double lore (12 fame)',
-  shouldShow: (workshopStatus: WorkshopStatus) => !isEvent(workshopStatus),
+  shouldShow: (workshopStatus: WorkshopStatus) => isNotEvent(workshopStatus),
   selectOption: (workshopStatus: WorkshopStatus) => {
     optimizeForDoubleLore(workshopStatus);
   },
