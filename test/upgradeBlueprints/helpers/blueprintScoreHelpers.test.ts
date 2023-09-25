@@ -1,4 +1,3 @@
-import { ImportedProduct } from '../../../src/buildWorkshop/types/ImportedProduct';
 import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
@@ -8,11 +7,10 @@ import {
 import { BASE_BP, BOTTOM_STAGE_2 } from '../../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   convertBlueprintLibraryToScores,
+  getAchievementMultiplier,
   getBlueprintsInSet,
   getOnlyTopBlueprints,
-  getSetAchievementMultiplier,
   getSetBlueprintScore,
-  getSetClosestToBoundary,
   getSpecifiedMultiplierFromSets,
 } from '../../../src/upgradeBlueprints/helpers/blueprintScoreHelpers';
 import { Blueprint } from '../../../src/upgradeBlueprints/types/Blueprint';
@@ -134,63 +132,15 @@ describe('blueprintScoreHelpers', () => {
 
   describe('getSetAchievementMultiplier', () => {
     it('should return 2.4 if the score is between 4350 and 7500', () => {
-      expect(getSetAchievementMultiplier(getBlueprintSet('Wood'), 5000)).toBe(2.4);
+      expect(getAchievementMultiplier(getBlueprintSet('Wood').achievementRanks, 5000)).toBe(2.4);
     });
 
     it('should return 1.4 if the score is 270', () => {
-      expect(getSetAchievementMultiplier(getBlueprintSet('Wood'), 270)).toBe(1.4);
+      expect(getAchievementMultiplier(getBlueprintSet('Wood').achievementRanks, 270)).toBe(1.4);
     });
 
     it('should return 6 if the score is very high', () => {
-      expect(getSetAchievementMultiplier(getBlueprintSet('Wood'), 50e6)).toBe(6);
-    });
-  });
-
-  describe('getSetClosestToBoundary', () => {
-    it('should return the set closest to the boundary, even if another set is a higher score', () => {
-      const blueprintSets: BlueprintSet[] = [
-        {
-          setName: 'Set A',
-          achievementRanks: [
-            { scoreBoundary: 0, totalMultiplier: 1 },
-            { scoreBoundary: 100, totalMultiplier: 2 },
-            { scoreBoundary: 200, totalMultiplier: 3 },
-          ],
-          multiplierType: SetMultiplierType.Income,
-        },
-        {
-          setName: 'Set B',
-          achievementRanks: [
-            { scoreBoundary: 0, totalMultiplier: 1 },
-            { scoreBoundary: 100, totalMultiplier: 2 },
-            { scoreBoundary: 200, totalMultiplier: 3 },
-          ],
-          multiplierType: SetMultiplierType.Income,
-        },
-      ];
-
-      const products: ImportedProduct[] = [
-        { ProductType: 'a apple', Tags: ['Set A'] } as unknown as ImportedProduct,
-        { ProductType: 'a apricot', Tags: ['Set A'] } as unknown as ImportedProduct,
-        { ProductType: 'b baseball', Tags: ['Set B'] } as unknown as ImportedProduct,
-        { ProductType: 'b bat', Tags: ['Set B'] } as unknown as ImportedProduct,
-      ];
-
-      const blueprintScores = new Map<string, number>([
-        ['a apple', 60],
-        ['a apricot', 10],
-        ['b baseball', 50],
-        ['b bat', 40],
-      ]);
-
-      const closestSet = getSetClosestToBoundary(blueprintSets, blueprintScores, products);
-      expect(closestSet).toBe('Set A');
-    });
-  });
-
-  describe('not test', () => {
-    it('should', () => {
-      console.log(getSetClosestToBoundary(BLUEPRINT_SETS, convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY)));
+      expect(getAchievementMultiplier(getBlueprintSet('Wood').achievementRanks, 50e6)).toBe(6);
     });
   });
 });

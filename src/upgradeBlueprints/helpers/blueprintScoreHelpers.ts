@@ -2,7 +2,7 @@ import memoize from 'fast-memoize';
 import { MainWorkshopProducts } from '../../../products/MainWorkshop';
 import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
 import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
-import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
+import { AchievementRank, BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
 import { Blueprint, ProductName } from '../types/Blueprint';
 
 export const getSpecifiedMultiplierFromLibrary = memoize(
@@ -52,7 +52,7 @@ export const getSpecifiedMultiplierFromSets = memoize(
 export function getMultiplierForSet(set: BlueprintSet, blueprintScores: Map<string, number>): number {
   const blueprints = getBlueprintsInSet(set.setName);
   const setScore = getSetBlueprintScore(blueprints, blueprintScores);
-  return getSetAchievementMultiplier(set, setScore);
+  return getAchievementMultiplier(set.achievementRanks, setScore);
 }
 
 const setNameMapping = new Map<string, string>([
@@ -71,9 +71,13 @@ export const getBlueprintsInSet = memoize(
   },
 );
 
-export function getSetBlueprintScore(blueprints: string[], blueprintScores: Map<string, number>): number {
+export function getSetBlueprintScore(
+  blueprints: string[],
+  blueprintScores: Map<string, number>,
+  isSetUnfinished: boolean = false,
+): number {
   let summedScores = 0;
-  let lowestScore = Number.MAX_VALUE;
+  let lowestScore = isSetUnfinished ? 10 : Number.MAX_VALUE;
   blueprints.forEach((blueprintName: string) => {
     const score = blueprintScores.get(blueprintName) ?? 0;
     summedScores += score;
@@ -82,63 +86,15 @@ export function getSetBlueprintScore(blueprints: string[], blueprintScores: Map<
   return Math.round(summedScores * Math.log10(Math.max(lowestScore, 10)));
 }
 
-export function getSetAchievementMultiplier(set: BlueprintSet, score: number): number {
-  if (set.achievementRanks === undefined) {
-    console.error(`Set ${set.setName} does not have score boundaries`);
-    return 1;
-  }
+export function getAchievementMultiplier(achievementRanks: AchievementRank[], score: number): number {
   let multiplier = 1;
-  for (let i = 0; i < set.achievementRanks.length; i++) {
-    if (score < set.achievementRanks[i].scoreBoundary) {
+  for (let i = 0; i < achievementRanks.length; i++) {
+    if (score < achievementRanks[i].scoreBoundary) {
       return multiplier;
     }
-    multiplier = set.achievementRanks[i].totalMultiplier;
+    multiplier = achievementRanks[i].totalMultiplier;
   }
   return Math.round(multiplier);
-}
-
-// export function getNextScoreBoundaryForBlueprint(blueprint: Blueprint, blueprintScores: Map<string, number>): number {
-//   let nearestBoundaryDistance = Number.MAX_VALUE;
-//   BLUEPRINT_SETS.filter((set: BlueprintSet) => set.blueprints.includes(blueprint.productName)).forEach(
-//     (set: BlueprintSet) => {
-//       if (set.achievementRanks === undefined) {
-//         throw new Error(`trying to get set boundaries for ${set.setName} failed`);
-//       }
-//       const setScore = getSetBlueprintScore(set.blueprints, blueprintScores);
-//       for (let i = 0; i < set.achievementRanks.length - 1; i++) {
-//         if (setScore > set.achievementRanks[i].scoreBoundary && setScore > set.achievementRanks[i + 1].scoreBoundary) {
-//           nearestBoundaryDistance = Math.min(
-//             nearestBoundaryDistance,
-//             set.achievementRanks[i + 1].scoreBoundary - setScore,
-//           );
-//         }
-//       }
-//     },
-//   );
-// }
-
-export function getSetClosestToBoundary(
-  blueprintSets: BlueprintSet[] = BLUEPRINT_SETS,
-  blueprintScores: Map<string, number>,
-  products: readonly ImportedProduct[] = MainWorkshopProducts,
-): string {
-  let closestDistance = Number.MAX_VALUE;
-  let closestSetName = 'no close set';
-  blueprintSets
-    .filter(
-      (set: BlueprintSet) =>
-        set.multiplierType === SetMultiplierType.Income || set.multiplierType === SetMultiplierType.MerchantRevenue,
-    )
-    .forEach((set: BlueprintSet) => {
-      const blueprints = getBlueprintsInSet(set.setName, products);
-      const setScore = getSetBlueprintScore(blueprints, blueprintScores);
-      const distanceInfo = getDistanceToNextRank(set, setScore);
-      if (distanceInfo.distance < closestDistance) {
-        closestDistance = distanceInfo.distance;
-        closestSetName = set.setName;
-      }
-    });
-  return closestSetName;
 }
 
 export const getDistanceToNextRank = memoize(

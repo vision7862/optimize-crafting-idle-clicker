@@ -17,5 +17,12 @@
     "speed": 5,
     "LPP": 30
   },
-  "lpp": 86
+  "highestEverAchievements": {
+    "passiveIncome": 1.0e102,
+    "tradeAgreements": 190,
+    "scientificMethod": 1600,
+    "idleClickerAddict": 105,
+    "eventCompletionist": 92
+  },
+  "lppWithoutPremium": 86
 }

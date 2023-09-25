@@ -1,8 +1,11 @@
 import memoize from 'fast-memoize';
 import GAME_STATUS from '../../../EDIT_ME/GameStatus.json';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
-import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER } from '../constants/Achievements';
+import {
+  getAchievementMultiplier,
+  getSpecifiedMultiplierFromLibrary,
+} from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
+import { PASSIVE_INCOME } from '../constants/Achievements';
 import { GameStatus } from '../types/GameStatus';
 import { PromoEvent } from '../types/PromoEvent';
 import { MainWorkshopStatus, WorkshopStatus } from '../types/Workshop';
@@ -34,7 +37,7 @@ export function getOfflineMultiplier(workshopStatus: WorkshopStatus): number {
   return isEvent(workshopStatus)
     ? 100 * getCurrentEventPassMultipliers(workshopStatus.eventPass).offlineMultiplier
     : 40 *
-        MWS_MONEY_ACHIEVE_OFFLINE_MULTIPLIER *
+        getAchievementMultiplier(PASSIVE_INCOME, getGameStatus().highestEverAchievements.passiveIncome) *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *
         getGameStatus().premiumBonuses.income;
 }
@@ -55,7 +58,7 @@ export function getSpeedMultiplier(workshopStatus: WorkshopStatus): number {
 
 export function getLPP(workshopStatus: MainWorkshopStatus): number {
   return (
-    getGameStatus().lpp +
+    getGameStatus().lppWithoutPremium +
     Math.min(
       190,
       workshopStatus.currentPromo === PromoEvent.LPP

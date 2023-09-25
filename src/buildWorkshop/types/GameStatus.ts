@@ -2,7 +2,8 @@ export type GameStatus = Readonly<{
   boostMultipliers: BoostMultipliers;
   dynastyMultipliers: DynastyMultipliers;
   premiumBonuses: PremiumBonuses;
-  lpp: number;
+  highestEverAchievements: HighestEverAchievements;
+  lppWithoutPremium: number;
 }>;
 
 export type BoostMultipliers = Readonly<{
@@ -24,4 +25,12 @@ export type PremiumBonuses = Readonly<{
   click: number;
   speed: number;
   LPP: number;
+}>;
+
+export type HighestEverAchievements = Readonly<{
+  passiveIncome: number;
+  tradeAgreements: number;
+  scientificMethod: number;
+  idleClickerAddict: number;
+  eventCompletionist: number;
 }>;

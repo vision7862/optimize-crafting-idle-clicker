@@ -17,7 +17,7 @@ export type BlueprintSet = Readonly<{
   isUnfinished?: boolean;
 }>;
 
-type AchievementRank = Readonly<{
+export type AchievementRank = Readonly<{
   scoreBoundary: number;
   totalMultiplier: number;
 }>;

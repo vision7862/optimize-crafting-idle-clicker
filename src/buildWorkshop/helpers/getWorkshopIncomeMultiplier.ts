@@ -1,11 +1,10 @@
 import memoize from 'fast-memoize';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
-import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import {
-  MAIN_WORKSHOP_MERCHANT_CAPACITY_ACHIEVEMENT_MULTIPLIER,
-  MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER,
-  MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER,
-} from '../constants/Achievements';
+  getAchievementMultiplier,
+  getSpecifiedMultiplierFromLibrary,
+} from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
+import { EVENT_COMPLETER, IDLE_CLICKER_ADDICT, TRADE_AGREEMENTS } from '../constants/Achievements';
 import { PromoEvent } from '../types/PromoEvent';
 import { WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
@@ -22,7 +21,7 @@ export const getIncomeMultiplier = memoize((workshopStatus: WorkshopStatus): num
     (isEvent(workshopStatus)
       ? 1
       : getSpecifiedMultiplierFromLibrary(SetMultiplierType.Income) *
-        MWS_EVENT_ACHIEVE_INCOME_MULTIPLIER *
+        getAchievementMultiplier(EVENT_COMPLETER, getGameStatus().highestEverAchievements.eventCompletionist) *
         getGameStatus().dynastyMultipliers.income *
         Math.min(
           20,
@@ -38,7 +37,7 @@ export const getMerchantMultiplier = memoize((workshopStatus: WorkshopStatus) =>
     (workshopStatus.merchantBoostActive ? getGameStatus().boostMultipliers.merchant : 1) *
     (isEvent(workshopStatus)
       ? getCurrentEventPassMultipliers(workshopStatus.eventPass).merchantMultiplier
-      : MWS_LOYALTY_ACHIEVE_MERCHANT_MULTIPLIER *
+      : getAchievementMultiplier(IDLE_CLICKER_ADDICT, getGameStatus().highestEverAchievements.idleClickerAddict) *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.MerchantRevenue) *
         getGameStatus().dynastyMultipliers.merchant *
         Math.min(
@@ -122,5 +121,6 @@ function getLevelAchievementMultiplier(level: number, isEvent: boolean): number 
 export function getMerchantCapacity(workshopStatus: WorkshopStatus): number {
   return isEvent(workshopStatus)
     ? 10
-    : 4 * MAIN_WORKSHOP_MERCHANT_CAPACITY_ACHIEVEMENT_MULTIPLIER * getGameStatus().premiumBonuses.merchant;
+    : (4 + getAchievementMultiplier(TRADE_AGREEMENTS, getGameStatus().highestEverAchievements.tradeAgreements)) *
+        getGameStatus().premiumBonuses.merchant;
 }
