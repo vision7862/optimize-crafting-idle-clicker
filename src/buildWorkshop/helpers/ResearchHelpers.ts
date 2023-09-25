@@ -1,7 +1,13 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../../upgradeBlueprints/config/BlueprintLibrary';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
-import { getSpecifiedMultiplierFromLibrary } from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
-import { RESEARCH_ACHIEVEMENT_MULTIPLIER, TOTAL_BLUEPRINT_SCORE_MULTIPLIER } from '../constants/Achievements';
+import {
+  convertBlueprintLibraryToScores,
+  getAchievementMultiplier,
+  getSetBlueprintScore,
+  getSpecifiedMultiplierFromLibrary,
+} from '../../upgradeBlueprints/helpers/blueprintScoreHelpers';
+import { PRODUCT_IMPROVER, SCIENTIFIC_METHOD } from '../constants/Achievements';
 import { PromoEvent } from '../types/PromoEvent';
 import { MainWorkshopStatus, Workshop, WorkshopStatus } from '../types/Workshop';
 import { isEvent } from './WorkshopHelpers';
@@ -59,9 +65,16 @@ export function getResearchMultiplier(workshopStatus: WorkshopStatus): number {
 
 function getMainWorkshopResearchMultiplier(workshopStatus: MainWorkshopStatus): number {
   return (
-    RESEARCH_ACHIEVEMENT_MULTIPLIER *
+    getAchievementMultiplier(SCIENTIFIC_METHOD, getGameStatus().highestEverAchievements.scientificMethod) *
     getSpecifiedMultiplierFromLibrary(SetMultiplierType.Research) *
-    TOTAL_BLUEPRINT_SCORE_MULTIPLIER *
+    getAchievementMultiplier(
+      PRODUCT_IMPROVER,
+      getSetBlueprintScore(
+        BLUEPRINT_LIBRARY.map((bp) => bp.productName),
+        convertBlueprintLibraryToScores(BLUEPRINT_LIBRARY),
+        true,
+      ),
+    ) *
     Math.min(
       20,
       workshopStatus.currentPromo === PromoEvent.Research
