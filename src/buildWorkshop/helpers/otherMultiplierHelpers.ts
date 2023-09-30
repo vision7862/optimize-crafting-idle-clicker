@@ -34,12 +34,15 @@ export function getClickOutputMultiplier(workshopStatus: WorkshopStatus): number
 }
 
 export function getOfflineMultiplier(workshopStatus: WorkshopStatus): number {
-  return isEvent(workshopStatus)
-    ? 100 * getCurrentEventPassMultipliers(workshopStatus.eventPass).offlineMultiplier
-    : 40 *
+  return (
+    (workshopStatus.offlineBoostActive ? getGameStatus().boostMultipliers.offline : 1) *
+    (isEvent(workshopStatus)
+      ? 100 * getCurrentEventPassMultipliers(workshopStatus.eventPass).offlineMultiplier
+      : 40 *
         getAchievementMultiplier(PASSIVE_INCOME, getGameStatus().highestEverAchievements.passiveIncome) *
         getSpecifiedMultiplierFromLibrary(SetMultiplierType.OfflineProduction) *
-        getGameStatus().premiumBonuses.income;
+        getGameStatus().premiumBonuses.income)
+  );
 }
 
 export function getSpeedMultiplier(workshopStatus: WorkshopStatus): number {
@@ -72,6 +75,10 @@ export const getGameStatus = memoize((): GameStatus => {
   if (![2, 3, 5, 10].includes(GAME_STATUS.boostMultipliers.click))
     throw new Error(
       `error with click boost multiplier: ${String(GAME_STATUS.boostMultipliers.click)} must be 2, 3, 5, or 10.`,
+    );
+  if (![2, 3, 5, 10].includes(GAME_STATUS.boostMultipliers.offline))
+    throw new Error(
+      `error with offline boost multiplier: ${String(GAME_STATUS.boostMultipliers.offline)} must be 2, 3, 5, or 10.`,
     );
   if (![4, 6, 10, 20].includes(GAME_STATUS.boostMultipliers.research))
     throw new Error(

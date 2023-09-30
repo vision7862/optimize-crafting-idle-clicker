@@ -1,6 +1,7 @@
 {
   "boostMultipliers": {
     "click": 5,
+    "offline": 2,
     "research": 20,
     "merchant": 10
   },

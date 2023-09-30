@@ -146,7 +146,8 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
   const scientists = Number(await input({ message: 'how many scientists do you have?' }));
 
   const speedBoostActive: boolean = await booleanChoice('is the speed boost active?');
-  const clickBoostActive: boolean = await booleanChoice('is the click boost active?');
+  const clickBoostActive: boolean = await booleanChoice('is the click boost active? (unused)');
+  const offlineBoostActive: boolean = await booleanChoice('is the offline boost active? (unused)');
   const researchBoostActive: boolean = await booleanChoice('is the research boost active?');
   const merchantBoostActive: boolean = await booleanChoice('is the merchant boost active?');
 
@@ -155,6 +156,7 @@ async function getWorkshopStatusFromUser(): Promise<Partial<WorkshopStatus>> {
     scientists,
     speedBoostActive,
     clickBoostActive,
+    offlineBoostActive,
     researchBoostActive,
     merchantBoostActive,
     currentPromo,

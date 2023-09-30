@@ -8,6 +8,7 @@ export type GameStatus = Readonly<{
 
 export type BoostMultipliers = Readonly<{
   click: number;
+  offline: number;
   research: number;
   merchant: number;
 }>;
