@@ -4,11 +4,13 @@ import { SetMergingStrategy } from '../types/MergingStrategy';
 // TODO: GH-4: only merge if there are excess blueprints for that product. for now, hardcode ones the algo wants that i don't have
 export const BPS_WITHOUT_DUPES: ProductName[] = [
   // // income wants
-  'Harpsichord',
-  'Saxophone',
   'Bongos',
   'Harp',
+  'Tambourine', // in MWS but not in a regular pack
   'Viola',
+  'Harpsichord',
+  'Snare Drum',
+  'Saxophone',
   // 'Microscope',
   // 'Machine Parts',
   // 'Motor Unit',
@@ -48,9 +50,9 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'Kettle Grill',
   'Stove',
   'Defibrillator',
-  'Light Bulb',
+  'Light Bulb', // in MWS but not in a regular pack
 
-  // science tools
+  // science tools - tools pack & more
   // 'Mechanical Parts',
   // 'Compass',
   // 'Sickle',
@@ -64,7 +66,7 @@ export const BPS_WITHOUT_DUPES: ProductName[] = [
   'Submarine',
   'Space Probe',
 
-  // exploration
+  // exploration - in master & grandmaster packs
   // 'Paper',
   // 'Paper Sheets',
 

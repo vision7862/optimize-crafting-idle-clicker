@@ -1,7 +1,7 @@
 import { BLUEPRINT_LIBRARY } from '../../src/upgradeBlueprints/config/BlueprintLibrary';
 import { STRATEGIES } from '../../src/upgradeBlueprints/config/Strategies';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
-import { BASE_BP } from '../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
+import { BASE_BP, getScoreAtTopOfStage } from '../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
   SetUpgradeInfo,
   getBpStrategy,
@@ -76,8 +76,27 @@ describe('optimizeUpgradingBlueprints', () => {
 
   describe('printUpgradeInfoOfEachSet', () => {
     it('prints it', () => {
-      console.log(printUpgradeInfoOfEachSet());
+      console.log(
+        printUpgradeInfoOfEachSet().filter(
+          (thing) => thing.type !== SetMultiplierType[SetMultiplierType.OfflineProduction],
+        ),
+      );
     });
+  });
+
+  test('strategies', () => {
+    const strategy = { topStage: 10, baseLevel: 101, plusLevelsPerStage: 0 };
+    console.log('f101');
+    console.log(`b2: score: ${getScoreAtTopOfStage(1, strategy) * 2}`);
+    console.log(`t2: score: ${getScoreAtTopOfStage(2, strategy)}`);
+    console.log(`b3: score: ${getScoreAtTopOfStage(2, strategy) * 2}`);
+    console.log(`t3: score: ${getScoreAtTopOfStage(3, strategy)}`);
+    console.log(`b4: score: ${getScoreAtTopOfStage(3, strategy) * 2}`);
+    console.log(`t4: score: ${getScoreAtTopOfStage(4, strategy)}`);
+    console.log(`b5: score: ${getScoreAtTopOfStage(4, strategy) * 2}`);
+    console.log(`t5: score: ${getScoreAtTopOfStage(5, strategy)}`);
+    console.log(`b6: score: ${getScoreAtTopOfStage(5, strategy) * 2}`);
+    console.log(`t6: score: ${getScoreAtTopOfStage(6, strategy)}`);
   });
 
   test('cheapest bp to merge', () => {
@@ -111,15 +130,25 @@ describe('optimizeUpgradingBlueprints', () => {
   // merging bps of a stage above 1 does not currently calculate like this wants
   test('making space: merge specified stage 1 blueprints', () => {
     const bps: ProductName[] = [
-      'Ilmenite',
-      'Gunpowder',
-      'Shovel',
-      'Magnificent Bow',
-      'Magnificent Hammer',
-      'Magnificent Dagger',
-      'Magnificent Crossbow',
-      'Canvas',
-      'Tiki Torch',
+      // 'Ilmenite',
+      // 'Gunpowder',
+      // 'Shovel',
+      // 'Magnificent Bow',
+      // 'Magnificent Hammer',
+      // 'Magnificent Dagger',
+      // 'Magnificent Crossbow',
+      // 'Canvas',
+      // 'Tiki Torch',
+      // 'Electrical Parts',
+      // 'Petroleum',
+      // 'Diesel',
+      // 'Gasoline',
+      // 'Cloth',
+      // 'Canvas',
+      // 'Ilmenite',
+      // 'Electro Magnet',
+      // 'Titanium Chloride',
+      'Chlorine'
     ];
     const merged: Array<BlueprintUpgradeInfo | null> = bps.map((productName) => {
       const mergedBp = mergeBlueprint({ ...BASE_BP, productName });

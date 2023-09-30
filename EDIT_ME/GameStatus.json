@@ -10,7 +10,7 @@
     "merchant": 30
   },
   "premiumBonuses": {
-    "income": 1,
+    "income": 3,
     "merchant": 2,
     "research": 2,
     "click": 1,
@@ -19,10 +19,10 @@
   },
   "highestEverAchievements": {
     "passiveIncome": 1.0e102,
-    "tradeAgreements": 190,
-    "scientificMethod": 1600,
+    "tradeAgreements": 210,
+    "scientificMethod": 1700,
     "idleClickerAddict": 105,
     "eventCompletionist": 92
   },
-  "lppWithoutPremium": 86
+  "lppWithoutPremium": 117
 }
