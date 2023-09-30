@@ -107,7 +107,7 @@ describe.only('runProgram', () => {
 
     describe('10+', () => {
       test('last product level 10', () => {
-        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 169 }));
+        printInfo(bottomUpToLastItem({ ...DEFAULT_WORKSHOP_STATUS_EVENT, eventName, scientists: 169 }).upgradeInfo);
       });
 
       describe('scientists', () => {
@@ -303,7 +303,14 @@ describe.only('runProgram', () => {
       });
 
       test('15 fame lvl 52', () => {
-        printFameTime(15, { level: 52, scientists: 1099, researchBoostActive: true });
+        printFameTime(42, {
+          level: 60,
+          scientists: 1650,
+          speedBoostActive: true,
+          clickBoostActive: false,
+          researchBoostActive: false,
+          merchantBoostActive: true,
+        });
       });
     });
 

@@ -10,6 +10,7 @@ import { clickTopInputsGoal } from './goals/clickTopAndInputs';
 import { doubleLoreGoal } from './goals/doubleLore';
 import { fastestFameGoal } from './goals/fastestFame';
 import { gemsGoal } from './goals/gems';
+import { lastProductGoal } from './goals/lastProduct';
 import { levelUpGoal } from './goals/levelUp';
 import { mostLoreGoal } from './goals/lore';
 import { merchantsGoal } from './goals/merchants';
@@ -32,6 +33,7 @@ const goals: Map<string, GoalType> = new Map<string, GoalType>([
   [merchantsGoal.name, merchantsGoal],
   [fameGoal.name, fameGoal],
   [fastestFameGoal.name, fastestFameGoal],
+  [lastProductGoal.name, lastProductGoal],
   [clickTopInputsGoal.name, clickTopInputsGoal],
   [mostLoreGoal.name, mostLoreGoal],
   [auditMultipliersGoal.name, auditMultipliersGoal],

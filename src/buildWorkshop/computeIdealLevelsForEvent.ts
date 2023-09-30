@@ -13,9 +13,13 @@ import {
   WorkshopStatus,
 } from './types/Workshop';
 
-export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
+export function bottomUpToLastItem(partialWorkshopStatus: Partial<WorkshopStatus>): {
+  upgradeInfo: WorkshopUpgradeInfo;
+  target: number;
+} {
   const workshop: Workshop = setUpWorkshop(partialWorkshopStatus);
-  return buildWorkshopToTarget(workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost, workshop);
+  const costOfLastProduct = workshop.productsInfo[workshop.productsInfo.length - 1].details.buildCost;
+  return { upgradeInfo: buildWorkshopToTarget(costOfLastProduct, workshop), target: costOfLastProduct };
 }
 
 export function quickestNewLevel(partialWorkshopStatus: Partial<WorkshopStatus>): WorkshopUpgradeInfo {
