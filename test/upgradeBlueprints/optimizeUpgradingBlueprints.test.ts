@@ -1,4 +1,4 @@
-import { BLUEPRINT_LIBRARY } from '../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../EDIT_ME/BlueprintLibrary';
 import { STRATEGIES } from '../../src/upgradeBlueprints/config/Strategies';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
 import { BASE_BP, getScoreAtTopOfStage } from '../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
@@ -148,7 +148,7 @@ describe('optimizeUpgradingBlueprints', () => {
       // 'Ilmenite',
       // 'Electro Magnet',
       // 'Titanium Chloride',
-      'Chlorine'
+      'Chlorine',
     ];
     const merged: Array<BlueprintUpgradeInfo | null> = bps.map((productName) => {
       const mergedBp = mergeBlueprint({ ...BASE_BP, productName });

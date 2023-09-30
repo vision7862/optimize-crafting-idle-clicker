@@ -1,5 +1,5 @@
-import { BASE_BP } from '../helpers/blueprintObjectHelpers';
-import { Blueprint } from '../types/Blueprint';
+import { BASE_BP } from '../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
+import { Blueprint } from '../src/upgradeBlueprints/types/Blueprint';
 
 // strategy 21+10, bottom blueprint for stage 2, 3, 4, etc, and top of stage 4
 const s21 = {
@@ -124,7 +124,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bIV, productName: 'War Hammer', upgradeLevel: 81, score: 241920 },
   { ...f51.bV, productName: 'Steel Blades', upgradeLevel: 31, score: 829440 },
   { ...s51.bV, productName: 'Cut Ruby' },
-  { ...s51.bIII, productName: 'Map', upgradeLevel: 31, score: 6720 },
+  { ...s51.bIV, productName: 'Map' },
   { ...s51.bV, productName: 'Ruby Ring' },
   { ...s51.bIV, productName: 'Book', upgradeLevel: 61, score: 188160 },
   { ...BASE_BP, productName: 'Tent' },
@@ -134,7 +134,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s71.bV, productName: 'Magnificent Hammer', upgradeLevel: 71, score: 10137600 },
   { ...s71.bV, productName: 'Magnificent Dagger', upgradeLevel: 41, score: 6336000 },
   { ...s51.bV, productName: 'Magnificent Sword', upgradeLevel: 31, score: 864000, scoreChangePerLevel: 21600 }, // intended to be f51 so score change needs to be included
-  { ...s51.bIII, productName: 'Rowboat', upgradeLevel: 31, score: 6720 },
+  { ...s51.bIV, productName: 'Rowboat' },
   { ...s71.bIV, productName: 'Uncut Sapphire' },
   { ...f51.bV, productName: 'Magnificent Armor', upgradeLevel: 21, score: 622080 },
   { ...s51.bVI, productName: 'Mechanical Parts', upgradeLevel: 101, score: 106444800 },
@@ -151,8 +151,8 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bIV, productName: 'Clockwork', upgradeLevel: 71, score: 215040 },
   { ...s51.bIII, productName: 'Harp', upgradeLevel: 71, score: 13440 },
   { ...s51.bV, productName: 'Saltpeter', upgradeLevel: 81, score: 4354560 },
-  { ...s81.bIV, productName: 'Tambourine' },
-  { ...s61.bII, productName: 'Chlorine' },
+  { ...s81.bIV, productName: 'Tambourine', upgradeLevel: 71, score: 633600 },
+  { ...s61.bIII, productName: 'Chlorine' },
   { ...s51.bIII, productName: 'Sapphire Ring' },
   { ...s51.bII, productName: 'Titanium Chloride', upgradeLevel: 21, score: 360 },
   { ...s51.bIV, productName: 'Clock', upgradeLevel: 71, score: 215040 },
@@ -197,7 +197,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bII, productName: 'Cannon' },
   { ...s51.bII, productName: 'Refrigerator', upgradeLevel: 61, score: 840 },
   { ...s51.bIV, productName: 'Locomotive', upgradeLevel: 71, score: 215040 },
-  { ...s51.bIII, productName: 'Combat Boots' },
+  { ...s51.bIII, productName: 'Combat Boots', upgradeLevel: 41, score: 8400 },
   { ...s51.bIII, productName: 'Revolver' },
   { ...BASE_BP, productName: 'Tiki Torch', upgradeLevel: 51, score: 60 },
   { ...s101.bIII, productName: 'Diesel', upgradeLevel: 111, score: 63360 },
@@ -230,4 +230,82 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BASE_BP, productName: 'Kevlar' },
   { ...BASE_BP, productName: 'Headset' },
   { ...BASE_BP, productName: 'Parachute' },
+];
+
+export const BPS_WITHOUT_DUPES = [
+  // income wants
+  'Bongos',
+  'Harp',
+  'Tambourine', // in MWS but not in a regular pack
+  'Viola',
+  'Harpsichord',
+  'Snare Drum',
+  'Saxophone',
+  // 'Microscope',
+  // 'Machine Parts',
+  // 'Motor Unit',
+  // 'Telephone',
+  // 'Steam Boat',
+  // 'Locomotive',
+  // 'Mechanical Parts', // not event only
+  // 'Electro Magnet',
+  // 'Clockwork',
+  // 'Steam Engine',
+  // 'Camera',
+  // 'Clock',
+  // 'Electrical Parts', // not event only. technically.
+  'Combustion Engine',
+  'Glider',
+  'Bicycle',
+  'Truck',
+  'Motorcycle',
+  'Car',
+  'Airplane',
+  'Antenna',
+  'Movie Projector',
+  'Walkie Talkie',
+  'TV Set',
+  'Microchip',
+  'Radio',
+  'Monitor',
+  'PC',
+
+  // research
+  // modern technology
+  'Stethoscope',
+  'Lamp',
+  'Refrigerator',
+  'X-ray Machine',
+  'Flashlight',
+  'Kettle Grill',
+  'Stove',
+  'Defibrillator',
+  'Light Bulb', // in MWS but not in a regular pack
+
+  // science tools - tools pack & more
+  // 'Mechanical Parts',
+  // 'Compass',
+  // 'Sickle',
+  // 'Chisel',
+
+  // modern exploration
+  'Antenna',
+  'Diving Gear',
+  'Rocket',
+  'Tent',
+  'Submarine',
+  'Space Probe',
+
+  // exploration - in master & grandmaster packs
+  // 'Paper',
+  // 'Paper Sheets',
+
+  // // gems
+  // 'Cut Emerald',
+  // 'Cut Ruby',
+  // 'Cut Sapphire',
+  // 'Cut Onyx',
+
+  // 'Lump Hammer',
+  // 'War Hammer',
 ];

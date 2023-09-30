@@ -1,4 +1,5 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../../EDIT_ME/BlueprintLibrary';
 import { ACarIsBorn } from '../../products/ACarIsBorn';
 import { AirCraft } from '../../products/AirCraft';
 import { AlchemistsKitchen } from '../../products/AlchemistsKitchen';
@@ -39,7 +40,6 @@ import { TrainedToShip } from '../../products/TrainedToShip';
 import { VitalScience } from '../../products/VitalScience';
 import { WindItUp } from '../../products/WindItUp';
 import { WorkshopOfHorrors } from '../../products/WorkshopOfHorrors';
-import { BLUEPRINT_LIBRARY } from '../upgradeBlueprints/config/BlueprintLibrary';
 import { convertBlueprintLibraryToScores } from '../upgradeBlueprints/helpers/blueprintScoreHelpers';
 import { getOreOutputMultiplier } from './helpers/otherMultiplierHelpers';
 import { ImportedProduct } from './types/ImportedProduct';

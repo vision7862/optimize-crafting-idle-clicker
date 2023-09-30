@@ -1,5 +1,5 @@
 import memoize from 'fast-memoize';
-import { BLUEPRINT_LIBRARY } from '../../upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../../EDIT_ME/BlueprintLibrary';
 import { SetMultiplierType } from '../../upgradeBlueprints/constants/BlueprintSets';
 import {
   convertBlueprintLibraryToScores,
