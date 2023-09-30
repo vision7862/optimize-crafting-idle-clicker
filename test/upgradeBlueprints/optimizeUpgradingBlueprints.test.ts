@@ -1,5 +1,7 @@
 import { BLUEPRINT_LIBRARY } from '../../EDIT_ME/BlueprintLibrary';
-import { STRATEGIES } from '../../src/upgradeBlueprints/config/Strategies';
+import { STRATEGIES } from '../../EDIT_ME/Strategies';
+import { MainWorkshopProducts } from '../../products/MainWorkshop';
+import { ImportedProduct } from '../../src/buildWorkshop/types/ImportedProduct';
 import { SetMultiplierType } from '../../src/upgradeBlueprints/constants/BlueprintSets';
 import { BASE_BP, getScoreAtTopOfStage } from '../../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
 import {
@@ -97,6 +99,20 @@ describe('optimizeUpgradingBlueprints', () => {
     console.log(`t5: score: ${getScoreAtTopOfStage(5, strategy)}`);
     console.log(`b6: score: ${getScoreAtTopOfStage(5, strategy) * 2}`);
     console.log(`t6: score: ${getScoreAtTopOfStage(6, strategy)}`);
+  });
+
+  test('all tags', () => {
+    const products: readonly ImportedProduct[] = MainWorkshopProducts;
+    const allTags = new Set<string>();
+    products.forEach((product) => {
+      const tags: readonly string[] = product.Tags ?? [];
+      tags.forEach((tag) => allTags.add(tag));
+    });
+    console.log(allTags);
+    allTags.forEach((tag) => {
+      console.log(`${tag}:`);
+      console.log(products.filter((product) => product.Tags?.includes(tag)).map((product) => product.ProductType));
+    });
   });
 
   test('cheapest bp to merge', () => {

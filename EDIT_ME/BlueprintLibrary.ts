@@ -232,80 +232,17 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BASE_BP, productName: 'Parachute' },
 ];
 
-export const BPS_WITHOUT_DUPES = [
-  // income wants
-  'Bongos',
-  'Harp',
-  'Tambourine', // in MWS but not in a regular pack
-  'Viola',
-  'Harpsichord',
-  'Snare Drum',
-  'Saxophone',
-  // 'Microscope',
-  // 'Machine Parts',
-  // 'Motor Unit',
-  // 'Telephone',
-  // 'Steam Boat',
-  // 'Locomotive',
-  // 'Mechanical Parts', // not event only
-  // 'Electro Magnet',
-  // 'Clockwork',
-  // 'Steam Engine',
-  // 'Camera',
-  // 'Clock',
-  // 'Electrical Parts', // not event only. technically.
-  'Combustion Engine',
-  'Glider',
-  'Bicycle',
-  'Truck',
-  'Motorcycle',
-  'Car',
-  'Airplane',
-  'Antenna',
-  'Movie Projector',
-  'Walkie Talkie',
-  'TV Set',
-  'Microchip',
-  'Radio',
-  'Monitor',
-  'PC',
+export enum UnmergeableBps {
+  All, // Algorithm will allow no merging
+  EventOnly, // Allow no merging of BPs not found in the main workshop
+  NotInMWSPacks, // Allow no merging of BPs not found in main workshop packs (Renaissance, Master, Expert, etc)
+  None, // Assume there are enough of any bp to merge to the next tier
+}
 
-  // research
-  // modern technology
-  'Stethoscope',
-  'Lamp',
-  'Refrigerator',
-  'X-ray Machine',
-  'Flashlight',
-  'Kettle Grill',
-  'Stove',
-  'Defibrillator',
-  'Light Bulb', // in MWS but not in a regular pack
+export const UnmergeableStrategy: UnmergeableBps = UnmergeableBps.None;
 
-  // science tools - tools pack & more
-  // 'Mechanical Parts',
-  // 'Compass',
-  // 'Sickle',
-  // 'Chisel',
+// in addition to the above strategy, the below blueprints will be considered unmergeable
+export const BPS_WITHOUT_DUPES = ['Tambourine'];
 
-  // modern exploration
-  'Antenna',
-  'Diving Gear',
-  'Rocket',
-  'Tent',
-  'Submarine',
-  'Space Probe',
-
-  // exploration - in master & grandmaster packs
-  // 'Paper',
-  // 'Paper Sheets',
-
-  // // gems
-  // 'Cut Emerald',
-  // 'Cut Ruby',
-  // 'Cut Sapphire',
-  // 'Cut Onyx',
-
-  // 'Lump Hammer',
-  // 'War Hammer',
-];
+// in addition to the above strategy and specified blueprints, the below packs will be considered unmergeable
+// export const NO_PACKS = ['Master', 'Grandmaster', 'Paragon'];

@@ -1,8 +1,14 @@
+import memoize from 'fast-memoize';
+import {
+  BPS_WITHOUT_DUPES,
+  UnmergeableStrategy as UNMERGEABLE_STRATEGY,
+  UnmergeableBps,
+} from '../../../EDIT_ME/BlueprintLibrary';
+import { STRATEGIES } from '../../../EDIT_ME/Strategies';
 import { MainWorkshopProducts } from '../../../products/MainWorkshop';
 import { importWorkshop } from '../../buildWorkshop/importWorkshop';
 import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
 import { ProductDetails } from '../../buildWorkshop/types/Product';
-import { BPS_WITHOUT_DUPES, STRATEGIES } from '../config/Strategies';
 import { BLUEPRINT_SETS, BlueprintSet } from '../constants/BlueprintSets';
 import { BlueprintUpgradeInfo } from '../optimizeUpgradingBlueprints';
 import { Blueprint, ProductName } from '../types/Blueprint';
@@ -49,6 +55,65 @@ export function upgradeBlueprint(blueprint: Blueprint, levels: number): Blueprin
   return { blueprint: newBlueprint, costOfUpgrade, scoreChange };
 }
 
+const BasicPack = ['Wood', 'Leather', 'Copper'];
+const IntermediatePack = ['Iron', 'Bronze', 'Ore'];
+const AdvancedPack = [...BasicPack, ...IntermediatePack, 'Precious'];
+const JewelryPack = ['Emerald', 'Ruby', 'Sapphire', 'Onyx'];
+const MagnificentPack = ['Magnificent', 'Precious'];
+const RenaissancePack = ['Renaissance', 'Exploration', 'Industrial'];
+const ToolsPack = ['Mining', 'Research', 'Renaissance'];
+const MainWorkshopPackTags = [
+  ...AdvancedPack,
+  ...JewelryPack,
+  ...MagnificentPack,
+  'Proficient',
+  'Expert',
+  'Master',
+  'Grandmaster',
+  'Paragon',
+  ...RenaissancePack,
+  ...ToolsPack,
+];
+
+const BPsOnMWSSlider = ['Electrical Parts', 'Light Bulb', 'Tambourine'];
+
+const isBpUnmergeable = memoize((name: ProductName): boolean => {
+  const products: readonly ImportedProduct[] = MainWorkshopProducts;
+  const tags = products.filter((product) => product.ProductType === name)[0].Tags;
+
+  if (BPS_WITHOUT_DUPES.includes(name)) return true;
+
+  // let allTagsInNoPacksList = true;
+  // tags?.forEach((tag) => {
+  //   allTagsInNoPacksList &&= NO_PACKS.includes(tag);
+  // });
+  // if (allTagsInNoPacksList) return true;
+
+  switch (UNMERGEABLE_STRATEGY) {
+    case UnmergeableBps.All:
+      return true;
+    case UnmergeableBps.EventOnly: {
+      let attainableInMWS = false;
+      tags?.forEach((tag) => {
+        attainableInMWS ||= MainWorkshopPackTags.includes(tag);
+      });
+      attainableInMWS ||= BPsOnMWSSlider.includes(name);
+      return !attainableInMWS;
+    }
+    case UnmergeableBps.NotInMWSPacks: {
+      let attainableInMWS = false;
+      tags?.forEach((tag) => {
+        attainableInMWS ||= MainWorkshopPackTags.includes(tag);
+      });
+      return !attainableInMWS;
+    }
+    case UnmergeableBps.None:
+      return false;
+    default:
+      return false;
+  }
+});
+
 export type SetUpgradeInfo = Readonly<{
   upgradedBlueprints: Blueprint[];
   cost: number;
@@ -62,10 +127,7 @@ export function getTopLevel(strategy: MergingStrategy, evolutionStage: number): 
 // Assume that there are sufficient base BPs to merge all the way up
 export function mergeBlueprint(blueprintToMerge: Blueprint): BlueprintUpgradeInfo | null {
   const mergeStrategy = getBpStrategy(blueprintToMerge.productName);
-  if (
-    BPS_WITHOUT_DUPES.includes(blueprintToMerge.productName) ||
-    blueprintToMerge.evolutionStage >= mergeStrategy.topStage
-  ) {
+  if (isBpUnmergeable(blueprintToMerge.productName) || blueprintToMerge.evolutionStage >= mergeStrategy.topStage) {
     return null;
   }
   // remove this blueprint from all blueprints
