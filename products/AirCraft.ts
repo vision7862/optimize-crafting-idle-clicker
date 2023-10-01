@@ -1,0 +1,28 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const AirCraft: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Coal', ProductAmount: 1, ConstructionPrice: 70, ProductPrice: 4, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 500, ProductPrice: 20, DiscoveryPrice: 50, Type: 'Ore' },
+  { ProductType: 'Fabric', ProductAmount: 1, ConstructionPrice: 4000, ProductPrice: 50, DiscoveryPrice: 100, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Coal', LeftResourceAmount: 3, RightResourceType: 'Iron Ore', RightResourceAmount: 2, ConstructionPrice: 35000, ProductPrice: 90, DiscoveryPrice: 500, Type: 'Ingot' },
+  { ProductType: 'Iron Rivets', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 450000, ProductPrice: 250, DiscoveryPrice: 1000, Type: 'SemiProduct' },
+  { ProductType: 'Mechanical Parts', ProductAmount: 2, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 3000000, ProductPrice: 3000, DiscoveryPrice: 2000, Type: 'SemiProduct' },
+  { ProductType: 'Glider Wing', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Fabric', RightResourceAmount: 6, ConstructionPrice: 25000000, ProductPrice: 20000, DiscoveryPrice: 5000, Type: 'SemiProduct' },
+  { ProductType: 'Glider', ProductAmount: 1, LeftResourceType: 'Glider Wing', LeftResourceAmount: 1, RightResourceType: 'Wood', RightResourceAmount: 3, ConstructionPrice: 100000000, ProductPrice: 60000, DiscoveryPrice: 10000, Type: 'LateProduct' },
+  { ProductType: 'Rubber', ProductAmount: 1, ConstructionPrice: 600000000, ProductPrice: 100000, DiscoveryPrice: 20000, Type: 'Ore' },
+  { ProductType: 'Tire', ProductAmount: 1, LeftResourceType: 'Rubber', LeftResourceAmount: 1, ConstructionPrice: 3000000000, ProductPrice: 400000, DiscoveryPrice: 50000, Type: 'SemiProduct' },
+  { ProductType: 'Airplane Wheel', ProductAmount: 1, LeftResourceType: 'Tire', LeftResourceAmount: 1, RightResourceType: 'Mechanical Parts', RightResourceAmount: 1, ConstructionPrice: 10000000000, ProductPrice: 1000000, DiscoveryPrice: 100000, Type: 'EarlyProduct' },
+  { ProductType: 'Steel', ProductAmount: 1, LeftResourceType: 'Coal', LeftResourceAmount: 4, RightResourceType: 'Iron Ingots', RightResourceAmount: 2, ConstructionPrice: 50000000000, ProductPrice: 2500000, DiscoveryPrice: 150000, Type: 'Ingot' },
+  { ProductType: 'Fuselage', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 8, RightResourceType: 'Steel', RightResourceAmount: 4, ConstructionPrice: 150000000000, ProductPrice: 15000000, DiscoveryPrice: 200000, Type: 'SemiProduct' },
+  { ProductType: 'Airplane Wing', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 4, ConstructionPrice: 1000000000000, ProductPrice: 30000000, DiscoveryPrice: 250000, Type: 'SemiProduct' },
+  { ProductType: 'Airplane Parts', ProductAmount: 1, LeftResourceType: 'Airplane Wheel', LeftResourceAmount: 4, RightResourceType: 'Airplane Wing', RightResourceAmount: 2, ConstructionPrice: 6000000000000, ProductPrice: 200000000, DiscoveryPrice: 300000, Type: 'SemiProduct' },
+  { ProductType: 'Airplane Body', ProductAmount: 1, LeftResourceType: 'Fuselage', LeftResourceAmount: 1, RightResourceType: 'Airplane Parts', RightResourceAmount: 1, ConstructionPrice: 30000000000000, ProductPrice: 600000000, DiscoveryPrice: 350000, Type: 'SemiProduct' },
+  { ProductType: 'Propeller', ProductAmount: 1, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Mechanical Parts', RightResourceAmount: 1, ConstructionPrice: 100000000000000, ProductPrice: 1000000000, DiscoveryPrice: 400000, Type: 'EarlyProduct' },
+  { ProductType: 'Piston', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 2, ConstructionPrice: 500000000000000, ProductPrice: 3500000000, DiscoveryPrice: 450000, Type: 'SemiProduct' },
+  { ProductType: 'Engine Block', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 4, RightResourceType: 'Piston', RightResourceAmount: 4, ConstructionPrice: 1500000000000000, ProductPrice: 20000000000, DiscoveryPrice: 500000, Type: 'SemiProduct' },
+  { ProductType: 'Crankshaft', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 9000000000000000, ProductPrice: 35000000000, DiscoveryPrice: 550000, Type: 'SemiProduct' },
+  { ProductType: 'Engine', ProductAmount: 1, LeftResourceType: 'Engine Block', LeftResourceAmount: 1, RightResourceType: 'Crankshaft', RightResourceAmount: 1, ConstructionPrice: 30000000000000000, ProductPrice: 150000000000, DiscoveryPrice: 600000, Type: 'EarlyProduct' },
+  { ProductType: 'Aircraft Engine', ProductAmount: 1, LeftResourceType: 'Propeller', LeftResourceAmount: 1, RightResourceType: 'Engine', RightResourceAmount: 1, ConstructionPrice: 150000000000000000, ProductPrice: 500000000000, DiscoveryPrice: 650000, Type: 'LateProduct' },
+  { ProductType: 'Airplane', ProductAmount: 1, LeftResourceType: 'Airplane Body', LeftResourceAmount: 1, RightResourceType: 'Aircraft Engine', RightResourceAmount: 2, ConstructionPrice: 600000000000000000, ProductPrice: 2000000000000, DiscoveryPrice: 700000, Type: 'LateProduct' },
+];

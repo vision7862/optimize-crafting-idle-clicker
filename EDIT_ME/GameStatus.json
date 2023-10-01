@@ -1,0 +1,29 @@
+{
+  "boostMultipliers": {
+    "click": 5,
+    "offline": 2,
+    "research": 20,
+    "merchant": 10
+  },
+  "dynastyMultipliers": {
+    "income": 30,
+    "ore": 30,
+    "merchant": 30
+  },
+  "premiumBonuses": {
+    "income": 3,
+    "merchant": 2,
+    "research": 2,
+    "click": 1,
+    "speed": 5,
+    "LPP": 30
+  },
+  "highestEverAchievements": {
+    "passiveIncome": 1.0e102,
+    "tradeAgreements": 210,
+    "scientificMethod": 1700,
+    "idleClickerAddict": 105,
+    "eventCompletionist": 92
+  },
+  "lppWithoutPremium": 117
+}

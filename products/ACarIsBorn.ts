@@ -1,0 +1,26 @@
+import { ImportedProduct } from '../src/buildWorkshop/types/ImportedProduct';
+
+export const ACarIsBorn: ImportedProduct[] = [
+  { ProductType: 'Wood', ProductAmount: 1, ConstructionPrice: 10, ProductPrice: 1, DiscoveryPrice: 1, Type: 'Ore' },
+  { ProductType: 'Coal', ProductAmount: 3, ConstructionPrice: 80, ProductPrice: 2, DiscoveryPrice: 10, Type: 'Ore' },
+  { ProductType: 'Iron Ore', ProductAmount: 1, ConstructionPrice: 900, ProductPrice: 30, DiscoveryPrice: 50, Type: 'Ore' },
+  { ProductType: 'Iron Ingots', ProductAmount: 5, LeftResourceType: 'Coal', LeftResourceAmount: 3, RightResourceType: 'Iron Ore', RightResourceAmount: 2, ConstructionPrice: 7000, ProductPrice: 40, DiscoveryPrice: 100, Type: 'Ingot' },
+  { ProductType: 'Iron Rivets', ProductAmount: 5, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 1, ConstructionPrice: 60000, ProductPrice: 90, DiscoveryPrice: 500, Type: 'SemiProduct' },
+  { ProductType: 'Rubber', ProductAmount: 1, ConstructionPrice: 500000, ProductPrice: 900, DiscoveryPrice: 1000, Type: 'Ore' },
+  { ProductType: 'Tire', ProductAmount: 1, LeftResourceType: 'Rubber', LeftResourceAmount: 1, ConstructionPrice: 2500000, ProductPrice: 5000, DiscoveryPrice: 2000, Type: 'SemiProduct' },
+  { ProductType: 'Steel', ProductAmount: 2, LeftResourceType: 'Coal', LeftResourceAmount: 4, RightResourceType: 'Iron Ingots', RightResourceAmount: 2, ConstructionPrice: 20000000, ProductPrice: 10000, DiscoveryPrice: 5000, Type: 'Ingot' },
+  { ProductType: 'Wheel', ProductAmount: 1, LeftResourceType: 'Tire', LeftResourceAmount: 1, RightResourceType: 'Steel', RightResourceAmount: 1, ConstructionPrice: 90000000, ProductPrice: 50000, DiscoveryPrice: 10000, Type: 'EarlyProduct' },
+  { ProductType: 'Mechanical Parts', ProductAmount: 2, LeftResourceType: 'Wood', LeftResourceAmount: 2, RightResourceType: 'Iron Rivets', RightResourceAmount: 8, ConstructionPrice: 800000000, ProductPrice: 150000, DiscoveryPrice: 20000, Type: 'SemiProduct' },
+  { ProductType: 'Axle', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 2, RightResourceType: 'Mechanical Parts', RightResourceAmount: 4, ConstructionPrice: 10000000000, ProductPrice: 2000000, DiscoveryPrice: 50000, Type: 'SemiProduct' },
+  { ProductType: 'Suspension', ProductAmount: 1, LeftResourceType: 'Wheel', LeftResourceAmount: 2, RightResourceType: 'Axle', RightResourceAmount: 1, ConstructionPrice: 70000000000, ProductPrice: 7000000, DiscoveryPrice: 100000, Type: 'EarlyProduct' },
+  { ProductType: 'Piston', ProductAmount: 1, LeftResourceType: 'Mechanical Parts', LeftResourceAmount: 2, ConstructionPrice: 500000000000, ProductPrice: 20000000, DiscoveryPrice: 150000, Type: 'SemiProduct' },
+  { ProductType: 'Engine Block', ProductAmount: 1, LeftResourceType: 'Iron Ingots', LeftResourceAmount: 4, RightResourceType: 'Piston', RightResourceAmount: 4, ConstructionPrice: 3000000000000, ProductPrice: 150000000, DiscoveryPrice: 200000, Type: 'SemiProduct' },
+  { ProductType: 'Crankshaft', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 1, ConstructionPrice: 20000000000000, ProductPrice: 300000000, DiscoveryPrice: 250000, Type: 'SemiProduct' },
+  { ProductType: 'Engine', ProductAmount: 1, LeftResourceType: 'Engine Block', LeftResourceAmount: 1, RightResourceType: 'Crankshaft', RightResourceAmount: 1, ConstructionPrice: 60000000000000, ProductPrice: 900000000, DiscoveryPrice: 300000, Type: 'EarlyProduct' },
+  { ProductType: 'Powertrain', ProductAmount: 1, LeftResourceType: 'Suspension', LeftResourceAmount: 2, RightResourceType: 'Engine', RightResourceAmount: 1, ConstructionPrice: 150000000000000, ProductPrice: 2000000000, DiscoveryPrice: 350000, Type: 'SemiProduct' },
+  { ProductType: 'Chassis', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 2, RightResourceType: 'Powertrain', RightResourceAmount: 1, ConstructionPrice: 1000000000000000, ProductPrice: 8000000000, DiscoveryPrice: 400000, Type: 'SemiProduct' },
+  { ProductType: 'Car Coachwork', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 6, ConstructionPrice: 7000000000000000, ProductPrice: 40000000000, DiscoveryPrice: 450000, Type: 'SemiProduct' },
+  { ProductType: 'Car', ProductAmount: 1, LeftResourceType: 'Chassis', LeftResourceAmount: 1, RightResourceType: 'Car Coachwork', RightResourceAmount: 1, ConstructionPrice: 20000000000000000, ProductPrice: 100000000000, DiscoveryPrice: 500000, Type: 'LateProduct' },
+  { ProductType: 'Truck Coachwork', ProductAmount: 1, LeftResourceType: 'Steel', LeftResourceAmount: 10, ConstructionPrice: 150000000000000000, ProductPrice: 300000000000, DiscoveryPrice: 600000, Type: 'SemiProduct' },
+  { ProductType: 'Truck', ProductAmount: 1, LeftResourceType: 'Chassis', LeftResourceAmount: 1, RightResourceType: 'Truck Coachwork', RightResourceAmount: 1, ConstructionPrice: 600000000000000000, ProductPrice: 1000000000000, DiscoveryPrice: 700000, Type: 'LateProduct' },
+];
