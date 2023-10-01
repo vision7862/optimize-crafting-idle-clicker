@@ -1,5 +1,5 @@
-import { BASE_BP } from '../helpers/blueprintObjectHelpers';
-import { Blueprint } from '../types/Blueprint';
+import { BASE_BP } from '../src/upgradeBlueprints/helpers/blueprintObjectHelpers';
+import { Blueprint, ProductName } from '../src/upgradeBlueprints/types/Blueprint';
 
 // strategy 21+10, bottom blueprint for stage 2, 3, 4, etc, and top of stage 4
 const s21 = {
@@ -124,7 +124,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bIV, productName: 'War Hammer', upgradeLevel: 81, score: 241920 },
   { ...f51.bV, productName: 'Steel Blades', upgradeLevel: 31, score: 829440 },
   { ...s51.bV, productName: 'Cut Ruby' },
-  { ...s51.bIII, productName: 'Map', upgradeLevel: 31, score: 6720 },
+  { ...s51.bIV, productName: 'Map' },
   { ...s51.bV, productName: 'Ruby Ring' },
   { ...s51.bIV, productName: 'Book', upgradeLevel: 61, score: 188160 },
   { ...BASE_BP, productName: 'Tent' },
@@ -134,7 +134,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s71.bV, productName: 'Magnificent Hammer', upgradeLevel: 71, score: 10137600 },
   { ...s71.bV, productName: 'Magnificent Dagger', upgradeLevel: 41, score: 6336000 },
   { ...s51.bV, productName: 'Magnificent Sword', upgradeLevel: 31, score: 864000, scoreChangePerLevel: 21600 }, // intended to be f51 so score change needs to be included
-  { ...s51.bIII, productName: 'Rowboat', upgradeLevel: 31, score: 6720 },
+  { ...s51.bIV, productName: 'Rowboat' },
   { ...s71.bIV, productName: 'Uncut Sapphire' },
   { ...f51.bV, productName: 'Magnificent Armor', upgradeLevel: 21, score: 622080 },
   { ...s51.bVI, productName: 'Mechanical Parts', upgradeLevel: 101, score: 106444800 },
@@ -142,7 +142,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bVI, productName: 'Magnificent Crossbow' },
   { ...s51.bV, productName: 'Sulfur' },
   { ...s51.bIII, productName: 'Bongos', upgradeLevel: 71, score: 13440 },
-  { ...s101.bIII, productName: 'Petroleum' },
+  { ...s101.bIII, productName: 'Petroleum', upgradeLevel: 101, score: 580080 },
   { ...s51.bIII, productName: 'Cut Sapphire', upgradeLevel: 71, score: 13440 },
   { ...s51.bV, productName: 'Halberd', upgradeLevel: 11, score: 967680 },
   { ...s51.bIV, productName: 'Microscope', upgradeLevel: 81, score: 241920 },
@@ -151,17 +151,17 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bIV, productName: 'Clockwork', upgradeLevel: 71, score: 215040 },
   { ...s51.bIII, productName: 'Harp', upgradeLevel: 71, score: 13440 },
   { ...s51.bV, productName: 'Saltpeter', upgradeLevel: 81, score: 4354560 },
-  { ...s81.bIV, productName: 'Tambourine' },
-  { ...s61.bII, productName: 'Chlorine' },
+  { ...s81.bIV, productName: 'Tambourine', upgradeLevel: 71, score: 633600 },
+  { ...s61.bIII, productName: 'Chlorine' },
   { ...s51.bIII, productName: 'Sapphire Ring' },
   { ...s51.bII, productName: 'Titanium Chloride', upgradeLevel: 21, score: 360 },
   { ...s51.bIV, productName: 'Clock', upgradeLevel: 71, score: 215040 },
   { ...s101.bIII, productName: 'Ilmenite', upgradeLevel: 71, score: 42240 },
   { ...s51.bII, productName: 'Viola', upgradeLevel: 51, score: 720 },
   { ...s71.bVI, productName: 'Gunpowder', upgradeLevel: 91, score: 304128000 },
-  { ...s61.bII, productName: 'Ethylene' },
+  { ...s61.bIII, productName: 'Ethylene' },
   { ...s71.bIII, productName: 'Uncut Onyx', upgradeLevel: 91, score: 28800 },
-  { ...s61.bII, productName: 'Borax' },
+  { ...s61.bIII, productName: 'Borax' },
   { ...s51.bII, productName: 'Harpsichord', upgradeLevel: 61, score: 840 },
   { ...s51.bV, productName: 'Weapon Parts', upgradeLevel: 91, score: 4838400 },
   { ...s81.bIII, productName: 'Canvas', upgradeLevel: 91, score: 36000 },
@@ -191,13 +191,13 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bIII, productName: 'Derringer' },
   { ...s51.bII, productName: 'Lamp', upgradeLevel: 61, score: 840 },
   { ...s51.bII, productName: 'Rocket Launcher', upgradeLevel: 31, score: 480 },
-  { ...s51.bIII, productName: 'Telephone', upgradeLevel: 41, score: 8400 },
+  { ...s51.bIV, productName: 'Telephone' },
   { ...s51.bIII, productName: 'Lever Action Rifle' },
   { ...s51.bIV, productName: 'Steam Boat', upgradeLevel: 81, score: 241920 },
   { ...s51.bII, productName: 'Cannon' },
   { ...s51.bII, productName: 'Refrigerator', upgradeLevel: 61, score: 840 },
   { ...s51.bIV, productName: 'Locomotive', upgradeLevel: 71, score: 215040 },
-  { ...s51.bIII, productName: 'Combat Boots' },
+  { ...s51.bIII, productName: 'Combat Boots', upgradeLevel: 41, score: 8400 },
   { ...s51.bIII, productName: 'Revolver' },
   { ...BASE_BP, productName: 'Tiki Torch', upgradeLevel: 51, score: 60 },
   { ...s101.bIII, productName: 'Diesel', upgradeLevel: 111, score: 63360 },
@@ -213,6 +213,7 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...s51.bII, productName: 'Truck', upgradeLevel: 71, score: 960 }, // want to move this to s71
   { ...s51.bII, productName: 'X-ray Machine', upgradeLevel: 61, score: 840 },
   { ...s51.bII, productName: 'Flashlight', upgradeLevel: 51, score: 720 },
+  { ...BASE_BP, productName: 'Military Tent' },
   { ...BASE_BP, productName: 'Airplane', upgradeLevel: 21, score: 30 },
   { ...s71.bII, productName: 'Movie Projector', upgradeLevel: 31, score: 640 },
   { ...s71.bIII, productName: 'Electric Motor', upgradeLevel: 61, score: 20160 },
@@ -231,3 +232,18 @@ export const BLUEPRINT_LIBRARY: Blueprint[] = [
   { ...BASE_BP, productName: 'Headset' },
   { ...BASE_BP, productName: 'Parachute' },
 ];
+
+export enum UnmergeableBps {
+  All, // Algorithm will allow no merging
+  EventOnly, // Allow no merging of BPs not found in the main workshop
+  NotInMWSPacks, // Allow no merging of BPs not found in main workshop packs (Renaissance, Master, Expert, etc)
+  None, // Assume there are enough of any bp to merge to the next tier
+}
+
+export const UnmergeableStrategy: UnmergeableBps = UnmergeableBps.NotInMWSPacks;
+
+// in addition to the above strategy, the below blueprints will be considered unmergeable
+export const BPS_WITHOUT_DUPES: ProductName[] = [];
+
+// in addition to the above strategy and specified blueprints, if a bp is listed in the below packs it will be considered unmergeable
+export const EXCLUDE_PACKS = ['Expert', 'Master', 'Grandmaster', 'Paragon', 'Renaissance'];

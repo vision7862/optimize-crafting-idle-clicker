@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize';
+import { BLUEPRINT_LIBRARY } from '../../../EDIT_ME/BlueprintLibrary';
 import { MainWorkshopProducts } from '../../../products/MainWorkshop';
 import { ImportedProduct } from '../../buildWorkshop/types/ImportedProduct';
-import { BLUEPRINT_LIBRARY } from '../config/BlueprintLibrary';
 import { AchievementRank, BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from '../constants/BlueprintSets';
 import { Blueprint, ProductName } from '../types/Blueprint';
 

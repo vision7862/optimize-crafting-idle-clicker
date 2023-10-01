@@ -1,4 +1,4 @@
-import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../../EDIT_ME/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
   BlueprintSet,

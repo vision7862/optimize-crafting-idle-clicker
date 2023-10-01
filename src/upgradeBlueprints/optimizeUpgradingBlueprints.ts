@@ -1,4 +1,4 @@
-import { BLUEPRINT_LIBRARY } from './config/BlueprintLibrary';
+import { BLUEPRINT_LIBRARY } from '../../EDIT_ME/BlueprintLibrary';
 import { BLUEPRINT_SETS, BlueprintSet, SetMultiplierType } from './constants/BlueprintSets';
 import {
   convertBlueprintLibraryToScores,

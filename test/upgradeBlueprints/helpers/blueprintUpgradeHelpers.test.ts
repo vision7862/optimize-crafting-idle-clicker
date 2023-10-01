@@ -1,5 +1,5 @@
+import { BLUEPRINT_LIBRARY } from '../../../EDIT_ME/BlueprintLibrary';
 import { ImportedProduct } from '../../../src/buildWorkshop/types/ImportedProduct';
-import { BLUEPRINT_LIBRARY } from '../../../src/upgradeBlueprints/config/BlueprintLibrary';
 import {
   BLUEPRINT_SETS,
   BlueprintSet,
