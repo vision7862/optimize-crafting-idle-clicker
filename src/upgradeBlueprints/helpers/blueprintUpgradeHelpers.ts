@@ -1,6 +1,7 @@
 import memoize from 'fast-memoize';
 import {
   BPS_WITHOUT_DUPES,
+  EXCLUDE_PACKS,
   UnmergeableStrategy as UNMERGEABLE_STRATEGY,
   UnmergeableBps,
 } from '../../../EDIT_ME/BlueprintLibrary';
@@ -83,11 +84,11 @@ const isBpUnmergeable = memoize((name: ProductName): boolean => {
 
   if (BPS_WITHOUT_DUPES.includes(name)) return true;
 
-  // let allTagsInNoPacksList = true;
-  // tags?.forEach((tag) => {
-  //   allTagsInNoPacksList &&= NO_PACKS.includes(tag);
-  // });
-  // if (allTagsInNoPacksList) return true;
+  let anyTagsInNoPacksList = false;
+  tags?.forEach((tag) => {
+    anyTagsInNoPacksList ||= EXCLUDE_PACKS.includes(tag);
+  });
+  if (anyTagsInNoPacksList) return true;
 
   switch (UNMERGEABLE_STRATEGY) {
     case UnmergeableBps.All:
